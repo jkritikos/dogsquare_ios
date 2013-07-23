@@ -25,6 +25,28 @@ var profileMapButton = Ti.UI.createButton({
 
 viewProfile.add(profileMapButton);
 
+var profileStartButton = Ti.UI.createButton({
+	title:'Run',
+	bottom:20,
+	left:5,
+	zIndex:2
+});
+
+viewProfile.add(profileStartButton);
+
+profileStartButton.addEventListener('click', function(){
+	var runWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		url:'ui/iphone/run.js',
+		barColor:'#28292c',
+		title:'Run',
+		backButtonTitle:'Back'
+	});
+	
+	openWindows.push(runWindow);
+	navController.open(runWindow);
+});
+
 profileMapButton.addEventListener('click', function(){
 	var profileMapWindow = Ti.UI.createWindow({
 		backgroundColor:'white',

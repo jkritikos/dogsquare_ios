@@ -1,3 +1,7 @@
+Ti.Geolocation.purpose = "Retrieve user location";
+Ti.Geolocation.accuracy = Ti.Geolocation.ACCURACY_BEST;
+Ti.Geolocation.preferredProvider = Ti.Geolocation.PROVIDER_GPS;
+
 var openWindows = [];
 
 ////////////////////////////////////////////////

@@ -2,6 +2,12 @@ var viewMap = Ti.UI.createView({
 	backgroundColor:'white'
 });
 
+var mapWebView = Ti.UI.createWebView({
+	url:'/web/map.html',
+	top:0,
+	height:200
+});
+
 var mapLabel = Ti.UI.createLabel({
 	text:'map'
 });
@@ -28,3 +34,6 @@ mapCheckInButton.addEventListener('click', function(){
 	openWindows.push(checkinWindow);
 	navController.open(checkinWindow);
 });
+
+viewMap.add(mapWebView);
+//Ti.UI.currentWindow.add(viewMap);
