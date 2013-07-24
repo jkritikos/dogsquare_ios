@@ -111,3 +111,6 @@ loginWindow.add(loginButton);
 
 window.add(loginWindow);
 window.open(); //init the app
+
+
+Ti.include('ui/iphone/run.js');

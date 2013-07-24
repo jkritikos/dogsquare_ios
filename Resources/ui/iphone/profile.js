@@ -37,11 +37,13 @@ viewProfile.add(profileStartButton);
 profileStartButton.addEventListener('click', function(){
 	var runWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		url:'ui/iphone/run.js',
+		//url:'ui/iphone/run.js',
 		barColor:'#28292c',
 		title:'Run',
 		backButtonTitle:'Back'
 	});
+	
+	runWindow.add(buildRunView());
 	
 	openWindows.push(runWindow);
 	navController.open(runWindow);

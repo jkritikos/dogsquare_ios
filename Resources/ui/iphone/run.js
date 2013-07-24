@@ -3,45 +3,71 @@ var runningPathCoordinates = [];
 var runningDistanceKm = 0;
 var runningDistanceKmLabelValue = '';
 
-var viewRun = Ti.UI.createView({
-	backgroundColor:'white'
-});
+//UI components
+var viewRun = null;
+var runDistanceValueLabel = null;
+var runDistanceUnitLabel = null;
+var runPauseButton = null;
+var runEndButton = null;
 
-var runDistanceValueLabel = Ti.UI.createLabel({
-	text:'0,00',
-	top:50,
-	font:{fontSize:50, fontWeight:'bold'}
-});
+//TMP debug
+var runDebugView = null;
 
-var runDistanceUnitLabel = Ti.UI.createLabel({
-	text:'km',
-	top:50,
-	right:40,
-	font:{fontSize:50, fontWeight:'bold'}
-});
+function buildRunView(){
+	viewRun = Ti.UI.createView({
+		backgroundColor:'white'
+	});
 
-viewRun.add(runDistanceValueLabel);
-viewRun.add(runDistanceUnitLabel);
+	runDistanceValueLabel = Ti.UI.createLabel({
+		text:'0,00',
+		top:30,
+		font:{fontSize:50, fontWeight:'bold'}
+	});
 
-var runPauseButton = Ti.UI.createButton({
-	title:'Start',
-	bottom:20,
-	left:10,
-	zIndex:2
-});
+	runDistanceUnitLabel = Ti.UI.createLabel({
+		text:'km',
+		top:30,
+		right:40,
+		font:{fontSize:50, fontWeight:'bold'}
+	});
 
-var runEndButton = Ti.UI.createButton({
-	title:'End',
-	bottom:20,
-	right:10,
-	zIndex:2
-});
+	viewRun.add(runDistanceValueLabel);
+	viewRun.add(runDistanceUnitLabel);
 
-viewRun.add(runPauseButton);
-viewRun.add(runEndButton);
+	runPauseButton = Ti.UI.createButton({
+		title:'Start',
+		bottom:20,
+		left:10,
+		zIndex:2
+	});
 
-runPauseButton.addEventListener('click', handleStartRunButton);
-runEndButton.addEventListener('click', handleEndRunButton);
+	runEndButton = Ti.UI.createButton({
+		title:'End',
+		bottom:20,
+		right:10,
+		zIndex:2
+	});
+
+	viewRun.add(runPauseButton);
+	viewRun.add(runEndButton);
+	
+	runPauseButton.addEventListener('click', handleStartRunButton);
+	runEndButton.addEventListener('click', handleEndRunButton);
+	
+	//TMP DEBUG
+	runDebugView = Ti.UI.createScrollView({
+		backgroundColor:'black',
+		top:100,
+		bottom:80,
+		contentWidth:100,
+		contentHeight:'auto',
+		layout:'vertical'
+	});
+	
+	viewRun.add(runDebugView);
+
+	return viewRun;
+}
 
 function handleStartRunButton(){
 	if(!runningMode){
@@ -60,13 +86,17 @@ function handleStartRunButton(){
 }
 
 function handleEndRunButton(){
+	Ti.include('ui/iphone/run_finish.js');
+	
 	var runEndWindow = Ti.UI.createWindow({
-		url:'ui/iphone/run_finish.js',
+		//url:'ui/iphone/run_finish.js',
 		backgroundColor:'white',
 		barColor:'#28292c',
 		title:'Run overview',
 		backButtonTitle:'Back'
 	});
+	
+	runEndWindow.add(buildRunFinishView(runningPathCoordinates));
 	
 	openWindows.push(runEndWindow);
 	navController.open(runEndWindow);
@@ -82,6 +112,17 @@ function trackLocation(){
 		var coordinates = [e.coords.latitude,e.coords.longitude];
 		calculateDistance(coordinates);
 		runningPathCoordinates.push(coordinates);
+		
+		var t = 'Lat:'+e.coords.latitude+' & lon: '+e.coords.longitude;
+		var tmpLabel = Ti.UI.createLabel({
+			text:t,
+			left:30,
+			color:'red',
+			//top:30,
+			font:{fontSize:15, fontWeight:'bold'}
+		});
+		
+		runDebugView.add(tmpLabel);
 		
 		var speed = e.coords.speed;
 		var velocidad_km_h = (speed / 0.28).toFixed(0);
@@ -113,4 +154,4 @@ function calculateDistance(newCoordinates){
 	}
 }
 
-Ti.UI.currentWindow.add(viewRun);
+//Ti.UI.currentWindow.add(viewRun);
