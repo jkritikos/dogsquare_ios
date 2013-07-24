@@ -40,9 +40,10 @@ var runEndButton = Ti.UI.createButton({
 viewRun.add(runPauseButton);
 viewRun.add(runEndButton);
 
-runPauseButton.addEventListener('click', handleStartButton);
+runPauseButton.addEventListener('click', handleStartRunButton);
+runEndButton.addEventListener('click', handleEndRunButton);
 
-function handleStartButton(){
+function handleStartRunButton(){
 	if(!runningMode){
 		runPauseButton.title = 'Pause';
 		runningMode = true;
@@ -56,6 +57,19 @@ function handleStartButton(){
 		Titanium.Geolocation.removeEventListener('location',trackLocation);
 		Ti.API.info('Tracking location OFF - collected '+runningPathCoordinates.length+' coordinates');
 	}
+}
+
+function handleEndRunButton(){
+	var runEndWindow = Ti.UI.createWindow({
+		url:'ui/iphone/run_finish.js',
+		backgroundColor:'white',
+		barColor:'#28292c',
+		title:'Run overview',
+		backButtonTitle:'Back'
+	});
+	
+	openWindows.push(runEndWindow);
+	navController.open(runEndWindow);
 }
 
 function trackLocation(){

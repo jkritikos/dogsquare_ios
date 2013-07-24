@@ -3,7 +3,7 @@ var viewMap = Ti.UI.createView({
 });
 
 var mapWebView = Ti.UI.createWebView({
-	url:'/web/map.html',
+	url:'/web/m.html',
 	top:0,
 	height:200
 });
@@ -35,5 +35,36 @@ mapCheckInButton.addEventListener('click', function(){
 	navController.open(checkinWindow);
 });
 
-viewMap.add(mapWebView);
+
+
+var center = {latitude:42.30,longitude:-71.18,latitudeDelta:0.03, longitudeDelta:0.1};
+ 
+var mapview = Titanium.Map.createView({
+    mapType: Titanium.Map.STANDARD_TYPE,
+    region: center,
+    animate:true,
+    regionFit:true
+});
+ 
+points = [
+    {latitude:42.31,longitude:-71.11},
+    {latitude:42.32,longitude:-71.13},
+    {latitude:42.31,longitude:-71.22},
+    {latitude:42.28,longitude:-71.26}
+]
+ 
+// route object
+var route = {
+    name:"some name",
+    points:points,
+    color:"#00f",
+    width:3
+};
+ 
+// add a route
+mapview.addRoute(route);
+
+
+
+viewMap.add(mapview);
 //Ti.UI.currentWindow.add(viewMap);
