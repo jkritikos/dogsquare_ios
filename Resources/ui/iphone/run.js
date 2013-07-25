@@ -109,32 +109,41 @@ function trackLocation(){
 			return;
 		}
 		
-		var coordinates = [e.coords.latitude,e.coords.longitude];
-		calculateDistance(coordinates);
-		runningPathCoordinates.push(coordinates);
+		var coordinates = {
+			latitude: e.coords.latitude,
+			longitude: e.coords.longitude,
+			animate:true,
+			latitudeDelta:0.001,
+			longitudeDelta:0.001
+		};
 		
-		var t = 'Lat:'+e.coords.latitude+' & lon: '+e.coords.longitude;
-		var tmpLabel = Ti.UI.createLabel({
-			text:t,
-			left:30,
-			color:'red',
-			//top:30,
-			font:{fontSize:15, fontWeight:'bold'}
-		});
-		
-		runDebugView.add(tmpLabel);
-		
-		var speed = e.coords.speed;
-		var velocidad_km_h = (speed / 0.28).toFixed(0);
+		//only use accurate coordinates
+		if(e.coords.accuracy <= 15){
+			var tmpDistance = calculateDistance(coordinates);
+			runningPathCoordinates.push(coordinates);
+			
+			var t = 'Lat:'+e.coords.latitude+' & lon: '+e.coords.longitude+' accuracy: '+e.coords.accuracy+' distance '+tmpDistance;
+			var tmpLabel = Ti.UI.createLabel({
+				text:t,
+				left:10,
+				color:'red',
+				font:{fontSize:15, fontWeight:'bold'}
+			});
+			
+			runDebugView.add(tmpLabel);
+			
+			var speed = e.coords.speed;
+			var velocidad_km_h = (speed / 0.28).toFixed(0);	
+		}
 	});
 }
 
 function calculateDistance(newCoordinates){
 	if(runningPathCoordinates.length >= 1){
-		var lat1 = newCoordinates[0];
-		var lon1 = newCoordinates[1];
-		var lat2 = runningPathCoordinates[runningPathCoordinates.length-1][0];
-		var lon2 = runningPathCoordinates[runningPathCoordinates.length-1][1];
+		var lat1 = newCoordinates[0].latitude;
+		var lon1 = newCoordinates[1].longitude;
+		var lat2 = runningPathCoordinates[runningPathCoordinates.length-1][0].latitude;
+		var lon2 = runningPathCoordinates[runningPathCoordinates.length-1][1].longitude;
 		
 		rad = function(x) {return x*Math.PI/180;}
 			
@@ -152,6 +161,8 @@ function calculateDistance(newCoordinates){
 	} else {
 		Ti.API.info('calculateDistance() NOT enough points for distance calculation');
 	}
+	
+	return parseFloat(d);
 }
 
 //Ti.UI.currentWindow.add(viewRun);
