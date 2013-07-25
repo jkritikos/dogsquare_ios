@@ -12,6 +12,7 @@ var runEndButton = null;
 
 //TMP debug
 var runDebugView = null;
+var viewRunSummaryMap = null;
 
 function buildRunView(){
 	viewRun = Ti.UI.createView({
@@ -65,6 +66,19 @@ function buildRunView(){
 	});
 	
 	viewRun.add(runDebugView);
+	
+	viewRunSummaryMap = Titanium.Map.createView({
+		width:'100%',
+		bottom:80,
+		top:100,
+	    mapType:Titanium.Map.STANDARD_TYPE,
+	    animate:true,
+	    regionFit:true,
+	    userLocation:true,
+	    visible:true
+	});
+	
+	viewRun.add(viewRunSummaryMap);
 
 	return viewRun;
 }
@@ -96,10 +110,20 @@ function handleEndRunButton(){
 		backButtonTitle:'Back'
 	});
 	
-	runEndWindow.add(buildRunFinishView(runningPathCoordinates));
+	//runEndWindow.add(buildRunFinishView(runningPathCoordinates));
 	
-	openWindows.push(runEndWindow);
-	navController.open(runEndWindow);
+	//openWindows.push(runEndWindow);
+	//navController.open(runEndWindow);
+	// route object
+	var route = {
+	    name:"Your path",
+	    points:runningPathCoordinates,
+	    color:"green",
+	    borderColor:'black',
+	    width:12
+	};
+	
+	viewRunSummaryMap.addRoute(route);
 }
 
 function trackLocation(){
@@ -116,6 +140,8 @@ function trackLocation(){
 			latitudeDelta:0.001,
 			longitudeDelta:0.001
 		};
+		
+		viewRunSummaryMap.setLocation(coordinates);
 		
 		//only use accurate coordinates
 		if(e.coords.accuracy <= 15){
@@ -140,10 +166,10 @@ function trackLocation(){
 
 function calculateDistance(newCoordinates){
 	if(runningPathCoordinates.length >= 1){
-		var lat1 = newCoordinates[0].latitude;
-		var lon1 = newCoordinates[1].longitude;
-		var lat2 = runningPathCoordinates[runningPathCoordinates.length-1][0].latitude;
-		var lon2 = runningPathCoordinates[runningPathCoordinates.length-1][1].longitude;
+		var lat1 = newCoordinates.latitude;
+		var lon1 = newCoordinates.longitude;
+		var lat2 = runningPathCoordinates[runningPathCoordinates.length-1].latitude;
+		var lon2 = runningPathCoordinates[runningPathCoordinates.length-1].longitude;
 		
 		rad = function(x) {return x*Math.PI/180;}
 			
