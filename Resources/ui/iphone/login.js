@@ -207,15 +207,23 @@ registerButton.addEventListener('click', function(){
 	loginWindow.add(w);
 	w.open();
 	
+	var registerPhotoDialog = Titanium.UI.createOptionDialog({
+		options:['Take Photo', 'Choose From Library', 'Cancel'],
+		cancel:2
+	});
+	
+	//Event handler for profile photo selection
 	function registerShowPhotoOptions(){
-		var optionsDialogOpts = {
-			options:['Take Photo', 'Choose From Library', 'Cancel'],
-			cancel:2
-		};
-		
-		var dialog = Titanium.UI.createOptionDialog(optionsDialogOpts);
-		dialog.show();
+		registerPhotoDialog.show();
 	}
+	
+	registerPhotoDialog.addEventListener('click',function(e){
+		if(e.index == 0){
+			handleCameraSelection();
+		} else if(e.index == 1){
+			handlePhotoSelection();
+		}
+	});
 	
 	//Validator for signup form
 	function validateSignupForm(){
@@ -232,20 +240,51 @@ registerButton.addEventListener('click', function(){
 			return false;
 		}
 		
+		if(!isStringNullOrEmpty(registerFieldAge.value) && !isWithinRange(registerFieldAge.value, 12, 100)){
+			alert('INVALID AGE');
+			return false;
+		}
+		
 		if(!isValidEmail(registerFieldEmail.value)){
 			alert('INVALID EMAIL');
 			return false;
 		}
+		
+		return true;
 	}
 	
 	function showProfileAfterUserSignup(){
 		if(validateSignupForm()){
+			Ti.API.info('register form is valid');
 			w.close();
 			loginWindow.animate({opacity:0, duration:1}, function(){
 				window.remove(loginWindow);
-				leftTableView.fireEvent('click', {index:MENU_PROFILE});
+				leftTableView.fireEvent('click', {menuItem:MENU_PROFILE});
 			});
 		}
+	}
+	
+	function handlePhotoSelection(){
+		Titanium.Media.openPhotoGallery({	
+			
+			success:function(event){
+				var image = event.media;
+				
+				// create new file name and remove old
+				var filename = Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg";
+				var tmpImage = Titanium.Filesystem.getFile(filename);
+				tmpImage.write(image);
+				Ti.API.info('saved image to '+filename);
+			},
+			cancel:function(){
+		
+			},
+			error:function(error){
+			}
+		});
+	}
+	
+	function handleCameraSelection(){
 		
 	}	
 });

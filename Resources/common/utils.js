@@ -19,3 +19,12 @@ function isValidEmail(email){
     	return true;
     }
 }
+
+//int range validator
+function isWithinRange(input, min, max){
+	if(input >= min && input <= max){
+		return true;
+	} else {
+		return false;
+	}
+}

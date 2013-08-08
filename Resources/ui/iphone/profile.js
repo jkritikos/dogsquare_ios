@@ -1,12 +1,16 @@
 var viewProfile = Ti.UI.createView({
-	backgroundColor:'white'
+	backgroundColor:UI_BACKGROUND_COLOR
 });
 
-var profileLabel = Ti.UI.createLabel({
-	text:'profile'
+var profileImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
+var menuProfileImage = Titanium.UI.createImageView({
+	image:profileImageFile.nativePath,
+	top:0,
+	//height:'52%',
+	width:'100%'
 });
 
-viewProfile.add(profileLabel);
+viewProfile.add(menuProfileImage);
 
 var profileEditButton = Ti.UI.createButton({
 	title:'Edit profile',

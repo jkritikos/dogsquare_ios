@@ -17,7 +17,7 @@ Ti.include('ui/iphone/navigation.js');
 
 window.add(loginWindow);
 window.open(); //init the app
-
+window.setParallaxAmount(0.3);
 
 Ti.include('common/dao.js');
 Ti.include('common/utils.js');
