@@ -4,7 +4,7 @@ var viewMap = Ti.UI.createView({
 
 var mapWebView = Ti.UI.createWebView({
 	url:'/web/m.html',
-	top:0,
+	top:30,
 	height:200
 });
 
@@ -17,6 +17,7 @@ var mapCheckInButton = Ti.UI.createButton({
 	bottom:20,
 	zIndex:2
 });
+
 
 viewMap.add(mapCheckInButton);
 viewMap.add(mapLabel);

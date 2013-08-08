@@ -36,9 +36,9 @@ viewProfile.add(profileStartButton);
 
 profileStartButton.addEventListener('click', function(){
 	var runWindow = Ti.UI.createWindow({
-		backgroundColor:'white',
-		//url:'ui/iphone/run.js',
-		barColor:'#28292c',
+		backgroundColor:UI_BACKGROUND_COLOR,
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
 		title:'Run',
 		backButtonTitle:'Back'
 	});
@@ -51,9 +51,10 @@ profileStartButton.addEventListener('click', function(){
 
 profileMapButton.addEventListener('click', function(){
 	var profileMapWindow = Ti.UI.createWindow({
-		backgroundColor:'white',
+		backgroundColor:UI_BACKGROUND_COLOR,
 		url:'ui/iphone/map.js',
-		barColor:'#28292c',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
 		title:'Map',
 		backButtonTitle:'Back'
 	});
@@ -65,8 +66,9 @@ profileMapButton.addEventListener('click', function(){
 profileEditButton.addEventListener('click', function(){
 	var profileEditWindow = Ti.UI.createWindow({
 		url:'ui/iphone/profile_edit.js',
-		backgroundColor:'red',
-		barColor:'#28292c',
+		backgroundColor:UI_BACKGROUND_COLOR,
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
 		title:'Edit profile',
 		backButtonTitle:'Back'
 	});

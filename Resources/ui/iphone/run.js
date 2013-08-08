@@ -119,6 +119,12 @@ function handleEndRunButton(){
 	    name:"Your path",
 	    points:runningPathCoordinates,
 	    color:"green",
+	    backgroundGradient: {
+        type: 'linear',
+        startPoint: { x: '0%', y: '50%' },
+        endPoint: { x: '100%', y: '50%' },
+        colors: [ { color: 'red', offset: 0.0}, { color: 'green', offset: 0.25 }, { color: 'red', offset: 1.0 } ],
+    },
 	    borderColor:'black',
 	    width:12
 	};
