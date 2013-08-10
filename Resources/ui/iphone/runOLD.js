@@ -31,37 +31,7 @@ function buildRunView(){
 		right:40,
 		font:{fontSize:50, fontWeight:'bold'}
 	});
-	
-	var runAvgPaceValueLabel = Ti.UI.createLabel({
-		text:'0',
-		top:90,
-		left:10,
-		font:{fontSize:30, fontWeight:'bold'}
-	});
-	
-	var runAvgPaceLabel = Ti.UI.createLabel({
-		text:'Avg pace',
-		top:130,
-		left:30,
-		font:{fontSize:15, fontWeight:'bold'}
-	});
-	
-	var runDurationValueLabel = Ti.UI.createLabel({
-		text:'0:00:00',
-		top:90,
-		font:{fontSize:30, fontWeight:'bold'}
-	});
-	
-	var runDurationLabel = Ti.UI.createLabel({
-		text:'Duration',
-		top:130,
-		font:{fontSize:15, fontWeight:'bold'}
-	});
 
-	viewRun.add(runDurationLabel);
-	viewRun.add(runDurationValueLabel);
-	viewRun.add(runAvgPaceLabel);
-	viewRun.add(runAvgPaceValueLabel);
 	viewRun.add(runDistanceValueLabel);
 	viewRun.add(runDistanceUnitLabel);
 
@@ -95,12 +65,12 @@ function buildRunView(){
 		layout:'vertical'
 	});
 	
-	//viewRun.add(runDebugView);
+	viewRun.add(runDebugView);
 	
 	viewRunSummaryMap = Titanium.Map.createView({
 		width:'100%',
 		bottom:80,
-		height:160,
+		top:100,
 	    mapType:Titanium.Map.STANDARD_TYPE,
 	    animate:true,
 	    regionFit:true,
@@ -132,32 +102,18 @@ function handleStartRunButton(){
 function handleEndRunButton(){
 	Ti.include('ui/iphone/run_finish.js');
 	
-	var runFinishView = buildRunFinishView(null);
-	
-
-	var runFinishWindow = Ti.UI.createWindow({
+	var runEndWindow = Ti.UI.createWindow({
 		//url:'ui/iphone/run_finish.js',
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR,
+		barColor:'#28292c',
 		title:'Run overview',
 		backButtonTitle:'Back'
 	});
 	
-	runFinishWindow.add(runFinishView);
+	//runEndWindow.add(buildRunFinishView(runningPathCoordinates));
 	
-	runFinishWindow.addEventListener('focus', function(){
-		//remove RUN window from the navigation stack
-		var runWindowIndex = openWindows.length-2;
-		navController.close(openWindows[runWindowIndex], {animated:false});
-	})
-	
-	openWindows.push(runFinishWindow);
-	navController.open(runFinishWindow);
-	
-	
-	
-	
+	//openWindows.push(runEndWindow);
+	//navController.open(runEndWindow);
 	// route object
 	var route = {
 	    name:"Your path",

@@ -6,37 +6,42 @@ var profileImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicati
 var menuProfileImage = Titanium.UI.createImageView({
 	image:profileImageFile.nativePath,
 	top:0,
-	//height:'52%',
 	width:'100%'
 });
 
 viewProfile.add(menuProfileImage);
 
-var profileEditButton = Ti.UI.createButton({
-	title:'Edit profile',
-	bottom:20,
-	zIndex:2
-});
-
-viewProfile.add(profileEditButton);
-
+//Map button
 var profileMapButton = Ti.UI.createButton({
-	title:'Map',
-	bottom:20,
-	right:5,
+	backgroundImage:IMAGE_PATH+'profile/Map_icon.png',
+	width:33,
+	height:32,
+	bottom:130,
+	right:45,
 	zIndex:2
 });
 
 viewProfile.add(profileMapButton);
 
+//Start button
 var profileStartButton = Ti.UI.createButton({
-	title:'Run',
-	bottom:20,
-	left:5,
+	backgroundImage:IMAGE_PATH+'profile/start_button.png',
+	bottom:115,
+	width:178,
+	height:52,
+	left:15,
 	zIndex:2
 });
 
 viewProfile.add(profileStartButton);
+
+//Activity bar
+var profileActivityBar = Ti.UI.createImageView({
+	image:IMAGE_PATH+'profile/Activitybar.png',
+	bottom:70
+});
+
+viewProfile.add(profileActivityBar);
 
 profileStartButton.addEventListener('click', function(){
 	var runWindow = Ti.UI.createWindow({
@@ -67,6 +72,7 @@ profileMapButton.addEventListener('click', function(){
 	navController.open(profileMapWindow);
 });
 
+/*
 profileEditButton.addEventListener('click', function(){
 	var profileEditWindow = Ti.UI.createWindow({
 		url:'ui/iphone/profile_edit.js',
@@ -80,3 +86,4 @@ profileEditButton.addEventListener('click', function(){
 	openWindows.push(profileEditWindow);
 	navController.open(profileEditWindow);
 });
+*/
