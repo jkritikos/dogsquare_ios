@@ -89,16 +89,17 @@ registerButton.addEventListener('click', function(){
 	var registerTxtFieldOffset = 35;
 	var registerTxtFieldHeight = 34;
 	var registerTxtFieldWidth = 192;
+	
 	var registerFormScrollBackground = Ti.UI.createScrollView({
-		top:'32%',
-		contentWidth: 'auto',
-  		contentHeight: 'auto',
+		top:192,
+		width:192,
+		height:140
 	});
 	
 	//Form background
 	var registerFormBackground = Ti.UI.createImageView({
 		image:IMAGE_PATH+'signup/fields_area.png',
-		top:1
+		top:'32%'
 	});
 	
 	//Gender selector MALE label
@@ -131,12 +132,12 @@ registerButton.addEventListener('click', function(){
 	var registerFieldName = Ti.UI.createTextField({
 		width:registerTxtFieldWidth,
 		height:registerTxtFieldHeight,
-		top:46,
+		top:1,
 		returnKeyType: Ti.UI.RETURNKEY_NEXT,
 		field:1
 	});
 	
-	registerFieldName.addEventListener('focus', handleTextFieldFocus);
+	registerFieldName.addEventListener('change', handleTextFieldFocus);
 	registerFieldName.addEventListener('blur', handleTextFieldBlur);
 	
 	//Event listener for the name textfield
@@ -144,7 +145,7 @@ registerButton.addEventListener('click', function(){
 	    registerFieldEmail.focus();
 	});
 	
-	registerFormBackground.add(registerFieldName);
+	registerFormScrollBackground.add(registerFieldName);
 	
 	var registerFieldNameHintTextLabel = Ti.UI.createLabel({
 		text:'Name*',
@@ -169,7 +170,7 @@ registerButton.addEventListener('click', function(){
 		field:2
 	});
 	
-	registerFieldEmail.addEventListener('focus', handleTextFieldFocus);
+	registerFieldEmail.addEventListener('change', handleTextFieldFocus);
 	registerFieldEmail.addEventListener('blur', handleTextFieldBlur);
 	
 	//Event listener for the email textfield
@@ -177,7 +178,7 @@ registerButton.addEventListener('click', function(){
 	    registerFieldPassword.focus();
 	});
 	
-	registerFormBackground.add(registerFieldEmail);
+	registerFormScrollBackground.add(registerFieldEmail);
 	
 	var registerFieldEmailHintTextLabel = Ti.UI.createLabel({
 		text:'Email*',
@@ -203,7 +204,7 @@ registerButton.addEventListener('click', function(){
 		field:3
 	});
 	
-	registerFieldPassword.addEventListener('focus', handleTextFieldFocus);
+	registerFieldPassword.addEventListener('change', handleTextFieldFocus);
 	registerFieldPassword.addEventListener('blur', handleTextFieldBlur);
 	
 	//Event listener for the password textfield
@@ -211,7 +212,7 @@ registerButton.addEventListener('click', function(){
 	    registerFieldAge.focus();
 	});
 	
-	registerFormBackground.add(registerFieldPassword);
+	registerFormScrollBackground.add(registerFieldPassword);
 	
 	var registerFieldPasswordHintTextLabel = Ti.UI.createLabel({
 		text:'Password*',
@@ -235,9 +236,9 @@ registerButton.addEventListener('click', function(){
 		field:4
 	});
 	
-	registerFieldAge.addEventListener('focus', handleTextFieldFocus);
+	registerFieldAge.addEventListener('change', handleTextFieldFocus);
 	registerFieldAge.addEventListener('blur', handleTextFieldBlur);
-	registerFormBackground.add(registerFieldAge);
+	registerFormScrollBackground.add(registerFieldAge);
 	
 	var registerFieldAgeHintTextLabel = Ti.UI.createLabel({
 		text:'Age',
@@ -252,7 +253,7 @@ registerButton.addEventListener('click', function(){
 	
 	registerFieldAge.add(registerFieldAgeHintTextLabel);
 	
-	registerFormScrollBackground.add(registerFormBackground);
+	w.add(registerFormBackground);
 	w.add(registerFormScrollBackground);
 	
 	//Facebook button
@@ -372,13 +373,21 @@ registerButton.addEventListener('click', function(){
 		var field = e.source.field;
 		
 		if(field == 1){
-			registerFieldNameHintTextLabel.hide();
+			if(registerFieldName.value != ''){
+				registerFieldNameHintTextLabel.hide();
+			}
 		}else if(field == 2){
-			registerFieldEmailHintTextLabel.hide();
+			if(registerFieldEmail.value != ''){
+				registerFieldEmailHintTextLabel.hide();
+			}
 		}else if(field == 3){
-			registerFieldPasswordHintTextLabel.hide();
+			if(registerFieldPassword.value != ''){
+				registerFieldPasswordHintTextLabel.hide();
+			}
 		}else if(field == 4){
-			registerFieldAgeHintTextLabel.hide();
+			if(registerFieldAge.value != ''){
+				registerFieldAgeHintTextLabel.hide();
+			}
 		}
 	}
 	
