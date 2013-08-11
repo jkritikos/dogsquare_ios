@@ -24,11 +24,19 @@ var registerButton = Ti.UI.createButton({
 loginWindow.add(registerButton);
 
 registerButton.addEventListener('click', function(){
+	
 	var w = Ti.UI.createWindow({
 		backButtonTitle:'back',
 		title:'register',
 		backgroundColor:UI_BACKGROUND_COLOR
 	});
+	
+	/*this view is created to get the globalPoint for the slider -
+	it needs a view to do that*/
+	var hiddenView = Ti.UI.createView({
+		backgroundColor:'transparent'
+	});
+	w.add(hiddenView);
 	
 	var registerNavBar = Ti.UI.createImageView({
 		image:IMAGE_PATH+'common/bar.png',
@@ -64,6 +72,18 @@ registerButton.addEventListener('click', function(){
 	registerProfilePhotoButton.addEventListener('click', registerShowPhotoOptions);
 	
 	w.add(registerProfilePhotoButton);
+	
+	
+	var registerProfilePhotoLabel = Ti.UI.createLabel({
+		text:'Your Photo Here!',
+		bottom:9,
+		textAlign:'center',
+		width:45,
+		height:30,
+		color:'black',
+		font:{fontSize:8, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	registerProfilePhotoButton.add(registerProfilePhotoLabel);
 	
 	//Form scroll container
 	var registerTxtFieldOffset = 35;
@@ -101,21 +121,23 @@ registerButton.addEventListener('click', function(){
 	//Gender selector sliding button
 	var registerGenderSelectorSlider = Ti.UI.createImageView({
 		image:IMAGE_PATH+'signup/Selected_genre.png',
-		left:8,
-		top:12
+		top:12,
+		left:8
 	});
 	
 	registerFormBackground.add(registerGenderSelectorSlider);
 	
 	//Name textfield
 	var registerFieldName = Ti.UI.createTextField({
-		hintText:'Name *',
 		width:registerTxtFieldWidth,
 		height:registerTxtFieldHeight,
 		top:46,
-		backgroundColor:'red',
-		returnKeyType: Ti.UI.RETURNKEY_NEXT
+		returnKeyType: Ti.UI.RETURNKEY_NEXT,
+		field:1
 	});
+	
+	registerFieldName.addEventListener('focus', handleTextFieldFocus);
+	registerFieldName.addEventListener('blur', handleTextFieldBlur);
 	
 	//Event listener for the name textfield
 	registerFieldName.addEventListener('return', function() {
@@ -124,16 +146,31 @@ registerButton.addEventListener('click', function(){
 	
 	registerFormBackground.add(registerFieldName);
 	
+	var registerFieldNameHintTextLabel = Ti.UI.createLabel({
+		text:'Name*',
+		color:'999999',
+		textAlign:'left',
+		left:4,
+		opacity:0.7,
+		width:80,
+		height:30,
+		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+	});
+	
+	registerFieldName.add(registerFieldNameHintTextLabel);
+	
 	//Email textfield
 	var registerFieldEmail = Ti.UI.createTextField({
-		hintText:'Email address *',
 		width:registerTxtFieldWidth,
 		height:registerTxtFieldHeight,
 		top:registerFieldName.top + registerTxtFieldOffset,
-		backgroundColor:'red',
 		keyboardType:Ti.UI.KEYBOARD_EMAIL,
-		returnKeyType: Ti.UI.RETURNKEY_NEXT
+		returnKeyType: Ti.UI.RETURNKEY_NEXT,
+		field:2
 	});
+	
+	registerFieldEmail.addEventListener('focus', handleTextFieldFocus);
+	registerFieldEmail.addEventListener('blur', handleTextFieldBlur);
 	
 	//Event listener for the email textfield
 	registerFieldEmail.addEventListener('return', function() {
@@ -142,16 +179,32 @@ registerButton.addEventListener('click', function(){
 	
 	registerFormBackground.add(registerFieldEmail);
 	
+	var registerFieldEmailHintTextLabel = Ti.UI.createLabel({
+		text:'Email*',
+		color:'999999',
+		textAlign:'left',
+		left:4,
+		opacity:0.7,
+		width:80,
+		height:30,
+		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+	});
+	
+	registerFieldEmail.add(registerFieldEmailHintTextLabel);
+	
 	//Password textfield
 	var registerFieldPassword = Ti.UI.createTextField({
-		hintText:'Password *',
 		width:registerTxtFieldWidth,
 		height:registerTxtFieldHeight,
 		top:registerFieldEmail.top + registerTxtFieldOffset,
-		backgroundColor:'red',
+		backgroundColor:'grey',
 		passwordMask:true,
-		returnKeyType: Ti.UI.RETURNKEY_NEXT
+		returnKeyType: Ti.UI.RETURNKEY_NEXT,
+		field:3
 	});
+	
+	registerFieldPassword.addEventListener('focus', handleTextFieldFocus);
+	registerFieldPassword.addEventListener('blur', handleTextFieldBlur);
 	
 	//Event listener for the password textfield
 	registerFieldPassword.addEventListener('return', function() {
@@ -160,17 +213,44 @@ registerButton.addEventListener('click', function(){
 	
 	registerFormBackground.add(registerFieldPassword);
 	
+	var registerFieldPasswordHintTextLabel = Ti.UI.createLabel({
+		text:'Password*',
+		color:'999999',
+		textAlign:'left',
+		left:4,
+		opacity:0.7,
+		width:80,
+		height:30,
+		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+	});
+	
+	registerFieldPassword.add(registerFieldPasswordHintTextLabel);
+	
 	//Age textfield
 	var registerFieldAge = Ti.UI.createTextField({
-		hintText:'Age',
 		width:registerTxtFieldWidth,
 		height:registerTxtFieldHeight,
 		top:registerFieldPassword.top + registerTxtFieldOffset,
-		backgroundColor:'red',
-		returnKeyType: Ti.UI.RETURNKEY_DONE
+		returnKeyType: Ti.UI.RETURNKEY_DONE,
+		field:4
 	});
 	
+	registerFieldAge.addEventListener('focus', handleTextFieldFocus);
+	registerFieldAge.addEventListener('blur', handleTextFieldBlur);
 	registerFormBackground.add(registerFieldAge);
+	
+	var registerFieldAgeHintTextLabel = Ti.UI.createLabel({
+		text:'Age',
+		color:'999999',
+		textAlign:'left',
+		left:4,
+		opacity:0.7,
+		width:80,
+		height:30,
+		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+	});
+	
+	registerFieldAge.add(registerFieldAgeHintTextLabel);
 	
 	registerFormScrollBackground.add(registerFormBackground);
 	w.add(registerFormScrollBackground);
@@ -287,6 +367,78 @@ registerButton.addEventListener('click', function(){
 	function handleCameraSelection(){
 		
 	}	
+	
+	function handleTextFieldFocus(e){
+		var field = e.source.field;
+		
+		if(field == 1){
+			registerFieldNameHintTextLabel.hide();
+		}else if(field == 2){
+			registerFieldEmailHintTextLabel.hide();
+		}else if(field == 3){
+			registerFieldPasswordHintTextLabel.hide();
+		}else if(field == 4){
+			registerFieldAgeHintTextLabel.hide();
+		}
+	}
+	
+	//handle textfield when not focused
+	function handleTextFieldBlur(e){
+		var field = e.source.field;
+		
+		if(field == 1){
+			if(registerFieldName.value == ''){
+				registerFieldNameHintTextLabel.show();
+			}
+			registerFieldName.blur();
+		}else if(field == 2){
+			if(registerFieldEmail.value == ''){
+				registerFieldEmailHintTextLabel.show();
+			}
+			registerFieldEmail.blur();
+		}else if(field == 3){
+			if(registerFieldPassword.value == ''){
+				registerFieldPasswordHintTextLabel.show();
+			}
+			registerFieldPassword.blur();
+		}else if(field == 4){
+			if(registerFieldAge.value == ''){
+				registerFieldAgeHintTextLabel.show();
+			}
+			registerFieldAge.blur();
+		}
+	}
+	
+	registerGenderSelectorSlider.addEventListener('touchstart', function(e){ //changed by alex
+	     e.source.axis = parseInt(e.x);
+	});
+	
+	registerGenderSelectorSlider.addEventListener('touchmove', function(e){ //changed by alex
+		var globalPoint = e.source.convertPointToView({x:e.x, y:e.y}, hiddenView);
+	    var coordinates = (globalPoint.x - e.source.axis) - 63;
+	    
+        if(coordinates <= 102 && coordinates >= 8){
+	    	registerGenderSelectorSlider.left = coordinates;
+	    }
+        
+	});
+	
+	registerGenderSelectorSlider.addEventListener('touchend', function(e){ //changed by alex
+	   
+	    if(registerGenderSelectorSlider.left >= 60){
+	        // Positioning the slider to the right
+	        registerGenderSelectorSlider.animate({
+	            left:102,
+	            duration:300
+	        });
+	    }else if(registerGenderSelectorSlider.left <= 60){
+	        // Positioning the slider to the left
+	        registerGenderSelectorSlider.animate({
+	            left:8,
+	            duration:300
+	        });
+	    }
+	});
 });
 
 var loginButton = Ti.UI.createButton({
