@@ -22,6 +22,7 @@ function buildRunView(){
 	runDistanceValueLabel = Ti.UI.createLabel({
 		text:'0,00',
 		top:30,
+		color:UI_COLOR_RUN,
 		font:{fontSize:50, fontWeight:'bold'}
 	});
 
@@ -29,13 +30,28 @@ function buildRunView(){
 		text:'km',
 		top:30,
 		right:40,
+		color:UI_COLOR_RUN,
 		font:{fontSize:50, fontWeight:'bold'}
 	});
+	
+	var t3 = Ti.UI.create2DMatrix();
+	t3 = t3.scale(1, -1);
+	
+	var runDistanceUnitReflectionLabel = Ti.UI.createLabel({
+		text:'km',
+		transform:t3,
+		opacity:0.3,
+		top:75,
+		right:40,
+		color:UI_COLOR_RUN,
+		font:{fontSize:50, fontWeight:'bold'}
+	}); 
 	
 	var runAvgPaceValueLabel = Ti.UI.createLabel({
 		text:'0',
 		top:90,
 		left:10,
+		color:UI_COLOR_RUN,
 		font:{fontSize:30, fontWeight:'bold'}
 	});
 	
@@ -43,21 +59,25 @@ function buildRunView(){
 		text:'Avg pace',
 		top:130,
 		left:30,
+		color:UI_COLOR_RUN,
 		font:{fontSize:15, fontWeight:'bold'}
 	});
 	
 	var runDurationValueLabel = Ti.UI.createLabel({
 		text:'0:00:00',
 		top:90,
+		color:UI_COLOR_RUN,
 		font:{fontSize:30, fontWeight:'bold'}
 	});
 	
 	var runDurationLabel = Ti.UI.createLabel({
 		text:'Duration',
 		top:130,
+		color:UI_COLOR_RUN,
 		font:{fontSize:15, fontWeight:'bold'}
 	});
-
+	
+	viewRun.add(runDistanceUnitReflectionLabel);
 	viewRun.add(runDurationLabel);
 	viewRun.add(runDurationValueLabel);
 	viewRun.add(runAvgPaceLabel);
