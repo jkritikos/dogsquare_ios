@@ -426,22 +426,18 @@ registerButton.addEventListener('click', function(){
 			if(registerFieldName.value == ''){
 				registerFieldNameHintTextLabel.show();
 			}
-			registerFieldName.blur();
 		}else if(field == 2){
 			if(registerFieldEmail.value == ''){
 				registerFieldEmailHintTextLabel.show();
 			}
-			registerFieldEmail.blur();
 		}else if(field == 3){
 			if(registerFieldPassword.value == ''){
 				registerFieldPasswordHintTextLabel.show();
 			}
-			registerFieldPassword.blur();
 		}else if(field == 4){
 			if(registerFieldAge.value == ''){
 				registerFieldAgeHintTextLabel.show();
 			}
-			registerFieldAge.blur();
 		}
 	}
 	

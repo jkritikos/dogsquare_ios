@@ -273,6 +273,5 @@ function handleLeftMenuTextFieldBlur(e){
 		if(leftmenuSearchTxtfield.value == ''){
 			leftmenuSearchTxtfieldLabel.show();
 		}
-		leftmenuSearchTxtfieldLabel.blur();
 	}
 }

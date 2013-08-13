@@ -147,6 +147,5 @@ function handlefindFriendsTextFieldBlur(e){
 		if(findFriendsSearchTxtfield.value == ''){
 			findFriendsSearchTxtfieldLabel.show();
 		}
-		findFriendsSearchTxtfieldLabel.blur();
 	}
 }
