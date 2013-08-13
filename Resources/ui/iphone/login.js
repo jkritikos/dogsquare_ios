@@ -86,8 +86,8 @@ registerButton.addEventListener('click', function(){
 	registerProfilePhotoButton.add(registerProfilePhotoLabel);
 	
 	//Form scroll container
-	var registerTxtFieldOffset = 35;
-	var registerTxtFieldHeight = 34;
+	var registerTxtFieldOffset = 34;
+	var registerTxtFieldHeight = 32;
 	var registerTxtFieldWidth = 192;
 	
 	var registerFormScrollBackground = Ti.UI.createScrollView({
@@ -137,8 +137,8 @@ registerButton.addEventListener('click', function(){
 		field:1
 	});
 	
-	registerFieldName.addEventListener('change', handleTextFieldFocus);
-	registerFieldName.addEventListener('blur', handleTextFieldBlur);
+	registerFieldName.addEventListener('change', handleRegisterTextFieldFocus);
+	registerFieldName.addEventListener('blur', handleRegisterTextFieldBlur);
 	
 	//Event listener for the name textfield
 	registerFieldName.addEventListener('return', function() {
@@ -146,6 +146,8 @@ registerButton.addEventListener('click', function(){
 	});
 	
 	registerFormScrollBackground.add(registerFieldName);
+	
+	
 	
 	var registerFieldNameHintTextLabel = Ti.UI.createLabel({
 		text:'Name*',
@@ -170,8 +172,8 @@ registerButton.addEventListener('click', function(){
 		field:2
 	});
 	
-	registerFieldEmail.addEventListener('change', handleTextFieldFocus);
-	registerFieldEmail.addEventListener('blur', handleTextFieldBlur);
+	registerFieldEmail.addEventListener('change', handleRegisterTextFieldFocus);
+	registerFieldEmail.addEventListener('blur', handleRegisterTextFieldBlur);
 	
 	//Event listener for the email textfield
 	registerFieldEmail.addEventListener('return', function() {
@@ -204,8 +206,8 @@ registerButton.addEventListener('click', function(){
 		field:3
 	});
 	
-	registerFieldPassword.addEventListener('change', handleTextFieldFocus);
-	registerFieldPassword.addEventListener('blur', handleTextFieldBlur);
+	registerFieldPassword.addEventListener('change', handleRegisterTextFieldFocus);
+	registerFieldPassword.addEventListener('blur', handleRegisterTextFieldBlur);
 	
 	//Event listener for the password textfield
 	registerFieldPassword.addEventListener('return', function() {
@@ -236,8 +238,8 @@ registerButton.addEventListener('click', function(){
 		field:4
 	});
 	
-	registerFieldAge.addEventListener('change', handleTextFieldFocus);
-	registerFieldAge.addEventListener('blur', handleTextFieldBlur);
+	registerFieldAge.addEventListener('change', handleRegisterTextFieldFocus);
+	registerFieldAge.addEventListener('blur', handleRegisterTextFieldBlur);
 	registerFormScrollBackground.add(registerFieldAge);
 	
 	var registerFieldAgeHintTextLabel = Ti.UI.createLabel({
@@ -252,6 +254,23 @@ registerButton.addEventListener('click', function(){
 	});
 	
 	registerFieldAge.add(registerFieldAgeHintTextLabel);
+	
+	//sepparator offset
+	var sepparatorOffset = 0;
+	
+	//creation of sepparators
+	for(var i=0; i<=3; i++) {
+		var registerSepparator = Ti.UI.createView({
+			backgroundColor:'CCCCCC',
+			width:registerTxtFieldWidth,
+			height:2,
+			top:33 + sepparatorOffset,
+			opacity:0.4
+		});
+		registerFormScrollBackground.add(registerSepparator);
+		
+		sepparatorOffset += 34;
+	}
 	
 	w.add(registerFormBackground);
 	w.add(registerFormScrollBackground);
@@ -369,30 +388,38 @@ registerButton.addEventListener('click', function(){
 		
 	}	
 	
-	function handleTextFieldFocus(e){
+	function handleRegisterTextFieldFocus(e){
 		var field = e.source.field;
 		
 		if(field == 1){
 			if(registerFieldName.value != ''){
 				registerFieldNameHintTextLabel.hide();
+			}else {
+				registerFieldNameHintTextLabel.show();
 			}
 		}else if(field == 2){
 			if(registerFieldEmail.value != ''){
 				registerFieldEmailHintTextLabel.hide();
+			}else {
+				registerFieldNameHintTextLabel.show();
 			}
 		}else if(field == 3){
 			if(registerFieldPassword.value != ''){
 				registerFieldPasswordHintTextLabel.hide();
+			}else {
+				registerFieldNameHintTextLabel.show();
 			}
 		}else if(field == 4){
 			if(registerFieldAge.value != ''){
 				registerFieldAgeHintTextLabel.hide();
+			}else {
+				registerFieldNameHintTextLabel.show();
 			}
 		}
 	}
 	
 	//handle textfield when not focused
-	function handleTextFieldBlur(e){
+	function handleRegisterTextFieldBlur(e){
 		var field = e.source.field;
 		
 		if(field == 1){

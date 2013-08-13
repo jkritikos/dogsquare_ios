@@ -31,10 +31,23 @@ var leftmenuSearchIcon = Titanium.UI.createImageView({
 var leftmenuSearchTxtfield = Titanium.UI.createTextField({
 	left:35,
 	width:200,
-	hintText:'Search'
+	field:'search'
 });
 
 leftmenuSearchContainer.add(leftmenuSearchTxtfield);
+leftmenuSearchTxtfield.addEventListener('change', handleLeftMenuTextFieldFocus);
+leftmenuSearchTxtfield.addEventListener('blur', handleLeftMenuTextFieldBlur);
+
+var leftmenuSearchTxtfieldLabel = Titanium.UI.createLabel({
+	text:'Search',
+	color:'white',
+	textAlign:'center',
+	opacity:0.3,
+	left:3,
+	font:{fontSize:16, fontWeight:'semibold', fontFamily:'Open Sans'}
+});
+leftmenuSearchTxtfield.add(leftmenuSearchTxtfieldLabel);
+
 leftmenuSearchContainer.add(leftmenuSearchIcon);
 leftmenuSearchView.add(leftmenuSearchContainer);
 
@@ -238,4 +251,28 @@ function createLeftMenuRow(menuItem){
 	row.add(rowLabel);
 	
 	return row;
+}
+
+function handleLeftMenuTextFieldFocus(e){
+		var field = e.source.field;
+		
+		if(field == 'search'){
+			if(leftmenuSearchTxtfield.value != ''){
+				leftmenuSearchTxtfieldLabel.hide();
+			}else{
+				leftmenuSearchTxtfieldLabel.show();
+			}
+		}
+	}
+	
+//handle textfield when not focused
+function handleLeftMenuTextFieldBlur(e){
+	var field = e.source.field;
+	
+	if(field == 'search'){
+		if(leftmenuSearchTxtfield.value == ''){
+			leftmenuSearchTxtfieldLabel.show();
+		}
+		leftmenuSearchTxtfieldLabel.blur();
+	}
 }
