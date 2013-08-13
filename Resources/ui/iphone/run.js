@@ -16,22 +16,23 @@ var viewRunSummaryMap = null;
 
 function buildRunView(){
 	viewRun = Ti.UI.createView({
-		backgroundColor:'white'
+		backgroundColor:UI_BACKGROUND_COLOR
 	});
 
 	runDistanceValueLabel = Ti.UI.createLabel({
-		text:'0,00',
-		top:30,
+		text:'0.00',
+		top:20,
+		left:30,
 		color:UI_COLOR_RUN,
-		font:{fontSize:50, fontWeight:'bold'}
+		font:{fontSize:60, fontWeight:'bold'}
 	});
 
 	runDistanceUnitLabel = Ti.UI.createLabel({
 		text:'km',
-		top:30,
+		top:35,
 		right:40,
 		color:UI_COLOR_RUN,
-		font:{fontSize:50, fontWeight:'bold'}
+		font:{fontSize:40, fontWeight:'bold'}
 	});
 	
 	var t3 = Ti.UI.create2DMatrix();
@@ -41,40 +42,48 @@ function buildRunView(){
 		text:'km',
 		transform:t3,
 		opacity:0.3,
-		top:75,
+		top:70,
 		right:40,
 		color:UI_COLOR_RUN,
-		font:{fontSize:50, fontWeight:'bold'}
+		font:{fontSize:40, fontWeight:'bold'}
 	}); 
 	
+	/*
+	var gradient = Ti.UI.createView({top:75, right:40, height:40, width:60,zIndex:10,
+        backgroundGradient:{
+            type:'linear',
+            colors:[UI_BACKGROUND_COLOR,'transparent']
+        }
+    });*/
+    
 	var runAvgPaceValueLabel = Ti.UI.createLabel({
 		text:'0',
-		top:90,
+		top:140,
 		left:10,
 		color:UI_COLOR_RUN,
-		font:{fontSize:30, fontWeight:'bold'}
+		font:{fontSize:30, fontWeight:'regular'}
 	});
 	
 	var runAvgPaceLabel = Ti.UI.createLabel({
 		text:'Avg pace',
-		top:130,
+		top:170,
 		left:30,
 		color:UI_COLOR_RUN,
-		font:{fontSize:15, fontWeight:'bold'}
+		font:{fontSize:15, fontWeight:'regular'}
 	});
 	
 	var runDurationValueLabel = Ti.UI.createLabel({
 		text:'0:00:00',
-		top:90,
+		top:140,
 		color:UI_COLOR_RUN,
-		font:{fontSize:30, fontWeight:'bold'}
+		font:{fontSize:30, fontWeight:'regular'}
 	});
 	
 	var runDurationLabel = Ti.UI.createLabel({
 		text:'Duration',
-		top:130,
+		top:170,
 		color:UI_COLOR_RUN,
-		font:{fontSize:15, fontWeight:'bold'}
+		font:{fontSize:15, fontWeight:'regular'}
 	});
 	
 	viewRun.add(runDistanceUnitReflectionLabel);
@@ -120,7 +129,7 @@ function buildRunView(){
 	viewRunSummaryMap = Titanium.Map.createView({
 		width:'100%',
 		bottom:80,
-		height:160,
+		height:100,
 	    mapType:Titanium.Map.STANDARD_TYPE,
 	    animate:true,
 	    regionFit:true,
