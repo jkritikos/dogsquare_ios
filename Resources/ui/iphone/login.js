@@ -401,19 +401,19 @@ registerButton.addEventListener('click', function(){
 			if(registerFieldEmail.value != ''){
 				registerFieldEmailHintTextLabel.hide();
 			}else {
-				registerFieldNameHintTextLabel.show();
+				registerFieldEmailHintTextLabel.show();
 			}
 		}else if(field == 3){
 			if(registerFieldPassword.value != ''){
 				registerFieldPasswordHintTextLabel.hide();
 			}else {
-				registerFieldNameHintTextLabel.show();
+				registerFieldPasswordHintTextLabel.show();
 			}
 		}else if(field == 4){
 			if(registerFieldAge.value != ''){
 				registerFieldAgeHintTextLabel.hide();
 			}else {
-				registerFieldNameHintTextLabel.show();
+				registerFieldAgeHintTextLabel.show();
 			}
 		}
 	}
