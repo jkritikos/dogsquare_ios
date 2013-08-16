@@ -13,8 +13,10 @@ var mapLabel = Ti.UI.createLabel({
 });
 
 var mapCheckInButton = Ti.UI.createButton({
-	title:'Check In',
-	bottom:20,
+	backgroundImage:IMAGE_PATH+'map/pin_checkIn.png',
+	bottom:0,
+	width:70,
+	height:70,
 	zIndex:2
 });
 
@@ -24,13 +26,15 @@ viewMap.add(mapLabel);
 
 mapCheckInButton.addEventListener('click', function(){
 	
-	var checkinWindow = Ti.UI.createWindow({
+	/*var checkinWindow = Ti.UI.createWindow({
 		url:'ui/iphone/checkin.js',
 		backgroundColor:'red',
 		barColor:'#28292c',
 		title:'Check in',
 		backButtonTitle:'Back'
-	});
+	});*/
+	
+	Ti.include('ui/iphone/checkIn.js');
 	
 	openWindows.push(checkinWindow);
 	navController.open(checkinWindow);
