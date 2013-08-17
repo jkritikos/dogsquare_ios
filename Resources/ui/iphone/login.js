@@ -78,10 +78,10 @@ registerButton.addEventListener('click', function(){
 		text:'Your Photo Here!',
 		bottom:9,
 		textAlign:'center',
-		width:45,
+		width:55,
 		height:30,
 		color:'black',
-		font:{fontSize:8, fontWeight:'semibold', fontFamily:'Open Sans'}
+		font:{fontSize:8, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	registerProfilePhotoButton.add(registerProfilePhotoLabel);
 	
@@ -105,16 +105,23 @@ registerButton.addEventListener('click', function(){
 	//Gender selector MALE label
 	var registerGenderMaleLabel = Ti.UI.createLabel({
 		text:'Male',
-		top:11
+		top:17,
+		left:37,
+		color:'#6a5b5b',
+		font:{fontSize:14, fontWeight:'bold', fontFamily:'Open Sans'},
+		zIndex:2
 	});
+	
+	registerFormBackground.add(registerGenderMaleLabel);
 	
 	//Gender selector FEMALE label
 	var registerGenderFemaleLabel = Ti.UI.createLabel({
 		text:'Female',
-		top:14,
-		right:19,
+		top:17,
+		right:28,
 		color:'white',
-		font:{fontSize:18, fontWeight:'semibold', fontFamily:'Open Sans'}
+		font:{fontSize:14, fontWeight:'bold', fontFamily:'Open Sans'},
+		zIndex:2
 	});
 	
 	registerFormBackground.add(registerGenderFemaleLabel);
@@ -183,12 +190,12 @@ registerButton.addEventListener('click', function(){
 	registerFormScrollBackground.add(registerFieldEmail);
 	
 	var registerFieldEmailHintTextLabel = Ti.UI.createLabel({
-		text:'Email*',
+		text:'Email address*',
 		color:'999999',
 		textAlign:'left',
 		left:4,
 		opacity:0.7,
-		width:80,
+		width:95,
 		height:30,
 		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
