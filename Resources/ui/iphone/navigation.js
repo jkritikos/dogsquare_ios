@@ -77,7 +77,7 @@ var window = NappSlideMenu.createSlideMenuWindow({
 	leftWindow:winLeft,
 	rightWindow:winRight,
 	leftLedge:65,
-	rightLedge:65
+	rightLedge:43
 });
 
 Ti.include('login.js');
