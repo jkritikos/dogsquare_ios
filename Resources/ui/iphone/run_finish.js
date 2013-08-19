@@ -1,207 +1,251 @@
 
-function buildRunFinishView(coords){
-//Ti.API.info('Map set to lat '+coords[0].latitude+' and lon '+coords[0].longitude);
+function buildRunFinishView(obj){
 
-//run finish View
-var viewRunSummary = Ti.UI.createView({
-	backgroundColor:UI_BACKGROUND_COLOR
-});
+	//run finish View
+	var viewRunSummary = Ti.UI.createView({
+		backgroundColor:UI_BACKGROUND_COLOR
+	});
+	
+	//the map
+	var viewRunFinishMap = Titanium.Map.createView({ 
+		width:'100%',
+		top:0,
+		height:214,
+	    mapType:Titanium.Map.STANDARD_TYPE,
+	    animate:true,
+	    regionFit:true,
+	    userLocation:true,
+	    visible:true
+	});
+	viewRunSummary.add(viewRunFinishMap);
+	
+	//opacity bar
+	var runFinishOpacityBar = Titanium.UI.createView({ 
+		backgroundColor:'white',
+		width:'100%',
+		top:150,
+		height:52,
+		opacity:0.8
+	});
+	viewRunFinishMap.add(runFinishOpacityBar);
+	
+	//left divider for opacity bar
+	var runFinishDividerBar1 = Titanium.UI.createView({ 
+		backgroundColor:'black',
+		width:1,
+		opacity:0.4,
+		height:31,
+		left:106
+	});
+	runFinishOpacityBar.add(runFinishDividerBar1);
+	
+	//right divider for opacity bar
+	var runFinishDividerBar2 = Titanium.UI.createView({ 
+		backgroundColor:'black',
+		width:1,
+		opacity:0.4,
+		height:31,
+		right:106
+	});
+	runFinishOpacityBar.add(runFinishDividerBar2);
 
-//the map
-var viewRunFinishMap = Titanium.Map.createView({ 
+	//number of the distance label
+	var runFinishDistanceNumberLabel = Titanium.UI.createLabel({
+		text:obj.distance,
+		height:21,
+		textAlign:'center',
+		left:36,
+		top:10,
+		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	runFinishOpacityBar.add(runFinishDistanceNumberLabel);
+	
+	//unit of the distance label
+	var runFinishDistanceUnitLabel = Titanium.UI.createLabel({ 
+		text:'km',
+		height:17,
+		textAlign:'center',
+		left:55,
+		top:14,
+		font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	runFinishOpacityBar.add(runFinishDistanceUnitLabel);
+	
+	//distance label
+	var runFinishDistanceLabel = Titanium.UI.createLabel({ 
+		text:'distance',
+		height:19,
+		textAlign:'center',
+		left:30,
+		bottom:0,
+		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	runFinishOpacityBar.add(runFinishDistanceLabel);
+
+	//number of the average pace label
+	var runFinishAvgPaceNumberLabel = Titanium.UI.createLabel({
+		text:obj.speed,
+		height:21,
+		textAlign:'center',
+		left:140,
+		top:10,
+		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	runFinishOpacityBar.add(runFinishAvgPaceNumberLabel);
+	
+	//unit of the average pace label
+	var runFinishAvgPaceUnitLabel = Titanium.UI.createLabel({ 
+		text:'km/h',
+		height:17,
+		textAlign:'center',
+		left:159,
+		top:14,
+		font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	runFinishOpacityBar.add(runFinishAvgPaceUnitLabel);
+	
+	//average pace label
+	var runFinishAvgPaceLabel = Titanium.UI.createLabel({ 
+		text:'avg pace',
+		height:19,
+		textAlign:'center',
+		left:139,
+		bottom:0,
+		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	runFinishOpacityBar.add(runFinishAvgPaceLabel);
+
+	//number of the weather label
+	var runFinishWeatherNumberLabel = Titanium.UI.createLabel({
+		text:obj.temperature,
+		height:21,
+		textAlign:'center',
+		left:252,
+		top:10,
+		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	runFinishOpacityBar.add(runFinishWeatherNumberLabel);
+	
+	//unit of the weather label
+	var runFinishWeatherUnitLabel = Titanium.UI.createLabel({ 
+		text:'°C',
+		height:17,
+		textAlign:'center',
+		left:271,
+		top:14,
+		font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	runFinishOpacityBar.add(runFinishWeatherUnitLabel);
+	
+	//weather label
+	var runFinishWeatherLabel = Titanium.UI.createLabel({ 
+		text:'weather',
+		height:19,
+		textAlign:'center',
+		left:246,
+		bottom:0,
+		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	runFinishOpacityBar.add(runFinishWeatherLabel);
+
+	//Table view title bar	
+	var runFinishTitleBar = Titanium.UI.createView({ 
+		backgroundColor:UI_COLOR,
+		width:'100%',
+		top:225,
+		height:25
+	});
+	viewRunSummary.add(runFinishTitleBar);
+	
+	//Table view title label	
+	var runFinishTitleLabel = Titanium.UI.createLabel({ 
+		text:'Breed Energy Bar',
+		color:'white',
+		height:25,
+		textAlign:'center',
+		left:18,
+		font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	runFinishTitleBar.add(runFinishTitleLabel);
+	
+	//Activity bar
+	var runFinishActivityBar = Ti.UI.createImageView({ 
+		image:IMAGE_PATH+'profile/Activitybar.png',
+		bottom:0,
+		zIndex:2
+	});
+	viewRunSummary.add(runFinishActivityBar);
+
+	//comments label
+	var runFinishCommentsLabel = Titanium.UI.createLabel({ 
+		text:'Comments',
+		color:'white',
+		top:13,
+		height:20,
+		textAlign:'center',
+		left:18,
+		font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	runFinishActivityBar.add(runFinishCommentsLabel);
+	
+	//dogs table view
+	var runFinishTableView = Titanium.UI.createTableView({
+		minRowHeight:60,
+		width:320,
+		data:populateRunFinishTableView(),
+		backgroundColor:'transparent',
+		separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
+		top:250,
+		bottom:39,
+		allowsSelection:false
+	});
+viewRunSummary.add(runFinishTableView);
+
+/* 
+//var center = {latitude:coords[0][0],longitude:coords[0][1],latitudeDelta:0.001, longitudeDelta:0.001,animate:true};
+var region={
+	latitude: coords[0].latitude,
+	longitude: coords[0].longitude,
+	animate:true,
+	latitudeDelta:0.001,
+	longitudeDelta:0.001
+};
+
+
+var viewRunSummaryMap = Titanium.Map.createView({
 	width:'100%',
-	top:0,
-	height:214,
+	bottom:0,
     mapType:Titanium.Map.STANDARD_TYPE,
     animate:true,
     regionFit:true,
     userLocation:true,
     visible:true
 });
-viewRunSummary.add(viewRunFinishMap);
 
-//opacity bar
-var runFinishOpacityBar = Titanium.UI.createView({ 
-	backgroundColor:'white',
-	width:'100%',
-	top:150,
-	height:52,
-	opacity:0.8
-});
-viewRunFinishMap.add(runFinishOpacityBar);
+var pathCoordinates = [];
+for(var i=0; i < coords.length; i++){
+	pathCoordinates.push({latitude:coords[i][0], longitude:coords[i][1]});
+}
 
-//left divider for opacity bar
-var runFinishDividerBar1 = Titanium.UI.createView({ 
-	backgroundColor:'black',
-	width:1,
-	opacity:0.4,
-	height:31,
-	left:106
-});
-runFinishOpacityBar.add(runFinishDividerBar1);
+viewRunSummary.add(viewRunSummaryMap);
+viewRunSummaryMap.setLocation(region);
 
-//right divider for opacity bar
-var runFinishDividerBar2 = Titanium.UI.createView({ 
-	backgroundColor:'black',
-	width:1,
-	opacity:0.4,
-	height:31,
-	right:106
-});
-runFinishOpacityBar.add(runFinishDividerBar2);
+Ti.API.info('Set location to '+region.latitude +' delta '+region.latitudeDelta);
+*/
+	//route object
+	var route = {
+	    name:"Your path",
+	    points:obj.coordinates,
+	    color:"green",
+	    borderColor:'black',
+	    width:12
+	};
+ 
+	// add the route
+	viewRunFinishMap.addRoute(route);
 
-//number of the distance label
-var runFinishDistanceNumberLabel = Titanium.UI.createLabel({
-	text:'23',
-	height:21,
-	textAlign:'center',
-	left:36,
-	top:10,
-	font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
-});
-runFinishOpacityBar.add(runFinishDistanceNumberLabel);
-
-//unit of the distance label
-var runFinishDistanceUnitLabel = Titanium.UI.createLabel({ 
-	text:'km',
-	height:17,
-	textAlign:'center',
-	left:55,
-	top:14,
-	font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
-});
-runFinishOpacityBar.add(runFinishDistanceUnitLabel);
-
-//distance label
-var runFinishDistanceLabel = Titanium.UI.createLabel({ 
-	text:'distance',
-	height:19,
-	textAlign:'center',
-	left:30,
-	bottom:0,
-	font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
-});
-runFinishOpacityBar.add(runFinishDistanceLabel);
-
-//number of the average pace label
-var runFinishAvgPaceNumberLabel = Titanium.UI.createLabel({
-	text:'12',
-	height:21,
-	textAlign:'center',
-	left:140,
-	top:10,
-	font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
-});
-runFinishOpacityBar.add(runFinishAvgPaceNumberLabel);
-
-//unit of the average pace label
-var runFinishAvgPaceUnitLabel = Titanium.UI.createLabel({ 
-	text:'km/h',
-	height:17,
-	textAlign:'center',
-	left:159,
-	top:14,
-	font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
-});
-runFinishOpacityBar.add(runFinishAvgPaceUnitLabel);
-
-//average pace label
-var runFinishAvgPaceLabel = Titanium.UI.createLabel({ 
-	text:'avg pace',
-	height:19,
-	textAlign:'center',
-	left:139,
-	bottom:0,
-	font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
-});
-runFinishOpacityBar.add(runFinishAvgPaceLabel);
-
-//number of the weather label
-var runFinishWeatherNumberLabel = Titanium.UI.createLabel({
-	text:'24',
-	height:21,
-	textAlign:'center',
-	left:252,
-	top:10,
-	font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
-});
-runFinishOpacityBar.add(runFinishWeatherNumberLabel);
-
-//unit of the weather label
-var runFinishWeatherUnitLabel = Titanium.UI.createLabel({ 
-	text:'°C',
-	height:17,
-	textAlign:'center',
-	left:271,
-	top:14,
-	font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
-});
-runFinishOpacityBar.add(runFinishWeatherUnitLabel);
-
-//weather label
-var runFinishWeatherLabel = Titanium.UI.createLabel({ 
-	text:'weather',
-	height:19,
-	textAlign:'center',
-	left:246,
-	bottom:0,
-	font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
-});
-runFinishOpacityBar.add(runFinishWeatherLabel);
-
-//Table view title bar	
-var runFinishTitleBar = Titanium.UI.createView({ 
-	backgroundColor:UI_COLOR,
-	width:'100%',
-	top:225,
-	height:25
-});
-viewRunSummary.add(runFinishTitleBar);
-
-//Table view title label	
-var runFinishTitleLabel = Titanium.UI.createLabel({ 
-	text:'Breed Energy Bar',
-	color:'white',
-	height:25,
-	textAlign:'center',
-	left:18,
-	font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
-});
-runFinishTitleBar.add(runFinishTitleLabel);
-
-//Activity bar
-var runFinishActivityBar = Ti.UI.createImageView({ 
-	image:IMAGE_PATH+'profile/Activitybar.png',
-	bottom:0,
-	zIndex:2
-});
-viewRunSummary.add(runFinishActivityBar);
-
-//comments label
-var runFinishCommentsLabel = Titanium.UI.createLabel({ 
-	text:'Comments',
-	color:'white',
-	top:13,
-	height:20,
-	textAlign:'center',
-	left:18,
-	font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
-});
-runFinishActivityBar.add(runFinishCommentsLabel);
-
-//dogs table view
-var runFinishTableView = Titanium.UI.createTableView({
-	minRowHeight:60,
-	width:320,
-	data:populateRunFinishTableView(),
-	backgroundColor:'transparent',
-	separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
-	top:250,
-	bottom:39,
-	allowsSelection:false
-});
-viewRunSummary.add(runFinishTableView);
-
+	return viewRunSummary;
+}
 
 function populateRunFinishTableView(){ 
 	var tableRows = [];
@@ -288,50 +332,4 @@ function populateRunFinishTableView(){
 		tableRows.push(row);
 	}
 	return tableRows;
-}
-
-/* 
-//var center = {latitude:coords[0][0],longitude:coords[0][1],latitudeDelta:0.001, longitudeDelta:0.001,animate:true};
-var region={
-	latitude: coords[0].latitude,
-	longitude: coords[0].longitude,
-	animate:true,
-	latitudeDelta:0.001,
-	longitudeDelta:0.001
-};
-
-
-var viewRunSummaryMap = Titanium.Map.createView({
-	width:'100%',
-	bottom:0,
-    mapType:Titanium.Map.STANDARD_TYPE,
-    animate:true,
-    regionFit:true,
-    userLocation:true,
-    visible:true
-});
-
-var pathCoordinates = [];
-for(var i=0; i < coords.length; i++){
-	pathCoordinates.push({latitude:coords[i][0], longitude:coords[i][1]});
-}
-
-// route object
-var route = {
-    name:"Your path",
-    points:pathCoordinates,
-    color:"green",
-    borderColor:'black',
-    width:12
-};
- 
-// add a route
-//viewRunSummaryMap.addRoute(route);
-
-viewRunSummary.add(viewRunSummaryMap);
-viewRunSummaryMap.setLocation(region);
-
-Ti.API.info('Set location to '+region.latitude +' delta '+region.latitudeDelta);
-*/
-	return viewRunSummary;
 }

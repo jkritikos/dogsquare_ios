@@ -82,6 +82,8 @@ var weather = ( function() {
         	xhr.onload = function() {
            
         		var weather = this.responseXML.documentElement;
+        		Ti.API.info('weather: '+weather);
+        		
             	var title = weather.getElementsByTagName('title').item(0).text;
             	var high = weather.getElementsByTagName('yweather:forecast').item(0).getAttribute("high");
             	var low = weather.getElementsByTagName('yweather:forecast').item(0).getAttribute("low");

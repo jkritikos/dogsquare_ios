@@ -2,6 +2,7 @@ var runningMode = false;
 var runningPathCoordinates = [];
 var runningDistanceKm = 0;
 var runningDistanceKmLabelValue = '';
+var runObject = {};
 
 //UI components
 var viewRun = null;
@@ -137,7 +138,7 @@ function buildRunView(){
 	    visible:true
 	});
 	
-	viewRun.add(viewRunSummaryMap);
+	//viewRun.add(viewRunSummaryMap);
 
 	return viewRun;
 }
@@ -162,13 +163,17 @@ function handleEndRunButton(){
 	if(runningMode){
 		runningMode = false;
 		
+		//Prepare run object for the next window
+		runObject.coordinates = runningPathCoordinates;
+		runObject.temperature = '99';
+		runObject.speed = '101';
+		
 		Ti.include('ui/iphone/run_finish.js');
 		
-		var runFinishView = buildRunFinishView(null);
+		var runFinishView = buildRunFinishView(runObject);
 		
 	
 		var runFinishWindow = Ti.UI.createWindow({
-			//url:'ui/iphone/run_finish.js',
 			backgroundColor:'white',
 			barImage:IMAGE_PATH+'common/bar.png',
 			barColor:UI_COLOR,
@@ -178,11 +183,11 @@ function handleEndRunButton(){
 		
 		runFinishWindow.add(runFinishView);
 		
+		//remove RUN window from the navigation stack
 		runFinishWindow.addEventListener('focus', function(){
-			//remove RUN window from the navigation stack
 			var runWindowIndex = openWindows.length-2;
 			navController.close(openWindows[runWindowIndex], {animated:false});
-		})
+		});
 		
 		openWindows.push(runFinishWindow);
 		navController.open(runFinishWindow);
@@ -227,7 +232,10 @@ function trackLocation(){
 		
 		//only use accurate coordinates
 		if(e.coords.accuracy <= 15){
+			
 			var tmpDistance = calculateDistance(coordinates);
+			runObject.distance = tmpDistance;
+			
 			runningPathCoordinates.push(coordinates);
 			
 			var t = 'Lat:'+e.coords.latitude+' & lon: '+e.coords.longitude+' accuracy: '+e.coords.accuracy+' distance '+tmpDistance;

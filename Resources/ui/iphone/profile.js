@@ -48,8 +48,20 @@ profileStartButton.addEventListener('click', function(){
 		backgroundColor:UI_BACKGROUND_COLOR,
 		barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR,
-		title:'Run',
-		backButtonTitle:'Back'
+		title:'Run'
+	});
+	
+	var runWindowBackButton = Titanium.UI.createButton({
+	   backgroundImage:IMAGE_PATH+"follow_invite/Baxk_button.png",
+	   width:48,
+	   height:33
+	});
+	
+	runWindow.leftNavButton = runWindowBackButton;
+	
+	//Event handler for the back button
+	runWindowBackButton.addEventListener('click',function(){
+	    navController.close(runWindow);
 	});
 	
 	runWindow.add(buildRunView());

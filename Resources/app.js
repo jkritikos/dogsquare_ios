@@ -36,3 +36,6 @@ Ti.include('ui/iphone/map.js');
 //test file upload
 //var win11 = xhr_upload({title:'test'});
 //win11.open();
+
+
+//weather.getWeather(37.97545, 23.735128);
