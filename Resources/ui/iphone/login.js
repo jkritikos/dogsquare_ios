@@ -25,6 +25,9 @@ loginWindow.add(registerButton);
 
 registerButton.addEventListener('click', function(){
 	
+	//Holds the user data entered through the signup form
+	var signupUserObject = {};
+	
 	var w = Ti.UI.createWindow({
 		backButtonTitle:'back',
 		title:'register',
@@ -307,7 +310,7 @@ registerButton.addEventListener('click', function(){
 		bottom:75
 	});
 	
-	registerSignupButton.addEventListener('click', showProfileAfterUserSignup);
+	registerSignupButton.addEventListener('click', handleSignupClick);
 	
 	w.add(registerSignupButton);
 	
@@ -357,17 +360,77 @@ registerButton.addEventListener('click', function(){
 			return false;
 		}
 		
+		if(signupUserObject.image == null){
+			alert('PROFILE PHOTO MISSING');
+			return false;
+		}
+		
+		//Prepare the signup object
+		signupUserObject.name = registerFieldName.value;
+		signupUserObject.email = registerFieldEmail.value;
+		signupUserObject.password = registerFieldPassword.value;
+		signupUserObject.age = registerFieldAge.value;
+		//signupUserObject.gender =;
+		//signupUserObject.facebook_id = d;
+		
 		return true;
 	}
 	
-	function showProfileAfterUserSignup(){
+	
+	//Server call for signup
+	function doSignup(uObj){
+		Ti.API.info('signup() called with userObject='+uObj); 	
+		
+		var xhr = Ti.Network.createHTTPClient();
+		xhr.setTimeout(NETWORK_TIMEOUT);
+		
+		xhr.onerror = function(e){
+		
+		};
+		
+		xhr.onload = function(e){
+			Ti.API.info('signup() got back from server '+this.responseText); 	
+			var jsonData = JSON.parse(this.responseText);
+			
+			//Update user object and close the signup window
+			if(jsonData.data.response == NETWORK_RESPONSE_OK){
+				saveUserObject(uObj);
+				updateLeftMenu(userObject);
+				closeRegisterWindow();
+			} else {
+				alert(getErrorMessage(jsonData.response));
+			}
+		};
+		
+		xhr.setRequestHeader("Content-Type", "multipart/form-data");
+		xhr.open('POST',API+'signup');
+		xhr.send({
+			photo:uObj.image,
+			name:uObj.name,
+			email:uObj.email,
+			password:uObj.password,
+			age:uObj.age,
+			facebook_id:uObj.facebook_id,
+			gender:uObj.gender
+		});
+	}
+	
+	//Closes the register window
+	function closeRegisterWindow(){
+		w.close();
+		loginWindow.animate({opacity:0, duration:100}, function(){
+			window.remove(loginWindow);
+			leftTableView.fireEvent('click', {menuItem:MENU_PROFILE});
+		});
+	}
+	
+	//Event handler for signup button
+	function handleSignupClick(){
 		if(validateSignupForm()){
 			Ti.API.info('register form is valid');
-			w.close();
-			loginWindow.animate({opacity:0, duration:1}, function(){
-				window.remove(loginWindow);
-				leftTableView.fireEvent('click', {menuItem:MENU_PROFILE});
-			});
+			
+			//Call signup() on the server
+			doSignup(signupUserObject);	
 		}
 	}
 	
@@ -376,6 +439,7 @@ registerButton.addEventListener('click', function(){
 			
 			success:function(event){
 				var image = event.media;
+				signupUserObject.image = image;
 				
 				// create new file name and remove old
 				var filename = Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg";

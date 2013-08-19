@@ -159,50 +159,53 @@ function handleStartRunButton(){
 }
 
 function handleEndRunButton(){
-	Ti.include('ui/iphone/run_finish.js');
+	if(runningMode){
+		runningMode = false;
+		
+		Ti.include('ui/iphone/run_finish.js');
+		
+		var runFinishView = buildRunFinishView(null);
+		
 	
-	var runFinishView = buildRunFinishView(null);
-	
-
-	var runFinishWindow = Ti.UI.createWindow({
-		//url:'ui/iphone/run_finish.js',
-		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR,
-		title:'Run overview',
-		backButtonTitle:'Back'
-	});
-	
-	runFinishWindow.add(runFinishView);
-	
-	runFinishWindow.addEventListener('focus', function(){
-		//remove RUN window from the navigation stack
-		var runWindowIndex = openWindows.length-2;
-		navController.close(openWindows[runWindowIndex], {animated:false});
-	})
-	
-	openWindows.push(runFinishWindow);
-	navController.open(runFinishWindow);
-	
-	
-	
-	
-	// route object
-	var route = {
-	    name:"Your path",
-	    points:runningPathCoordinates,
-	    color:"green",
-	    backgroundGradient: {
-        type: 'linear',
-        startPoint: { x: '0%', y: '50%' },
-        endPoint: { x: '100%', y: '50%' },
-        colors: [ { color: 'red', offset: 0.0}, { color: 'green', offset: 0.25 }, { color: 'red', offset: 1.0 } ],
-    },
-	    borderColor:'black',
-	    width:12
-	};
-	
-	viewRunSummaryMap.addRoute(route);
+		var runFinishWindow = Ti.UI.createWindow({
+			//url:'ui/iphone/run_finish.js',
+			backgroundColor:'white',
+			barImage:IMAGE_PATH+'common/bar.png',
+			barColor:UI_COLOR,
+			title:'Run overview',
+			backButtonTitle:'Back'
+		});
+		
+		runFinishWindow.add(runFinishView);
+		
+		runFinishWindow.addEventListener('focus', function(){
+			//remove RUN window from the navigation stack
+			var runWindowIndex = openWindows.length-2;
+			navController.close(openWindows[runWindowIndex], {animated:false});
+		})
+		
+		openWindows.push(runFinishWindow);
+		navController.open(runFinishWindow);
+		
+		// route object
+		var route = {
+		    name:"Your path",
+		    points:runningPathCoordinates,
+		    color:"green",
+		    backgroundGradient: {
+	        type: 'linear',
+	        startPoint: { x: '0%', y: '50%' },
+	        endPoint: { x: '100%', y: '50%' },
+	        colors: [ { color: 'red', offset: 0.0}, { color: 'green', offset: 0.25 }, { color: 'red', offset: 1.0 } ],
+	    },
+		    borderColor:'black',
+		    width:12
+		};
+		
+		viewRunSummaryMap.addRoute(route);
+	} else {
+		alert('START RUNNING FIRST');
+	}
 }
 
 function trackLocation(){

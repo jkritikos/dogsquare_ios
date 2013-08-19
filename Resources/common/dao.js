@@ -20,13 +20,54 @@ if(!PRODUCTION_MODE){
 //Language constants
 var LANGUAGE_ENGLISH = 1;
 
+//Server constants
 var NETWORK_TIMEOUT = 20000;
+var NETWORK_RESPONSE_OK = 1;
+var ERROR_MESSAGE_EMAIL_TAKEN = -1;
 
-function hello(){
+//Updates the global user object - only keys in obj are updated
+function saveUserObject(obj){
+	//image
+	
+	if(obj.name){
+		userObject.name = obj.name;	
+	}
+	
+	if(obj.email){
+		userObject.email = obj.email;	
+	}
+	
+	if(obj.age){
+		userObject.age = obj.age;	
+	}
+	
+	if(obj.facebook_id){
+		userObject.facebook_id = obj.facebook_id;	
+	}
+	
+	if(obj.gender){
+		userObject.gender = obj.gender;
+	}
+	
+	if(obj.followers){
+		userObject.followers = obj.followers;
+	} 
+	
+	if(obj.inbox){
+		userObject.inbox = obj.inbox;
+	}
+	
+	if(obj.userId){
+		userObject.userId = obj.userId;
+	}
 	
 }
 
-function signup(){
+function getUserObject(){
+	
+}
+
+function hello(){
 	
 }
 
@@ -91,7 +132,7 @@ function xhr_upload(_args) {
 				Ti.UI.createAlertDialog({title:'Error', message:e.error}).show();
 				Ti.API.info('IN ERROR ' + e.error);
 			};
-			xhr.setTimeout(20000);
+			xhr.setTimeout(NETWORK_TIMEOUT);
 			xhr.onload = function(e)
 			{
 				Ti.UI.createAlertDialog({title:'Success', message:'status code ' + this.status}).show();
