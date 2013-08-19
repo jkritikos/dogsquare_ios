@@ -1,3 +1,4 @@
+//checkin window
 var checkinWindow = Ti.UI.createWindow({
 	backgroundColor:UI_BACKGROUND_COLOR,
 	barColor:UI_COLOR,
@@ -5,11 +6,11 @@ var checkinWindow = Ti.UI.createWindow({
 	backButtonTitle:'Back'
 });
 
-//the map
+//the checkin map
 var checkinMap = Titanium.Map.createView({ 
 	width:'100%',
 	top:0,
-	height:120,
+	height:208,
     mapType:Titanium.Map.STANDARD_TYPE,
     animate:true,
     regionFit:true,
@@ -18,117 +19,16 @@ var checkinMap = Titanium.Map.createView({
 });
 checkinWindow.add(checkinMap);
 
-//photo image
-var checkinPhotoImage = Ti.UI.createImageView({
-	image:IMAGE_PATH+'checkin/photo.png',
-	width:'100%',
-	height:120,
-	top:120
+//checkin title yellow bar
+var checkinTitleBar = Ti.UI.createImageView({ 
+	image:IMAGE_PATH+'profile/Activitybar.png',
+	top:226
 });
-checkinWindow.add(checkinPhotoImage);
+checkinWindow.add(checkinTitleBar);
 
-//view to add photo
-var checkinPhotoView = Ti.UI.createView({
-	height:120,
-	width:54,
-	right:0,
-	backgroundColor:'black',
-	opacity:0.5
-});
-checkinPhotoImage.add(checkinPhotoView);
-
-//place title label
-var checkinTitleLabel = Ti.UI.createLabel({
-	text:'Mega Pet City',
-	top:240,
-	textAlign:'left',
-	width:100,
-	height:21,
-	left:16,
-	color:'black',
-	opacity:0.6,
-	font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
-});
-checkinWindow.add(checkinTitleLabel);
-
-//place description label
-var checkinDescriptionLabel = Ti.UI.createLabel({
-	text:'Pet supplies',
-	top:257,
-	textAlign:'left',
-	width:100,
-	height:16,
-	left:17,
-	color:'black',
-	opacity:0.8,
-	font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
-});
-checkinWindow.add(checkinDescriptionLabel);
-
-//background bar for checkin button
-var checkinButtonBarView = Ti.UI.createView({
-	bottom:84,
-	height:55,
-	width:'100%',
-	backgroundColor:'white'
-});
-checkinWindow.add(checkinButtonBarView);
-
-//checkin button
-var checkinButton = Ti.UI.createButton({
-	backgroundImage:IMAGE_PATH+'checkin/check_in_btn.png',
-	width:179,
-	height:51,
-	left:14
-});
-checkinButtonBarView.add(checkinButton);
-
-//heart image
-var checkinHeartImage = Ti.UI.createImageView({
-	image:IMAGE_PATH+'checkin/best_icon_default.png',
-	right:46
-});
-checkinButtonBarView.add(checkinHeartImage);
-
-//background for comments
-var checkinCommentsBackgroundView = Ti.UI.createView({
-	bottom:-236,
-	height:320,
-	width:'100%',
-	backgroundColor:UI_BACKGROUND_COLOR,
-	zIndex:2
-});
-checkinWindow.add(checkinCommentsBackgroundView);
-
-//button to show all comments
-var checkinCommentsButton = Ti.UI.createButton({ 
-	backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
-	top:0,
-	width:320,
-	height:33,
-	toggle:false,
-	button:'bar'
-});
-checkinCommentsBackgroundView.add(checkinCommentsButton);
-//event listener for button
-checkinCommentsButton.addEventListener('click', handleCommentButtons);
-
-//plus buttton to create a new comment
-var checkinPlusButton = Ti.UI.createButton({ 
-	backgroundColor:'red',
-	top:13,
-	right:26,
-	width:20,
-	height:20,
-	button:'plus'
-});
-checkinCommentsButton.add(checkinPlusButton);
-//event listener for plus button
-checkinPlusButton.addEventListener('click', handleCommentButtons);
-
-//comments title label
-var checkinCommentsTitleLabel = Titanium.UI.createLabel({ 
-	text:'Comments',
+//checkin title label of the bar
+var checkinBarTitleLabel = Titanium.UI.createLabel({ 
+	text:'Nearby places',
 	color:'white',
 	top:13,
 	height:20,
@@ -136,107 +36,161 @@ var checkinCommentsTitleLabel = Titanium.UI.createLabel({
 	left:18,
 	font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
-checkinCommentsButton.add(checkinCommentsTitleLabel);
+checkinTitleBar.add(checkinBarTitleLabel);
 
-//create a comment textField
-var checkinCommentsTextField = Ti.UI.createTextField({
-	width:266,
-	height:36,
-	top:44,
-	borderWidth:2,
-	borderRadius:2
-});
-checkinCommentsBackgroundView.add(checkinCommentsTextField);
-checkinCommentsTextField.hide();
-
-//comments tableView
-var checkinCommentsTableView = Titanium.UI.createTableView({
-	minRowHeight:47,
+//opacity bar
+var checkinOpacityBar = Titanium.UI.createView({ 
+	backgroundColor:'white',
 	width:320,
-	data:populateCommentsTableView(),
-	backgroundColor:'e7e7e7',
-	top:36,
-	bottom:0,
-	allowsSelection:false
+	top:144,
+	height:53,
+	opacity:0.8
 });
-checkinCommentsBackgroundView.add(checkinCommentsTableView);
+checkinMap.add(checkinOpacityBar);
 
-//populate comment rows
-function populateCommentsTableView(){
+//change opacity when touched
+checkinOpacityBar.addEventListener('touchstart', function(e){
+	checkinOpacityBar.opacity = 1;
+});
+
+//change opacity when released
+checkinOpacityBar.addEventListener('touchend', function(e){
+	checkinOpacityBar.opacity = 0.8;
+});
+
+//redirect to add new place view
+checkinOpacityBar.addEventListener('click', function(e){
+	Ti.include('ui/iphone/add_place.js');
 	
+	openWindows.push(addPlaceWindow);
+	navController.open(addPlaceWindow);
+});
+
+//checkin opacity bar label
+var checkinOpacityBarLabel = Titanium.UI.createLabel({ 
+	text:'Add a new place +',
+	color:'695a5a',
+	height:22,
+	textAlign:'left',
+	left:16,
+	font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
+});
+checkinOpacityBar.add(checkinOpacityBarLabel);
+
+//background of the table view
+var checkinPlacesTableViewBackground = Titanium.UI.createView({ 
+	backgroundColor:'d2d2d2',
+	width:'100%',
+	bottom:0,
+	top:259
+});
+checkinWindow.add(checkinPlacesTableViewBackground);
+
+//checkin places tableView
+var checkinPlacesTableView = Titanium.UI.createTableView({
+	minRowHeight:51,
+	width:320,
+	data:populatecheckinPlacesTableView(),
+	separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
+	backgroundColor:'d2d2d2',
+	top:263,
+	bottom:0
+});
+checkinWindow.add(checkinPlacesTableView);
+
+function populatecheckinPlacesTableView(){
 	var tableRows = [];
+	var placeArray = ['Pet City', 'Pet and Bath', 'Pet Vet'];
+	var descriptionArray = ['Pet Shop', 'Grooming Services', 'Veterinary Clinic'];
+	var distanceArray = ['0,5km', '1km', '1km'];
 	
-	for(i=0;i<=5;i++){
+	for(i=0;i<=3;i++){
 		
-		//comment row
-		var commentRow = Ti.UI.createTableViewRow({
-			className:'commentRow',
-			height:'auto',
+		//places row
+		var placeRow = Ti.UI.createTableViewRow({
+			className:'placeRow',
+			height:51,
 			width:'100%',
-			backgroundColor:'transparent',
+			backgroundColor:'e7e7e7',
 			selectedBackgroundColor:'transparent'
 		});
+		placeRow.addEventListener('click', handlePlaceRow);
 		
-		//comment label
-		var commentLabel = Ti.UI.createLabel({
-			text:'Great shop. It has anything you need for your pet',
-			top:8,
-			textAlign:'left',
-			width:292,
-			bottom:24,
-			height:'auto',
-			left:14,
-			opacity:0.6,
-			color:'black',
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+		//place image
+		var rowPlaceImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
+		var rowPlaceImage = Titanium.UI.createImageView({
+			image:rowPlaceImageFile.nativePath,
+			left:12,
+			top:2,
+			width:42,
+			height:42,
+			borderRadius:21,
+			borderWidth:1,
+			borderColor:'f5a92c'
 		});
 		
-		//comment time
-		var timeLabel = Ti.UI.createLabel({
-			text:'3 hours ago',
-			bottom:10,
-			textAlign:'left',
-			width:100,
-			height:15,
-			left:16,
-			opacity:0.4,
+		//place title label for row
+		var rowPlaceTitleLabel = Titanium.UI.createLabel({ 
+			text:placeArray[i],
 			color:'black',
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			height:16,
+			top:4,
+			width:'auto',
+			textAlign:'left',
+			opacity:0.8,
+			left:67,
+			font:{fontSize:10, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
-		commentRow.add(commentLabel);
-		commentRow.add(timeLabel);
+		//place description label for row
+		var rowPlaceDescriptionLabel = Titanium.UI.createLabel({ 
+			text:descriptionArray[i],
+			color:'black',
+			height:14,
+			top:17,
+			width:'auto',
+			textAlign:'left',
+			opacity:0.5,
+			left:67,
+			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
 		
-		tableRows.push(commentRow);
+		//place distance label for row
+		var rowPlaceDistanceLabel = Titanium.UI.createLabel({ 
+			text:distanceArray[i],
+			color:'black',
+			height:14,
+			top:29,
+			width:'auto',
+			textAlign:'left',
+			opacity:0.5,
+			left:67,
+			font:{fontSize:10, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		
+		//sepparator
+		var rowSepparator = Titanium.UI.createView({ 
+			backgroundColor:'d2d2d2',
+			width:'100%',
+			bottom:0,
+			height:3
+		});
+		
+		placeRow.add(rowPlaceTitleLabel);
+		placeRow.add(rowPlaceDescriptionLabel);
+		placeRow.add(rowPlaceDistanceLabel);
+		placeRow.add(rowSepparator);
+		placeRow.add(rowPlaceImage);
+		
+		tableRows.push(placeRow);
 	}
 	
 	return tableRows;
 }
 
-//handle comments button and plus button
-function handleCommentButtons(e){
-	var toggle = e.source.toggle;
-	var button = e.source.button;
+function handlePlaceRow(){
+	Ti.include('ui/iphone/checkin_place.js');
 	
-	if(toggle && button != 'plus'){
-		checkinCommentsBackgroundView.animate({bottom:-236, duration:500});
-		checkinCommentsTextField.blur();
-		checkinCommentsTextField.hide();
-		checkinCommentsTableView.show();
-		e.source.toggle = false;
-	}else if(!toggle && button != 'plus'){
-		checkinCommentsBackgroundView.animate({bottom:0, duration:500});
-		checkinCommentsTextField.blur();
-		checkinCommentsTextField.hide();
-		checkinCommentsTableView.show();
-		e.source.toggle = true;
-	}else if(button == 'plus'){
-		checkinCommentsBackgroundView.animate({bottom:0, duration:300});
-		checkinCommentsButton.toggle = true;
-		
-		checkinCommentsTextField.focus();
-		checkinCommentsTableView.hide();
-		checkinCommentsTextField.show();
-	}
-	
+	openWindows.push(checkinPlaceWindow);
+	navController.open(checkinPlaceWindow);
 }

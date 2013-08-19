@@ -1,15 +1,16 @@
+//Add dog view
 var viewAddDog = Ti.UI.createView({
 	backgroundColor:UI_BACKGROUND_COLOR
 });
 
+//form field
 var addDogFormFieldImage = Ti.UI.createImageView({ 
-	image:IMAGE_PATH+'add_new_dog/form_field.png',
+	image:IMAGE_PATH+'add_dog/form_field.png',
 	top:12
 });
-
 viewAddDog.add(addDogFormFieldImage);
 
-
+//photo button
 var addDogPhotoButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'signup/place_photo.png',
 	width:109,
@@ -20,6 +21,7 @@ var addDogPhotoButton = Ti.UI.createButton({
 viewAddDog.add(addDogPhotoButton);
 addDogPhotoButton.addEventListener('click', addDogShowPhotoOptions);
 
+//photo label
 var addDogPhotoLabel = Ti.UI.createLabel({
 	text:'Dog\'s Photo Here!',
 	bottom:9,
@@ -31,12 +33,14 @@ var addDogPhotoLabel = Ti.UI.createLabel({
 });
 addDogPhotoButton.add(addDogPhotoLabel);
 
+//Scroll background 
 var addDogFormScrollBackground = Ti.UI.createScrollView({
 	backgroundColor:'e7e6e6',
 	top:119,
 	width:196,
 	height:205
 });
+addDogFormFieldImage.add(addDogFormScrollBackground);
 
 var addDogTxtFieldOffset = 34;
 var addDogTxtFieldHeight = 32;
@@ -61,6 +65,7 @@ addDogFieldName.addEventListener('return', function() {
 
 addDogFormScrollBackground.add(addDogFieldName);
 
+//Name textfield label
 var addDogFieldNameHintTextLabel = Ti.UI.createLabel({
 	text:'Name*',
 	color:'999999',
@@ -71,9 +76,9 @@ var addDogFieldNameHintTextLabel = Ti.UI.createLabel({
 	height:30,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-
 addDogFieldName.add(addDogFieldNameHintTextLabel);
 
+//Dog Breed textfield
 var addDogFieldDogBreed = Ti.UI.createTextField({
 	width:addDogTxtFieldWidth,
 	height:addDogTxtFieldHeight,
@@ -85,13 +90,14 @@ var addDogFieldDogBreed = Ti.UI.createTextField({
 addDogFieldDogBreed.addEventListener('change', handleAddDogTextFieldFocus);
 addDogFieldDogBreed.addEventListener('blur', handleAddDogTextFieldBlur);
 
-//Event listener for the name textfield
+//Event listener for the dog breed textfield
 addDogFieldDogBreed.addEventListener('return', function() {
    addDogFieldAge.focus();
 });
 
 addDogFormScrollBackground.add(addDogFieldDogBreed );
 
+//Dog Breed textfield label
 var addDogFieldDogBreedHintTextLabel = Ti.UI.createLabel({
 	text:'Dog Breed*',
 	color:'999999',
@@ -102,9 +108,9 @@ var addDogFieldDogBreedHintTextLabel = Ti.UI.createLabel({
 	height:30,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-
 addDogFieldDogBreed.add(addDogFieldDogBreedHintTextLabel);
 
+//Age textfield
 var addDogFieldAge = Ti.UI.createTextField({
 	width:addDogTxtFieldWidth,
 	height:addDogTxtFieldHeight,
@@ -116,13 +122,14 @@ var addDogFieldAge = Ti.UI.createTextField({
 addDogFieldAge.addEventListener('change', handleAddDogTextFieldFocus);
 addDogFieldAge.addEventListener('blur', handleAddDogTextFieldBlur);
 
-//Event listener for the name textfield
+//Event listener for the age textfield
 addDogFieldAge.addEventListener('return', function() {
    addDogFieldWeight.focus();
 });
 
 addDogFormScrollBackground.add(addDogFieldAge);
 
+//Age textfield label
 var addDogFieldAgeHintTextLabel = Ti.UI.createLabel({
 	text:'Age*',
 	color:'999999',
@@ -133,9 +140,9 @@ var addDogFieldAgeHintTextLabel = Ti.UI.createLabel({
 	height:30,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-
 addDogFieldAge.add(addDogFieldAgeHintTextLabel);
 
+//Weight textfield
 var addDogFieldWeight = Ti.UI.createTextField({
 	width:addDogTxtFieldWidth,
 	height:addDogTxtFieldHeight,
@@ -147,13 +154,14 @@ var addDogFieldWeight = Ti.UI.createTextField({
 addDogFieldWeight.addEventListener('change', handleAddDogTextFieldFocus);
 addDogFieldWeight.addEventListener('blur', handleAddDogTextFieldBlur)
 
-//Event listener for the name textfield
+//Event listener for the weight textfield
 addDogFieldWeight.addEventListener('return', function() {
    addDogFieldGender.focus();
 });
 
 addDogFormScrollBackground.add(addDogFieldWeight);
 
+//Weight textfield label
 var addDogFieldWeightHintTextLabel = Ti.UI.createLabel({
 	text:'Weight*',
 	color:'999999',
@@ -164,9 +172,9 @@ var addDogFieldWeightHintTextLabel = Ti.UI.createLabel({
 	height:30,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-
 addDogFieldWeight.add(addDogFieldWeightHintTextLabel);
 
+//Gender textfield
 var addDogFieldGender = Ti.UI.createTextField({
 	width:addDogTxtFieldWidth,
 	height:addDogTxtFieldHeight,
@@ -178,13 +186,14 @@ var addDogFieldGender = Ti.UI.createTextField({
 addDogFieldGender.addEventListener('change', handleAddDogTextFieldFocus);
 addDogFieldGender.addEventListener('blur', handleAddDogTextFieldBlur);
 
-//Event listener for the name textfield
+//Event listener for the gender textfield
 addDogFieldGender.addEventListener('return', function() {
    addDogFieldMatting.focus();
 });
 
 addDogFormScrollBackground.add(addDogFieldGender);
 
+//Gender textfield label
 var addDogFieldGenderHintTextLabel = Ti.UI.createLabel({
 	text:'Gender*',
 	color:'999999',
@@ -195,9 +204,9 @@ var addDogFieldGenderHintTextLabel = Ti.UI.createLabel({
 	height:30,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-
 addDogFieldGender.add(addDogFieldGenderHintTextLabel);
 
+//Matting textfield
 var addDogFieldMatting = Ti.UI.createTextField({
 	width:addDogTxtFieldWidth,
 	height:addDogTxtFieldHeight,
@@ -211,6 +220,7 @@ addDogFieldMatting.addEventListener('blur', handleAddDogTextFieldBlur);
 
 addDogFormScrollBackground.add(addDogFieldMatting);
 
+//Matting textfield label
 var addDogFieldMattingHintTextLabel = Ti.UI.createLabel({
 	text:'Matting*',
 	color:'999999',
@@ -221,7 +231,6 @@ var addDogFieldMattingHintTextLabel = Ti.UI.createLabel({
 	height:30,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-
 addDogFieldMatting.add(addDogFieldMattingHintTextLabel);
 
 //sepparator offset
@@ -241,13 +250,13 @@ for(var i=0; i<=4; i++) {
 	sepparatorOffset += 34;
 }
 
-addDogFormFieldImage.add(addDogFormScrollBackground);
-
+//photo dialog
 var addDogPhotoDialog = Titanium.UI.createOptionDialog({
 	options:['Take Photo', 'Choose From Library', 'Cancel'],
 	cancel:2
 });
 
+//photo dialog event listener
 addDogPhotoDialog.addEventListener('click',function(e){
 	if(e.index == 0){
 		handleCameraSelection();
@@ -256,11 +265,12 @@ addDogPhotoDialog.addEventListener('click',function(e){
 	}
 });
 
+//handle photo button
 function addDogShowPhotoOptions(){
 	addDogPhotoDialog.show();
 }
 
-
+//handle photo selection
 function handlePhotoSelection(){
 	Titanium.Media.openPhotoGallery({	
 		
@@ -280,11 +290,13 @@ function handlePhotoSelection(){
 		}
 	});
 }
-	
+
+//handle camera selection
 function handleCameraSelection(){
 	
 }	
 
+//handle all textfields when focused
 function handleAddDogTextFieldFocus(e){
 	var field = e.source.field;
 	
@@ -327,7 +339,7 @@ function handleAddDogTextFieldFocus(e){
 	}
 }
 
-//handle textfield when not focused
+//handle all textfields when not focused
 function handleAddDogTextFieldBlur(e){
 	var field = e.source.field;
 	

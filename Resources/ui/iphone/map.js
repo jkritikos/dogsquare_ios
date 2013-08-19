@@ -34,7 +34,7 @@ mapCheckInButton.addEventListener('click', function(){
 		backButtonTitle:'Back'
 	});*/
 	
-	Ti.include('ui/iphone/checkIn.js');
+	Ti.include('ui/iphone/checkin.js');
 	
 	openWindows.push(checkinWindow);
 	navController.open(checkinWindow);

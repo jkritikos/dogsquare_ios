@@ -1,9 +1,11 @@
+//UI components
 var ADD_DOG = 8;
 
 
 //Right window
 var winRight = Ti.UI.createWindow();
 
+//right table view
 var rightTableView = Ti.UI.createTableView({
 	backgroundColor:'1c2027',
 	data:populateRightMenu(),
@@ -17,9 +19,11 @@ winRight.add(rightTableView);
 function populateRightMenu(){
 	
 	var rightMenuData = [];
+	//temporary arrays
 	var dogNames = ['Max', 'Lory', 'Lucy'];
 	var percent = ['76 %', '53 %', '39 %'];
 	
+	//add dog row - buttton
 	var rightMenuAddDogRow = Ti.UI.createTableViewRow({
 		height:58,
 		className:'RIGHT_MENU',
@@ -27,7 +31,10 @@ function populateRightMenu(){
 		selectedBackgroundColor:'#1c2027',
 		rowId:ADD_DOG
 	});
+	
+	// add dog button event listener
 	rightMenuAddDogRow.addEventListener("click", function(){
+		closeOpenWindows();
 		
 		Ti.include('ui/iphone/add_dog.js');
 		navController.getWindow().add(viewAddDog);
@@ -38,11 +45,13 @@ function populateRightMenu(){
 		}
 	});
 	
+	//plus image inside button UI
 	var rowPlusImage = Ti.UI.createImageView({ 
 		image:IMAGE_PATH+'menu_right/add_dog_icon.png',
 		left:86
 	});
 	
+	//label inside button UI
 	var addDogRowLabel = Titanium.UI.createLabel({ 
 		text:'Add a new dog',
 		color:'bab9ba',
@@ -53,6 +62,7 @@ function populateRightMenu(){
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	
+	//border inside button UI
 	var rowBorderImage1 = Ti.UI.createImageView({ 
 		image:IMAGE_PATH+'menu_right/border.png',
 		bottom:0,
@@ -66,6 +76,7 @@ function populateRightMenu(){
 	rightMenuData.push(rightMenuAddDogRow);
 	
 	for(i=0;i<=2;i++){
+		//all dog rows
 		var rightMenuRow = Ti.UI.createTableViewRow({
 			height:116,
 			className:'RIGHT_MENU',
@@ -75,12 +86,14 @@ function populateRightMenu(){
 			active:false
 		});
 		
+		//border image inside the dog row - right menu row
 		var rowBorderImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'menu_right/border.png',
 			bottom:0,
 			left:42
 		});
 		
+		//dog image inside the dog row - right menu row
 		var rowDogImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
 		var rowDogImage = Titanium.UI.createImageView({
 			image:rowDogImageFile.nativePath,
@@ -93,6 +106,7 @@ function populateRightMenu(){
 			borderColor:'454950'
 		});
 		
+		//dog name label inside the dog row - right menu row
 		var rowDogNameLabel = Titanium.UI.createLabel({ 
 			text:dogNames[i],
 			color:'ab7b04',
@@ -104,6 +118,7 @@ function populateRightMenu(){
 			font:{fontSize:24, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
+		//dog mood label inside the dog row - right menu row
 		var rowDogMoodLabel = Titanium.UI.createLabel({ 
 			text:'Happy',
 			color:'8a8b8c',
@@ -115,6 +130,7 @@ function populateRightMenu(){
 			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
+		//dog percent label inside the dog row - right menu row
 		var rowDogPercentLabel = Titanium.UI.createLabel({ 
 			text:percent[i],
 			color:'ab7b04',
@@ -126,12 +142,14 @@ function populateRightMenu(){
 			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
+		//bone image inside the dog row - right menu row
 		var rowBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_icon.png',
 			left:232,
 			top:47
 		});
 		
+		//check box view inside the dog row - right menu row
 		var rowCheckBox = Titanium.UI.createView({
 			backgroundColor:'454950',
 			bottom:16,
@@ -140,6 +158,7 @@ function populateRightMenu(){
 			height:23
 		});
 		
+		//check image inside the dog row - right menu row
 		var rowCheckImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'menu_right/check_mark.png'
 		});
@@ -159,6 +178,7 @@ function populateRightMenu(){
 	return rightMenuData;
 }
 
+//handle all rows and change properties when activated/deactivated
 function handleTableViewRows(e){
 	var rowCheckImage = e.row.children[0].children[0];
 	var rowDogNameLabel = e.row.children[4];
