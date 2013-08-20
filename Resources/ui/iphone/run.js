@@ -2,6 +2,7 @@ var runningMode = false;
 var runningPathCoordinates = [];
 var runningDistanceKm = 0;
 var runningDistanceKmLabelValue = '';
+var runObject = {};
 
 //UI components
 var viewRun = null;
@@ -140,7 +141,7 @@ function buildRunView(){
 	    visible:true
 	});
 	
-	viewRun.add(viewRunSummaryMap);
+	//viewRun.add(viewRunSummaryMap);
 
 	return viewRun;
 }
@@ -162,56 +163,57 @@ function handleStartRunButton(){
 }
 
 function handleEndRunButton(){
-	Ti.include('ui/iphone/run_finish.js');
-	
-	var runFinishView = buildRunFinishView(null);
-	
 
-	runFinishWindow = Ti.UI.createWindow({
-		//url:'ui/iphone/run_finish.js',
-		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR,
-		title:'Run overview'
-	});
+	if(runningMode){
+		runningMode = false;
+		
+		//Prepare run object for the next window
+		runObject.coordinates = runningPathCoordinates;
+		runObject.temperature = '99';
+		runObject.speed = '101';
+		
+		Ti.include('ui/iphone/run_finish.js');
+		
+		var runFinishView = buildRunFinishView(runObject);
 	
-	//back button
-	var runFinishBackButton = Ti.UI.createButton({
-	    backgroundImage: IMAGE_PATH+'common/back_button.png',
-	    width:48,
-	    height:33
-	});
-	
-	runFinishWindow.setLeftNavButton(runFinishBackButton);
-	runFinishBackButton.addEventListener("click", handleRunFinishBackButton);
-	
-	runFinishWindow.add(runFinishView);
-	
-	runFinishWindow.addEventListener('focus', function(){
+		var runFinishWindow = Ti.UI.createWindow({
+			backgroundColor:'white',
+			barImage:IMAGE_PATH+'common/bar.png',
+			barColor:UI_COLOR,
+			title:'Run overview',
+			backButtonTitle:'Back'
+		});
+		
+		runFinishWindow.add(runFinishView);
+		
 		//remove RUN window from the navigation stack
-		var runWindowIndex = openWindows.length-2;
-		navController.close(openWindows[runWindowIndex], {animated:false});
-	})
-	
-	openWindows.push(runFinishWindow);
-	navController.open(runFinishWindow);
-	
-	// route object
-	var route = {
-	    name:"Your path",
-	    points:runningPathCoordinates,
-	    color:"green",
-	    backgroundGradient: {
-        type: 'linear',
-        startPoint: { x: '0%', y: '50%' },
-        endPoint: { x: '100%', y: '50%' },
-        colors: [ { color: 'red', offset: 0.0}, { color: 'green', offset: 0.25 }, { color: 'red', offset: 1.0 } ],
-    },
-	    borderColor:'black',
-	    width:12
-	};
-	
-	viewRunSummaryMap.addRoute(route);
+		runFinishWindow.addEventListener('focus', function(){
+			var runWindowIndex = openWindows.length-2;
+			navController.close(openWindows[runWindowIndex], {animated:false});
+		});
+		
+		openWindows.push(runFinishWindow);
+		navController.open(runFinishWindow);
+		
+		// route object
+		var route = {
+		    name:"Your path",
+		    points:runningPathCoordinates,
+		    color:"green",
+		    backgroundGradient: {
+	        type: 'linear',
+	        startPoint: { x: '0%', y: '50%' },
+	        endPoint: { x: '100%', y: '50%' },
+	        colors: [ { color: 'red', offset: 0.0}, { color: 'green', offset: 0.25 }, { color: 'red', offset: 1.0 } ],
+	    },
+		    borderColor:'black',
+		    width:12
+		};
+		
+		viewRunSummaryMap.addRoute(route);
+	} else {
+		alert('START RUNNING FIRST');
+	}
 }
 
 function handleRunFinishBackButton() {
@@ -237,7 +239,10 @@ function trackLocation(){
 		
 		//only use accurate coordinates
 		if(e.coords.accuracy <= 15){
+			
 			var tmpDistance = calculateDistance(coordinates);
+			runObject.distance = tmpDistance;
+			
 			runningPathCoordinates.push(coordinates);
 			
 			var t = 'Lat:'+e.coords.latitude+' & lon: '+e.coords.longitude+' accuracy: '+e.coords.accuracy+' distance '+tmpDistance;

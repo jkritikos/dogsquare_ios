@@ -120,6 +120,16 @@ leftTableView.addEventListener("click", function(e){
 	}
 });
 
+//Updates the menu with user specific properties
+function updateLeftMenu(userObject){
+	Ti.API.info('updating left menu for user '+userObject.name +' with '+userObject.followers+' followers');
+	
+	//name
+	leftTableView.data[0].rows[0].children[2].text = userObject.name;
+	//followers
+	leftTableView.data[0].rows[0].children[1].text = userObject.followers +' followers';
+}
+
 //Creates and populates the left menu
 function createLeftMenu(){
 	var leftTableView = Ti.UI.createTableView({
@@ -154,7 +164,7 @@ function createLeftMenu(){
 	});
 	
 	var usernameLabel = Titanium.UI.createLabel({
-		text:'Jein Mc Lane',
+		text:userObject.name,
 		color:'#ab7b04',
 		left:82,
 		top:17,
@@ -162,7 +172,7 @@ function createLeftMenu(){
 	});
 	
 	var followersLabel = Titanium.UI.createLabel({
-		text:'23 followers',
+		text:userObject.followers + ' followers',
 		color:'#b6b5b6',
 		left:82,
 		top:42,
@@ -258,16 +268,16 @@ function createLeftMenuRow(menuItem){
 }
 
 function handleLeftMenuTextFieldFocus(e){
-		var field = e.source.field;
+	var field = e.source.field;
 		
-		if(field == 'search'){
-			if(leftmenuSearchTxtfield.value != ''){
-				leftmenuSearchTxtfieldLabel.hide();
-			}else{
-				leftmenuSearchTxtfieldLabel.show();
-			}
+	if(field == 'search'){
+		if(leftmenuSearchTxtfield.value != ''){
+			leftmenuSearchTxtfieldLabel.hide();
+		}else{
+			leftmenuSearchTxtfieldLabel.show();
 		}
 	}
+}
 	
 //handle textfield when not focused
 function handleLeftMenuTextFieldBlur(e){

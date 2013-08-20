@@ -53,6 +53,7 @@ profileStartButton.addEventListener('click', function(){
 		title:'Run'
 	});
 	
+
 	//back button
 	var runBackButton = Ti.UI.createButton({
 	    backgroundImage: IMAGE_PATH+'common/back_button.png',
