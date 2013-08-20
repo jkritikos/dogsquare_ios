@@ -192,7 +192,10 @@ function handleEndRunButton(){
 		openWindows.push(runFinishWindow);
 		navController.open(runFinishWindow);
 		
+		Ti.API.info('OPENED run finish');
+		
 		// route object
+		/*
 		var route = {
 		    name:"Your path",
 		    points:runningPathCoordinates,
@@ -208,6 +211,7 @@ function handleEndRunButton(){
 		};
 		
 		viewRunSummaryMap.addRoute(route);
+		*/
 	} else {
 		alert('START RUNNING FIRST');
 	}
