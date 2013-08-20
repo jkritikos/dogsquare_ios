@@ -14,6 +14,9 @@ var runEndButton = null;
 var runDebugView = null;
 var viewRunSummaryMap = null;
 
+//UI component isnide method
+var runFinishWindow = null;
+
 function buildRunView(){
 	viewRun = Ti.UI.createView({
 		backgroundColor:UI_BACKGROUND_COLOR
@@ -164,14 +167,23 @@ function handleEndRunButton(){
 	var runFinishView = buildRunFinishView(null);
 	
 
-	var runFinishWindow = Ti.UI.createWindow({
+	runFinishWindow = Ti.UI.createWindow({
 		//url:'ui/iphone/run_finish.js',
 		backgroundColor:'white',
 		barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR,
-		title:'Run overview',
-		backButtonTitle:'Back'
+		title:'Run overview'
 	});
+	
+	//back button
+	var runFinishBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	runFinishWindow.setLeftNavButton(runFinishBackButton);
+	runFinishBackButton.addEventListener("click", handleRunFinishBackButton);
 	
 	runFinishWindow.add(runFinishView);
 	
@@ -183,9 +195,6 @@ function handleEndRunButton(){
 	
 	openWindows.push(runFinishWindow);
 	navController.open(runFinishWindow);
-	
-	
-	
 	
 	// route object
 	var route = {
@@ -203,6 +212,10 @@ function handleEndRunButton(){
 	};
 	
 	viewRunSummaryMap.addRoute(route);
+}
+
+function handleRunFinishBackButton() {
+    navController.close(runFinishWindow);
 }
 
 function trackLocation(){

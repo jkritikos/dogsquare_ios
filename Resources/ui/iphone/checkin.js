@@ -1,9 +1,22 @@
 //checkin window
 var checkinWindow = Ti.UI.createWindow({
 	backgroundColor:UI_BACKGROUND_COLOR,
+	barImage:IMAGE_PATH+'common/bar.png',
 	barColor:UI_COLOR,
-	title:'Check in',
-	backButtonTitle:'Back'
+	title:'Check in'
+});
+
+//back button
+var checkinBackButton = Ti.UI.createButton({
+    backgroundImage: IMAGE_PATH+'common/back_button.png',
+    width:48,
+    height:33
+});
+
+checkinWindow.setLeftNavButton(checkinBackButton);
+
+checkinBackButton.addEventListener("click", function() {
+    navController.close(checkinWindow);
 });
 
 //the checkin map
@@ -68,12 +81,13 @@ checkinOpacityBar.addEventListener('click', function(e){
 
 //checkin opacity bar label
 var checkinOpacityBarLabel = Titanium.UI.createLabel({ 
-	text:'Add a new place +',
-	color:'695a5a',
+	text:'Add a new place   +',
+	color:'black',
 	height:22,
 	textAlign:'left',
 	left:16,
-	font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
+	opacity:0.8,
+	font:{fontSize:16, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
 checkinOpacityBar.add(checkinOpacityBarLabel);
 

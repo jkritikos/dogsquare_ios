@@ -1,8 +1,21 @@
 var addPlaceWindow = Ti.UI.createWindow({
 	backgroundColor:UI_BACKGROUND_COLOR,
+	barImage:IMAGE_PATH+'common/bar.png',
 	barColor:UI_COLOR,
-	title:'Add Place',
-	backButtonTitle:'Back'
+	title:'Add Place'
+});
+
+//back button
+var addPlaceBackButton = Ti.UI.createButton({
+    backgroundImage: IMAGE_PATH+'common/back_button.png',
+    width:48,
+    height:33
+});
+
+addPlaceWindow.setLeftNavButton(addPlaceBackButton);
+
+addPlaceBackButton.addEventListener("click", function() {
+    navController.close(addPlaceWindow);
 });
 
 //the map

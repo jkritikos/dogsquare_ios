@@ -1,8 +1,22 @@
+
 var checkinPlaceWindow = Ti.UI.createWindow({
 	backgroundColor:UI_BACKGROUND_COLOR,
+	barImage:IMAGE_PATH+'common/bar.png',
 	barColor:UI_COLOR,
-	title:'Check in',
-	backButtonTitle:'Back'
+	title:'Check in'
+});
+
+//back button
+var checkinPlaceBackButton = Ti.UI.createButton({
+    backgroundImage: IMAGE_PATH+'common/back_button.png',
+    width:48,
+    height:33
+});
+
+checkinPlaceWindow.setLeftNavButton(checkinPlaceBackButton);
+
+checkinPlaceBackButton.addEventListener("click", function() {
+    navController.close(checkinPlaceWindow);
 });
 
 //the map
@@ -74,14 +88,52 @@ var checkinPlaceButtonBarView = Ti.UI.createView({
 });
 checkinPlaceWindow.add(checkinPlaceButtonBarView);
 
-//checkinPlace button
-var checkinPlaceButton = Ti.UI.createButton({
-	backgroundImage:IMAGE_PATH+'checkin_place/check_in_btn.png',
-	width:179,
-	height:51,
-	left:14
+//get the view from fireEvent
+Ti.App.addEventListener('view', function(data) 
+{ 
+  	var view = data.view; 
+  	
+	//change if it is the view place view
+	if(view == 1){
+		//checkin number label
+		var checkinNumberLabel = Ti.UI.createLabel({
+			text:'16 Check-ins',
+			textAlign:'left',
+			width:'auto',
+			height:20,
+			left:94,
+			color:'black',
+			opacity:0.8,
+			font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
+		});
+		checkinPlaceButtonBarView.add(checkinNumberLabel);
+		
+		//checkin number of hearts label 
+		var checkinNumberOfHeartsLabel = Ti.UI.createLabel({
+			text:'5',
+			textAlign:'left',
+			width:'auto',
+			height:20,
+			right:73,
+			color:'black',
+			opacity:0.8,
+			font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
+		});
+		checkinPlaceButtonBarView.add(checkinNumberOfHeartsLabel);
+		
+	}else if(view == 2){
+		
+		//checkinPlace button
+		var checkinPlaceButton = Ti.UI.createButton({
+			backgroundImage:IMAGE_PATH+'checkin_place/check_in_btn.png',
+			width:179,
+			height:51,
+			left:14
+		});
+		checkinPlaceButtonBarView.add(checkinPlaceButton);
+	}
 });
-checkinPlaceButtonBarView.add(checkinPlaceButton);
+
 
 //heart image
 var checkinPlaceHeartImage = Ti.UI.createImageView({

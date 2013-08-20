@@ -43,14 +43,25 @@ var profileActivityBar = Ti.UI.createImageView({
 
 viewProfile.add(profileActivityBar);
 
+var runWindow = null;
+
 profileStartButton.addEventListener('click', function(){
-	var runWindow = Ti.UI.createWindow({
+	runWindow = Ti.UI.createWindow({
 		backgroundColor:UI_BACKGROUND_COLOR,
 		barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR,
-		title:'Run',
-		backButtonTitle:'Back'
+		title:'Run'
 	});
+	
+	//back button
+	var runBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	runWindow.setLeftNavButton(runBackButton);
+	runBackButton.addEventListener("click", handleRunBackButton);
 	
 	runWindow.add(buildRunView());
 	
@@ -71,6 +82,10 @@ profileMapButton.addEventListener('click', function(){
 	openWindows.push(profileMapWindow);
 	navController.open(profileMapWindow);
 });
+
+function handleRunBackButton() {
+    navController.close(runWindow);
+}
 
 /*
 profileEditButton.addEventListener('click', function(){
