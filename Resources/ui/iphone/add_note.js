@@ -6,6 +6,19 @@ var addNoteWindow = Ti.UI.createWindow({
 	title:'Add Note'
 });
 
+//back button
+var addNoteBackButton = Ti.UI.createButton({
+    backgroundImage: IMAGE_PATH+'common/back_button.png',
+    width:48,
+    height:33
+});
+
+addNoteWindow.setLeftNavButton(addNoteBackButton);
+
+addNoteBackButton.addEventListener("click", function() {
+    navController.close(addNoteWindow);
+});
+
 //UI components
 var selected = false;
 

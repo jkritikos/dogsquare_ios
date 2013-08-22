@@ -1,3 +1,8 @@
+//constants
+var VIEW_PLACE_VIEW = 1;
+var CHECKIN_PLACE_VIEW = 2;
+
+
 //checkin window
 var checkinWindow = Ti.UI.createWindow({
 	backgroundColor:UI_BACKGROUND_COLOR,
@@ -206,5 +211,6 @@ function handlePlaceRow(){
 	Ti.include('ui/iphone/checkin_place.js');
 	
 	openWindows.push(checkinPlaceWindow);
+	buildCheckinPlaceView(CHECKIN_PLACE_VIEW);
 	navController.open(checkinPlaceWindow);
 }

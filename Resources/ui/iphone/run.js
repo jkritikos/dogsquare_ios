@@ -63,7 +63,7 @@ function buildRunView(){
 	var runAvgPaceValueLabel = Ti.UI.createLabel({
 		text:'0',
 		top:140,
-		left:10,
+		left:50,
 		color:UI_COLOR_RUN,
 		font:{fontSize:30, fontWeight:'regular'}
 	});
@@ -90,6 +90,20 @@ function buildRunView(){
 		font:{fontSize:15, fontWeight:'regular'}
 	});
 	
+	var runMapImage = Ti.UI.createImageView({
+		image:IMAGE_PATH+'menu_left/Map_icon.png',
+		right:52,
+		top:147
+	});
+	
+	var runMapLabel = Ti.UI.createLabel({
+		text:'View Map',
+		top:170,
+		right:30,
+		color:UI_COLOR_RUN,
+		font:{fontSize:15, fontWeight:'regular'}
+	});
+	
 	viewRun.add(runDistanceUnitReflectionLabel);
 	viewRun.add(runDurationLabel);
 	viewRun.add(runDurationValueLabel);
@@ -97,18 +111,24 @@ function buildRunView(){
 	viewRun.add(runAvgPaceValueLabel);
 	viewRun.add(runDistanceValueLabel);
 	viewRun.add(runDistanceUnitLabel);
+	viewRun.add(runMapLabel);
+	viewRun.add(runMapImage);
 
 	runPauseButton = Ti.UI.createButton({
-		title:'Start',
-		bottom:20,
-		left:10,
+		backgroundImage:IMAGE_PATH+'run/start_btn.png',
+		bottom:73,
+		left:21,
+		width:153,
+		height:54,
 		zIndex:2
 	});
 
 	runEndButton = Ti.UI.createButton({
-		title:'End',
-		bottom:20,
-		right:10,
+		backgroundImage:IMAGE_PATH+'run/end_button.png',
+		bottom:73,
+		right:21,
+		width:96,
+		height:50,
 		zIndex:2
 	});
 
@@ -148,13 +168,13 @@ function buildRunView(){
 
 function handleStartRunButton(){
 	if(!runningMode){
-		runPauseButton.title = 'Pause';
+		runPauseButton.backgroundImage = IMAGE_PATH+'run/pause_btn.png';
 		runningMode = true;
 		
 		Titanium.Geolocation.addEventListener('location',trackLocation);
 		Ti.API.info('Tracking location ON');
 	} else {
-		runPauseButton.title = 'Start';
+		runPauseButton.backgroundImage = IMAGE_PATH+'run/start_btn.png';
 		runningMode = false;
 		
 		Titanium.Geolocation.removeEventListener('location',trackLocation);
@@ -180,8 +200,20 @@ function handleEndRunButton(){
 			backgroundColor:'white',
 			barImage:IMAGE_PATH+'common/bar.png',
 			barColor:UI_COLOR,
-			title:'Run overview',
-			backButtonTitle:'Back'
+			title:'Run overview'
+		});
+		
+		//back button
+		var runFinishBackButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'common/back_button.png',
+		    width:48,
+		    height:33
+		});
+		
+		runFinishWindow.setLeftNavButton(runFinishBackButton);
+		
+		runFinishBackButton.addEventListener("click", function() {
+		    navController.close(runFinishWindow);
 		});
 		
 		runFinishWindow.add(runFinishView);

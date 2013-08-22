@@ -41,6 +41,7 @@ function populateInboxTableView() {
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent'
 		});
+		messageRow.addEventListener('click', handleInboxMessage);
 		
 		//profile image
 		var rowMessageImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
@@ -115,4 +116,11 @@ function populateInboxTableView() {
 	}
 	
 	return tableRows;
+}
+
+function handleInboxMessage(){
+	Ti.include('ui/iphone/inbox_view.js');
+	
+	openWindows.push(inboxViewWindow);
+	navController.open(inboxViewWindow);
 }

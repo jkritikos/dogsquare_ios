@@ -67,10 +67,6 @@ leftTableView.addEventListener("click", function(e){
 	
 	switch(menuItem){
 		case MENU_HOME:
-			Ti.include('ui/iphone/checkin_place.js');
-			Ti.App.fireEvent('view', {view:1});
-			openWindows.push(checkinPlaceWindow);
-			navController.open(checkinPlaceWindow);
 			break;
 		case MENU_PROFILE:
 			Ti.include('ui/iphone/profile.js');
