@@ -35,7 +35,7 @@ var profileOtherOpacityBarLabel1 = Ti.UI.createLabel({
 	left:55,
 	font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
-profileOtherOpacityBar.add(profileOtherOpacityBarLabel);
+profileOtherOpacityBar.add(profileOtherOpacityBarLabel1);
 
 //number of followers label on the opacity bar
 var profileOtherOpacityBarNumberLabel1 = Ti.UI.createLabel({
