@@ -74,7 +74,7 @@ leftTableView.addEventListener("click", function(e){
 		case MENU_PROFILE:
 			Ti.include('ui/iphone/profile.js');
 			navController.getWindow().add(viewProfile);
-			navController.getWindow().setTitle('My Profile');
+			navController.getWindow().setTitle(userObject.name);
 			break;
 			
 		case MENU_MAP:
