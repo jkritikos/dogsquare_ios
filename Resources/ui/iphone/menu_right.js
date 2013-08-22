@@ -95,12 +95,13 @@ function populateRightMenu(){
 		
 		//dog image inside the dog row - right menu row
 		var rowDogImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
+		var rowDogImageBlob = rowDogImageFile.toBlob();
+		var rowDogImageBlobCropped = rowDogImageBlob.imageAsThumbnail(80,0,40);
+		
 		var rowDogImage = Titanium.UI.createImageView({
-			image:rowDogImageFile.nativePath,
+			image:rowDogImageBlobCropped,
 			left:58,
 			top:13,
-			width:80,
-			height:80,
 			borderRadius:40,
 			borderWidth:4,
 			borderColor:'454950'

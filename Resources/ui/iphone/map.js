@@ -50,7 +50,8 @@ var mapview = Titanium.Map.createView({
     animate:true,
     regionFit:true
 });
- 
+
+/* 
 points = [
     {latitude:42.31,longitude:-71.11},
     {latitude:42.32,longitude:-71.13},
@@ -68,7 +69,7 @@ var route = {
  
 // add a route
 mapview.addRoute(route);
-
+*/
 
 
 viewMap.add(mapview);

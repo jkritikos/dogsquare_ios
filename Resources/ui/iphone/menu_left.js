@@ -149,14 +149,16 @@ function createLeftMenu(){
 		menuItem:MENU_PROFILE
 	});
 	
-	//Profile image
+	//Create the rounded thumbnail image
 	var profileImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
+	var menuImageViewBlob = profileImageFile.toBlob();
+	var menuImageBlobCropped = menuImageViewBlob.imageAsThumbnail(60,0,30);
+	
+	//Profile image
 	var menuProfileImage = Titanium.UI.createImageView({
-		image:profileImageFile.nativePath,
+		image:menuImageBlobCropped,
 		left:11,
 		top:11,
-		width:60,
-		height:60,
 		borderRadius:30,
 		borderWidth:2,
 		borderColor:'#f9bf30'

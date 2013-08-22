@@ -3,13 +3,18 @@ var viewProfile = Ti.UI.createView({
 });
 
 var profileImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-var menuProfileImage = Titanium.UI.createImageView({
+
+var profileImageView = Titanium.UI.createImageView({
 	image:profileImageFile.nativePath,
 	top:0,
 	width:'100%'
 });
 
-viewProfile.add(menuProfileImage);
+var profileImageViewBlob = profileImageView.toBlob();
+var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:1650});
+profileImageView.image = profileImageBlobCropped;
+
+viewProfile.add(profileImageView);
 
 //Map button
 var profileMapButton = Ti.UI.createButton({
