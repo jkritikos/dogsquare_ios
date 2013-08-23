@@ -63,8 +63,11 @@ leftTableView.addEventListener("click", function(e){
 	
 	//Hide keyboard from search field
 	leftmenuSearchTxtfield.blur();
-	
+	//Close open windows
 	closeOpenWindows();
+	
+	//Revert to the standard right window button
+	navController.getWindow().rightNavButton = rightBtn;
 	
 	var menuItem = e.row != null ? e.row.menuItem : e.menuItem;
 	

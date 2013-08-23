@@ -24,6 +24,17 @@ function closeOpenWindows(){
 
 ////////////////////////////////////////////////
 // CENTER MAIN WINDOW
+var rightBtn = Ti.UI.createButton({
+	backgroundImage:IMAGE_PATH+'common/menu_dog.png',
+	width:35,
+	height:23
+});
+
+rightBtn.addEventListener("click", function(){
+	window.toggleRightView();
+	window.setCenterhiddenInteractivity("TouchEnabled");
+});
+
 var navController = createCenterNavWindow();
 
 function createCenterNavWindow(){	
@@ -42,17 +53,6 @@ function createCenterNavWindow(){
 	
 	leftBtn.addEventListener("click", function(){
 		window.toggleLeftView();
-		window.setCenterhiddenInteractivity("TouchEnabled");
-	});
-	
-	var rightBtn = Ti.UI.createButton({
-		backgroundImage:IMAGE_PATH+'common/menu_dog.png',
-		width:35,
-		height:23
-	});
-	
-	rightBtn.addEventListener("click", function(){
-		window.toggleRightView();
 		window.setCenterhiddenInteractivity("TouchEnabled");
 	});
 	
