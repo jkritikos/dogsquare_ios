@@ -1,7 +1,6 @@
 //UI components
 var ADD_DOG = 8;
 
-
 //Right window
 var winRight = Ti.UI.createWindow();
 
@@ -14,6 +13,20 @@ var rightTableView = Ti.UI.createTableView({
 rightTableView.addEventListener('click', handleTableViewRows);
 
 winRight.add(rightTableView);
+
+/*Returns an array of the selected dog ids*/
+function getSelectedDogs(){
+	var selected = [];
+	
+	for (i=0; i<rightTableView.data[0].rows.length;i++){
+	    if (rightTableView.data[0].rows[i].active) {
+	        Ti.API.info('Found selected dog');
+	        selected.push(1);
+	    }
+	}
+	
+	return selected;
+}
 
 //Creates and populates the right menu
 function populateRightMenu(){

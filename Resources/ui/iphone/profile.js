@@ -103,10 +103,10 @@ viewProfile.add(profileMapButton);
 
 var profileMapLabel = Ti.UI.createLabel({
 	text:'View map',
-	top:257,
-	right:30,
+	top:255,
+	right:32,
 	color:UI_COLOR_RUN,
-	font:{fontSize:15, fontWeight:'bold'}
+	font:{fontSize:13, fontWeight:'semibold',fontFamily:'Open Sans'}
 });
 viewProfile.add(profileMapLabel);
 
@@ -167,28 +167,34 @@ profileTableViewBackground.add(profileTableView);
 var runWindow = null;
 
 profileStartButton.addEventListener('click', function(){
-	runWindow = Ti.UI.createWindow({
-		backgroundColor:UI_BACKGROUND_COLOR,
-		barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR,
-		title:'Run'
-	});
+	var selectedDogs = getSelectedDogs();
+	if(selectedDogs.length > 0){
+		runWindow = Ti.UI.createWindow({
+			backgroundColor:UI_BACKGROUND_COLOR,
+			barImage:IMAGE_PATH+'common/bar.png',
+			barColor:UI_COLOR,
+			title:'Run'
+		});
+		
 	
-
-	//back button
-	var runBackButton = Ti.UI.createButton({
-	    backgroundImage: IMAGE_PATH+'common/back_button.png',
-	    width:48,
-	    height:33
-	});
+		//back button
+		var runBackButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'common/back_button.png',
+		    width:48,
+		    height:33
+		});
+		
+		runWindow.setLeftNavButton(runBackButton);
+		runBackButton.addEventListener("click", handleRunBackButton);
+		
+		runWindow.add(buildRunView());
+		
+		openWindows.push(runWindow);
+		navController.open(runWindow);
+	} else {
+		alert('NO DOGS SELECTED');	
+	}
 	
-	runWindow.setLeftNavButton(runBackButton);
-	runBackButton.addEventListener("click", handleRunBackButton);
-	
-	runWindow.add(buildRunView());
-	
-	openWindows.push(runWindow);
-	navController.open(runWindow);
 });
 
 profileMapButton.addEventListener('click', function(){
@@ -249,12 +255,12 @@ function populateProfileTableView(){
 		});
 		
 		var rowActivityImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
+		var rowActivityImageBlob = profileImageView.toBlob();
+		var rowActivityImageBlobCropped = rowActivityImageBlob.imageAsThumbnail(42,0,21);
 		var rowActivityImage = Titanium.UI.createImageView({
-			image:rowActivityImageFile.nativePath,
+			image:rowActivityImageBlobCropped,
 			left:28,
 			top:3,
-			width:42,
-			height:42,
 			borderRadius:21,
 			borderWidth:1,
 			borderColor:'f5a92c'

@@ -137,12 +137,12 @@ function populatecheckinPlacesTableView(){
 		
 		//place image
 		var rowPlaceImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
+		var rowPlaceImageBlob = rowPlaceImageFile.toBlob();
+		var rowPlaceImageBlobCropped = rowPlaceImageBlob.imageAsThumbnail(42,0,21);
 		var rowPlaceImage = Titanium.UI.createImageView({
-			image:rowPlaceImageFile.nativePath,
+			image:rowPlaceImageBlobCropped,
 			left:12,
 			top:2,
-			width:42,
-			height:42,
 			borderRadius:21,
 			borderWidth:1,
 			borderColor:'f5a92c'

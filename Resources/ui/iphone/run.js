@@ -8,6 +8,7 @@ var runObject = {};
 var viewRun = null;
 var runDistanceValueLabel = null;
 var runDistanceUnitLabel = null;
+var runDurationValueLabel = null;
 var runPauseButton = null;
 var runEndButton = null;
 
@@ -17,6 +18,10 @@ var viewRunSummaryMap = null;
 
 //UI component isnide method
 var runFinishWindow = null;
+
+//Cronometer
+var horas = 0, minutos = 0, segundos = 0, total_minutos = 0;
+var cronometerInterval = null;
 
 function buildRunView(){
 	viewRun = Ti.UI.createView({
@@ -28,7 +33,7 @@ function buildRunView(){
 		top:20,
 		left:33,
 		color:UI_COLOR_RUN,
-		font:{fontSize:82, fontWeight:'bold'}
+		font:{fontSize:82, fontWeight:'bold', fontFamily:'Open Sans'}
 	});
 
 	runDistanceUnitLabel = Ti.UI.createLabel({
@@ -36,7 +41,7 @@ function buildRunView(){
 		top:59,
 		right:40,
 		color:UI_COLOR_RUN,
-		font:{fontSize:41, fontWeight:'bold'}
+		font:{fontSize:41, fontWeight:'bold', fontFamily:'Open Sans'}
 	});
 	
 	var t3 = Ti.UI.create2DMatrix();
@@ -49,7 +54,7 @@ function buildRunView(){
 		top:91,
 		right:40,
 		color:UI_COLOR_RUN,
-		font:{fontSize:41, fontWeight:'bold'}
+		font:{fontSize:41, fontWeight:'bold', fontFamily:'Open Sans'}
 	}); 
 	
 	/*
@@ -65,7 +70,7 @@ function buildRunView(){
 		top:146,
 		left:33,
 		color:UI_COLOR_RUN,
-		font:{fontSize:27, fontWeight:'bold'}
+		font:{fontSize:27, fontWeight:'bold', fontFamily:'Open Sans'}
 	});
 	
 	var runAvgPaceSecondLabel = Ti.UI.createLabel({
@@ -73,7 +78,7 @@ function buildRunView(){
 		top:146,
 		left:55,
 		color:UI_COLOR_RUN,
-		font:{fontSize:27, fontWeight:'bold'}
+		font:{fontSize:27, fontWeight:'bold', fontFamily:'Open Sans'}
 	});
 	
 	var runAvgPaceLabel = Ti.UI.createLabel({
@@ -81,21 +86,21 @@ function buildRunView(){
 		top:181,
 		left:30,
 		color:UI_COLOR_RUN,
-		font:{fontSize:15, fontWeight:'regular'}
+		font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
-	var runDurationValueLabel = Ti.UI.createLabel({
+	runDurationValueLabel = Ti.UI.createLabel({
 		text:'0:00:00',
 		top:146,
 		color:UI_COLOR_RUN,
-		font:{fontSize:27, fontWeight:'bold'}
+		font:{fontSize:27, fontWeight:'bold', fontFamily:'Open Sans'}
 	});
 	
 	var runDurationLabel = Ti.UI.createLabel({
 		text:'Duration',
 		top:181,
 		color:UI_COLOR_RUN,
-		font:{fontSize:15, fontWeight:'regular'}
+		font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
 	var runMapButton = Ti.UI.createButton({
@@ -112,7 +117,7 @@ function buildRunView(){
 		top:181,
 		right:30,
 		color:UI_COLOR_RUN,
-		font:{fontSize:15, fontWeight:'semibold'}
+		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	
 	viewRun.add(runDistanceUnitReflectionLabel);
@@ -205,14 +210,49 @@ function handleMapButton(){
 	navController.open(runMapWindow);
 }
 
+function clockTick(){
+	var tmpLabel = "";
+	
+	++segundos;
+	if(segundos==60) { segundos=0; ++minutos; ++total_minutos; }
+	if(minutos==60) { minutos=0; ++horas; }
+	if(horas==24) { horas=0; }
+	
+	if(horas<10) tmpLabel += "0";
+	tmpLabel += horas;
+	
+	tmpLabel += ":";
+	
+	if(minutos<10) tmpLabel += "0";
+	tmpLabel = tmpLabel + minutos;
+	
+	tmpLabel += ":";
+	
+	if(segundos<10) {tmpLabel += "0";}
+	tmpLabel = tmpLabel + segundos;
+	
+	//tiempo = "";
+	//tiempo += total_minutos;
+	//tiempo += ".";
+	//if(segundos<10) {tiempo += "0";}
+	//tiempo = tiempo+segundos;
+	
+	//GLOBAL.total_minutos_y_segundos_int = parseFloat(tiempo);
+	runDurationValueLabel.text = tmpLabel;
+}
+
 function handleStartRunButton(){
 	if(!runningMode){
+		cronometerInterval = setInterval(clockTick,1000);
+		
 		runPauseButton.backgroundImage = IMAGE_PATH+'run/pause_btn.png';
 		runningMode = true;
 		
 		Titanium.Geolocation.addEventListener('location',trackLocation);
 		Ti.API.info('Tracking location ON');
 	} else {
+		clearInterval(cronometerInterval);
+		
 		runPauseButton.backgroundImage = IMAGE_PATH+'run/start_btn.png';
 		runningMode = false;
 		

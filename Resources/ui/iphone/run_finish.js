@@ -264,12 +264,13 @@ function populateRunFinishTableView(){
 		});
 		//dog image 
 		var dogImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
+		var dogImageBlob = dogImageFile.toBlob();
+		var dogImageBlobCropped = dogImageBlob.imageAsThumbnail(50,0,25);
+		
 		var rowDogImage = Titanium.UI.createImageView({ 
-			image:dogImageFile.nativePath,
+			image:dogImageBlobCropped,
 			left:14,
-			width:46,
-			height:46,
-			borderRadius:23,
+			borderRadius:25,
 			borderWidth:2,
 			borderColor:'#f9bf30'
 		});

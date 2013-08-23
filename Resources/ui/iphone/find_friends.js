@@ -82,11 +82,11 @@ function populateFindFriendsTableView(){
 		});
 		
 		var friendImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
+		var friendImageBlob = friendImageFile.toBlob();
+		var friendImageBlobCropped = friendImageBlob.imageAsThumbnail(60,0,30);
 		var rowFriendImage = Titanium.UI.createImageView({
-			image:friendImageFile.nativePath,
+			image:friendImageBlobCropped,
 			left:3,
-			width:60,
-			height:60,
 			borderRadius:30,
 			borderWidth:2,
 			borderColor:'#f9bf30'

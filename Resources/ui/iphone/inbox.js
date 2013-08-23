@@ -45,11 +45,11 @@ function populateInboxTableView() {
 		
 		//profile image
 		var rowMessageImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
+		var rowMessageImageBlob = rowMessageImageFile.toBlob();
+		var rowMessageImageBlobCropped = rowMessageImageBlob.imageAsThumbnail(54,0,27);
 		var rowMessageProfileImage = Titanium.UI.createImageView({
-			image:rowMessageImageFile.nativePath,
+			image:rowMessageImageBlobCropped,
 			left:2,
-			width:54,
-			height:54,
 			borderRadius:27,
 			borderWidth:3,
 			borderColor:'f5a92c'
