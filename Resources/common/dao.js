@@ -165,3 +165,11 @@ function xhr_upload(_args) {
 	
 	return win;
 };
+
+function createDB(){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.execute('create table if not exists DOGFUEL_RULES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"user_id\" integer,\"walk_distance\" integer, \"playtime\" integer )');
+	
+	db.close();
+}

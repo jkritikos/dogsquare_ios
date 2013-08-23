@@ -292,6 +292,7 @@ function populateRunFinishTableView(){
 			image:IMAGE_PATH+'run_finish/bone_icon.png',
 			right:105
 		});
+		
 		row.add(rowBoneImage);
 		
 		//mood label
