@@ -89,7 +89,7 @@ function buildCheckinPlaceView(view){
 	
 	//background bar for checkinPlace button
 	var checkinPlaceButtonBarView = Ti.UI.createView({
-		bottom:84,
+		top:277,
 		height:55,
 		width:'100%',
 		backgroundColor:'white'
@@ -145,7 +145,7 @@ function buildCheckinPlaceView(view){
 	
 	//background for comments
 	checkinPlaceCommentsBackgroundView = Ti.UI.createView({
-		bottom:-236,
+		top:332,
 		height:320,
 		width:'100%',
 		backgroundColor:UI_BACKGROUND_COLOR,
@@ -274,19 +274,19 @@ function handleCommentButtons(e){
 	var button = e.source.button;
 	
 	if(toggle && button != 'plus'){
-		checkinPlaceCommentsBackgroundView.animate({bottom:-236, duration:500});
+		checkinPlaceCommentsBackgroundView.animate({top:332, duration:500});
 		checkinPlaceCommentsTextField.blur();
 		checkinPlaceCommentsTextField.hide();
 		checkinPlaceCommentsTableView.show();
 		e.source.toggle = false;
 	}else if(!toggle && button != 'plus'){
-		checkinPlaceCommentsBackgroundView.animate({bottom:0, duration:500});
+		checkinPlaceCommentsBackgroundView.animate({top:96, duration:500});
 		checkinPlaceCommentsTextField.blur();
 		checkinPlaceCommentsTextField.hide();
 		checkinPlaceCommentsTableView.show();
 		e.source.toggle = true;
 	}else if(button == 'plus'){
-		checkinPlaceCommentsBackgroundView.animate({bottom:0, duration:300});
+		checkinPlaceCommentsBackgroundView.animate({top:96, duration:300});
 		checkinPlaceCommentsButton.toggle = true;
 		
 		checkinPlaceCommentsTextField.focus();

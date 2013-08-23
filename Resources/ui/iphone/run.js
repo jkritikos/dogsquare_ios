@@ -112,7 +112,7 @@ function buildRunView(){
 		top:181,
 		right:30,
 		color:UI_COLOR_RUN,
-		font:{fontSize:15, fontWeight:'regular'}
+		font:{fontSize:15, fontWeight:'semibold'}
 	});
 	
 	viewRun.add(runDistanceUnitReflectionLabel);

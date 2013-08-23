@@ -10,24 +10,14 @@ var profileImageView = Titanium.UI.createImageView({
 	width:'100%'
 });
 
-//photo image
-var profilePhotoImage = Titanium.UI.createImageView({ 
-	image:IMAGE_PATH+'profile_other/jim.jpg',
-	width:320,
-	height:209,
-	top:0
-});
-viewProfile.add(profilePhotoImage);
-
 //opacity bar
 var profileOpacityBar = Titanium.UI.createView({ 
 	backgroundColor:'white',
 	width:'100%',
-	top:160,
+	bottom:12,
 	height:36,
 	opacity:0.8
 });
-viewProfile.add(profileOpacityBar);
 
 //followers label on the opacity bar
 var profileOpacityBarLabel1 = Ti.UI.createLabel({
@@ -92,6 +82,7 @@ var profileOpacityBarSepparator = Titanium.UI.createView({
 	height:34
 });
 profileOpacityBar.add(profileOpacityBarSepparator);
+profileImageView.add(profileOpacityBar);
 
 var profileImageViewBlob = profileImageView.toBlob();
 var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:1650});
@@ -104,40 +95,50 @@ var profileMapButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'profile/Map_icon.png',
 	width:33,
 	height:32,
-	bottom:159,
+	top:225,
 	right:48
 });
 
 viewProfile.add(profileMapButton);
 
 var profileMapLabel = Ti.UI.createLabel({
-	text:'View Map',
-	bottom:139,
+	text:'View map',
+	top:257,
 	right:30,
 	color:UI_COLOR_RUN,
-	font:{fontSize:15, fontWeight:'regular'}
+	font:{fontSize:15, fontWeight:'bold'}
 });
 viewProfile.add(profileMapLabel);
 
 //Start button
 var profileStartButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'profile/start_button.png',
-	bottom:146,
+	top:218,
 	width:178,
 	height:52,
 	left:18
 });
-
 viewProfile.add(profileStartButton);
 
 //Activity bar
 var profileActivityBar = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
-	bottom:103,
+	top:280,
 	width:320,
 	height:33,
 	toggle:false
 });
+
+var profileActivityLabel = Titanium.UI.createLabel({ 
+	text:'Activity',
+	color:'white',
+	top:13,
+	height:20,
+	textAlign:'center',
+	left:29,
+	font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+});
+profileActivityBar.add(profileActivityLabel);
 
 viewProfile.add(profileActivityBar);
 profileActivityBar.addEventListener('click', handleActivityButton);
@@ -146,7 +147,7 @@ profileActivityBar.addEventListener('click', handleActivityButton);
 var profileTableViewBackground = Titanium.UI.createView({ 
 	backgroundColor:'d2d2d2',
 	width:'100%',
-	height:207,
+	height:324,
 	top:313
 });
 viewProfile.add(profileTableViewBackground);
@@ -223,12 +224,12 @@ function handleRunBackButton() {
 function handleActivityButton(e){
 	var toggle = e.source.toggle;
 	if(toggle){
-		profileActivityBar.animate({bottom:103, duration:500});
+		profileActivityBar.animate({top:280, duration:500});
 		profileTableViewBackground.animate({top:313, duration:500});
 		e.source.toggle = false;
 	}else{
-		profileActivityBar.animate({bottom:204, duration:500});
-		profileTableViewBackground.animate({top:212, duration:500});
+		profileActivityBar.animate({top:187, duration:500});
+		profileTableViewBackground.animate({top:220, duration:500});
 		e.source.toggle = true;
 	}
 }
@@ -250,8 +251,8 @@ function populateProfileTableView(){
 		var rowActivityImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
 		var rowActivityImage = Titanium.UI.createImageView({
 			image:rowActivityImageFile.nativePath,
-			left:12,
-			top:2,
+			left:28,
+			top:3,
 			width:42,
 			height:42,
 			borderRadius:21,
