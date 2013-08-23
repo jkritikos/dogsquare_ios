@@ -26,17 +26,17 @@ function buildRunView(){
 	runDistanceValueLabel = Ti.UI.createLabel({
 		text:'0.00',
 		top:20,
-		left:30,
+		left:33,
 		color:UI_COLOR_RUN,
-		font:{fontSize:60, fontWeight:'bold'}
+		font:{fontSize:82, fontWeight:'bold'}
 	});
 
 	runDistanceUnitLabel = Ti.UI.createLabel({
 		text:'km',
-		top:35,
+		top:59,
 		right:40,
 		color:UI_COLOR_RUN,
-		font:{fontSize:40, fontWeight:'bold'}
+		font:{fontSize:41, fontWeight:'bold'}
 	});
 	
 	var t3 = Ti.UI.create2DMatrix();
@@ -46,10 +46,10 @@ function buildRunView(){
 		text:'km',
 		transform:t3,
 		opacity:0.3,
-		top:70,
+		top:91,
 		right:40,
 		color:UI_COLOR_RUN,
-		font:{fontSize:40, fontWeight:'bold'}
+		font:{fontSize:41, fontWeight:'bold'}
 	}); 
 	
 	/*
@@ -60,17 +60,25 @@ function buildRunView(){
         }
     });*/
     
-	var runAvgPaceValueLabel = Ti.UI.createLabel({
-		text:'0',
-		top:140,
-		left:50,
+	var runAvgPaceMinuteLabel = Ti.UI.createLabel({
+		text:'0\'',
+		top:146,
+		left:33,
 		color:UI_COLOR_RUN,
-		font:{fontSize:30, fontWeight:'regular'}
+		font:{fontSize:27, fontWeight:'bold'}
+	});
+	
+	var runAvgPaceSecondLabel = Ti.UI.createLabel({
+		text:'0\'\'',
+		top:146,
+		left:55,
+		color:UI_COLOR_RUN,
+		font:{fontSize:27, fontWeight:'bold'}
 	});
 	
 	var runAvgPaceLabel = Ti.UI.createLabel({
 		text:'Avg pace',
-		top:170,
+		top:181,
 		left:30,
 		color:UI_COLOR_RUN,
 		font:{fontSize:15, fontWeight:'regular'}
@@ -78,27 +86,30 @@ function buildRunView(){
 	
 	var runDurationValueLabel = Ti.UI.createLabel({
 		text:'0:00:00',
-		top:140,
+		top:146,
 		color:UI_COLOR_RUN,
-		font:{fontSize:30, fontWeight:'regular'}
+		font:{fontSize:27, fontWeight:'bold'}
 	});
 	
 	var runDurationLabel = Ti.UI.createLabel({
 		text:'Duration',
-		top:170,
+		top:181,
 		color:UI_COLOR_RUN,
 		font:{fontSize:15, fontWeight:'regular'}
 	});
 	
-	var runMapImage = Ti.UI.createImageView({
-		image:IMAGE_PATH+'menu_left/Map_icon.png',
+	var runMapButton = Ti.UI.createButton({
+		backgroundImage:IMAGE_PATH+'menu_left/Map_icon.png',
 		right:52,
-		top:147
+		width:26,
+		height:23,
+		top:158
 	});
+	runMapButton.addEventListener('click', handleMapButton);
 	
 	var runMapLabel = Ti.UI.createLabel({
 		text:'View Map',
-		top:170,
+		top:181,
 		right:30,
 		color:UI_COLOR_RUN,
 		font:{fontSize:15, fontWeight:'regular'}
@@ -108,11 +119,12 @@ function buildRunView(){
 	viewRun.add(runDurationLabel);
 	viewRun.add(runDurationValueLabel);
 	viewRun.add(runAvgPaceLabel);
-	viewRun.add(runAvgPaceValueLabel);
+	viewRun.add(runAvgPaceMinuteLabel);
+	viewRun.add(runAvgPaceSecondLabel);
 	viewRun.add(runDistanceValueLabel);
 	viewRun.add(runDistanceUnitLabel);
 	viewRun.add(runMapLabel);
-	viewRun.add(runMapImage);
+	viewRun.add(runMapButton);
 
 	runPauseButton = Ti.UI.createButton({
 		backgroundImage:IMAGE_PATH+'run/start_btn.png',
@@ -164,6 +176,33 @@ function buildRunView(){
 	//viewRun.add(viewRunSummaryMap);
 
 	return viewRun;
+}
+
+function handleMapButton(){
+	
+	var runMapWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Map'
+	});
+	
+	//map back button
+	var runMapBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	runMapWindow.setLeftNavButton(runMapBackButton);
+	
+	runMapBackButton.addEventListener("click", function() {
+	    navController.close(runMapWindow);
+	});
+	
+	Ti.include('ui/iphone/map.js');
+	runMapWindow.add(viewMap);
+	navController.open(runMapWindow);
 }
 
 function handleStartRunButton(){

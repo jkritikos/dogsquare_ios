@@ -19,6 +19,12 @@ checkinPlaceBackButton.addEventListener("click", function() {
     navController.close(checkinPlaceWindow);
 });
 
+//UI Components
+var checkinPlaceCommentsBackgroundView = null;
+var checkinPlaceCommentsTextField = null;
+var checkinPlaceCommentsTableView = null;
+var checkinPlaceCommentsButton = null;
+
 function buildCheckinPlaceView(view){
 	
 	//the map
@@ -138,7 +144,7 @@ function buildCheckinPlaceView(view){
 	checkinPlaceButtonBarView.add(checkinPlaceHeartImage);
 	
 	//background for comments
-	var checkinPlaceCommentsBackgroundView = Ti.UI.createView({
+	checkinPlaceCommentsBackgroundView = Ti.UI.createView({
 		bottom:-236,
 		height:320,
 		width:'100%',
@@ -148,7 +154,7 @@ function buildCheckinPlaceView(view){
 	checkinPlaceWindow.add(checkinPlaceCommentsBackgroundView);
 	
 	//button to show all comments
-	var checkinPlaceCommentsButton = Ti.UI.createButton({ 
+	checkinPlaceCommentsButton = Ti.UI.createButton({ 
 		backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
 		top:0,
 		width:320,
@@ -186,7 +192,7 @@ function buildCheckinPlaceView(view){
 	checkinPlaceCommentsButton.add(checkinPlaceCommentsTitleLabel);
 	
 	//create a comment textField
-	var checkinPlaceCommentsTextField = Ti.UI.createTextField({
+	checkinPlaceCommentsTextField = Ti.UI.createTextField({
 		width:266,
 		height:36,
 		top:44,
@@ -197,7 +203,7 @@ function buildCheckinPlaceView(view){
 	checkinPlaceCommentsTextField.hide();
 	
 	//comments tableView
-	var checkinPlaceCommentsTableView = Titanium.UI.createTableView({
+	checkinPlaceCommentsTableView = Titanium.UI.createTableView({
 		minRowHeight:47,
 		width:320,
 		data:populateCommentsTableView(),

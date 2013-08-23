@@ -9,7 +9,7 @@ var profileOtherWindow = Ti.UI.createWindow({
 var profileOtherPhotoImage = Titanium.UI.createImageView({ 
 	image:IMAGE_PATH+'profile_other/jim.jpg',
 	width:320,
-	lenght:217,
+	height:217,
 	top:0
 });
 profileOtherWindow.add(profileOtherPhotoImage);
@@ -27,7 +27,8 @@ profileOtherWindow.add(profileOtherOpacityBar);
 //followers label on the opacity bar
 var profileOtherOpacityBarLabel1 = Ti.UI.createLabel({
 	text:'followers',
-	color:'aeafaa',
+	color:'black',
+	opacity:0.6,
 	textAlign:'left',
 	width:55,
 	height:15,
@@ -40,7 +41,8 @@ profileOtherOpacityBar.add(profileOtherOpacityBarLabel1);
 //number of followers label on the opacity bar
 var profileOtherOpacityBarNumberLabel1 = Ti.UI.createLabel({
 	text:'56',
-	color:'aeafaa',
+	color:'black',
+	opacity:0.6,
 	textAlign:'left',
 	width:'auto',
 	height:22,
@@ -53,7 +55,8 @@ profileOtherOpacityBar.add(profileOtherOpacityBarNumberLabel1);
 //following label on the opacity bar
 var profileOtherOpacityBarLabel2 = Ti.UI.createLabel({
 	text:'following',
-	color:'aeafaa',
+	color:'black',
+	opacity:0.6,
 	textAlign:'left',
 	width:55,
 	height:15,
@@ -66,7 +69,8 @@ profileOtherOpacityBar.add(profileOtherOpacityBarLabel2);
 //number of following label on the opacity bar
 var profileOtherOpacityBarNumberLabel2 = Ti.UI.createLabel({
 	text:'23',
-	color:'aeafaa',
+	color:'black',
+	opacity:0.6,
 	textAlign:'left',
 	width:'auto',
 	height:22,
@@ -104,9 +108,10 @@ profileOtherWindow.add(profileOtherChatButton);
 //chat button label
 var profileOtherChatButtonLabel = Ti.UI.createLabel({
 	text:'Chat with me',
-	color:'c5c6c2',
+	color:'black',
+	opacity:0.6,
 	textAlign:'center',
-	bottom:35,
+	bottom:30,
 	width:88,
 	height:18,
 	font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
@@ -126,9 +131,10 @@ profileOtherWindow.add(profileOtherWalkWithButton);
 //walk with me button label
 var profileOtherWalkWithButtonLabel = Ti.UI.createLabel({
 	text:'Walk with me',
-	color:'c5c6c2',
+	color:'black',
+	opacity:0.6,
 	textAlign:'left',
-	bottom:35,
+	bottom:30,
 	width:88,
 	height:18,
 	left:21,
@@ -149,9 +155,10 @@ profileOtherWindow.add(profileOtherGalleryButton);
 //gallery button label
 var profileOtherGalleryButtonLabel = Ti.UI.createLabel({
 	text:'Gallery',
-	color:'c5c6c2',
+	color:'black',
+	opacity:0.6,
 	textAlign:'center',
-	bottom:35,
+	bottom:30,
 	width:88,
 	height:18,
 	right:21,
