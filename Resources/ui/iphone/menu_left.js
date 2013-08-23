@@ -61,6 +61,9 @@ winLeft.add(leftTableView);
 leftTableView.addEventListener("click", function(e){
 	Ti.API.info("isAnyViewOpen: " + window.isAnyViewOpen());
 	
+	//Hide keyboard from search field
+	leftmenuSearchTxtfield.blur();
+	
 	closeOpenWindows();
 	
 	var menuItem = e.row != null ? e.row.menuItem : e.menuItem;
