@@ -15,6 +15,11 @@ var IMAGE_PATH = 'images/iphone/';
 Ti.include('menu_left.js');
 Ti.include('menu_right.js');
 
+//Various views
+var currentDogView = null;
+var VIEW_SIGNUP = 1;
+
+
 function closeOpenWindows(){
 	Ti.API.info('closeOpenWindows() closed '+openWindows.length+' windows');
 	for(var i=0; i < openWindows.length; i++){

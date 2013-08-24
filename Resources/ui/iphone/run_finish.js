@@ -296,6 +296,18 @@ function populateRunFinishTableView(){
 		
 		row.add(rowBoneImage);
 		
+		//bone fill image
+		var boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'run_finish/bone_icon_fill.png');
+		var boneFillImageBlob = boneFillImage.toBlob();
+		var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:10});
+		var rowBoneFillImage = Ti.UI.createImageView({ 
+			image:boneFillImageBlobCropped,
+			right:105,
+			zIndex:2
+		}); 
+		
+		row.add(rowBoneFillImage);
+		
 		//mood label
 		var rowMoodLabel = Titanium.UI.createLabel({ 
 			text:'Happy',

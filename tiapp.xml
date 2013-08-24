@@ -16,6 +16,7 @@
     <navbar-hidden>false</navbar-hidden>
     <analytics>false</analytics>
     <guid>0a007602-0b90-4667-80c5-bbe2ab71ed58</guid>
+    <property name="ti.facebook.appid">509577672446427</property>
     <property name="ti.ui.defaultunit" type="string">system</property>
     <iphone>
         <orientations device="iphone">
@@ -38,6 +39,7 @@
         <theme>default</theme>
     </mobileweb>
     <modules>
+    	<module platform="iphone">facebook</module>
         <module platform="iphone">dk.napp.slidemenu</module>
     </modules>
     <deployment-targets>

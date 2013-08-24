@@ -15,7 +15,8 @@ var userObject = {
 	age:0,
 	facebook_id:null,
 	gender:null,
-	followers:1,
+	followers:0,
+	following:0,
 	inbox:0,
 	userId:1,
 	dogId:1

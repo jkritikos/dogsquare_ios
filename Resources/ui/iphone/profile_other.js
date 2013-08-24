@@ -28,7 +28,6 @@ profileOtherWindow.add(profileOtherOpacityBar);
 var profileOtherOpacityBarLabel1 = Ti.UI.createLabel({
 	text:'followers',
 	color:'black',
-	opacity:0.6,
 	textAlign:'left',
 	width:55,
 	height:15,
@@ -42,12 +41,11 @@ profileOtherOpacityBar.add(profileOtherOpacityBarLabel1);
 var profileOtherOpacityBarNumberLabel1 = Ti.UI.createLabel({
 	text:'56',
 	color:'black',
-	opacity:0.6,
-	textAlign:'left',
-	width:'auto',
+	textAlign:'center',
+	width:50,
 	height:22,
 	top:1,
-	left:70,
+	left:53,
 	font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
 profileOtherOpacityBar.add(profileOtherOpacityBarNumberLabel1);
@@ -56,7 +54,6 @@ profileOtherOpacityBar.add(profileOtherOpacityBarNumberLabel1);
 var profileOtherOpacityBarLabel2 = Ti.UI.createLabel({
 	text:'following',
 	color:'black',
-	opacity:0.6,
 	textAlign:'left',
 	width:55,
 	height:15,
@@ -70,12 +67,11 @@ profileOtherOpacityBar.add(profileOtherOpacityBarLabel2);
 var profileOtherOpacityBarNumberLabel2 = Ti.UI.createLabel({
 	text:'23',
 	color:'black',
-	opacity:0.6,
-	textAlign:'left',
-	width:'auto',
+	textAlign:'center',
+	width:50,
 	height:22,
 	top:1,
-	right:71,
+	right:55,
 	font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
 profileOtherOpacityBar.add(profileOtherOpacityBarNumberLabel2);

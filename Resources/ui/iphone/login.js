@@ -296,10 +296,13 @@ registerButton.addEventListener('click', function(){
 	w.add(registerFacebookButton);
 	
 	registerFacebookButton.addEventListener('click', function(){
+		fb.authorize();
+		/*
 		w.close();
 		loginWindow.animate({opacity:0, duration:1}, function(){
 			window.remove(loginWindow);
 		});
+		*/
 	});
 
 	//Signup button
@@ -315,6 +318,9 @@ registerButton.addEventListener('click', function(){
 	w.add(registerSignupButton);
 	
 	loginWindow.add(w);
+	
+	//Mark current view as open
+	currentDogView = VIEW_SIGNUP;
 	w.open();
 	
 	var registerPhotoDialog = Titanium.UI.createOptionDialog({

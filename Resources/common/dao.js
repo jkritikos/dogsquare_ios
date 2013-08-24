@@ -17,6 +17,62 @@ if(!PRODUCTION_MODE){
 	API = 'https://www.dogsquare.com/api/';
 }
 
+//Facebook connectivity (Titanium 3.1 and up)
+var FB_APP_ID = '509577672446427';
+var FB_API_KEY = '667843a07b0ab0bd71aaa4c91c5ec2af';
+var FB_READ_PERMISSIONS = ['read_stream'];
+var FB_WRITE_PERMISSIONS = ['publish_actions','publish_stream'];
+//var FB_SESSION_PROXY = 'http://api.appcelerator.net/p/fbconnect/';
+var fb = require('facebook');
+fb.appid = FB_APP_ID;
+fb.forceDialogAuth = false;
+fb.permissions = FB_READ_PERMISSIONS;
+
+/*Facebook logout event handler*/
+fb.addEventListener('logout', function(e) {
+    Ti.API.info('Facebook LOGOUT event');
+});
+
+/*Facebook login event handler*/
+fb.addEventListener('login', function(e) {
+	
+	Ti.API.info('Facebook LOGIN event');
+	
+	if(fb.loggedIn){
+		
+		//fb.reauthorize(FB_WRITE_PERMISSIONS, "friends");
+		
+		fb.requestWithGraphPath('me', {}, 'GET', function(e) {
+    		if (e.success) {
+    			Ti.API.info(e.result);
+    			var jsonFBData = JSON.parse(e.result);
+    			
+    			var fbName = jsonFBData.name ? jsonFBData.name : null;
+    			var gender = jsonFBData.gender ? jsonFBData.gender : null; 
+    			var age = jsonFBData.age ? jsonFBData.age : null;
+    			var fbId = jsonFBData.id;
+    			var email = jsonFBData.email ? jsonFBData.email : null;
+    			
+    			Ti.API.info('FB callback: name '+fbName+' gender '+gender+' age '+age+' fbId '+fbId+' email '+email);
+    			
+    			if(currentDogView == VIEW_SIGNUP){
+    				
+    			}
+    			
+    		} else if (e.error) {
+        		//TODO handle error
+        		alert(e.error);
+    		} else {
+    			//TODO handle unknown response
+        		alert('Unknown response');
+    		}
+		});
+		
+	} else {
+		Ti.API.info('USER **NOT** LOGGED IN TO FACEBOOK!');
+	}	
+});
+
 //Language constants
 var LANGUAGE_ENGLISH = 1;
 

@@ -265,6 +265,7 @@ function handleEndRunButton(){
 
 	if(runningMode){
 		runningMode = false;
+		clearInterval(cronometerInterval);
 		
 		//Prepare run object for the next window
 		runObject.coordinates = runningPathCoordinates;

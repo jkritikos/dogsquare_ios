@@ -23,7 +23,6 @@ var profileOpacityBar = Titanium.UI.createView({
 var profileOpacityBarLabel1 = Ti.UI.createLabel({
 	text:'followers',
 	color:'black',
-	opacity:0.8,
 	textAlign:'left',
 	width:55,
 	height:15,
@@ -35,14 +34,13 @@ profileOpacityBar.add(profileOpacityBarLabel1);
 
 //number of followers label on the opacity bar
 var profileOpacityBarNumberLabel1 = Ti.UI.createLabel({
-	text:'56',
+	text:userObject.followers,
 	color:'black',
-	opacity:0.8,
-	textAlign:'left',
-	width:'auto',
+	textAlign:'center',
+	width:50,
 	height:22,
 	top:1,
-	left:70,
+	left:53,
 	font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
 profileOpacityBar.add(profileOpacityBarNumberLabel1);
@@ -51,7 +49,6 @@ profileOpacityBar.add(profileOpacityBarNumberLabel1);
 var profileOpacityBarLabel2 = Ti.UI.createLabel({
 	text:'following',
 	color:'black',
-	opacity:0.8,
 	textAlign:'left',
 	width:55,
 	height:15,
@@ -63,14 +60,13 @@ profileOpacityBar.add(profileOpacityBarLabel2);
 
 //number of following label on the opacity bar
 var profileOpacityBarNumberLabel2 = Ti.UI.createLabel({
-	text:'23',
+	text:userObject.following,
 	color:'black',
-	opacity:0.8,
-	textAlign:'left',
-	width:'auto',
+	textAlign:'center',
+	width:50,
 	height:22,
 	top:1,
-	right:71,
+	right:55,
 	font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
 profileOpacityBar.add(profileOpacityBarNumberLabel2);
