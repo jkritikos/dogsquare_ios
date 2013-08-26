@@ -138,14 +138,15 @@ var weather = ( function() {
         	xhr.onload = function() {
            
         		var weather = this.responseXML.documentElement;
-        		Ti.API.info('weather: '+weather);
         		
-            	var title = weather.getElementsByTagName('title').item(0).text;
-            	var high = weather.getElementsByTagName('yweather:forecast').item(0).getAttribute("high");
-            	var low = weather.getElementsByTagName('yweather:forecast').item(0).getAttribute("low");
-				        
-				Ti.API.info(e.data.ResultSet.Results.woeid);      
-            	alert(title + "\nToday's Forecast \nhigh: "+ high + 'C, low: '+ low + 'C');
+        		var currentTemp = weather.getElementsByTagName('yweather:condition').item(0).getAttribute("temp");
+        		runObject.temperature = currentTemp;
+        		
+        		Ti.API.info('Got temperature= '+currentTemp);
+        		
+            	//var title = weather.getElementsByTagName('title').item(0).text;
+            	//var high = weather.getElementsByTagName('yweather:forecast').item(0).getAttribute("high");
+            	//var low = weather.getElementsByTagName('yweather:forecast').item(0).getAttribute("low");
         	};
         	
         	xhr.open('GET', url);
@@ -222,10 +223,25 @@ function xhr_upload(_args) {
 	return win;
 };
 
+function saveDog(dogObject){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.execute('insert into dogs (breed_id,dog_id,name,age,weight,mating,gender,photo) values (?,?,?,?,?,?,?,?)', dogObject.breed_id, dogObject.dog_id, dogObject.name, dogObject.age, dogObject.weight, dogObject.mating, dogObject.gender, dogObject.photo);
+	
+	db.close();
+}
+
+function getDogs(){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.close();
+}
+
 function createDB(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
 	db.execute('create table if not exists DOGFUEL_RULES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"user_id\" integer,\"walk_distance\" integer, \"playtime\" integer )');
+	db.execute('create table if not exists DOGS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"dog_id\" integer, \"name\" varchar(128), \"age\" integer, \"weight\" integer, \"mating\" integer, \"gender\" integer, \"photo\" varchar(128))');
 	
 	db.close();
 }

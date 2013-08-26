@@ -14,7 +14,7 @@ function buildRunFinishView(obj){
 	    mapType:Titanium.Map.STANDARD_TYPE,
 	    animate:true,
 	    regionFit:true,
-	    userLocation:true,
+	    userLocation:false,
 	    visible:true
 	});
 	viewRunSummary.add(viewRunFinishMap);
@@ -77,7 +77,7 @@ function buildRunFinishView(obj){
 		height:19,
 		textAlign:'center',
 		left:30,
-		bottom:0,
+		bottom:4,
 		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	runFinishOpacityBar.add(runFinishDistanceLabel);
@@ -86,8 +86,8 @@ function buildRunFinishView(obj){
 	var runFinishAvgPaceNumberLabel = Titanium.UI.createLabel({
 		text:obj.speed,
 		height:21,
-		textAlign:'center',
-		left:140,
+		textAlign:'right',
+		left:127,
 		top:10,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -109,8 +109,8 @@ function buildRunFinishView(obj){
 		text:'avg pace',
 		height:19,
 		textAlign:'center',
-		left:139,
-		bottom:0,
+		left:137,
+		bottom:4,
 		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	runFinishOpacityBar.add(runFinishAvgPaceLabel);
@@ -143,7 +143,7 @@ function buildRunFinishView(obj){
 		height:19,
 		textAlign:'center',
 		left:246,
-		bottom:0,
+		bottom:4,
 		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	runFinishOpacityBar.add(runFinishWeatherLabel);
@@ -152,7 +152,7 @@ function buildRunFinishView(obj){
 	var runFinishTitleBar = Titanium.UI.createView({ 
 		backgroundColor:UI_COLOR,
 		width:'100%',
-		top:225,
+		top:214,
 		height:25
 	});
 	viewRunSummary.add(runFinishTitleBar);
@@ -195,7 +195,7 @@ function buildRunFinishView(obj){
 		data:populateRunFinishTableView(),
 		backgroundColor:'transparent',
 		separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
-		top:250,
+		top:240,
 		bottom:39,
 		allowsSelection:false
 	});
@@ -203,13 +203,7 @@ viewRunSummary.add(runFinishTableView);
 
 /* 
 //var center = {latitude:coords[0][0],longitude:coords[0][1],latitudeDelta:0.001, longitudeDelta:0.001,animate:true};
-var region={
-	latitude: coords[0].latitude,
-	longitude: coords[0].longitude,
-	animate:true,
-	latitudeDelta:0.001,
-	longitudeDelta:0.001
-};
+
 
 
 var viewRunSummaryMap = Titanium.Map.createView({
@@ -227,18 +221,25 @@ for(var i=0; i < coords.length; i++){
 	pathCoordinates.push({latitude:coords[i][0], longitude:coords[i][1]});
 }
 
-viewRunSummary.add(viewRunSummaryMap);
-viewRunSummaryMap.setLocation(region);
-
-Ti.API.info('Set location to '+region.latitude +' delta '+region.latitudeDelta);
 */
+	//map region object
+	var runSummaryRegion = {
+		latitude: obj.coordinates[0].latitude,
+		longitude: obj.coordinates[0].longitude,
+		animate:true,
+		latitudeDelta:0.001,
+		longitudeDelta:0.001
+	};
+	
+	viewRunFinishMap.setLocation(runSummaryRegion);
+
 	//route object
 	var route = {
 	    name:"Your path",
 	    points:obj.coordinates,
-	    color:"green",
+	    color:"f9bf30",
 	    borderColor:'black',
-	    width:12
+	    width:8
 	};
  
 	// add the route

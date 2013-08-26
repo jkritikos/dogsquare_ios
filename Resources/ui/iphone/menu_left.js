@@ -1,5 +1,5 @@
 //Menu constants
-var MENU_HOME = 0;
+var MENU_FEED = 0;
 var MENU_PROFILE = 1;
 var MENU_MAP = 2;
 var MENU_GALLERY = 3;
@@ -7,6 +7,8 @@ var MENU_INBOX = 4;
 var MENU_PASSPORT = 5;
 var MENU_FIND_FRIENDS = 6;
 var MENU_SETTINGS = 7;
+var MENU_BADGES = 8;
+var MENU_NOTIFICATIONS = 9;
 
 //Left window
 var winLeft = Ti.UI.createWindow();
@@ -72,7 +74,7 @@ leftTableView.addEventListener("click", function(e){
 	var menuItem = e.row != null ? e.row.menuItem : e.menuItem;
 	
 	switch(menuItem){
-		case MENU_HOME:
+		case MENU_FEED:
 			Ti.include('ui/iphone/profile_other.js');
 			navController.getWindow().add(profileOtherWindow);
 			navController.getWindow().setTitle('John D.');
@@ -198,10 +200,12 @@ function createLeftMenu(){
 	topRow.add(rowSeparator);
 	
 	leftMenuData.push(topRow);
-	leftMenuData.push(createLeftMenuRow(MENU_HOME));
+	leftMenuData.push(createLeftMenuRow(MENU_FEED));
 	leftMenuData.push(createLeftMenuRow(MENU_MAP));
 	leftMenuData.push(createLeftMenuRow(MENU_GALLERY));
 	leftMenuData.push(createLeftMenuRow(MENU_INBOX));
+	leftMenuData.push(createLeftMenuRow(MENU_NOTIFICATIONS));
+	leftMenuData.push(createLeftMenuRow(MENU_BADGES));
 	leftMenuData.push(createLeftMenuRow(MENU_PASSPORT));
 	leftMenuData.push(createLeftMenuRow(MENU_FIND_FRIENDS));
 	leftMenuData.push(createLeftMenuRow(MENU_SETTINGS));
@@ -222,9 +226,9 @@ function createLeftMenuRow(menuItem){
 	});
 		
 	var icon, label;
-	if(menuItem == MENU_HOME){
+	if(menuItem == MENU_FEED){
 		icon = IMAGE_PATH+'menu_left/Home_icon.png';
-		label = 'Home';
+		label = 'Feed';
 	} else if(menuItem == MENU_PROFILE){
 		icon = IMAGE_PATH+'menu_left/Home_icon.png';
 		label = 'Profile';
@@ -246,6 +250,12 @@ function createLeftMenuRow(menuItem){
 	} else if(menuItem == MENU_SETTINGS){
 		icon = IMAGE_PATH+'menu_left/Settings_icon.png';
 		label = 'Settings';
+	} else if(menuItem == MENU_BADGES){
+		icon = IMAGE_PATH+'menu_left/Settings_icon.png';
+		label = 'Badges';
+	} else if(menuItem == MENU_NOTIFICATIONS){
+		icon = IMAGE_PATH+'menu_left/Settings_icon.png';
+		label = 'Notifications';
 	}
 	
 	var rowIcon = Titanium.UI.createImageView({

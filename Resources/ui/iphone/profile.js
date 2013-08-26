@@ -163,34 +163,28 @@ profileTableViewBackground.add(profileTableView);
 var runWindow = null;
 
 profileStartButton.addEventListener('click', function(){
-	var selectedDogs = getSelectedDogs();
-	if(selectedDogs.length > 0){
-		runWindow = Ti.UI.createWindow({
-			backgroundColor:UI_BACKGROUND_COLOR,
-			barImage:IMAGE_PATH+'common/bar.png',
-			barColor:UI_COLOR,
-			title:'Run'
-		});
-		
+	runWindow = Ti.UI.createWindow({
+		backgroundColor:UI_BACKGROUND_COLOR,
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Run'
+	});
 	
-		//back button
-		var runBackButton = Ti.UI.createButton({
-		    backgroundImage: IMAGE_PATH+'common/back_button.png',
-		    width:48,
-		    height:33
-		});
-		
-		runWindow.setLeftNavButton(runBackButton);
-		runBackButton.addEventListener("click", handleRunBackButton);
-		
-		runWindow.add(buildRunView());
-		
-		openWindows.push(runWindow);
-		navController.open(runWindow);
-	} else {
-		alert('NO DOGS SELECTED');	
-	}
+
+	//back button
+	var runBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
 	
+	runWindow.setLeftNavButton(runBackButton);
+	runBackButton.addEventListener("click", handleRunBackButton);
+	
+	runWindow.add(buildRunView());
+	
+	openWindows.push(runWindow);
+	navController.open(runWindow);
 });
 
 profileMapButton.addEventListener('click', function(){
@@ -220,7 +214,12 @@ profileMapButton.addEventListener('click', function(){
 });
 
 function handleRunBackButton() {
-    navController.close(runWindow);
+	if(runningMode){
+		alert('STOP RUNNING FIRST');
+	} else {
+		navController.close(runWindow);
+	}
+    
 }
 
 function handleActivityButton(e){

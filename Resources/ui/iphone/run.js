@@ -243,13 +243,24 @@ function clockTick(){
 
 function handleStartRunButton(){
 	if(!runningMode){
-		cronometerInterval = setInterval(clockTick,1000);
-		
-		runPauseButton.backgroundImage = IMAGE_PATH+'run/pause_btn.png';
-		runningMode = true;
-		
-		Titanium.Geolocation.addEventListener('location',trackLocation);
-		Ti.API.info('Tracking location ON');
+		var selectedDogs = getSelectedDogs();
+		if(selectedDogs.length > 0){
+			cronometerInterval = setInterval(clockTick,1000);
+			
+			//Adapt UI
+			runPauseButton.backgroundImage = IMAGE_PATH+'run/pause_btn.png';
+			runningMode = true;
+			
+			//Start location tracking
+			Titanium.Geolocation.addEventListener('location',trackLocation);
+			Ti.API.info('Tracking location ON');
+			
+			//Disable window sliding
+			window.setPanningMode("NoPanning");
+			
+		} else {
+			alert('NO DOGS SELECTED');
+		}
 	} else {
 		clearInterval(cronometerInterval);
 		
@@ -258,19 +269,24 @@ function handleStartRunButton(){
 		
 		Titanium.Geolocation.removeEventListener('location',trackLocation);
 		Ti.API.info('Tracking location OFF - collected '+runningPathCoordinates.length+' coordinates');
+		
+		//Enable window sliding
+		window.setPanningMode("FullViewPanning");
 	}
 }
 
 function handleEndRunButton(){
-
+	//Enable window sliding
+	window.setPanningMode("FullViewPanning");
+	
+	
 	if(runningMode){
 		runningMode = false;
 		clearInterval(cronometerInterval);
 		
 		//Prepare run object for the next window
 		runObject.coordinates = runningPathCoordinates;
-		runObject.temperature = '99';
-		runObject.speed = '101';
+		runObject.speed = '1.34';
 		
 		Ti.include('ui/iphone/run_finish.js');
 		
@@ -283,7 +299,7 @@ function handleEndRunButton(){
 			title:'Run overview'
 		});
 		
-		//back button
+		//back button & event listener
 		var runFinishBackButton = Ti.UI.createButton({
 		    backgroundImage: IMAGE_PATH+'common/back_button.png',
 		    width:48,
@@ -291,8 +307,19 @@ function handleEndRunButton(){
 		});
 		
 		runFinishWindow.setLeftNavButton(runFinishBackButton);
-		
 		runFinishBackButton.addEventListener("click", function() {
+		    navController.close(runFinishWindow);
+		});
+		
+		//done button & event listener
+		var runFinishDoneButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'common/Done_button.png',
+		    width:58,
+		    height:29
+		});
+		
+		runFinishWindow.setRightNavButton(runFinishDoneButton);
+		runFinishDoneButton.addEventListener("click", function() {
 		    navController.close(runFinishWindow);
 		});
 		
@@ -356,6 +383,11 @@ function trackLocation(){
 		//only use accurate coordinates
 		if(e.coords.accuracy <= 15){
 			
+			//Get weather once we get the 1st accurate set of coordinates
+			if(runningPathCoordinates.length == 1){
+				weather.getWeather(runningPathCoordinates[0].latitude, runningPathCoordinates[0].longitude);	
+			}
+			
 			var tmpDistance = calculateDistance(coordinates);
 			runObject.distance = tmpDistance;
 			
@@ -403,5 +435,3 @@ function calculateDistance(newCoordinates){
 	
 	return parseFloat(d);
 }
-
-//Ti.UI.currentWindow.add(viewRun);
