@@ -3,6 +3,14 @@ var viewAddDog = Ti.UI.createView({
 	backgroundColor:UI_BACKGROUND_COLOR
 });
 
+//constants
+var DOG_BREED_PICKER = 1;
+var GENDER_PICKER = 2;
+var MATTING_PICKER = 3;
+
+//UI components
+var addDogPickerType = null;
+
 //form field
 var addDogFormFieldImage = Ti.UI.createImageView({ 
 	image:IMAGE_PATH+'add_dog/form_field.png',
@@ -52,7 +60,8 @@ var addDogFieldName = Ti.UI.createTextField({
 	height:addDogTxtFieldHeight,
 	top:1,
 	returnKeyType: Ti.UI.RETURNKEY_NEXT,
-	field:1
+	field:1,
+	font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 });
 
 addDogFieldName.addEventListener('change', handleAddDogTextFieldFocus);
@@ -60,7 +69,7 @@ addDogFieldName.addEventListener('blur', handleAddDogTextFieldBlur);
 
 //Event listener for the name textfield
 addDogFieldName.addEventListener('return', function() {
-   addDogFieldDogBreed.focus();
+   addDogFieldDogBreedHintTextLabel.fireEvent('click');
 });
 
 addDogFormScrollBackground.add(addDogFieldName);
@@ -78,45 +87,29 @@ var addDogFieldNameHintTextLabel = Ti.UI.createLabel({
 });
 addDogFieldName.add(addDogFieldNameHintTextLabel);
 
-//Dog Breed textfield
-var addDogFieldDogBreed = Ti.UI.createTextField({
-	width:addDogTxtFieldWidth,
-	height:addDogTxtFieldHeight,
-	top:addDogFieldName.top + addDogTxtFieldOffset,
-	returnKeyType: Ti.UI.RETURNKEY_NEXT,
-	field:2
-});
-
-addDogFieldDogBreed.addEventListener('change', handleAddDogTextFieldFocus);
-addDogFieldDogBreed.addEventListener('blur', handleAddDogTextFieldBlur);
-
-//Event listener for the dog breed textfield
-addDogFieldDogBreed.addEventListener('return', function() {
-   addDogFieldAge.focus();
-});
-
-addDogFormScrollBackground.add(addDogFieldDogBreed );
-
 //Dog Breed textfield label
 var addDogFieldDogBreedHintTextLabel = Ti.UI.createLabel({
 	text:'Dog Breed*',
+	picker:DOG_BREED_PICKER,
 	color:'999999',
 	textAlign:'left',
-	left:4,
+	top:addDogFieldName.top + addDogTxtFieldOffset,
 	opacity:0.7,
-	width:80,
-	height:30,
+	width:192,
+	height:32,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-addDogFieldDogBreed.add(addDogFieldDogBreedHintTextLabel);
+addDogFormScrollBackground.add(addDogFieldDogBreedHintTextLabel);
+addDogFieldDogBreedHintTextLabel.addEventListener('click', addDogHandlePicker);
 
 //Age textfield
 var addDogFieldAge = Ti.UI.createTextField({
 	width:addDogTxtFieldWidth,
 	height:addDogTxtFieldHeight,
-	top:addDogFieldDogBreed.top + addDogTxtFieldOffset,
+	top:addDogFieldDogBreedHintTextLabel.top + addDogTxtFieldOffset,
 	returnKeyType: Ti.UI.RETURNKEY_NEXT,
-	field:3
+	field:3,
+	font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 });
 
 addDogFieldAge.addEventListener('change', handleAddDogTextFieldFocus);
@@ -148,7 +141,8 @@ var addDogFieldWeight = Ti.UI.createTextField({
 	height:addDogTxtFieldHeight,
 	top:addDogFieldAge.top + addDogTxtFieldOffset,
 	returnKeyType: Ti.UI.RETURNKEY_NEXT,
-	field:4
+	field:4,
+	font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 });
 
 addDogFieldWeight.addEventListener('change', handleAddDogTextFieldFocus);
@@ -156,7 +150,8 @@ addDogFieldWeight.addEventListener('blur', handleAddDogTextFieldBlur)
 
 //Event listener for the weight textfield
 addDogFieldWeight.addEventListener('return', function() {
-   addDogFieldGender.focus();
+   addDogFieldGenderHintTextLabel.fireEvent('click');
+   addDogFormScrollBackground.scrollTo(0,100); //sometimes it wouldn't open'
 });
 
 addDogFormScrollBackground.add(addDogFieldWeight);
@@ -174,64 +169,64 @@ var addDogFieldWeightHintTextLabel = Ti.UI.createLabel({
 });
 addDogFieldWeight.add(addDogFieldWeightHintTextLabel);
 
-//Gender textfield
-var addDogFieldGender = Ti.UI.createTextField({
-	width:addDogTxtFieldWidth,
-	height:addDogTxtFieldHeight,
-	top:addDogFieldWeight.top + addDogTxtFieldOffset,
-	returnKeyType: Ti.UI.RETURNKEY_NEXT,
-	field:5
-});
-
-addDogFieldGender.addEventListener('change', handleAddDogTextFieldFocus);
-addDogFieldGender.addEventListener('blur', handleAddDogTextFieldBlur);
-
-//Event listener for the gender textfield
-addDogFieldGender.addEventListener('return', function() {
-   addDogFieldMatting.focus();
-});
-
-addDogFormScrollBackground.add(addDogFieldGender);
-
 //Gender textfield label
 var addDogFieldGenderHintTextLabel = Ti.UI.createLabel({
 	text:'Gender*',
+	picker:GENDER_PICKER,
 	color:'999999',
 	textAlign:'left',
-	left:4,
 	opacity:0.7,
-	width:80,
-	height:30,
+	top:addDogFieldWeight.top + addDogTxtFieldOffset,
+	width:192,
+	height:32,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-addDogFieldGender.add(addDogFieldGenderHintTextLabel);
-
-//Matting textfield
-var addDogFieldMatting = Ti.UI.createTextField({
-	width:addDogTxtFieldWidth,
-	height:addDogTxtFieldHeight,
-	top:addDogFieldGender.top + addDogTxtFieldOffset,
-	returnKeyType: Ti.UI.RETURNKEY_DONE,
-	field:6
-});
-
-addDogFieldMatting.addEventListener('change', handleAddDogTextFieldFocus);
-addDogFieldMatting.addEventListener('blur', handleAddDogTextFieldBlur); 
-
-addDogFormScrollBackground.add(addDogFieldMatting);
+addDogFormScrollBackground.add(addDogFieldGenderHintTextLabel);
+addDogFieldGenderHintTextLabel.addEventListener('click', addDogHandlePicker);
 
 //Matting textfield label
 var addDogFieldMattingHintTextLabel = Ti.UI.createLabel({
 	text:'Matting*',
+	picker:MATTING_PICKER,
 	color:'999999',
 	textAlign:'left',
-	left:4,
+	top:addDogFieldGenderHintTextLabel.top + addDogTxtFieldOffset,
 	opacity:0.7,
-	width:80,
-	height:30,
+	width:192,
+	height:32,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-addDogFieldMatting.add(addDogFieldMattingHintTextLabel);
+addDogFormScrollBackground.add(addDogFieldMattingHintTextLabel);
+addDogFieldMattingHintTextLabel.addEventListener('click', addDogHandlePicker);
+
+//picker
+var addDogPicker = Ti.UI.createPicker({
+  bottom:-216
+});
+viewAddDog.add(addDogPicker);
+
+//picker done button
+var addDogPickerDoneButton = Ti.UI.createButton({
+	title:'done',
+    width:48,
+    height:33
+});
+
+//picker data
+var genderPicker = [];
+
+genderPicker[0]=Ti.UI.createPickerRow({title:'male'});
+genderPicker[1]=Ti.UI.createPickerRow({title:'female'});
+
+var dogBreedPicker = [];
+	
+dogBreedPicker[0]=Ti.UI.createPickerRow({title:'kannis'});
+dogBreedPicker[1]=Ti.UI.createPickerRow({title:'bull dog'});
+
+var mattingPicker = [];
+	
+mattingPicker[0]=Ti.UI.createPickerRow({title:'yes'});
+mattingPicker[1]=Ti.UI.createPickerRow({title:'no'});
 
 //sepparator offset
 var sepparatorOffset = 0;
@@ -265,9 +260,77 @@ addDogPhotoDialog.addEventListener('click',function(e){
 	}
 });
 
+//handle picker data and animation
+function addDogHandlePicker(e){
+	//clear all picker rows method
+    clearPickerRows();
+    
+    var picker = e.source.picker;
+    //add data for specified picker
+	if(picker === DOG_BREED_PICKER){
+		addDogPicker.add(dogBreedPicker);
+	}else if(picker === GENDER_PICKER){
+		addDogPicker.add(genderPicker);
+		addDogFormScrollBackground.scrollTo(0,100);
+	}else if(picker === MATTING_PICKER){
+		addDogPicker.add(mattingPicker);
+		addDogFormScrollBackground.scrollTo(0,135);
+	}
+	
+	addDogPicker.selectionIndicator = true;
+	addDogPicker.animate({bottom:0, duration:500});
+	
+	
+	navController.getWindow().setRightNavButton(addDogPickerDoneButton);
+	addDogPickerDoneButton.addEventListener("click", handlePickerDoneButton);
+	addDogPickerType = picker;
+}
+
+//clear all picker rows
+function clearPickerRows(){
+	if (addDogPicker.getColumns()[0]) {
+ 
+        var _col = addDogPicker.getColumns()[0];
+	    var len  = _col.rowCount;
+ 
+	    for (var x = len - 1; x >= 0; x--) {
+                var _row = _col.rows[x];
+                _col.removeRow(_row);
+        }
+    }
+}
+
 //handle photo button
 function addDogShowPhotoOptions(){
 	addDogPhotoDialog.show();
+}
+
+//handle picker done button
+function handlePickerDoneButton(e){
+	addDogFormScrollBackground.scrollTo(0,0);
+	
+	addDogPicker.animate({bottom:-216, duration:500});
+ 	navController.getWindow().setRightNavButton(rightBtn);
+	
+	//change text to the chosen picker row
+	if(addDogPickerType === DOG_BREED_PICKER){
+		addDogFieldDogBreedHintTextLabel.color = 'black';
+		addDogFieldDogBreedHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		addDogFieldDogBreedHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
+		addDogFieldDogBreedHintTextLabel.opacity = 1;
+		addDogFieldAge.focus();
+	}else if(addDogPickerType === GENDER_PICKER){
+		addDogFieldGenderHintTextLabel.color = 'black';
+		addDogFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		addDogFieldGenderHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
+		addDogFieldGenderHintTextLabel.opacity = 1;
+		addDogFieldMattingHintTextLabel.fireEvent('click');
+	}else if(addDogPickerType === MATTING_PICKER){
+		addDogFieldMattingHintTextLabel.color = 'black';
+		addDogFieldMattingHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		addDogFieldMattingHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
+		addDogFieldMattingHintTextLabel.opacity = 1;
+	}
 }
 
 //handle photo selection
@@ -306,12 +369,6 @@ function handleAddDogTextFieldFocus(e){
 		}else {
 			addDogFieldNameHintTextLabel.show();
 		}
-	}else if(field == 2){
-		if(addDogFieldDogBreed.value != ''){
-			addDogFieldDogBreedHintTextLabel.hide();
-		}else {
-			addDogFieldDogBreedHintTextLabel.show();
-		}
 	}else if(field == 3){
 		if(addDogFieldAge.value != ''){
 			addDogFieldAgeHintTextLabel.hide();
@@ -324,18 +381,6 @@ function handleAddDogTextFieldFocus(e){
 		}else {
 			addDogFieldWeightHintTextLabel.show();
 		}
-	}else if(field == 5){
-		if(addDogFieldGender.value != ''){
-			addDogFieldGenderHintTextLabel.hide();
-		}else {
-			addDogFieldGenderHintTextLabel.show();
-		}
-	}else if(field == 6){
-		if(addDogFieldMatting.value != ''){
-			addDogFieldMattingHintTextLabel.hide();
-		}else {
-			addDogFieldMattingHintTextLabel.show();
-		}
 	}
 }
 
@@ -347,10 +392,6 @@ function handleAddDogTextFieldBlur(e){
 		if(addDogFieldName.value == ''){
 			addDogFieldNameHintTextLabel.show();
 		}
-	}else if(field == 2){
-		if(addDogFieldDogBreed.value == ''){
-			addDogFieldDogBreedHintTextLabel.show();
-		}
 	}else if(field == 3){
 		if(addDogFieldAge.value == ''){
 			addDogFieldAgeHintTextLabel.show();
@@ -358,14 +399,6 @@ function handleAddDogTextFieldBlur(e){
 	}else if(field == 4){
 		if(addDogFieldWeight.value == ''){
 			addDogFieldWeightHintTextLabel.show();
-		}
-	}else if(field == 5){
-		if(addDogFieldGender.value == ''){
-			addDogFieldGenderHintTextLabel.show();
-		}
-	}else if(field == 6){
-		if(addDogFieldMatting.value == ''){
-			addDogFieldMattingHintTextLabel.show();
 		}
 	}
 }

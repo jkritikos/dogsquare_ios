@@ -10,7 +10,6 @@ var rightTableView = Ti.UI.createTableView({
 	data:populateRightMenu(),
 	separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE
 });
-rightTableView.addEventListener('click', handleTableViewRows);
 
 winRight.add(rightTableView);
 
@@ -171,6 +170,7 @@ function populateRightMenu(){
 			width: 23,
 			height:23
 		});
+		rowCheckBox.addEventListener('click', handleTableViewRows);
 		
 		//check image inside the dog row - right menu row
 		var rowCheckImage = Ti.UI.createImageView({ 
