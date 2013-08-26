@@ -223,6 +223,49 @@ function xhr_upload(_args) {
 	return win;
 };
 
+//Server call for saving dogs
+function doSaveDogOnline(uObj){
+	Ti.API.info('doSaveDogOnline() called with userObject='+uObj); 	
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('doSaveDogOnline() got back from server '+this.responseText); 	
+		var jsonData = JSON.parse(this.responseText);
+		
+		//Update user object and close the signup window
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			//Add the server dog id to the object
+			uObj.dog_id = jsonData.data.dog_id;
+			saveDog(uObj);
+			//updateLeftMenu(userObject);
+			
+		} else {
+			alert(getErrorMessage(jsonData.response));
+		}
+	};
+	
+	xhr.setRequestHeader("Content-Type", "multipart/form-data");
+	xhr.open('POST',API+'addDog');
+	xhr.send({
+		user_id:userObject.userId,
+		photo:uObj.image,
+		name:uObj.name,
+		weight:uObj.weight,
+		age:uObj.age,
+		breed_id:uObj.breed_id,
+		gender:uObj.gender,
+		mating:uObj.mating
+	});
+}
+
+//Saves a dog object in the local db
 function saveDog(dogObject){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
@@ -231,8 +274,27 @@ function saveDog(dogObject){
 	db.close();
 }
 
+//Gets all dogs from the local db
 function getDogs(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.close();
+}
+
+//Saves an activity to the local db
+function saveActivity(obj){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.execute('insert into activities (start_date,type_id) values (?,?,1)', obj.start_date);
+	
+	db.close();
+}
+
+//Updates an activity in the local db
+function updateActivity(obj){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.execute('update activities set end_date=? where id=?',obj.end_date, obj.id);
 	
 	db.close();
 }
@@ -242,6 +304,9 @@ function createDB(){
 	
 	db.execute('create table if not exists DOGFUEL_RULES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"user_id\" integer,\"walk_distance\" integer, \"playtime\" integer )');
 	db.execute('create table if not exists DOGS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"dog_id\" integer, \"name\" varchar(128), \"age\" integer, \"weight\" integer, \"mating\" integer, \"gender\" integer, \"photo\" varchar(128))');
+	db.execute('create table if not exists ACTIVITIES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"start_date\" real, \"end_date\" real, \"type_id\" integer)');
+	db.execute('create table if not exists ACTIVITY_DOGS (\"activity_id\" integer, \"dog_id\" integer)');
+	db.execute('create table if not exists ACTIVITY_COORDINATES (\"activity_id\" integer, \"lat\" real, \"lon\" real)');
 	
 	db.close();
 }

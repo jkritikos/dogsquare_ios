@@ -199,29 +199,9 @@ function buildRunFinishView(obj){
 		bottom:39,
 		allowsSelection:false
 	});
-viewRunSummary.add(runFinishTableView);
+	
+	viewRunSummary.add(runFinishTableView);
 
-/* 
-//var center = {latitude:coords[0][0],longitude:coords[0][1],latitudeDelta:0.001, longitudeDelta:0.001,animate:true};
-
-
-
-var viewRunSummaryMap = Titanium.Map.createView({
-	width:'100%',
-	bottom:0,
-    mapType:Titanium.Map.STANDARD_TYPE,
-    animate:true,
-    regionFit:true,
-    userLocation:true,
-    visible:true
-});
-
-var pathCoordinates = [];
-for(var i=0; i < coords.length; i++){
-	pathCoordinates.push({latitude:coords[i][0], longitude:coords[i][1]});
-}
-
-*/
 	//map region object
 	var runSummaryRegion = {
 		latitude: obj.coordinates[0].latitude,

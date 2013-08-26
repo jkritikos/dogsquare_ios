@@ -24,6 +24,9 @@ var horas = 0, minutos = 0, segundos = 0, total_minutos = 0;
 var cronometerInterval = null;
 
 function buildRunView(){
+	//Reset cronometer
+	horas = 0, minutos = 0, segundos = 0, total_minutos = 0;
+	
 	viewRun = Ti.UI.createView({
 		backgroundColor:UI_BACKGROUND_COLOR
 	});
@@ -248,7 +251,7 @@ function handleStartRunButton(){
 			cronometerInterval = setInterval(clockTick,1000);
 			
 			//Adapt UI
-			runPauseButton.backgroundImage = IMAGE_PATH+'run/pause_btn.png';
+			runPauseButton.backgroundImage = IMAGE_PATH+'run/Pause_btn.png';
 			runningMode = true;
 			
 			//Start location tracking
@@ -433,5 +436,5 @@ function calculateDistance(newCoordinates){
 		Ti.API.info('calculateDistance() NOT enough points for distance calculation');
 	}
 	
-	return parseFloat(d);
+	return runningDistanceKmLabelValue;
 }
