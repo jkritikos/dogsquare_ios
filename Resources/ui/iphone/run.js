@@ -60,14 +60,6 @@ function buildRunView(){
 		font:{fontSize:41, fontWeight:'bold', fontFamily:'Open Sans'}
 	}); 
 	
-	/*
-	var gradient = Ti.UI.createView({top:75, right:40, height:40, width:60,zIndex:10,
-        backgroundGradient:{
-            type:'linear',
-            colors:[UI_BACKGROUND_COLOR,'transparent']
-        }
-    });*/
-    
 	var runAvgPaceMinuteLabel = Ti.UI.createLabel({
 		text:'0\'',
 		top:146,
@@ -250,6 +242,14 @@ function handleStartRunButton(){
 		if(selectedDogs.length > 0){
 			cronometerInterval = setInterval(clockTick,1000);
 			
+			//Save activity locally
+			if(!runObject.activity_id){
+				var activityId = saveActivity(selectedDogs);
+				runObject.activity_id = activityId;
+			} else {
+				Ti.API.info('NOT saving activity because we are resuming it');
+			}
+			
 			//Adapt UI
 			runPauseButton.backgroundImage = IMAGE_PATH+'run/Pause_btn.png';
 			runningMode = true;
@@ -286,6 +286,9 @@ function handleEndRunButton(){
 	if(runningMode){
 		runningMode = false;
 		clearInterval(cronometerInterval);
+		
+		//Update our activity object
+		updateActivity(runObject.activity_id);
 		
 		//Prepare run object for the next window
 		runObject.coordinates = runningPathCoordinates;
@@ -338,25 +341,6 @@ function handleEndRunButton(){
 		navController.open(runFinishWindow);
 		
 		Ti.API.info('OPENED run finish');
-		
-		// route object
-		/*
-		var route = {
-		    name:"Your path",
-		    points:runningPathCoordinates,
-		    color:"green",
-		    backgroundGradient: {
-	        type: 'linear',
-	        startPoint: { x: '0%', y: '50%' },
-	        endPoint: { x: '100%', y: '50%' },
-	        colors: [ { color: 'red', offset: 0.0}, { color: 'green', offset: 0.25 }, { color: 'red', offset: 1.0 } ],
-	    },
-		    borderColor:'black',
-		    width:12
-		};
-		
-		viewRunSummaryMap.addRoute(route);
-		*/
 	} else {
 		alert('START RUNNING FIRST');
 	}
@@ -390,6 +374,9 @@ function trackLocation(){
 			if(runningPathCoordinates.length == 1){
 				weather.getWeather(runningPathCoordinates[0].latitude, runningPathCoordinates[0].longitude);	
 			}
+			
+			//Save coordinates
+			saveActivityCoordinates(runObject.activity_id, e.coords.latitude, e.coords.longitude);
 			
 			var tmpDistance = calculateDistance(coordinates);
 			runObject.distance = tmpDistance;

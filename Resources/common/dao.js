@@ -241,19 +241,75 @@ function getDogs(){
 }
 
 //Saves an activity to the local db
-function saveActivity(obj){
+function saveActivity(dogs){
+	var now = new Date().getTime();
+	
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
-	db.execute('insert into activities (start_date,type_id) values (?,?,1)', obj.start_date);
+	//activity
+	db.execute('insert into activities (start_date,start_time,type_id) values (date(),?,1)',now);
+	var activityId = db.lastInsertRowId;
+	
+	//dogs
+	if(dogs != null){
+		for(var i=0; i < dogs.length; i++){
+			db.execute('insert into activity_dogs (activity_id, dog_id) values (?,?)', activityId,dogs[i]);
+		}
+	}
+	
+	db.close();
+	
+	Ti.API.info('saveActivity() returns activity id '+activityId);
+	return activityId;
+}
+
+//Updates an activity in the local db
+function updateActivity(id){
+	var now = new Date().getTime();
+	
+	Ti.API.info('updateActivity() called for activity id '+id);
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.execute('update activities set end_time=? where id=?',now,id);
 	
 	db.close();
 }
 
-//Updates an activity in the local db
-function updateActivity(obj){
+//Returns a list of all the user activities
+function getActivities(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
-	db.execute('update activities set end_date=? where id=?',obj.end_date, obj.id);
+	var activities = [];
+	
+	var sql = 'select id,start_date, start_time, end_time,type_id from activities';
+	var rows = db.execute(sql);
+	while (rows.isValidRow()){
+		
+		var duration = rows.field(3) - rows.field(2);
+		
+		var obj = {
+			id:rows.field(0),
+			start_date:rows.field(1),
+			start_time:rows.field(2),
+			end_time:rows.field(3),
+			duration:duration
+		}
+		
+		activities.push(obj);
+		rows.next();
+	}
+	
+	rows.close();
+	db.close();
+	
+	return activities;
+}
+
+//Saves the specified coordinates for this activity
+function saveActivityCoordinates(activityId, lat, lon){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.execute('insert into activity_coordinates (activity_id, lat, lon) values (?,?,?)',activityId, lat, lon);
 	
 	db.close();
 }
@@ -263,7 +319,7 @@ function createDB(){
 	
 	db.execute('create table if not exists DOGFUEL_RULES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"user_id\" integer,\"walk_distance\" integer, \"playtime\" integer )');
 	db.execute('create table if not exists DOGS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"dog_id\" integer, \"name\" varchar(128), \"age\" integer, \"weight\" integer, \"mating\" integer, \"gender\" integer, \"photo\" varchar(128))');
-	db.execute('create table if not exists ACTIVITIES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"start_date\" real, \"end_date\" real, \"type_id\" integer)');
+	db.execute('create table if not exists ACTIVITIES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"start_date\" real, \"start_time\" real, \"end_time\" real, \"type_id\" integer)');
 	db.execute('create table if not exists ACTIVITY_DOGS (\"activity_id\" integer, \"dog_id\" integer)');
 	db.execute('create table if not exists ACTIVITY_COORDINATES (\"activity_id\" integer, \"lat\" real, \"lon\" real)');
 	
