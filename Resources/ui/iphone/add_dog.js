@@ -353,10 +353,14 @@ function handlePhotoSelection(){
 		
 		success:function(event){
 			var image = event.media;
-			addDogObject.image = image;
+			addDogObject.photo = image;
+			
+			var uniqueDogFilename = new Date().getTime() + '.jpg';
+			addDogObject.photo_filename = uniqueDogFilename;
 			
 			// create new file name and remove old
-			var filename = Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg";
+			
+			var filename = Titanium.Filesystem.applicationDataDirectory + uniqueDogFilename;
 			var tmpImage = Titanium.Filesystem.getFile(filename);
 			tmpImage.write(image);
 			Ti.API.info('saved image to '+filename);
@@ -435,41 +439,38 @@ function doSaveDogOnline(dObj){
 		
 		//Update user object and close the signup window
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
-			
 			//Add the server dog id to the object
-			addDogObject.dog_id = jsonData.data.dog_id;
-			//saveDog(uObj);
-			//updateLeftMenu(userObject);
+			dObj.dog_id = jsonData.data.dog_id;
+			saveDog(dObj);
+			
+			var dogRows = getDogs();
+			populateRightMenu(dogRows);
+			
+			navController.getWindow().setRightNavButton(rightBtn);
+			Ti.include('ui/iphone/dog_profile.js');
+			navController.getWindow().add(dogProfileView);
+			navController.getWindow().setTitle('dog profile');
 			
 		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
 	};
 	
-	var t = {
-		user_id:userObject.userId,
-		photo:addDogObject.image,
-		name:addDogObject.name,
-		weight:addDogObject.weight,
-		age:addDogObject.age,
-		breed_id:addDogObject.breed_id,
-		gender:addDogObject.gender,
-		mating:addDogObject.matting
-	};
-	
-	alert(t);
-	
 	xhr.setRequestHeader("Content-Type", "multipart/form-data");
 	xhr.open('POST',API+'addDog');
 	xhr.send({
 		user_id:userObject.userId,
-		photo:addDogObject.image,
-		name:addDogObject.name,
-		weight:addDogObject.weight,
-		age:addDogObject.age,
-		breed_id:addDogObject.breed_id,
-		gender:addDogObject.gender,
-		mating:addDogObject.matting
+<<<<<<< HEAD
+		photo:dObj.photo,
+=======
+		photo:dObj.image,
+>>>>>>> 030a04459bd2acca5b510763ef47bc58c5c66416
+		name:dObj.name,
+		weight:dObj.weight,
+		age:dObj.age,
+		breed_id:dObj.breed_id,
+		gender:dObj.gender,
+		mating:dObj.mating
 	});
 }
 
@@ -480,11 +481,11 @@ function validateDogForm(){
 	}else if(addDogFieldDogBreedHintTextLabel.id == null){
 		alert('DOG BREED IS MISSING');
 		return false;
-	}else if(isStringNullOrEmpty(addDogFieldAge.value)){
-		alert('AGE IS MISSING');
+	}else if(isStringNullOrEmpty(addDogFieldAge.value) || isNaN(addDogFieldAge.value)){
+		alert('AGE IS MISSING OR NOT A NUMBER');
 		return false;
-	} else if(isStringNullOrEmpty(addDogFieldWeight.value)){
-		alert('WEIGHT IS MISSING');
+	} else if(isStringNullOrEmpty(addDogFieldWeight.value) || isNaN(addDogFieldWeight.value)){
+		alert('WEIGHT IS MISSING OR NOT A NUMBER');
 		return false;
 	}else if(addDogFieldGenderHintTextLabel.id == null){
 		alert('GENDER IS MISSING');
@@ -492,24 +493,26 @@ function validateDogForm(){
 	}else if(addDogFieldMattingHintTextLabel.id == null){
 		alert('MATTING IS MISSING');
 		return false;
-	}else if(addDogObject.image == null){
+	}else if(addDogObject.photo == null){
 		alert('PROFILE PHOTO MISSING');
 		return false;
 	}
 	
 	addDogObject.name = addDogFieldName.value;
-	addDogObject.dogBreed = addDogFieldDogBreedHintTextLabel.id;
+	addDogObject.breed_id = addDogFieldDogBreedHintTextLabel.id;
 	addDogObject.age = addDogFieldAge.value;
 	addDogObject.weight = addDogFieldWeight.value;
 	addDogObject.gender = addDogFieldGenderHintTextLabel.id;
-	addDogObject.matting = addDogFieldMattingHintTextLabel.id;
+	addDogObject.mating = addDogFieldMattingHintTextLabel.id;
 	
 	return true;
 }
 
 function handleAddDogDoneClick(){
+	
 	if(validateDogForm()){
 		Ti.API.info('dog form is valid');
+		
 		doSaveDogOnline(addDogObject);	
 		//alert(addDogObject);
 	}else{

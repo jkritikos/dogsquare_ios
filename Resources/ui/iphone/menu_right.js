@@ -3,14 +3,14 @@ var ADD_DOG = 8;
 
 //Right window
 var winRight = Ti.UI.createWindow();
+var dRows = getDogs();
 
 //right table view
 var rightTableView = Ti.UI.createTableView({
 	backgroundColor:'1c2027',
-	data:populateRightMenu(),
 	separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE
 });
-
+populateRightMenu(dRows);
 winRight.add(rightTableView);
 
 /*Returns an array of the selected dog ids*/
@@ -28,11 +28,10 @@ function getSelectedDogs(){
 }
 
 //Creates and populates the right menu
-function populateRightMenu(){
+function populateRightMenu(dogRows){
 	
 	var rightMenuData = [];
 	//temporary arrays
-	var dogNames = ['Max', 'Lory', 'Lucy'];
 	var percent = ['76 %', '53 %', '39 %'];
 	
 	//add dog row - buttton
@@ -87,7 +86,8 @@ function populateRightMenu(){
 	
 	rightMenuData.push(rightMenuAddDogRow);
 	
-	for(i=0;i<=2;i++){
+	for(var i=0;i<dogRows.length;i++){
+		Ti.API.info('dog rows are being populated');
 		//all dog rows
 		var rightMenuRow = Ti.UI.createTableViewRow({
 			height:116,
@@ -106,7 +106,7 @@ function populateRightMenu(){
 		});
 		
 		//dog image inside the dog row - right menu row
-		var rowDogImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
+		var rowDogImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + dogRows[i].photo);
 		var rowDogImageBlob = rowDogImageFile.toBlob();
 		var rowDogImageBlobCropped = rowDogImageBlob.imageAsThumbnail(80,0,40);
 		
@@ -121,10 +121,10 @@ function populateRightMenu(){
 		
 		//dog name label inside the dog row - right menu row
 		var rowDogNameLabel = Titanium.UI.createLabel({ 
-			text:dogNames[i],
+			text:dogRows[i].name,
 			color:'ab7b04',
 			height:31,
-			width:62,
+			width:'auto',
 			textAlign:'left',
 			left:156,
 			top:14,
@@ -189,7 +189,7 @@ function populateRightMenu(){
 		
 		rightMenuData.push(rightMenuRow);
 	}
-	return rightMenuData;
+	rightTableView.setData(rightMenuData);
 }
 
 //handle all rows and change properties when activated/deactivated

@@ -26,6 +26,8 @@ Ti.include('common/dao.js');
 Ti.include('common/utils.js');
 Ti.include('common/translator.js');
 
+createDB();
+
 //Left & center windows
 Ti.include('ui/iphone/navigation.js');
 
@@ -36,6 +38,12 @@ window.setParallaxAmount(0.3);
 Ti.include('ui/iphone/run.js');
 Ti.include('ui/iphone/map.js');
 
-//test file upload
-//var win11 = xhr_upload({title:'test'});
-//win11.open();
+//DEBUG STUFF
+createDB();
+
+
+var a = getActivities();
+for(var i=0; i<a.length; a++){
+	Ti.API.info('activities saved id '+a[i].id+' start date '+a[i].start_date+' start time '+a[i].start_time+' duration '+a[i].duration);
+}
+
