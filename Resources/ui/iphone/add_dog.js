@@ -446,30 +446,17 @@ function doSaveDogOnline(dObj){
 		}
 	};
 	
-	var t = {
-		user_id:userObject.userId,
-		photo:addDogObject.image,
-		name:addDogObject.name,
-		weight:addDogObject.weight,
-		age:addDogObject.age,
-		breed_id:addDogObject.breed_id,
-		gender:addDogObject.gender,
-		mating:addDogObject.matting
-	};
-	
-	alert(t);
-	
 	xhr.setRequestHeader("Content-Type", "multipart/form-data");
 	xhr.open('POST',API+'addDog');
 	xhr.send({
 		user_id:userObject.userId,
-		photo:addDogObject.image,
-		name:addDogObject.name,
-		weight:addDogObject.weight,
-		age:addDogObject.age,
-		breed_id:addDogObject.breed_id,
-		gender:addDogObject.gender,
-		mating:addDogObject.matting
+		photo:dObj.image,
+		name:dObj.name,
+		weight:dObj.weight,
+		age:dObj.age,
+		breed_id:dObj.breed_id,
+		gender:dObj.gender,
+		mating:dObj.mating
 	});
 }
 
@@ -498,11 +485,11 @@ function validateDogForm(){
 	}
 	
 	addDogObject.name = addDogFieldName.value;
-	addDogObject.dogBreed = addDogFieldDogBreedHintTextLabel.id;
+	addDogObject.breed_id = addDogFieldDogBreedHintTextLabel.id;
 	addDogObject.age = addDogFieldAge.value;
 	addDogObject.weight = addDogFieldWeight.value;
 	addDogObject.gender = addDogFieldGenderHintTextLabel.id;
-	addDogObject.matting = addDogFieldMattingHintTextLabel.id;
+	addDogObject.mating = addDogFieldMattingHintTextLabel.id;
 	
 	return true;
 }
