@@ -11,6 +11,17 @@ var MATTING_PICKER = 3;
 //UI components
 var addDogPickerType = null;
 
+var addDogObject = {};
+
+// done button
+var addDogDoneButton = Ti.UI.createButton({
+	backgroundImage:IMAGE_PATH+'common/Done_button.png',
+    width:58,
+    height:29
+});
+navController.getWindow().setRightNavButton(addDogDoneButton);
+addDogDoneButton.addEventListener('click', handleAddDogDoneClick);
+
 //form field
 var addDogFormFieldImage = Ti.UI.createImageView({ 
 	image:IMAGE_PATH+'add_dog/form_field.png',
@@ -207,26 +218,26 @@ viewAddDog.add(addDogPicker);
 
 //picker done button
 var addDogPickerDoneButton = Ti.UI.createButton({
-	title:'done',
-    width:48,
-    height:33
+	backgroundImage:IMAGE_PATH+'common/Done_button.png',
+    width:58,
+    height:29
 });
 
 //picker data
 var genderPicker = [];
 
-genderPicker[0]=Ti.UI.createPickerRow({title:'male'});
-genderPicker[1]=Ti.UI.createPickerRow({title:'female'});
+genderPicker[0]=Ti.UI.createPickerRow({title:'male', id:1});
+genderPicker[1]=Ti.UI.createPickerRow({title:'female', id:2});
 
 var dogBreedPicker = [];
 	
-dogBreedPicker[0]=Ti.UI.createPickerRow({title:'kannis'});
-dogBreedPicker[1]=Ti.UI.createPickerRow({title:'bull dog'});
+dogBreedPicker[0]=Ti.UI.createPickerRow({title:'kannis', id:1});
+dogBreedPicker[1]=Ti.UI.createPickerRow({title:'bull dog', id:2});
 
 var mattingPicker = [];
 	
-mattingPicker[0]=Ti.UI.createPickerRow({title:'yes'});
-mattingPicker[1]=Ti.UI.createPickerRow({title:'no'});
+mattingPicker[0]=Ti.UI.createPickerRow({title:'yes', id:1});
+mattingPicker[1]=Ti.UI.createPickerRow({title:'no', id:2});
 
 //sepparator offset
 var sepparatorOffset = 0;
@@ -310,25 +321,28 @@ function handlePickerDoneButton(e){
 	addDogFormScrollBackground.scrollTo(0,0);
 	
 	addDogPicker.animate({bottom:-216, duration:500});
- 	navController.getWindow().setRightNavButton(rightBtn);
+ 	navController.getWindow().setRightNavButton(addDogDoneButton);
 	
 	//change text to the chosen picker row
 	if(addDogPickerType === DOG_BREED_PICKER){
 		addDogFieldDogBreedHintTextLabel.color = 'black';
 		addDogFieldDogBreedHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addDogFieldDogBreedHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
+		addDogFieldDogBreedHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldDogBreedHintTextLabel.opacity = 1;
 		addDogFieldAge.focus();
 	}else if(addDogPickerType === GENDER_PICKER){
 		addDogFieldGenderHintTextLabel.color = 'black';
 		addDogFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addDogFieldGenderHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
+		addDogFieldGenderHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldGenderHintTextLabel.opacity = 1;
 		addDogFieldMattingHintTextLabel.fireEvent('click');
 	}else if(addDogPickerType === MATTING_PICKER){
 		addDogFieldMattingHintTextLabel.color = 'black';
 		addDogFieldMattingHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addDogFieldMattingHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
+		addDogFieldMattingHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldMattingHintTextLabel.opacity = 1;
 	}
 }
@@ -339,6 +353,7 @@ function handlePhotoSelection(){
 		
 		success:function(event){
 			var image = event.media;
+			addDogObject.image = image;
 			
 			// create new file name and remove old
 			var filename = Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg";
@@ -400,5 +415,104 @@ function handleAddDogTextFieldBlur(e){
 		if(addDogFieldWeight.value == ''){
 			addDogFieldWeightHintTextLabel.show();
 		}
+	}
+}
+
+//Server call for saving dogs
+function doSaveDogOnline(dObj){
+	Ti.API.info('doSaveDogOnline() called with userObject='+dObj); 	
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('doSaveDogOnline() got back from server '+this.responseText); 	
+		var jsonData = JSON.parse(this.responseText);
+		
+		//Update user object and close the signup window
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			//Add the server dog id to the object
+			addDogObject.dog_id = jsonData.data.dog_id;
+			//saveDog(uObj);
+			//updateLeftMenu(userObject);
+			
+		} else {
+			alert(getErrorMessage(jsonData.response));
+		}
+	};
+	
+	var t = {
+		user_id:userObject.userId,
+		photo:addDogObject.image,
+		name:addDogObject.name,
+		weight:addDogObject.weight,
+		age:addDogObject.age,
+		breed_id:addDogObject.breed_id,
+		gender:addDogObject.gender,
+		mating:addDogObject.matting
+	};
+	
+	alert(t);
+	
+	xhr.setRequestHeader("Content-Type", "multipart/form-data");
+	xhr.open('POST',API+'addDog');
+	xhr.send({
+		user_id:userObject.userId,
+		photo:addDogObject.image,
+		name:addDogObject.name,
+		weight:addDogObject.weight,
+		age:addDogObject.age,
+		breed_id:addDogObject.breed_id,
+		gender:addDogObject.gender,
+		mating:addDogObject.matting
+	});
+}
+
+function validateDogForm(){
+	if(isStringNullOrEmpty(addDogFieldName.value)){
+		alert('NAME IS MISSING');
+		return false;
+	}else if(addDogFieldDogBreedHintTextLabel.id == null){
+		alert('DOG BREED IS MISSING');
+		return false;
+	}else if(isStringNullOrEmpty(addDogFieldAge.value)){
+		alert('AGE IS MISSING');
+		return false;
+	} else if(isStringNullOrEmpty(addDogFieldWeight.value)){
+		alert('WEIGHT IS MISSING');
+		return false;
+	}else if(addDogFieldGenderHintTextLabel.id == null){
+		alert('GENDER IS MISSING');
+		return false;
+	}else if(addDogFieldMattingHintTextLabel.id == null){
+		alert('MATTING IS MISSING');
+		return false;
+	}else if(addDogObject.image == null){
+		alert('PROFILE PHOTO MISSING');
+		return false;
+	}
+	
+	addDogObject.name = addDogFieldName.value;
+	addDogObject.dogBreed = addDogFieldDogBreedHintTextLabel.id;
+	addDogObject.age = addDogFieldAge.value;
+	addDogObject.weight = addDogFieldWeight.value;
+	addDogObject.gender = addDogFieldGenderHintTextLabel.id;
+	addDogObject.matting = addDogFieldMattingHintTextLabel.id;
+	
+	return true;
+}
+
+function handleAddDogDoneClick(){
+	if(validateDogForm()){
+		Ti.API.info('dog form is valid');
+		doSaveDogOnline(addDogObject);	
+		//alert(addDogObject);
+	}else{
+		Ti.API.info('dog form is not valid');
 	}
 }

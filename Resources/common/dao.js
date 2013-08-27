@@ -223,47 +223,6 @@ function xhr_upload(_args) {
 	return win;
 };
 
-//Server call for saving dogs
-function doSaveDogOnline(uObj){
-	Ti.API.info('doSaveDogOnline() called with userObject='+uObj); 	
-	
-	var xhr = Ti.Network.createHTTPClient();
-	xhr.setTimeout(NETWORK_TIMEOUT);
-	
-	xhr.onerror = function(e){
-	
-	};
-	
-	xhr.onload = function(e){
-		Ti.API.info('doSaveDogOnline() got back from server '+this.responseText); 	
-		var jsonData = JSON.parse(this.responseText);
-		
-		//Update user object and close the signup window
-		if(jsonData.data.response == NETWORK_RESPONSE_OK){
-			
-			//Add the server dog id to the object
-			uObj.dog_id = jsonData.data.dog_id;
-			saveDog(uObj);
-			//updateLeftMenu(userObject);
-			
-		} else {
-			alert(getErrorMessage(jsonData.response));
-		}
-	};
-	
-	xhr.setRequestHeader("Content-Type", "multipart/form-data");
-	xhr.open('POST',API+'addDog');
-	xhr.send({
-		user_id:userObject.userId,
-		photo:uObj.image,
-		name:uObj.name,
-		weight:uObj.weight,
-		age:uObj.age,
-		breed_id:uObj.breed_id,
-		gender:uObj.gender,
-		mating:uObj.mating
-	});
-}
 
 //Saves a dog object in the local db
 function saveDog(dogObject){
