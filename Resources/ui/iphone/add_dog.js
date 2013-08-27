@@ -460,11 +460,7 @@ function doSaveDogOnline(dObj){
 	xhr.open('POST',API+'addDog');
 	xhr.send({
 		user_id:userObject.userId,
-<<<<<<< HEAD
 		photo:dObj.photo,
-=======
-		photo:dObj.image,
->>>>>>> 030a04459bd2acca5b510763ef47bc58c5c66416
 		name:dObj.name,
 		weight:dObj.weight,
 		age:dObj.age,
