@@ -26,8 +26,6 @@ Ti.include('common/dao.js');
 Ti.include('common/utils.js');
 Ti.include('common/translator.js');
 
-createDB();
-
 //Left & center windows
 Ti.include('ui/iphone/navigation.js');
 
@@ -40,7 +38,6 @@ Ti.include('ui/iphone/map.js');
 
 //DEBUG STUFF
 createDB();
-
 
 var a = getActivities();
 for(var i=0; i<a.length; a++){
