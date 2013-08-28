@@ -452,10 +452,10 @@ function doSaveDogOnline(dObj){
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			//Add the server dog id to the object
 			dObj.dog_id = jsonData.data.dog_id;
+			Ti.API.info('doSaveDogOnline() got back dog id from server '+jsonData.data.dog_id);
 			saveDog(dObj);
 			
-			var dogRows = getDogs();
-			populateRightMenu(dogRows);
+			populateRightMenu(getDogs());
 			
 			navController.getWindow().setRightNavButton(rightBtn);
 			Ti.include('ui/iphone/dog_profile.js');

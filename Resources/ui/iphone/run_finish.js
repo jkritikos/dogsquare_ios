@@ -84,7 +84,7 @@ function buildRunFinishView(obj){
 
 	//number of the average pace label
 	var runFinishAvgPaceNumberLabel = Titanium.UI.createLabel({
-		text:obj.speed,
+		text:obj.pace,
 		height:21,
 		textAlign:'right',
 		left:127,
@@ -192,7 +192,7 @@ function buildRunFinishView(obj){
 	var runFinishTableView = Titanium.UI.createTableView({
 		minRowHeight:60,
 		width:320,
-		data:populateRunFinishTableView(),
+		data:populateRunFinishTableView(obj),
 		backgroundColor:'transparent',
 		separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
 		top:240,
@@ -228,7 +228,7 @@ function buildRunFinishView(obj){
 	return viewRunSummary;
 }
 
-function populateRunFinishTableView(){ 
+function populateRunFinishTableView(o){ 
 	var tableRows = [];
 	//dog names array
 	var dogNames = ['Lory', 'Lucy'];

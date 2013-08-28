@@ -23,10 +23,12 @@ var userObject = {
 }
 
 Ti.include('common/dao.js');
+
+//DEBUG STUFF
+createDB();
+
 Ti.include('common/utils.js');
 Ti.include('common/translator.js');
-
-createDB();
 
 //Left & center windows
 Ti.include('ui/iphone/navigation.js');
@@ -41,4 +43,14 @@ Ti.include('ui/iphone/map.js');
 var a = getActivities();
 for(var i=0; i<a.length; a++){
 	Ti.API.info('activities saved id '+a[i].id+' start date '+a[i].start_date+' start time '+a[i].start_time+' duration '+a[i].duration);
+
+	var dogInfo = a[i].dogs;
+	if(a[i].dogs && dogInfo.length > 0){
+		for(var z=0; z<dogInfo.length; z++){
+			Ti.API.info('------ activity '+a[i].id+' dog '+dogInfo[z].name);
+		}
+	}
+	
+	
 }
+
