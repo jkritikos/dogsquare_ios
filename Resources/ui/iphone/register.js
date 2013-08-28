@@ -480,8 +480,9 @@ function doSignup(uObj){
 	
 //Closes the register window
 function closeRegisterWindow(){
-	registerWindow.close();
+	
 	loginWindow.animate({opacity:0, duration:100}, function(){
+		registerWindow.close();
 		window.remove(loginWindow);
 		leftTableView.fireEvent('click', {menuItem:MENU_PROFILE});
 	});

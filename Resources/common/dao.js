@@ -233,6 +233,18 @@ function saveDog(dogObject){
 	db.close();
 }
 
+//Saves a note object in the local db
+function saveNote(nObject){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.execute('insert into passport (title, description, date, remind_flag) values (?,?,?,?)', nObject.title, nObject.description, nObject.date, nObject.remind_flag);
+	var noteId = db.lastInsertRowId;
+	
+	Ti.API.info('note stored in DB with id: ' + noteId);
+	
+	db.close();
+}
+
 //Gets all dogs from the local db
 function getDogs(){
 	var dbDogObject = {};
@@ -258,6 +270,41 @@ function getDogs(){
 	db.close();
 	
 	return dogRows;
+}
+
+//Gets all notes from the local db
+function getNotes(){
+	var dbNoteObject = {};
+	
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	var noteRows = [];
+	
+	var rows = db.execute('select title, description, date, remind_flag from passport order by date');
+	var i=0;
+	while (rows.isValidRow())
+	{
+		
+	  var title = rows.field(0);
+	  var description = rows.field(1);
+	  var date = rows.field(2);
+	  var month = new Date(date*1000).getMonth();
+	  var remind_flag = rows.field(3);
+	  
+	  var obj = {
+			title:title,
+			description:description,
+			date:date,
+			remind_flag:remind_flag,
+		};
+	
+		noteRows.push(obj);
+		rows.next();
+	}
+	rows.close();
+	db.close();
+	
+	return noteRows;
 }
 
 //Saves an activity to the local db
@@ -342,6 +389,7 @@ function createDB(){
 	db.execute('create table if not exists ACTIVITIES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"start_date\" real, \"start_time\" real, \"end_time\" real, \"type_id\" integer)');
 	db.execute('create table if not exists ACTIVITY_DOGS (\"activity_id\" integer, \"dog_id\" integer)');
 	db.execute('create table if not exists ACTIVITY_COORDINATES (\"activity_id\" integer, \"lat\" real, \"lon\" real)');
+	db.execute('create table if not exists PASSPORT (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"title\" varchar(128), \"description\" varchar(128), \"date\" real, \"remind_flag\" integer)');
 	
 	db.close();
 	Ti.API.info('createDB() ends');

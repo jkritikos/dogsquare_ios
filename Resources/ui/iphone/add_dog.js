@@ -74,8 +74,8 @@ var addDogFieldName = Ti.UI.createTextField({
 	field:1,
 	font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-
-addDogFieldName.addEventListener('change', handleAddDogTextFieldFocus);
+addDogFieldName.addEventListener('focus', handleAddDogTextFieldFocus);
+addDogFieldName.addEventListener('change', handleAddDogTextFieldChange);
 addDogFieldName.addEventListener('blur', handleAddDogTextFieldBlur);
 
 //Event listener for the name textfield
@@ -122,8 +122,8 @@ var addDogFieldAge = Ti.UI.createTextField({
 	field:3,
 	font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-
-addDogFieldAge.addEventListener('change', handleAddDogTextFieldFocus);
+addDogFieldAge.addEventListener('focus', handleAddDogTextFieldFocus);
+addDogFieldAge.addEventListener('change', handleAddDogTextFieldChange);
 addDogFieldAge.addEventListener('blur', handleAddDogTextFieldBlur);
 
 //Event listener for the age textfield
@@ -155,8 +155,9 @@ var addDogFieldWeight = Ti.UI.createTextField({
 	field:4,
 	font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-
-addDogFieldWeight.addEventListener('change', handleAddDogTextFieldFocus);
+addDogFieldWeight.blur();
+addDogFieldWeight.addEventListener('focus', handleAddDogTextFieldFocus);
+addDogFieldWeight.addEventListener('change', handleAddDogTextFieldChange);
 addDogFieldWeight.addEventListener('blur', handleAddDogTextFieldBlur)
 
 //Event listener for the weight textfield
@@ -276,6 +277,11 @@ function addDogHandlePicker(e){
 	//clear all picker rows method
     clearPickerRows();
     
+    addDogFieldName.blur();
+	addDogFieldAge.blur();
+	addDogFieldWeight.blur();
+	
+    
     var picker = e.source.picker;
     //add data for specified picker
 	if(picker === DOG_BREED_PICKER){
@@ -319,6 +325,7 @@ function addDogShowPhotoOptions(){
 //handle picker done button
 function handlePickerDoneButton(e){
 	addDogFormScrollBackground.scrollTo(0,0);
+	Ti.API.info('inside picker');
 	
 	addDogPicker.animate({bottom:-216, duration:500});
  	navController.getWindow().setRightNavButton(addDogDoneButton);
@@ -378,8 +385,12 @@ function handleCameraSelection(){
 	
 }	
 
-//handle all textfields when focused
-function handleAddDogTextFieldFocus(e){
+function handleAddDogTextFieldFocus(){
+	navController.getWindow().setRightNavButton(addDogDoneButton);
+}
+
+//handle all textfields when changed
+function handleAddDogTextFieldChange(e){
 	var field = e.source.field;
 	
 	if(field == 1){

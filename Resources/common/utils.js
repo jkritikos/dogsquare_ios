@@ -42,3 +42,25 @@ function _import(file){
 		Ti.API.info('NOT importing '+file+' - already imported');
 	}
 }
+
+function formatDate(date){
+	var day = date.getDate();
+    day = day.toString();
+ 
+    if (day.length < 2) {
+        day = '0' + day;
+    }
+ 
+    var month = date.getMonth();
+    month = month + 1;
+    month = month.toString();
+ 
+    if (month.length < 2) {
+        month = '0' + month;
+    }
+ 
+    var year = date.getFullYear();
+    var date = day + "/" + month + "/" + year;
+    
+    return date;
+}
