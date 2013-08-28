@@ -141,12 +141,6 @@ var weather = ( function() {
         		
         		var currentTemp = weather.getElementsByTagName('yweather:condition').item(0).getAttribute("temp");
         		runObject.temperature = currentTemp;
-        		
-        		Ti.API.info('Got temperature= '+currentTemp);
-        		
-            	//var title = weather.getElementsByTagName('title').item(0).text;
-            	//var high = weather.getElementsByTagName('yweather:forecast').item(0).getAttribute("high");
-            	//var low = weather.getElementsByTagName('yweather:forecast').item(0).getAttribute("low");
         	};
         	
         	xhr.open('GET', url);
@@ -284,7 +278,7 @@ function saveActivity(dogs){
 }
 
 //Updates an activity in the local db
-function updateActivity(id){
+function endActivity(id){
 	var now = new Date().getTime();
 	
 	Ti.API.info('updateActivity() called for activity id '+id);
@@ -340,7 +334,7 @@ function createDB(){
 	db.execute('create table if not exists DOGFUEL_RULES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"user_id\" integer,\"walk_distance\" integer, \"playtime\" integer )');
 	db.execute('create table if not exists DOGS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"dog_id\" integer, \"name\" varchar(128), \"age\" integer, \"weight\" integer, \"mating\" integer, \"gender\" integer, \"photo\" varchar(128))');
 	db.execute('create table if not exists ACTIVITIES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"start_date\" real, \"start_time\" real, \"end_time\" real, \"type_id\" integer)');
-	db.execute('create table if not exists ACTIVITY_DOGS (\"activity_id\" integer, \"dog_id\" integer)');
+	db.execute('create table if not exists ACTIVITY_DOGS (\"activity_id\" integer, \"dog_id\" integer, \"walk_distance\" real, \"playtime\" integer, \"dogfuel\" integer)');
 	db.execute('create table if not exists ACTIVITY_COORDINATES (\"activity_id\" integer, \"lat\" real, \"lon\" real)');
 	
 	db.close();

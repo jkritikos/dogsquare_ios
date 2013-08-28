@@ -219,7 +219,6 @@ function handleRunBackButton() {
 	} else {
 		navController.close(runWindow);
 	}
-    
 }
 
 function handleActivityButton(e){
@@ -237,7 +236,7 @@ function handleActivityButton(e){
 
 function populateProfileTableView(){
 	var tableRows = [];
-	
+
 	var activityArray = ['Gone for a walk with Tom', 'Gone for a walk with Jerry'];
 	
 	for(i=0;i<=1;i++){
@@ -304,19 +303,3 @@ function populateProfileTableView(){
 	}
 	return tableRows;
 }
-
-/*
-profileEditButton.addEventListener('click', function(){
-	var profileEditWindow = Ti.UI.createWindow({
-		url:'ui/iphone/profile_edit.js',
-		backgroundColor:UI_BACKGROUND_COLOR,
-		barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR,
-		title:'Edit profile',
-		backButtonTitle:'Back'
-	});
-	
-	openWindows.push(profileEditWindow);
-	navController.open(profileEditWindow);
-});
-*/

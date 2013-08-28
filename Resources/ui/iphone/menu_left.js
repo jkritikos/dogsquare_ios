@@ -89,6 +89,24 @@ leftTableView.addEventListener("click", function(e){
 			Ti.include('ui/iphone/map.js');
 			navController.getWindow().add(viewMap);
 			navController.getWindow().setTitle('Map');
+			
+			//search field
+			/*
+			var mapSearchContainer = Titanium.UI.createView({
+				backgroundColor:'white',
+				width:100
+			});
+			
+			var mapSearchTxtfield = Titanium.UI.createTextField({
+				left:5,
+				width:100,
+				field:'search'
+			});
+			
+			mapSearchContainer.add(mapSearchTxtfield);
+			
+			navController.getWindow().setTitleControl(mapSearchContainer);
+			*/
 			break;
 			
 		case MENU_GALLERY:
