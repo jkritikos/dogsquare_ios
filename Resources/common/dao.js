@@ -234,20 +234,19 @@ function getDogs(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	var dogRows = [];
 	
-	var rows = db.execute('select name, photo from dogs ');
-	while (rows.isValidRow())
-	{
-	  var name = rows.field(0);
-	  var photo = rows.field(1);
-	  
-	  var obj = {
-			name:name,
-			photo:photo
+	var rows = db.execute('select dog_id, name, photo from dogs ');
+	while (rows.isValidRow()) {
+
+	  	var obj = {
+	  		id:rows.field(0),
+			name:rows.field(1),
+			photo:rows.field(2)
 		};
 		
-	  dogRows.push(obj);	
-	  rows.next();
+	  	dogRows.push(obj);	
+	  	rows.next();
 	}
+	
 	rows.close();
 	db.close();
 	
@@ -267,6 +266,7 @@ function saveActivity(dogs){
 	//dogs
 	if(dogs != null){
 		for(var i=0; i < dogs.length; i++){
+			Ti.API.info('saveActivity() for dog '+dogs[i]);
 			db.execute('insert into activity_dogs (activity_id, dog_id) values (?,?)', activityId,dogs[i]);
 		}
 	}
@@ -306,7 +306,8 @@ function getActivities(){
 			start_date:rows.field(1),
 			start_time:rows.field(2),
 			end_time:rows.field(3),
-			duration:duration
+			duration:duration,
+			dogs:getActivityDetails(rows.field(0))
 		}
 		
 		activities.push(obj);
@@ -319,11 +320,42 @@ function getActivities(){
 	return activities;
 }
 
-//Saves the specified coordinates for this activity
-function saveActivityCoordinates(activityId, lat, lon){
+//Returns the dog related info for the specified activity
+function getActivityDetails(id){
+	Ti.API.info('getActivityDetails() called for activity '+id);
+	
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
-	db.execute('insert into activity_coordinates (activity_id, lat, lon) values (?,?,?)',activityId, lat, lon);
+	var info = [];
+	
+	var sql = 'select ad.dog_id, d.name, d.photo from activity_dogs ad inner join dogs d on (ad.dog_id=d.dog_id) where ad.activity_id=?';
+	var rows = db.execute(sql, id);
+	while (rows.isValidRow()){
+		
+		Ti.API.info('Found dog '+rows.field(0)+' for activity '+id);
+		
+		var obj = {
+			dog_id:rows.field(0),
+			name:rows.field(1),
+			photo:rows.field(2)
+		}
+		
+		info.push(obj);
+		rows.next();
+	}
+	
+	rows.close();
+	db.close();
+	
+	return info;
+}
+
+//Saves the specified coordinates for this activity
+function saveActivityCoordinates(activityId, lat, lon){
+	var now = new Date().getTime();
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.execute('insert into activity_coordinates (activity_id, lat, lon, log_time) values (?,?,?,?)',activityId, lat, lon, now);
 	
 	db.close();
 }
@@ -335,7 +367,7 @@ function createDB(){
 	db.execute('create table if not exists DOGS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"dog_id\" integer, \"name\" varchar(128), \"age\" integer, \"weight\" integer, \"mating\" integer, \"gender\" integer, \"photo\" varchar(128))');
 	db.execute('create table if not exists ACTIVITIES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"start_date\" real, \"start_time\" real, \"end_time\" real, \"type_id\" integer)');
 	db.execute('create table if not exists ACTIVITY_DOGS (\"activity_id\" integer, \"dog_id\" integer, \"walk_distance\" real, \"playtime\" integer, \"dogfuel\" integer)');
-	db.execute('create table if not exists ACTIVITY_COORDINATES (\"activity_id\" integer, \"lat\" real, \"lon\" real)');
+	db.execute('create table if not exists ACTIVITY_COORDINATES (\"activity_id\" integer, \"lat\" real, \"lon\" real, \"log_time\" real)');
 	
 	db.close();
 	Ti.API.info('createDB() ends');

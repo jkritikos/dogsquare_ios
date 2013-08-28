@@ -155,7 +155,7 @@ var profileTableView = Titanium.UI.createTableView({
 	data:populateProfileTableView(),
 	separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
 	backgroundColor:'d2d2d2',
-	top:3,
+	top:0,
 	bottom:0
 });
 profileTableViewBackground.add(profileTableView);
@@ -170,7 +170,6 @@ profileStartButton.addEventListener('click', function(){
 		title:'Run'
 	});
 	
-
 	//back button
 	var runBackButton = Ti.UI.createButton({
 	    backgroundImage: IMAGE_PATH+'common/back_button.png',
@@ -235,11 +234,86 @@ function handleActivityButton(e){
 }
 
 function populateProfileTableView(){
+	var userActivities = getActivities();
 	var tableRows = [];
-
-	var activityArray = ['Gone for a walk with Tom', 'Gone for a walk with Jerry'];
 	
-	for(i=0;i<=1;i++){
+	if(userActivities.length > 0){
+		
+		for(var i=0; i < userActivities.length; i++){
+			
+			var dogNames = '';
+			var dogPhoto = '';
+			var dogInfo = userActivities[i].dogs;
+			for(var z=0; z < dogInfo.length; z++){
+				dogNames += dogInfo[z].name + ', ';
+				dogPhoto = dogInfo[z].photo;
+			}
+			
+			dogNames = dogNames.substr(0, dogNames.length-2);
+			
+			var activityRow = Ti.UI.createTableViewRow({
+				className:'activityRow',
+				height:51,
+				width:'100%',
+				backgroundColor:'e7e7e7',
+				selectedBackgroundColor:'transparent'
+			});
+			
+			var rowActivityImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + dogPhoto);
+			var rowActivityImageBlob = rowActivityImageFile.toBlob();
+			var rowActivityImageBlobCropped = rowActivityImageBlob.imageAsThumbnail(42,0,21);
+			var rowActivityImage = Titanium.UI.createImageView({
+				image:rowActivityImageBlobCropped,
+				left:28,
+				top:3,
+				borderRadius:21,
+				borderWidth:1,
+				borderColor:'f5a92c'
+			});	
+		
+			//sepparator
+			var rowSepparator = Titanium.UI.createView({ 
+				backgroundColor:'d2d2d2',
+				width:'100%',
+				bottom:0,
+				height:3
+			});
+			
+			//activity label
+			var activityLabel = Ti.UI.createLabel({
+				text:'Gone for a walk with '+dogNames,
+				top:10,
+				textAlign:'left',
+				width:'auto',
+				height:'auto',
+				left:88,
+				opacity:0.6,
+				color:'black',
+				font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			});
+			
+			//time label
+			var timeLabel = Ti.UI.createLabel({
+				text:relativeTime(userActivities[i].start_time),
+				bottom:12,
+				textAlign:'left',
+				width:'auto',
+				height:'auto',
+				left:88,
+				opacity:0.4,
+				color:'black',
+				font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			});
+		
+			activityRow.add(rowActivityImage);
+			activityRow.add(rowSepparator);
+			activityRow.add(activityLabel);
+			activityRow.add(timeLabel);
+			
+			tableRows.push(activityRow);
+		}
+		
+	} else {
 		var activityRow = Ti.UI.createTableViewRow({
 			className:'activityRow',
 			height:51,
@@ -248,29 +322,9 @@ function populateProfileTableView(){
 			selectedBackgroundColor:'transparent'
 		});
 		
-		var rowActivityImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-		var rowActivityImageBlob = profileImageView.toBlob();
-		var rowActivityImageBlobCropped = rowActivityImageBlob.imageAsThumbnail(42,0,21);
-		var rowActivityImage = Titanium.UI.createImageView({
-			image:rowActivityImageBlobCropped,
-			left:28,
-			top:3,
-			borderRadius:21,
-			borderWidth:1,
-			borderColor:'f5a92c'
-		});	
-		
-		//sepparator
-		var rowSepparator = Titanium.UI.createView({ 
-			backgroundColor:'d2d2d2',
-			width:'100%',
-			bottom:0,
-			height:3
-		});
-		
 		//activity label
 		var activityLabel = Ti.UI.createLabel({
-			text:activityArray[i],
+			text:'No activity yet',
 			top:10,
 			textAlign:'left',
 			width:'auto',
@@ -278,28 +332,13 @@ function populateProfileTableView(){
 			left:88,
 			opacity:0.6,
 			color:'black',
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
-		//time label
-		var timeLabel = Ti.UI.createLabel({
-			text:'3 hours ago',
-			bottom:12,
-			textAlign:'left',
-			width:'auto',
-			height:'auto',
-			left:90,
-			opacity:0.4,
-			color:'black',
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
-		});
-		
-		activityRow.add(rowActivityImage);
-		activityRow.add(rowSepparator);
 		activityRow.add(activityLabel);
-		activityRow.add(timeLabel);
 		
 		tableRows.push(activityRow);
 	}
+
 	return tableRows;
 }

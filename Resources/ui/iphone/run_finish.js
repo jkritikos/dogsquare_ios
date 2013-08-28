@@ -84,7 +84,7 @@ function buildRunFinishView(obj){
 
 	//number of the average pace label
 	var runFinishAvgPaceNumberLabel = Titanium.UI.createLabel({
-		text:obj.speed,
+		text:obj.pace,
 		height:21,
 		textAlign:'right',
 		left:127,

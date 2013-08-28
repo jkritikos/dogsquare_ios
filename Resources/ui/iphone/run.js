@@ -20,12 +20,12 @@ var viewRunSummaryMap = null;
 var runFinishWindow = null;
 
 //Cronometer
-var horas = 0, minutos = 0, segundos = 0, total_minutos = 0;
+var horas = 0, minutos = 0, segundos = 0, total_seconds = 0;
 var cronometerInterval = null;
 
 function buildRunView(){
 	//Reset cronometer
-	horas = 0, minutos = 0, segundos = 0, total_minutos = 0;
+	horas = 0, minutos = 0, segundos = 0, total_seconds = 0;
 	
 	viewRun = Ti.UI.createView({
 		backgroundColor:UI_BACKGROUND_COLOR
@@ -61,27 +61,27 @@ function buildRunView(){
 	}); 
 	
 	var runAvgPaceMinuteLabel = Ti.UI.createLabel({
-		text:'0\'',
+		text:'0.0',
 		top:146,
-		left:33,
+		left:35,
 		color:UI_COLOR_RUN,
 		font:{fontSize:27, fontWeight:'bold', fontFamily:'Open Sans'}
 	});
 	
-	var runAvgPaceSecondLabel = Ti.UI.createLabel({
-		text:'0\'\'',
-		top:146,
-		left:55,
+	var runAvgPaceUnitLabel = Ti.UI.createLabel({
+		text:'km/h',
+		top:165,
+		left:70,
 		color:UI_COLOR_RUN,
-		font:{fontSize:27, fontWeight:'bold', fontFamily:'Open Sans'}
+		font:{fontSize:10, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	
 	var runAvgPaceLabel = Ti.UI.createLabel({
 		text:'Avg pace',
 		top:181,
-		left:30,
+		left:25,
 		color:UI_COLOR_RUN,
-		font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
+		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	
 	runDurationValueLabel = Ti.UI.createLabel({
@@ -95,7 +95,7 @@ function buildRunView(){
 		text:'Duration',
 		top:181,
 		color:UI_COLOR_RUN,
-		font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
+		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	
 	var runMapButton = Ti.UI.createButton({
@@ -110,7 +110,7 @@ function buildRunView(){
 	var runMapLabel = Ti.UI.createLabel({
 		text:'View Map',
 		top:181,
-		right:30,
+		right:25,
 		color:UI_COLOR_RUN,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -120,7 +120,7 @@ function buildRunView(){
 	viewRun.add(runDurationValueLabel);
 	viewRun.add(runAvgPaceLabel);
 	viewRun.add(runAvgPaceMinuteLabel);
-	viewRun.add(runAvgPaceSecondLabel);
+	//viewRun.add(runAvgPaceUnitLabel);
 	viewRun.add(runDistanceValueLabel);
 	viewRun.add(runDistanceUnitLabel);
 	viewRun.add(runMapLabel);
@@ -209,7 +209,9 @@ function clockTick(){
 	var tmpLabel = "";
 	
 	++segundos;
-	if(segundos==60) { segundos=0; ++minutos; ++total_minutos; }
+	++total_seconds;
+	
+	if(segundos==60) { segundos=0; ++minutos; }
 	if(minutos==60) { minutos=0; ++horas; }
 	if(horas==24) { horas=0; }
 	
@@ -226,13 +228,6 @@ function clockTick(){
 	if(segundos<10) {tmpLabel += "0";}
 	tmpLabel = tmpLabel + segundos;
 	
-	//tiempo = "";
-	//tiempo += total_minutos;
-	//tiempo += ".";
-	//if(segundos<10) {tiempo += "0";}
-	//tiempo = tiempo+segundos;
-	
-	//GLOBAL.total_minutos_y_segundos_int = parseFloat(tiempo);
 	runDurationValueLabel.text = tmpLabel;
 }
 
@@ -292,7 +287,6 @@ function handleEndRunButton(){
 		
 		//Prepare run object for the next window
 		runObject.coordinates = runningPathCoordinates;
-		runObject.speed = '1.34';
 		
 		Ti.include('ui/iphone/run_finish.js');
 		
@@ -419,6 +413,13 @@ function calculateDistance(newCoordinates){
 		runningDistanceKm += parseFloat(d);
 		runningDistanceKmLabelValue = runningDistanceKm.toFixed(2);
 		runDistanceValueLabel.text = runningDistanceKmLabelValue;
+		
+		var hourInSeconds = 3600;
+		//km per hour
+		var pace = Math.round((hourInSeconds * runningDistanceKmLabelValue) / total_seconds);
+		runAvgPaceMinuteLabel.text = pace;
+		runObject.pace = pace;
+		
 	} else {
 		Ti.API.info('calculateDistance() NOT enough points for distance calculation');
 	}

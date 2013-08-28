@@ -19,8 +19,8 @@ function getSelectedDogs(){
 	
 	for (i=0; i<rightTableView.data[0].rows.length;i++){
 	    if (rightTableView.data[0].rows[i].active) {
-	        Ti.API.info('Found selected dog');
-	        selected.push(1);
+	        Ti.API.info('Found selected dog '+rightTableView.data[0].rows[i].dogId);
+	        selected.push(rightTableView.data[0].rows[i].dogId);
 	    }
 	}
 	
@@ -28,7 +28,7 @@ function getSelectedDogs(){
 }
 
 //Creates and populates the right menu
-function populateRightMenu(dogRows){
+function populateRightMenu(dogObject){
 	
 	var rightMenuData = [];
 	//temporary arrays
@@ -86,8 +86,8 @@ function populateRightMenu(dogRows){
 	
 	rightMenuData.push(rightMenuAddDogRow);
 	
-	for(var i=0;i<dogRows.length;i++){
-		Ti.API.info('dog rows are being populated');
+	for(var i=0;i<dogObject.length;i++){
+		Ti.API.info('dog rows are being populated with dog id '+dogObject[i].id);
 		//all dog rows
 		var rightMenuRow = Ti.UI.createTableViewRow({
 			height:116,
@@ -95,7 +95,8 @@ function populateRightMenu(dogRows){
 			selectedBackgroundColor:'transparent',
 			backgroundColor:'1c2027',
 			selectionStyle:0,
-			active:false
+			active:false,
+			dogId:dogObject[i].id
 		});
 		
 		//border image inside the dog row - right menu row
@@ -106,7 +107,7 @@ function populateRightMenu(dogRows){
 		});
 		
 		//dog image inside the dog row - right menu row
-		var rowDogImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + dogRows[i].photo);
+		var rowDogImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + dogObject[i].photo);
 		var rowDogImageBlob = rowDogImageFile.toBlob();
 		var rowDogImageBlobCropped = rowDogImageBlob.imageAsThumbnail(80,0,40);
 		
@@ -121,7 +122,7 @@ function populateRightMenu(dogRows){
 		
 		//dog name label inside the dog row - right menu row
 		var rowDogNameLabel = Titanium.UI.createLabel({ 
-			text:dogRows[i].name,
+			text:dogObject[i].name,
 			color:'ab7b04',
 			height:31,
 			width:'auto',
