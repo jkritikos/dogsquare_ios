@@ -91,7 +91,7 @@ var profileMapButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'profile/Map_icon.png',
 	width:33,
 	height:32,
-	top:225,
+	top:222,
 	right:48
 });
 
@@ -99,7 +99,7 @@ viewProfile.add(profileMapButton);
 
 var profileMapLabel = Ti.UI.createLabel({
 	text:'View map',
-	top:255,
+	top:252,
 	right:32,
 	color:UI_COLOR_RUN,
 	font:{fontSize:13, fontWeight:'semibold',fontFamily:'Open Sans'}
