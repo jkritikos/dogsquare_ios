@@ -86,12 +86,9 @@ function populateRightMenu(dogObject){
 	
 	rightMenuData.push(rightMenuAddDogRow);
 	
-<<<<<<< HEAD
-	for(var i=0;i<dogRows.length;i++){
-=======
 	for(var i=0;i<dogObject.length;i++){
 		Ti.API.info('dog rows are being populated with dog id '+dogObject[i].id);
->>>>>>> 2633ac3e8566e38928273d350b7042942155f439
+
 		//all dog rows
 		var rightMenuRow = Ti.UI.createTableViewRow({
 			height:116,

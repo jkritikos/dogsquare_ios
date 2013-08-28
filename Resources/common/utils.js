@@ -43,7 +43,6 @@ function _import(file){
 	}
 }
 
-<<<<<<< HEAD
 function formatDate(date){
 	var day = date.getDate();
     day = day.toString();
@@ -64,8 +63,8 @@ function formatDate(date){
     var date = day + "/" + month + "/" + year;
     
     return date;
-=======
-//Returns the relative time ago in words for the given timestamp
+}
+
 function relativeTime(eventTime){
 	var nowTime = new Date().getTime();
 	var t = '';
@@ -108,5 +107,4 @@ function relativeTime(eventTime){
 	}
 	
 	return t;
->>>>>>> 2633ac3e8566e38928273d350b7042942155f439
 }
