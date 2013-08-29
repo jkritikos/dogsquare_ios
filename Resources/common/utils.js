@@ -60,9 +60,31 @@ function formatDate(date){
     }
  
     var year = date.getFullYear();
-    var date = day + "/" + month + "/" + year;
+    var date = day + " / " + month + " / " + year;
     
     return date;
+}
+
+function createLoadingView(){
+	var loadingView = Titanium.UI.createView({
+		backgroundColor:'black',
+		bottom:0,
+		opacity:0.6,
+		width:'100%',
+		height:416
+	});
+	
+	var loadingViewLabel = Titanium.UI.createLabel({
+		text:'Loading...',
+		color:'black',
+		height:47,
+		opacity:1,
+		textAlign:'center',
+		font:{fontSize:30, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	loadingView.add(loadingViewLabel);
+	
+	return loadingView;
 }
 
 function relativeTime(eventTime){

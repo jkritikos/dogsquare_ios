@@ -26,7 +26,6 @@ function populateInboxTableView() {
 	
 	//arrays for the labels
 	var namesArray = ['Ben Howdle', 'Rogie King', 'Mike Beecham', 'Ryan Murphy'];
-	var messageTitleArray = ['Check Out Kashflow', 'RE: NeonMob', 'RE: Bagels', 'RE: Rockpack is Awesome!'];
 	var messageArray = ['Hey Jamie, I wanted to show you Kashflow...', 
 						'Hey Jamie, of course you can have all the ... ', 
 						'I agree, bagels are pretty good!',
@@ -55,23 +54,11 @@ function populateInboxTableView() {
 			borderColor:'f5a92c'
 		});
 		
-		//title label
-		var rowTitleLabel = Titanium.UI.createLabel({ 
-			text:messageTitleArray[i],
-			color:'black',
-			height:20,
-			width:'auto',
-			textAlign:'left',
-			left:64,
-			opacity:0.8,
-			font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
-		});
-		
 		//message label
 		var rowMessageLabel = Titanium.UI.createLabel({ 
 			text:messageArray[i],
 			color:'black',
-			bottom:9,
+			bottom:18,
 			height:18,
 			width:'auto',
 			textAlign:'left',
@@ -84,7 +71,7 @@ function populateInboxTableView() {
 		var rowNameLabel = Titanium.UI.createLabel({ 
 			text:namesArray[i],
 			color:'black',
-			top:9,
+			top:18,
 			height:18,
 			width:'auto',
 			textAlign:'left',
@@ -107,7 +94,6 @@ function populateInboxTableView() {
 		});
 		
 		messageRow.add(rowMessageProfileImage);
-		messageRow.add(rowTitleLabel);
 		messageRow.add(rowMessageLabel);
 		messageRow.add(rowNameLabel);
 		messageRow.add(rowDateLabel);

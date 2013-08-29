@@ -27,10 +27,10 @@ viewPassport.add(passportTableView);
 
 //data for the sections
 var data = [];
-var nRows = getNotes();
+var noteData = getNotes();
 
 //populate section
-populateTableViewSection(nRows);
+populateTableViewSection(noteData);
 
 //handle next button
 function handleAddNoteButton() {
@@ -40,19 +40,19 @@ function handleAddNoteButton() {
 }
 
 //populate section
-function populateTableViewSection(noteRows) {
+function populateTableViewSection(nData) {
 	
 	var tableRows = [];
+	var numberOfNotes = null;
 	
-	var counter = 1;
 	var previousMonth = null;
 	
-	for(i=0;i<noteRows.length;i++){
-		var date = new Date(noteRows[i].date*1000);
+	for(i=0;i<nData.length;i++){
+		var date = new Date(nData[i].date*1000);
 		var month = date.getMonth();
 		//rows are ordered by date - if previous month
 		if(previousMonth != month){
-			
+			numberOfNotes = 1;
 			previousMonth = month;
 			
 			var tableViewSection = Titanium.UI.createTableViewSection({
@@ -99,7 +99,7 @@ function populateTableViewSection(noteRows) {
 			
 			//category number label
 			var rowCategoryNumberLabel1 = Titanium.UI.createLabel({ 
-				text:counter,
+				text:numberOfNotes,
 				color:'black',
 				top:0,
 				textAlign:'right',
@@ -110,7 +110,7 @@ function populateTableViewSection(noteRows) {
 			
 			//title label
 			var rowTitleLabel1 = Titanium.UI.createLabel({ 
-				text:noteRows[i].title,
+				text:nData[i].title,
 				color:'black',
 				top:3,
 				height:22,
@@ -124,13 +124,13 @@ function populateTableViewSection(noteRows) {
 			
 			//description label
 			var rowDescriptionLabel1 = Titanium.UI.createLabel({ 
-				text:noteRows[i].description,
+				text:nData[i].description,
 				color:'black',
 				height:'auto',
 				width:'auto',
 				textAlign:'left',
-				top:23,
-				bottom:29,
+				top:26,
+				bottom:28,
 				left:7,
 				right:7,
 				font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -171,8 +171,11 @@ function populateTableViewSection(noteRows) {
 			tableViewSection.add(passportRow1);
 			data.push(tableViewSection);
 			
-			counter++;
 		}else if(previousMonth == month){
+			//increase the number of notes if more than one
+			numberOfNotes++;
+			rowCategoryNumberLabel1.text = numberOfNotes;
+			
 			previousMonth = month;
 			var passportRow = Ti.UI.createTableViewRow({
 				className:'passportRow',
@@ -183,7 +186,7 @@ function populateTableViewSection(noteRows) {
 			});
 			
 			var rowTitleLabel = Titanium.UI.createLabel({ 
-				text:noteRows[i].title,
+				text:nData[i].title,
 				color:'black',
 				top:3,
 				height:22,
@@ -195,20 +198,20 @@ function populateTableViewSection(noteRows) {
 			passportRow.add(rowTitleLabel);
 			
 			var rowDescriptionLabel = Titanium.UI.createLabel({ 
-				text:noteRows[i].description,
+				text:nData[i].description,
 				color:'black',
 				height:'auto',
 				width:'auto',
 				textAlign:'left',
-				top:23,
-				bottom:29,
+				top:26,
+				bottom:28,
 				left:7,
 				right:7,
 				font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 			});
 			passportRow.add(rowDescriptionLabel);
 			
-			var date = new Date(noteRows[i].date*1000);
+			var date = new Date(nData[i].date*1000);
 			var rowDate = formatDate(date);
 			
 			var rowDateLabel = Titanium.UI.createLabel({ 
@@ -223,13 +226,13 @@ function populateTableViewSection(noteRows) {
 			});
 			passportRow.add(rowDateLabel);
 			
-			var rowSepparator1 = Titanium.UI.createView({ 
+			var rowSepparator = Titanium.UI.createView({ 
 				width:'100%',
 				bottom:0,
 				height:2,
 				backgroundColor:UI_BACKGROUND_COLOR
 			});
-			passportRow.add(rowSepparator1);
+			passportRow.add(rowSepparator);
 			
 			tableViewSection.add(passportRow);
 			///////////////////END OF NEXT ROW//////////////////
@@ -239,6 +242,7 @@ function populateTableViewSection(noteRows) {
 	}
 }
 
+//convert numerical month to string
 function getMonthName(date){
 	var month = date.getMonth();
 	
