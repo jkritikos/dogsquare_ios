@@ -2,19 +2,23 @@ var viewFindFriends = Ti.UI.createView({
 	backgroundColor:'eeeded'
 });
 
+//UI components
 var FACEBOOK_TAB = 1;
 var CONTACTS_TAB = 2;
 var DOGSQUARE_TAB = 3;
 
+//temporary variable to store data from server
 var localDataForContacts = null;
 
-var findFriendsTabsArea = Ti.UI.createImageView({
+//tabs Area Image
+var findFriendsTabsAreaImage = Ti.UI.createImageView({
 	image:IMAGE_PATH+'follow_invite/Tabs_Area.png',
 	top:-3
 });
 
-viewFindFriends.add(findFriendsTabsArea);
+viewFindFriends.add(findFriendsTabsAreaImage);
 
+//facebook tab label
 var findFriendsTabFacebookLabel = Titanium.UI.createLabel({
 	text:'Facebook',
 	color:'black',
@@ -24,8 +28,9 @@ var findFriendsTabFacebookLabel = Titanium.UI.createLabel({
 	opacity:0.6,
 	font:{fontSize:16, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
-findFriendsTabsArea.add(findFriendsTabFacebookLabel);
+findFriendsTabsAreaImage.add(findFriendsTabFacebookLabel);
 
+//contacts tab label
 var findFriendsTabContactsLabel = Titanium.UI.createLabel({
 	text:'Contacts',
 	color:'black',
@@ -34,8 +39,9 @@ var findFriendsTabContactsLabel = Titanium.UI.createLabel({
 	opacity:0.6,
 	font:{fontSize:18, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
-findFriendsTabsArea.add(findFriendsTabContactsLabel);
+findFriendsTabsAreaImage.add(findFriendsTabContactsLabel);
 
+//dogsquare tab label
 var findFriendsTabDogsquareLabel = Titanium.UI.createLabel({
 	text:'Dogsquare',
 	color:'black',
@@ -45,16 +51,18 @@ var findFriendsTabDogsquareLabel = Titanium.UI.createLabel({
 	opacity:0.6,
 	font:{fontSize:16, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
-findFriendsTabsArea.add(findFriendsTabDogsquareLabel);
+findFriendsTabsAreaImage.add(findFriendsTabDogsquareLabel);
 
+//contacts selection bar
 var findFriendsTabContactsSelection = Titanium.UI.createView({
 	backgroundColor:UI_COLOR,
 	bottom:3,
 	width:129,
 	height:8
 });
-findFriendsTabsArea.add(findFriendsTabContactsSelection);
+findFriendsTabsAreaImage.add(findFriendsTabContactsSelection);
 
+//facebook selection bar
 var findFriendsTabFacebookSelection = Titanium.UI.createView({
 	backgroundColor:UI_COLOR,
 	left:0,
@@ -62,9 +70,10 @@ var findFriendsTabFacebookSelection = Titanium.UI.createView({
 	width:93,
 	height:8
 });
-findFriendsTabsArea.add(findFriendsTabFacebookSelection);
+findFriendsTabsAreaImage.add(findFriendsTabFacebookSelection);
 findFriendsTabFacebookSelection.hide();
 
+//dogsquare selection bar
 var findFriendsTabDogsquareSelection = Titanium.UI.createView({
 	backgroundColor:UI_COLOR,
 	right:0,
@@ -72,9 +81,10 @@ var findFriendsTabDogsquareSelection = Titanium.UI.createView({
 	width:94,
 	height:8
 });
-findFriendsTabsArea.add(findFriendsTabDogsquareSelection);
+findFriendsTabsAreaImage.add(findFriendsTabDogsquareSelection);
 findFriendsTabDogsquareSelection.hide();
 
+//facebook transparent view - to be clicked
 var findFriendsTabFacebookTransparentView = Titanium.UI.createView({
 	backgroundColor:'transparent',
 	left:0,
@@ -83,9 +93,10 @@ var findFriendsTabFacebookTransparentView = Titanium.UI.createView({
 	height:45,
 	tab:FACEBOOK_TAB
 });
-findFriendsTabsArea.add(findFriendsTabFacebookTransparentView);
+findFriendsTabsAreaImage.add(findFriendsTabFacebookTransparentView);
 findFriendsTabFacebookTransparentView.addEventListener('click', handleFindFriendsTabs);
 
+//contacts transparent view - to be clicked
 var findFriendsTabContactsTransparentView = Titanium.UI.createView({
 	backgroundColor:'transparent',
 	bottom:2,
@@ -93,9 +104,10 @@ var findFriendsTabContactsTransparentView = Titanium.UI.createView({
 	height:45,
 	tab:CONTACTS_TAB
 });
-findFriendsTabsArea.add(findFriendsTabContactsTransparentView);
+findFriendsTabsAreaImage.add(findFriendsTabContactsTransparentView);
 findFriendsTabContactsTransparentView.addEventListener('click', handleFindFriendsTabs);
 
+//dogsquare transparent view - to be clicked
 var findFriendsTabDogsquareTransparentView = Titanium.UI.createView({
 	backgroundColor:'transparent',
 	right:0,
@@ -104,9 +116,10 @@ var findFriendsTabDogsquareTransparentView = Titanium.UI.createView({
 	height:45,
 	tab:DOGSQUARE_TAB
 });
-findFriendsTabsArea.add(findFriendsTabDogsquareTransparentView);
+findFriendsTabsAreaImage.add(findFriendsTabDogsquareTransparentView);
 findFriendsTabDogsquareTransparentView.addEventListener('click', handleFindFriendsTabs);
 
+//container for search
 var findFriendsSearchContainer = Titanium.UI.createView({
 	backgroundColor:'white',
 	top:50,
@@ -116,11 +129,13 @@ var findFriendsSearchContainer = Titanium.UI.createView({
 	borderColor:'white'
 });
 
+//search icon
 var findFriendsSearchIcon = Titanium.UI.createImageView({
 	image:IMAGE_PATH+'menu_left/search_icon.png',
 	left:5
 });
 
+//search textfield
 var findFriendsSearchTxtfield = Titanium.UI.createTextField({
 	left:35,
 	width:200,
@@ -139,6 +154,7 @@ findFriendsSearchTxtfield.addEventListener('return', function() {
    
 });
 
+//search textfield label
 var findFriendsSearchTxtfieldLabel = Titanium.UI.createLabel({
     text:'Search',
 	color:'CCCCCC',
@@ -152,6 +168,7 @@ findFriendsSearchTxtfield.add(findFriendsSearchTxtfieldLabel);
 findFriendsSearchContainer.add(findFriendsSearchIcon);
 viewFindFriends.add(findFriendsSearchContainer);
 
+//dummy view for facebook
 var findFriendsFacebookView = Titanium.UI.createView({
 	backgroundColor:'yellow',
 	bottom:0,
@@ -161,6 +178,7 @@ var findFriendsFacebookView = Titanium.UI.createView({
 viewFindFriends.add(findFriendsFacebookView);
 findFriendsFacebookView.hide();
 
+//table view for all
 var findFriendsTableView = Titanium.UI.createTableView({
 	minRowHeight:60,
 	width:290,
@@ -169,18 +187,19 @@ var findFriendsTableView = Titanium.UI.createTableView({
 	bottom:0,
 	allowsSelection:false
 });
-
 viewFindFriends.add(findFriendsTableView);
 
+//get all contacts from iphone
 var people = Titanium.Contacts.getAllPeople();
 
+//remove empty rows
 findFriendsTableView.footerView = Ti.UI.createView({
     height: 1,
     backgroundColor: 'transparent'
 });
 
 var contactsEmailObj = [];
-
+//push every email from work or from home
 for(j=0;j<people.length;j++){	
 	
 	if(people[j].email.home != null){
@@ -191,6 +210,7 @@ for(j=0;j<people.length;j++){
 }
 
 var contactsEmailStringList = '';
+//convert the array into a string 
 for(l=0;l<contactsEmailObj.length;l++){
 	if(contactsEmailObj.length - 1 == l){
 		contactsEmailStringList += '\'' + contactsEmailObj[l] + '\'';
@@ -200,8 +220,12 @@ for(l=0;l<contactsEmailObj.length;l++){
 	
 }
 
+//find user info via email from the server - to check if he owns the app 
 doSearchUserByEmail(contactsEmailStringList);
+//populate contacts if user is offline
+populateFindFriendsContactsTableView(localDataForContacts);
 
+//populate contacts table view
 function populateFindFriendsContactsTableView(uData){
 	var tableRows = [];
 	
@@ -214,6 +238,7 @@ function populateFindFriendsContactsTableView(uData){
 			selectedBackgroundColor:'transparent'
 		});
 		
+		//friend's profile image
 		var friendImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
 		var friendImageBlob = friendImageFile.toBlob();
 		var friendImageBlobCropped = friendImageBlob.imageAsThumbnail(60,0,30);
@@ -226,7 +251,8 @@ function populateFindFriendsContactsTableView(uData){
 		});
 		row.add(rowFriendImage);
 		
-		var rowLabel = Titanium.UI.createLabel({
+		//friend's fullname label
+		var rowFullNameLabel = Titanium.UI.createLabel({
 			text:people[i].fullName,
 			color:'black',
 			height:22,
@@ -235,8 +261,9 @@ function populateFindFriendsContactsTableView(uData){
 			left:72,
 			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
-		row.add(rowLabel);
+		row.add(rowFullNameLabel);
 		
+		//invite button
 		var rowInviteButton = Titanium.UI.createButton({
 			backgroundImage:IMAGE_PATH+'follow_invite/Invite_btn.png',
 			right:9,
@@ -246,7 +273,7 @@ function populateFindFriendsContactsTableView(uData){
 		row.add(rowInviteButton);
 		
 		var userEmail = null;
-		
+		//check what type of email the user has - from work or home
 		if(people[i].email.home != null){
 			userEmail = people[i].email.home[0];
 		}else if(people[i].email.work != null){
@@ -277,6 +304,7 @@ function populateFindFriendsContactsTableView(uData){
 	Ti.API.info('contacts table View has been populated');
 }
 
+//populate dogsquare table view
 function populateFindFriendsDogsquareTableView(uObj){
 	var tableRows = [];
 	
@@ -289,6 +317,7 @@ function populateFindFriendsDogsquareTableView(uObj){
 			selectedBackgroundColor:'transparent'
 		});
 		
+		//friend's profile name
 		var friendImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
 		var friendImageBlob = friendImageFile.toBlob();
 		var friendImageBlobCropped = friendImageBlob.imageAsThumbnail(60,0,30);
@@ -301,7 +330,8 @@ function populateFindFriendsDogsquareTableView(uObj){
 		});
 		row.add(rowFriendImage);
 		
-		var rowLabel = Titanium.UI.createLabel({
+		//friend's name label
+		var rowNameLabel = Titanium.UI.createLabel({
 			text:uObj[i].User.name,
 			color:'black',
 			height:22,
@@ -310,15 +340,18 @@ function populateFindFriendsDogsquareTableView(uObj){
 			left:72,
 			font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
-		row.add(rowLabel);
+		row.add(rowNameLabel);
 		
-		var rowInviteButton = Titanium.UI.createButton({
+		//follow button
+		var rowFollowButton = Titanium.UI.createButton({
 			backgroundImage:IMAGE_PATH+'follow_invite/Follow_btn.png',
 			right:9,
 			width:86,
-			height:29
+			height:29,
+			userId:uObj[i].User.id
 		});
-		row.add(rowInviteButton);
+		row.add(rowFollowButton);
+		rowFollowButton.addEventListener('click', handleFollowButton);
 		
 		tableRows.push(row);
 	}
@@ -326,6 +359,7 @@ function populateFindFriendsDogsquareTableView(uObj){
 	Ti.API.info('dogsquare table View has been populated');
 }
 
+//handle textfield focus
 function handlefindFriendsTextFieldFocus(e){
 		var field = e.source.field;
 		
@@ -338,7 +372,7 @@ function handlefindFriendsTextFieldFocus(e){
 		}
 	}
 	
-//handle textfield when not focused
+//handle textfield blur
 function handlefindFriendsTextFieldBlur(e){
 	var field = e.source.field;
 	
@@ -349,6 +383,7 @@ function handlefindFriendsTextFieldBlur(e){
 	}
 }
 
+//handle tabs
 function handleFindFriendsTabs(e){
 	var tab = e.source.tab;
 	if(tab == FACEBOOK_TAB){
@@ -472,6 +507,7 @@ function saveFollowingUser(uId){
 	});
 }
 
+//handle follow button
 function handleFollowButton(e){
 	var userId = e.source.userId;
 	
