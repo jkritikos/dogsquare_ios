@@ -14,7 +14,7 @@ if(!PRODUCTION_MODE){
 	//UrbanAirship.secret ='KBiUUr_mQwKYNmTXX5oVpQ';
 	//UrbanAirship.master_secret='0louzaRKRLmStWwb0qEHjw';
 	//UrbanAirship.baseurl = 'https://go.urbanairship.com';
-	API = 'http://www.dogsquare.com/api/';
+	API = 'http://dogsquare.veladia.com/api/';
 }
 
 //Facebook connectivity (Titanium 3.1 and up)
@@ -131,6 +131,7 @@ function hello(){
 var weather = ( function() {
     var api = {};
     api.getWeather = function(la, lo) {
+    	alert('weather for lat '+la +' lon '+lo);
     	Ti.Yahoo.yql('select * from yahoo.maps.findLocation where q="' + la + ',' + lo + '" and gflags="R"', function(e) {
         	var url = 'http://weather.yahooapis.com/forecastrss?w=' + e.data.ResultSet.Results.woeid + '&u=c';
         	var xhr = Ti.Network.createHTTPClient({});

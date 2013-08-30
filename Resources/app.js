@@ -1,4 +1,4 @@
-Ti.API.info('debug 1');
+Ti.API.info('debug 2');
 
 Ti.Geolocation.purpose = "Retrieve user location";
 Ti.Geolocation.accuracy = Ti.Geolocation.ACCURACY_BEST_FOR_NAVIGATION;

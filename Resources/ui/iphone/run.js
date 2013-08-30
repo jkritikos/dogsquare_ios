@@ -11,6 +11,7 @@ var runDistanceUnitLabel = null;
 var runDurationValueLabel = null;
 var runPauseButton = null;
 var runEndButton = null;
+var runAvgPaceMinuteLabel = null;
 
 //TMP debug
 var runDebugView = null;
@@ -60,7 +61,7 @@ function buildRunView(){
 		font:{fontSize:41, fontWeight:'bold', fontFamily:'Open Sans'}
 	}); 
 	
-	var runAvgPaceMinuteLabel = Ti.UI.createLabel({
+	runAvgPaceMinuteLabel = Ti.UI.createLabel({
 		text:'0.0',
 		top:146,
 		left:35,
@@ -365,8 +366,8 @@ function trackLocation(){
 		if(e.coords.accuracy <= 15){
 			
 			//Get weather once we get the 1st accurate set of coordinates
-			if(runningPathCoordinates.length == 1){
-				weather.getWeather(runningPathCoordinates[0].latitude, runningPathCoordinates[0].longitude);	
+			if(!runObject.temperature){
+				weather.getWeather(e.coords.latitude, e.coords.longitude);	
 			}
 			
 			//Save coordinates
