@@ -3,6 +3,7 @@
 var runFinishCommentsBackgroundView = null;
 var runFinishCommentsTextField = null;
 var runFinishCommentsTableView = null;
+var viewActivityCommentsButton = null;
 
 function buildRunFinishView(obj){
 
@@ -260,7 +261,7 @@ function buildRunFinishView(obj){
 	viewRunSummary.add(runFinishCommentsBackgroundView);
 	
 	//button to show all comments
-	var runFinishCommentsButton = Ti.UI.createButton({ 
+	runFinishCommentsButton = Ti.UI.createButton({ 
 		backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
 		top:0,
 		width:320,

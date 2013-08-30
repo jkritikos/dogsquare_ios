@@ -2,6 +2,7 @@
 var viewActivityCommentsBackgroundView = null;
 var viewActivityCommentsTextField = null;
 var viewActivityCommentsTableView  = null;
+var viewActivityCommentsButton = null;
 
 function buildViewActivityView(aId){
 	//activity View
@@ -233,7 +234,7 @@ function buildViewActivityView(aId){
 	});
 	
 	//button to show all comments
-	var viewActivityCommentsButton = Ti.UI.createButton({ 
+	viewActivityCommentsButton = Ti.UI.createButton({ 
 		backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
 		top:0,
 		width:320,
