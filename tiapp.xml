@@ -39,8 +39,9 @@
         <theme>default</theme>
     </mobileweb>
     <modules>
-    	<module platform="iphone">facebook</module>
+        <module platform="iphone">facebook</module>
         <module platform="iphone">dk.napp.slidemenu</module>
+        <module platform="iphone">com.sideshowcoder.jpgcompressor</module>
     </modules>
     <deployment-targets>
         <target device="blackberry">false</target>

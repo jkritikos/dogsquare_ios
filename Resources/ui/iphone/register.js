@@ -50,7 +50,7 @@ function buildRegisterWindow(){
 		text:'Welcome',
 		color:'white',
 		font:UI_FONT_SEMIBOLD_NAVBAR
-	})
+	});
 	
 	registerNavBar.add(registerNavBarLabel);
 	
@@ -493,12 +493,26 @@ function handlePhotoSelection(){
 		
 		success:function(event){
 			var image = event.media;
-			signupUserObject.image = image;
+			
+			//Reduce image size first
+			Ti.API.info('Selected image with h:'+image.height+' w:'+image.width);
+			//var resizedImage = image.imageAsResized((image.width/4), (image.height/4));
+			
+			//Jpeg compression module
+			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
+			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setWorstCompressQuality(0.40);
+			var resizedImage = jpgcompressor.scale(image, 1024, 768);
+			var compressedImage = jpgcompressor.compress(resizedImage);
+			
+			Ti.API.info('Resized image with h:'+resizedImage.height+' w:'+resizedImage.width);
+			
+			signupUserObject.image = compressedImage;
 			
 			// create new file name and remove old
 			var filename = Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg";
 			var tmpImage = Titanium.Filesystem.getFile(filename);
-			tmpImage.write(image);
+			tmpImage.write(compressedImage);
 			Ti.API.info('saved image to '+filename);
 		},
 		cancel:function(){

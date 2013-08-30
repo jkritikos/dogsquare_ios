@@ -20,7 +20,7 @@ var userObject = {
 	inbox:0,
 	userId:1,
 	dogId:1
-}
+};
 
 Ti.include('common/dao.js');
 

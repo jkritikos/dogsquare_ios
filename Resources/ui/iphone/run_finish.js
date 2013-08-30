@@ -6,6 +6,24 @@ function buildRunFinishView(obj){
 		backgroundColor:UI_BACKGROUND_COLOR
 	});
 	
+	//start point annotation
+	var runFinishAnnotationStart = Titanium.Map.createAnnotation({
+		latitude:obj.coordinates[0].latitude,
+		longitude:obj.coordinates[0].longitude,
+		title:"Start",
+		animate:true,
+		image:IMAGE_PATH+'run_finish/pin.png'
+	});
+	
+	//end point annotation
+	var runFinishAnnotationEnd = Titanium.Map.createAnnotation({
+		latitude:obj.coordinates[0].latitude,
+		longitude:obj.coordinates[0].longitude,
+		title:"End",
+		animate:true,
+		image:IMAGE_PATH+'run_finish/pin.png'
+	});
+	
 	//the map
 	var viewRunFinishMap = Titanium.Map.createView({ 
 		width:'100%',
@@ -15,7 +33,8 @@ function buildRunFinishView(obj){
 	    animate:true,
 	    regionFit:true,
 	    userLocation:false,
-	    visible:true
+	    visible:true,
+	    annotations:[runFinishAnnotationStart,runFinishAnnotationEnd]
 	});
 	viewRunSummary.add(viewRunFinishMap);
 	
@@ -228,14 +247,12 @@ function buildRunFinishView(obj){
 	return viewRunSummary;
 }
 
-function populateRunFinishTableView(o){ 
+function populateRunFinishTableView(o){
+	//Get activity details
+	var data = getActivity(o.activity_id); 
 	var tableRows = [];
-	//dog names array
-	var dogNames = ['Lory', 'Lucy'];
-	//percent array
-	var percent = ['53 %', '73 %'];
 	
-	for(i=0;i<=1;i++){	 
+	for(i=0; i<data.dogs.length; i++){	 
 		//row
 		var row = Ti.UI.createTableViewRow({ 
 			className:'runFinishRow',
@@ -259,7 +276,7 @@ function populateRunFinishTableView(o){
 		
 		//dog name label
 		var rowDogNameLabel = Titanium.UI.createLabel({ 
-			text:dogNames[i],
+			text:data.dogs[i].name,
 			color:'black',
 			height:65,
 			textAlign:'center',
@@ -304,7 +321,7 @@ function populateRunFinishTableView(o){
 		
 		//mood percent label
 		var rowMoodPercentLabel = Titanium.UI.createLabel({ 
-			text:percent[i],
+			text:'14%',
 			color:'999900',
 			height:15,
 			textAlign:'center',
@@ -320,7 +337,7 @@ function populateRunFinishTableView(o){
 			opacity:0.1,
 			bottom:0,
 			height:1,
-			width:290
+			width:299
 		});
 		row.add(rowSepparator);
 		

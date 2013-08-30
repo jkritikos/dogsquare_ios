@@ -14,7 +14,7 @@ if(!PRODUCTION_MODE){
 	//UrbanAirship.secret ='KBiUUr_mQwKYNmTXX5oVpQ';
 	//UrbanAirship.master_secret='0louzaRKRLmStWwb0qEHjw';
 	//UrbanAirship.baseurl = 'https://go.urbanairship.com';
-	API = 'https://www.dogsquare.com/api/';
+	API = 'http://www.dogsquare.com/api/';
 }
 
 //Facebook connectivity (Titanium 3.1 and up)
@@ -150,74 +150,6 @@ var weather = ( function() {
     return api;
 }());
 
-function xhr_upload(_args) {
-	var win = Titanium.UI.createWindow({
-		title:_args.title
-	});
-	
-	var ind=Titanium.UI.createProgressBar({
-		width:200,
-		height:50,
-		min:0,
-		max:1,
-		value:0,
-		style:Titanium.UI.iPhone.ProgressBarStyle.PLAIN,
-		top:10,
-		message:'Uploading Image',
-		font:{fontSize:12, fontWeight:'bold'},
-		color:'#888'
-	});
-	
-	win.add(ind);
-	ind.show();
-	
-	Titanium.Media.openPhotoGallery({
-	
-		success:function(event)
-		{
-			Ti.API.info("success! event: " + JSON.stringify(event));
-			var image = event.media;
-		
-			var xhr = Titanium.Network.createHTTPClient({enableKeepAlive:false});
-	
-			xhr.onerror = function(e)
-			{
-				Ti.UI.createAlertDialog({title:'Error', message:e.error}).show();
-				Ti.API.info('IN ERROR ' + e.error);
-			};
-			xhr.setTimeout(NETWORK_TIMEOUT);
-			xhr.onload = function(e)
-			{
-				Ti.UI.createAlertDialog({title:'Success', message:'status code ' + this.status}).show();
-				Ti.API.info('IN ONLOAD ' + this.status + ' readyState ' + this.readyState);
-			};
-			xhr.onsendstream = function(e)
-			{
-				ind.value = e.progress ;
-				Ti.API.info('ONSENDSTREAM - PROGRESS: ' + e.progress);
-			};
-			// open the client
-			xhr.open('POST',API+'signup');
-	
-			// send the data
-			xhr.setRequestHeader("Content-Type", "multipart/form-data");
-			xhr.send({photo:image,username:'fgsandford1000',password:'sanford1000',name:'Jason Kritikos'});
-			
-		},
-		cancel:function()
-		{
-	
-		},
-		error:function(error)
-		{
-		},
-		allowEditing:true
-	});
-	
-	return win;
-};
-
-
 //Saves a dog object in the local db
 function saveDog(dogObject){
 	var db = Ti.Database.install('dog.sqlite', 'db');
@@ -342,7 +274,7 @@ function getActivities(){
 	
 	var activities = [];
 	
-	var sql = 'select id,start_date, start_time, end_time,type_id from activities';
+	var sql = 'select id,start_date, start_time, end_time,type_id from activities order by id desc';
 	var rows = db.execute(sql);
 	while (rows.isValidRow()){
 		
@@ -365,6 +297,37 @@ function getActivities(){
 	db.close();
 	
 	return activities;
+}
+
+//Returns all the data for the specified activity
+function getActivity(id){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	var obj = null;
+	
+	var sql = 'select id,start_date, start_time, end_time,type_id from activities where id=?';
+	var rows = db.execute(sql,id);
+	while (rows.isValidRow()){
+		
+		var duration = rows.field(3) - rows.field(2);
+		
+		obj = {
+			id:rows.field(0),
+			start_date:rows.field(1),
+			start_time:rows.field(2),
+			end_time:rows.field(3),
+			duration:duration,
+			dogs:getActivityDetails(rows.field(0)),
+			path:getActivityCoordinates(rows.field(0))
+		}
+		
+		rows.next();
+	}
+	
+	rows.close();
+	db.close();
+	
+	return obj;
 }
 
 //Returns the dog related info for the specified activity
@@ -405,6 +368,28 @@ function saveActivityCoordinates(activityId, lat, lon){
 	db.execute('insert into activity_coordinates (activity_id, lat, lon, log_time) values (?,?,?,?)',activityId, lat, lon, now);
 	
 	db.close();
+}
+
+//Returns the activity coordinates for this activity
+function getActivityCoordinates(activityId){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	var data = [];
+	
+	var rows = db.execute('select lat,lon from activity_coordinates where activity_id=? order by log_time', activityId);
+	
+	while (rows.isValidRow()){
+		var obj = {
+			lat:rows.field(0),
+			lon:rows.field(1)
+		};
+		
+		data.push(obj);
+		rows.next();
+	}
+	
+	db.close();
+	
+	return data;
 }
 
 function createDB(){
