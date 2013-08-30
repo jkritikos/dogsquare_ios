@@ -5,15 +5,23 @@ var addPlaceWindow = Ti.UI.createWindow({
 	title:'Add Place'
 });
 
+//done button for picker
+var addPlacePickerDoneButton = Ti.UI.createButton({
+	backgroundImage:IMAGE_PATH+'common/Done_button.png',
+    width:58,
+    height:29
+});
+addPlacePickerDoneButton.addEventListener("click", handlePickerDoneButton);
+
 //back button
 var addPlaceBackButton = Ti.UI.createButton({
     backgroundImage: IMAGE_PATH+'common/back_button.png',
     width:48,
     height:33
 });
-
 addPlaceWindow.setLeftNavButton(addPlaceBackButton);
 
+//event listener for back button
 addPlaceBackButton.addEventListener("click", function() {
     navController.close(addPlaceWindow);
 });
@@ -47,6 +55,7 @@ var addPlacePhotoIcon = Ti.UI.createImageView({
 });
 addPlacePhotoAreaButton.add(addPlacePhotoIcon);
 
+//photo label
 var addPlacePhotoLabel = Titanium.UI.createLabel({ 
 	text:'Add a photo',
 	color:'black',
@@ -59,49 +68,133 @@ var addPlacePhotoLabel = Titanium.UI.createLabel({
 });
 addPlacePhotoAreaButton.add(addPlacePhotoLabel);
 
-var addPlaceTableView = Titanium.UI.createTableView({
-	minRowHeight:29,
-	width:320,
-	data:populateAddPlaceTableView(),
-	backgroundColor:'dcdcdc',
-	separatorColor:'dcdcdc',
-	top:293,
+//fields background
+var addPlaceFieldsBackground = Ti.UI.createView({
+	backgroundColor:'e7e6e6',
 	bottom:0,
-	allowsSelection:false
+	width:320,
+	height:124
 });
-addPlaceWindow.add(addPlaceTableView);
+addPlaceWindow.add(addPlaceFieldsBackground);
 
-function populateAddPlaceTableView(){
-	var tableRows = [];
-	
-	// name row
-	var nameRow = Ti.UI.createTableViewRow({
-		className:'addPlaceRow',
-		height:29,
-		width:'100%',
-		backgroundColor:'e7e6e6',
-		selectedBackgroundColor:'transparent'
+//offset for the two sepparators in the form
+var sepparatorOffset = 0;
+
+for(var i=0; i<2; i++) {
+	//sepparator
+	var addPlaceSepparator = Ti.UI.createView({
+		backgroundColor:'dcdcdc',
+		width:320,
+		height:1,
+		top:29 + sepparatorOffset
 	});
+	addPlaceFieldsBackground.add(addPlaceSepparator);
 	
-	//Name textfield
-	var rowTxtFieldName = Ti.UI.createTextField({
-		width:291,
-		height:20,
-		returnKeyType: Ti.UI.RETURNKEY_NEXT,
-		field:1
-	});
-	
-	// category row
-	var categoryRow = Ti.UI.createTableViewRow({
-		className:'addPlaceRow',
-		height:29,
-		width:'100%',
-		backgroundColor:'e7e6e6',
-		selectedBackgroundColor:'transparent'
-	});
-	
-	tableRows.push(nameRow);
-	tableRows.push(categoryRow);
-	
-	return tableRows;
+	sepparatorOffset += 30;
+}
+
+//text field name
+var  addPlaceTxtFieldName = Ti.UI.createTextField({
+	top:0,
+	width:294,
+	height:28,
+	left:13,
+	returnKeyType: Ti.UI.RETURNKEY_NEXT,
+	font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
+});
+addPlaceFieldsBackground.add(addPlaceTxtFieldName);
+//events for text field name
+addPlaceTxtFieldName.addEventListener('change', handleTextFieldNameChange);
+addPlaceTxtFieldName.addEventListener('focus', handleTextFieldNameFocus);
+addPlaceTxtFieldName.addEventListener('blur', handleTextFieldNameBlur);
+
+//textfield label
+var addPlaceTxtFieldNameLabel = Ti.UI.createLabel({
+	text:'Name',
+	color:'black',
+	textAlign:'left',
+	left:0,
+	opacity:0.8,
+	width:80,
+	height:30,
+	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+});
+addPlaceTxtFieldName.add(addPlaceTxtFieldNameLabel);
+
+//category label
+var addPlaceCategoryLabel = Ti.UI.createLabel({
+	text:'Category',
+	color:'black',
+	textAlign:'left',
+	left:13,
+	top:28,
+	opacity:0.8,
+	width:80,
+	height:30,
+	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+});
+addPlaceFieldsBackground.add(addPlaceCategoryLabel);
+
+//button to show 
+var addPlaceCategoryButton = Ti.UI.createButton({
+	top:29,
+	right:0,	
+    width:43,
+    height:31
+});
+addPlaceFieldsBackground.add(addPlaceCategoryButton);
+addPlaceCategoryButton.addEventListener('click', handleCategoryButton);
+
+//picker data
+var pickerCategories = [];
+
+pickerCategories[0]=Ti.UI.createPickerRow({title:'park', id:1});
+pickerCategories[1]=Ti.UI.createPickerRow({title:'homeless', id:2});
+pickerCategories[2]=Ti.UI.createPickerRow({title:'cruelty', id:3});
+pickerCategories[3]=Ti.UI.createPickerRow({title:'pet shop', id:4});
+pickerCategories[4]=Ti.UI.createPickerRow({title:'veterinary', id:5});
+pickerCategories[5]=Ti.UI.createPickerRow({title:'dog hospital', id:6});
+pickerCategories[6]=Ti.UI.createPickerRow({title:'other', id:7});
+
+//picker
+var addPlacePicker = Ti.UI.createPicker({
+  bottom:-216,
+  selectionIndicator:true
+});
+addPlacePicker.add(pickerCategories);
+
+addPlaceWindow.add(addPlacePicker);
+
+//handle category button
+function handleCategoryButton(){
+	addPlacePicker.animate({bottom:0, duration:500});
+	addPlaceWindow.setRightNavButton(addPlacePickerDoneButton);
+}
+
+//handle picker done button
+function handlePickerDoneButton(){
+	addPlacePicker.animate({bottom:-216, duration:500});
+	addPlaceWindow.setRightNavButton(null);
+	addPlaceCategoryLabel.text = addPlacePicker.getSelectedRow(0).title;
+	addPlaceCategoryLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+	addPlaceCategoryLabel.opacity = 1;
+}
+
+//handle textfield change
+function handleTextFieldNameChange(){
+	if(addPlaceTxtFieldName.value != ''){
+		addPlaceTxtFieldNameLabel.hide();
+	}else {
+		addPlaceTxtFieldNameLabel.show();
+	}
+}
+
+//handle textfield focus
+function handleTextFieldNameFocus(){
+	addPlaceFieldsBackground.animate({bottom:122, duration:200});
+}
+
+//handle textfield blur
+function handleTextFieldNameBlur(){
+	addPlaceFieldsBackground.animate({bottom:0, duration:200});
 }
