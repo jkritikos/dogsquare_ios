@@ -3,7 +3,7 @@
 var runFinishCommentsBackgroundView = null;
 var runFinishCommentsTextField = null;
 var runFinishCommentsTableView = null;
-var viewActivityCommentsButton = null;
+var runFinishCommentsButton = null;
 
 function buildRunFinishView(obj){
 
