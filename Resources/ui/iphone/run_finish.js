@@ -1,4 +1,9 @@
 
+
+var runFinishCommentsBackgroundView = null;
+var runFinishCommentsTextField = null;
+var runFinishCommentsTableView = null;
+
 function buildRunFinishView(obj){
 
 	//run finish View
@@ -243,6 +248,77 @@ function buildRunFinishView(obj){
  
 	// add the route
 	viewRunFinishMap.addRoute(route);
+	
+	//background for comments
+	runFinishCommentsBackgroundView = Ti.UI.createView({
+		top:383,
+		height:320,
+		width:'100%',
+		backgroundColor:UI_BACKGROUND_COLOR,
+		zIndex:2
+	});
+	viewRunSummary.add(runFinishCommentsBackgroundView);
+	
+	//button to show all comments
+	var runFinishCommentsButton = Ti.UI.createButton({ 
+		backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
+		top:0,
+		width:320,
+		height:33,
+		toggle:false,
+		button:'bar'
+	});
+	runFinishCommentsBackgroundView.add(runFinishCommentsButton);
+	//event listener for button
+	runFinishCommentsButton.addEventListener('click', handleCommentButtons);
+	
+	//plus buttton to create a new comment
+	var runFinishPlusButton = Ti.UI.createButton({ 
+		backgroundColor:'red',
+		top:13,
+		right:26,
+		width:20,
+		height:20,
+		button:'plus'
+	});
+	runFinishCommentsButton.add(runFinishPlusButton);
+	//event listener for plus button
+	runFinishPlusButton.addEventListener('click', handleCommentButtons);
+	
+	//comments title label
+	var runFinishCommentsTitleLabel = Titanium.UI.createLabel({ 
+		text:'Comments',
+		color:'white',
+		top:13,
+		height:20,
+		textAlign:'center',
+		left:18,
+		font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	runFinishCommentsButton.add(runFinishCommentsTitleLabel);
+	
+	//create a comment textField
+	runFinishCommentsTextField = Ti.UI.createTextField({
+		width:266,
+		height:36,
+		top:44,
+		borderWidth:2,
+		borderRadius:2
+	});
+	runFinishCommentsBackgroundView.add(runFinishCommentsTextField);
+	runFinishCommentsTextField.hide();
+	
+	//comments tableView
+	runFinishCommentsTableView = Titanium.UI.createTableView({
+		minRowHeight:47,
+		width:320,
+		data:populateRunFinishCommentsTableView(),
+		backgroundColor:'e7e7e7',
+		top:36,
+		bottom:0,
+		allowsSelection:false
+	});
+	runFinishCommentsBackgroundView.add(runFinishCommentsTableView);
 
 	return viewRunSummary;
 }
@@ -344,4 +420,84 @@ function populateRunFinishTableView(o){
 		tableRows.push(row);
 	}
 	return tableRows;
+}
+
+//populate comment rows
+function populateRunFinishCommentsTableView(){
+	
+	var tableRows = [];
+	
+	for(i=0;i<=5;i++){
+		
+		//comment row
+		var commentRow = Ti.UI.createTableViewRow({
+			className:'commentRow',
+			height:'auto',
+			width:'100%',
+			backgroundColor:'transparent',
+			selectedBackgroundColor:'transparent'
+		});
+		
+		//comment label
+		var commentLabel = Ti.UI.createLabel({
+			text:'Great shop. It has anything you need for your pet',
+			top:8,
+			textAlign:'left',
+			width:292,
+			bottom:24,
+			height:'auto',
+			left:14,
+			opacity:0.6,
+			color:'black',
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		
+		//comment time
+		var timeLabel = Ti.UI.createLabel({
+			text:'3 hours ago',
+			bottom:10,
+			textAlign:'left',
+			width:100,
+			height:15,
+			left:16,
+			opacity:0.4,
+			color:'black',
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		
+		commentRow.add(commentLabel);
+		commentRow.add(timeLabel);
+		
+		tableRows.push(commentRow);
+	}
+	
+	return tableRows;
+}
+
+//handle comments button and plus button
+function handleCommentButtons(e){
+	var toggle = e.source.toggle;
+	var button = e.source.button;
+	
+	if(toggle && button != 'plus'){
+		runFinishCommentsBackgroundView.animate({top:383, duration:500});
+		runFinishCommentsTextField.blur();
+		runFinishCommentsTextField.hide();
+		runFinishCommentsTableView.show();
+		e.source.toggle = false;
+	}else if(!toggle && button != 'plus'){
+		runFinishCommentsBackgroundView.animate({top:96, duration:500});
+		runFinishCommentsTextField.blur();
+		runFinishCommentsTextField.hide();
+		runFinishCommentsTableView.show();
+		e.source.toggle = true;
+	}else if(button == 'plus'){
+		runFinishCommentsBackgroundView.animate({top:96, duration:300});
+		runFinishCommentsButton.toggle = true;
+		
+		runFinishCommentsTextField.focus();
+		runFinishCommentsTableView.hide();
+		runFinishCommentsTextField.show();
+	}
+	
 }

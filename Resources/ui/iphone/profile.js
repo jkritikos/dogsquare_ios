@@ -159,6 +159,7 @@ var profileTableView = Titanium.UI.createTableView({
 	bottom:0
 });
 profileTableViewBackground.add(profileTableView);
+profileTableView.addEventListener('click', handleProfileActivityRows);
 
 var runWindow = null;
 
@@ -256,7 +257,8 @@ function populateProfileTableView(){
 				height:51,
 				width:'100%',
 				backgroundColor:'e7e7e7',
-				selectedBackgroundColor:'transparent'
+				selectedBackgroundColor:'transparent',
+				activityId:userActivities[i].id
 			});
 			
 			var rowActivityImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + dogPhoto);
@@ -341,4 +343,34 @@ function populateProfileTableView(){
 	}
 
 	return tableRows;
+}
+
+function handleProfileActivityRows(e){
+	var activityId = e.row.activityId;
+	Ti.include('ui/iphone/view_activity.js');
+	var viewActivityView = buildViewActivityView(activityId);
+	
+	var viewActivityWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Activity'
+	});
+	
+	//back button & event listener
+	var viewActivityBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	viewActivityWindow.setLeftNavButton(viewActivityBackButton);
+	viewActivityBackButton.addEventListener("click", function() {
+	    navController.close(viewActivityWindow);
+	});
+	
+	viewActivityWindow.add(viewActivityView);
+	
+	openWindows.push(viewActivityWindow);
+	navController.open(viewActivityWindow);
 }
