@@ -225,7 +225,6 @@ function handleTableViewRows(e){
 		dogProfileWindow.add(dogProfileView);
 		
 		navController.getWindow().add(dogProfileWindow);
-		navController.getWindow().setTitle(dogId);
 		
 		if(window.isAnyViewOpen()){
 			window.toggleRightView();

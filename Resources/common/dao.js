@@ -198,6 +198,36 @@ function getDogs(){
 	return dogRows;
 }
 
+//Gets dog from the local db by id
+function getDogById(dogId){
+	var dbDogObject = {};
+	
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	var dogRows = [];
+	
+	var rows = db.execute('select dog_id, name, photo, weight, gender, age, breed_id from dogs where dog_id=?', dogId);
+	while (rows.isValidRow()) {
+
+	  	var obj = {
+	  		id:rows.field(0),
+			name:rows.field(1),
+			photo:rows.field(2),
+			weight:rows.field(3),
+			gender:rows.field(4),
+			age:rows.field(5),
+			breed_id:rows.field(6),
+		};
+		
+	  	dogRows.push(obj);	
+	  	rows.next();
+	}
+	
+	rows.close();
+	db.close();
+	
+	return dogRows;
+}
+
 //Gets all notes from the local db
 function getNotes(){
 	var dbNoteObject = {};

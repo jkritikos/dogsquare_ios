@@ -1,6 +1,7 @@
 	
 function buildDogProfileView(dId){
-	Ti.API.info('dog id is: ' + dId);
+	var data = getDogById(dId);
+	navController.getWindow().setTitle(data[0].name);
 	
 	var dogProfileView = Ti.UI.createView({
 		backgroundColor:'white'
@@ -11,15 +12,60 @@ function buildDogProfileView(dId){
 	});
 	dogProfileView.add(dogProfileLabel);
 	
-	
+	var dogImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + data[0].photo);
 	
 	var dogProfilePhotoImage = Ti.UI.createImageView({ 
-		image:IMAGE_PATH+'profile_other/jim.jpg',
+		image:dogImageFile.nativePath,
 		height:272,
 		top:0,
 		width:'100%'
 	});
+	
+	var dogProfileBreedBackground = Titanium.UI.createView({
+		backgroundColor:'white',
+		left:11,
+		top:11,
+		width:75,
+		height:75,
+		opacity:0.4,
+		borderRadius:37.5,
+		borderWidth:1,
+		borderColor:'transparent',
+	});
+	dogProfilePhotoImage.add(dogProfileBreedBackground);
+	
+	var dogProfileBreedLabel = Titanium.UI.createLabel({ 
+		text:'breed',
+		height:14,
+		textAlign:'center',
+		top:63,
+		left:36,
+		font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	dogProfilePhotoImage.add(dogProfileBreedLabel);
+	
+	var dogBreed = null;
+	
+	if(data[0].breed_id == 1){
+		dogBreed = 'kannis';
+	}else if(data[0].breed_id == 2){
+		dogBreed = 'bull dog';
+	}
+	
+	var dogProfileBreedTypeLabel = Titanium.UI.createLabel({ 
+		text:dogBreed,
+		height:'auto',
+		width:42,
+		textAlign:'center',
+		top:25,
+		left:27,
+		font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	dogProfilePhotoImage.add(dogProfileBreedTypeLabel);
+	
 	dogProfileView.add(dogProfilePhotoImage);
+	
+	
 	
 	//opacity bar for info
 	var dogProfileOpacityInfoBar = Titanium.UI.createView({ 
@@ -45,13 +91,22 @@ function buildDogProfileView(dId){
 		dividerLeftOffset += 80;
 	}
 	
-	//dogProfile
+	var dogGender = null;
+	var dogGenderLeft = null;
+	
+	if(data[0].gender == 1){
+		dogGender = 'male';
+		dogGenderLeft = 18;
+	}else if(data[0].gender == 2){
+		dogGender = 'female';
+		dogGenderLeft = 13;
+	}
 	
 	var dogProfileDogGenderLabel = Titanium.UI.createLabel({
-		text:'female',
+		text:dogGender,
 		height:21,
 		textAlign:'right',
-		left:13,
+		left:dogGenderLeft,
 		top:10,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -68,24 +123,14 @@ function buildDogProfileView(dId){
 	dogProfileOpacityInfoBar.add(dogProfileGenderLabel);
 	
 	var dogProfileAgeNumberLabel = Titanium.UI.createLabel({
-		text:'9',
+		text:data[0].age,
 		height:21,
 		textAlign:'right',
-		left:93,
+		left:111,
 		top:10,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	dogProfileOpacityInfoBar.add(dogProfileAgeNumberLabel);
-	
-	var dogProfileAgeUnitLabel = Titanium.UI.createLabel({ 
-		text:'months',
-		height:17,
-		textAlign:'center',
-		left:107,
-		top:14,
-		font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
-	});
-	dogProfileOpacityInfoBar.add(dogProfileAgeUnitLabel);
 	
 	var dogProfileAgeLabel = Titanium.UI.createLabel({ 
 		text:'years old',
@@ -108,10 +153,10 @@ function buildDogProfileView(dId){
 	dogProfileOpacityInfoBar.add(dogProfileWeightLabel);
 	
 	var dogProfileWeightNumberLabel = Titanium.UI.createLabel({
-		text:'4',
+		text:data[0].weight,
 		height:21,
 		textAlign:'center',
-		left:187,
+		left:181,
 		top:10,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -121,7 +166,7 @@ function buildDogProfileView(dId){
 		text:'kgs',
 		height:17,
 		textAlign:'center',
-		left:196,
+		left:200,
 		top:14,
 		font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
