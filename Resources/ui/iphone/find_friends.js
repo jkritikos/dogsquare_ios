@@ -18,17 +18,13 @@ var findFriendsTabsAreaImage = Ti.UI.createImageView({
 
 viewFindFriends.add(findFriendsTabsAreaImage);
 
-//facebook tab label
-var findFriendsTabFacebookLabel = Titanium.UI.createLabel({
-	text:'Facebook',
-	color:'black',
-	height:47,
-	left:10,
-	textAlign:'center',
-	opacity:0.6,
-	font:{fontSize:16, fontWeight:'semibold', fontFamily:'Open Sans'}
+//facebook tab image
+var findFriendsTabFacebookImage = Titanium.UI.createImageView({
+	image:IMAGE_PATH+'follow_invite/Facebook_logo.png',
+	top:9,
+	left:6
 });
-findFriendsTabsAreaImage.add(findFriendsTabFacebookLabel);
+findFriendsTabsAreaImage.add(findFriendsTabFacebookImage);
 
 //contacts tab label
 var findFriendsTabContactsLabel = Titanium.UI.createLabel({
@@ -41,17 +37,13 @@ var findFriendsTabContactsLabel = Titanium.UI.createLabel({
 });
 findFriendsTabsAreaImage.add(findFriendsTabContactsLabel);
 
-//dogsquare tab label
-var findFriendsTabDogsquareLabel = Titanium.UI.createLabel({
-	text:'Dogsquare',
-	color:'black',
-	height:47,
-	right:3,
-	textAlign:'center',
-	opacity:0.6,
-	font:{fontSize:16, fontWeight:'semibold', fontFamily:'Open Sans'}
+//dogsquare tab image
+var findFriendsTabDogsquareImage = Titanium.UI.createImageView({
+	image:IMAGE_PATH+'follow_invite/Dogsquare_logo.png',
+	top:13,
+	right:6
 });
-findFriendsTabsAreaImage.add(findFriendsTabDogsquareLabel);
+findFriendsTabsAreaImage.add(findFriendsTabDogsquareImage);
 
 //contacts selection bar
 var findFriendsTabContactsSelection = Titanium.UI.createView({

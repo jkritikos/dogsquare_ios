@@ -1,5 +1,7 @@
 //UI components
 var ADD_DOG = 8;
+var TYPE_CHECKBOX = 1;
+var TYPE_ROW = 2;
 
 //Right window
 var winRight = Ti.UI.createWindow();
@@ -77,7 +79,7 @@ function populateRightMenu(dogObject){
 	var rowBorderImage1 = Ti.UI.createImageView({ 
 		image:IMAGE_PATH+'menu_right/border.png',
 		bottom:0,
-		left:39
+		width:319
 	});
 	
 	rightMenuAddDogRow.add(rowBorderImage1);
@@ -97,14 +99,16 @@ function populateRightMenu(dogObject){
 			backgroundColor:'1c2027',
 			selectionStyle:0,
 			active:false,
+			type:TYPE_ROW,
 			dogId:dogObject[i].id
 		});
+		rightMenuRow.addEventListener('click', handleTableViewRows);
 		
 		//border image inside the dog row - right menu row
 		var rowBorderImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'menu_right/border.png',
 			bottom:0,
-			left:42
+			width:319
 		});
 		
 		//dog image inside the dog row - right menu row
@@ -118,7 +122,8 @@ function populateRightMenu(dogObject){
 			top:13,
 			borderRadius:40,
 			borderWidth:4,
-			borderColor:'454950'
+			borderColor:'454950',
+			type:TYPE_ROW
 		});
 		
 		//dog name label inside the dog row - right menu row
@@ -130,7 +135,8 @@ function populateRightMenu(dogObject){
 			textAlign:'left',
 			left:156,
 			top:14,
-			font:{fontSize:24, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:24, fontWeight:'semibold', fontFamily:'Open Sans'},
+			type:TYPE_ROW
 		});
 		
 		//dog mood label inside the dog row - right menu row
@@ -142,7 +148,8 @@ function populateRightMenu(dogObject){
 			textAlign:'left',
 			left:158,
 			top:47,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
+			type:TYPE_ROW
 		});
 		
 		//dog percent label inside the dog row - right menu row
@@ -154,14 +161,16 @@ function populateRightMenu(dogObject){
 			textAlign:'left',
 			left:199,
 			top:47,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
+			type:TYPE_ROW
 		});
 		
 		//bone image inside the dog row - right menu row
 		var rowBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_icon.png',
 			left:232,
-			top:47
+			top:47,
+			type:TYPE_ROW
 		});
 		
 		//check box view inside the dog row - right menu row
@@ -170,13 +179,15 @@ function populateRightMenu(dogObject){
 			bottom:16,
 			right:28,
 			width: 23,
-			height:23
+			height:23,
+			type:TYPE_CHECKBOX
 		});
-		rowCheckBox.addEventListener('click', handleTableViewRows);
+		rowCheckBox.addEventListener('click', handleCheckBoxInteraction);
 		
 		//check image inside the dog row - right menu row
 		var rowCheckImage = Ti.UI.createImageView({ 
-			image:IMAGE_PATH+'menu_right/check_mark.png'
+			image:IMAGE_PATH+'menu_right/check_mark.png',
+			type:TYPE_CHECKBOX
 		});
 		rowCheckImage.hide();
 		
@@ -194,29 +205,56 @@ function populateRightMenu(dogObject){
 	rightTableView.setData(rightMenuData);
 }
 
-//handle all rows and change properties when activated/deactivated
+//handle all rows and show dog profile
 function handleTableViewRows(e){
+	
+	if(e.source.type == TYPE_ROW) {
+		closeOpenWindows();
+		
+		var dogId = e.row.dogId;
+		
+		Ti.include('ui/iphone/dog_profile.js');
+		var dogProfileView = buildDogProfileView(dogId);
+		
+		var dogProfileWindow = Ti.UI.createWindow({
+			backgroundColor:'white',
+			barImage:IMAGE_PATH+'common/bar.png',
+			barColor:UI_COLOR
+		});
+		
+		dogProfileWindow.add(dogProfileView);
+		
+		navController.getWindow().add(dogProfileWindow);
+		navController.getWindow().setTitle(dogId);
+		
+		if(window.isAnyViewOpen()){
+			window.toggleRightView();
+		}
+	}
+}
+
+
+function handleCheckBoxInteraction(e){
 	var rowCheckImage = e.row.children[0].children[0];
 	var rowDogNameLabel = e.row.children[4];
 	var rowDogPercentLabel = e.row.children[2];
 	var rowDogImage = e.row.children[5];
 	
 	if(e.row.rowId != ADD_DOG) {
-		if(e.row.active) {
+		if(e.source.type == TYPE_CHECKBOX && e.row.active) {
 			rowCheckImage.hide();
 			rowDogNameLabel.color = 'ab7b04';
 			rowDogPercentLabel.color = 'ab7b04';
 			rowDogImage.borderColor = '454950';
 			e.row.backgroundColor = '1c2027';
 			e.row.active = false;
-		}else{ 
+		}else if(e.source.type == TYPE_CHECKBOX && !(e.row.active)){ 
 			rowCheckImage.show();
 			rowDogNameLabel.color = 'f9bf30';
 			rowDogPercentLabel.color = 'f9bf30';
 			rowDogImage.borderColor = 'f9bf30';
 			e.row.backgroundColor = UI_MENU_BACKGROUND_COLOR;
 			e.row.active = true;
-		}
-		 	
+		}	
 	}
 }

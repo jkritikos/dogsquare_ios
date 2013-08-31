@@ -21,7 +21,7 @@ checkinPlaceBackButton.addEventListener("click", function() {
 
 //UI Components
 var checkinPlaceCommentsBackgroundView = null;
-var checkinPlaceCommentsTextField = null;
+var checkinPlaceCommentsTextArea = null;
 var checkinPlaceCommentsTableView = null;
 var checkinPlaceCommentsButton = null;
 
@@ -146,7 +146,7 @@ function buildCheckinPlaceView(view){
 	//background for comments
 	checkinPlaceCommentsBackgroundView = Ti.UI.createView({
 		top:332,
-		height:320,
+		height:429,
 		width:'100%',
 		backgroundColor:UI_BACKGROUND_COLOR,
 		zIndex:2
@@ -168,11 +168,11 @@ function buildCheckinPlaceView(view){
 	
 	//plus buttton to create a new comment
 	var checkinPlacePlusButton = Ti.UI.createButton({ 
-		backgroundColor:'red',
-		top:13,
+		backgroundImage:IMAGE_PATH+'checkin_place/add_icon.png',
+		bottom:4,
 		right:26,
-		width:20,
-		height:20,
+		width:12,
+		height:12,
 		button:'plus'
 	});
 	checkinPlaceCommentsButton.add(checkinPlacePlusButton);
@@ -191,16 +191,16 @@ function buildCheckinPlaceView(view){
 	});
 	checkinPlaceCommentsButton.add(checkinPlaceCommentsTitleLabel);
 	
-	//create a comment textField
-	checkinPlaceCommentsTextField = Ti.UI.createTextField({
-		width:266,
-		height:36,
-		top:44,
-		borderWidth:2,
-		borderRadius:2
+	//create a comment text area
+	checkinPlaceCommentsTextArea = Ti.UI.createTextArea({
+		backgroundColor:'white',
+		width:276,
+		height:137,
+		top:55,
+		font:{fontSize:15}
 	});
-	checkinPlaceCommentsBackgroundView.add(checkinPlaceCommentsTextField);
-	checkinPlaceCommentsTextField.hide();
+	checkinPlaceCommentsBackgroundView.add(checkinPlaceCommentsTextArea); 
+	checkinPlaceCommentsTextArea.hide();
 	
 	//comments tableView
 	checkinPlaceCommentsTableView = Titanium.UI.createTableView({
@@ -210,9 +210,16 @@ function buildCheckinPlaceView(view){
 		backgroundColor:'e7e7e7',
 		top:36,
 		bottom:0,
-		allowsSelection:false
+		allowsSelection:false,
+		height:393
 	});
 	checkinPlaceCommentsBackgroundView.add(checkinPlaceCommentsTableView);
+	
+	//remove empty rows
+	checkinPlaceCommentsTableView.footerView = Ti.UI.createView({
+	    height: 1,
+	    backgroundColor: 'transparent'
+	});
 	
 }
 
@@ -274,24 +281,24 @@ function handleCommentButtons(e){
 	var button = e.source.button;
 	
 	if(toggle && button != 'plus'){
-		checkinPlaceCommentsBackgroundView.animate({top:332, duration:500});
-		checkinPlaceCommentsTextField.blur();
-		checkinPlaceCommentsTextField.hide();
+		checkinPlaceCommentsBackgroundView.animate({top:332, duration:600});
+		checkinPlaceCommentsTextArea.blur();
+		checkinPlaceCommentsTextArea.hide();
 		checkinPlaceCommentsTableView.show();
 		e.source.toggle = false;
 	}else if(!toggle && button != 'plus'){
-		checkinPlaceCommentsBackgroundView.animate({top:96, duration:500});
-		checkinPlaceCommentsTextField.blur();
-		checkinPlaceCommentsTextField.hide();
+		checkinPlaceCommentsBackgroundView.animate({top:-13, duration:600});
+		checkinPlaceCommentsTextArea.blur();
+		checkinPlaceCommentsTextArea.hide();
 		checkinPlaceCommentsTableView.show();
 		e.source.toggle = true;
 	}else if(button == 'plus'){
-		checkinPlaceCommentsBackgroundView.animate({top:96, duration:300});
+		checkinPlaceCommentsBackgroundView.animate({top:-13, duration:200});
 		checkinPlaceCommentsButton.toggle = true;
 		
-		checkinPlaceCommentsTextField.focus();
+		checkinPlaceCommentsTextArea.focus();
 		checkinPlaceCommentsTableView.hide();
-		checkinPlaceCommentsTextField.show();
+		checkinPlaceCommentsTextArea.show();
 	}
 	
 }

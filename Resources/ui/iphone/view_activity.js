@@ -1,13 +1,33 @@
 
 var viewActivityCommentsBackgroundView = null;
-var viewActivityCommentsTextField = null;
+var viewActivityCommentsTextArea = null;
 var viewActivityCommentsTableView  = null;
 var viewActivityCommentsButton = null;
 
 function buildViewActivityView(aId){
+	var data = getActivity(aId); 
+	
 	//activity View
 	var viewActivityView = Ti.UI.createView({
 		backgroundColor:UI_BACKGROUND_COLOR
+	});
+	
+	//start point annotation
+	var viewActivityAnnotationStart = Titanium.Map.createAnnotation({
+		latitude:data.path[0].lat,
+		longitude:data.path[0].lon,
+		title:"Start",
+		animate:true,
+		image:IMAGE_PATH+'run_finish/pin.png'
+	});
+	
+	//end point annotation
+	var viewActivityAnnotationEnd = Titanium.Map.createAnnotation({
+		latitude:data.path[0].lat,
+		longitude:data.path[0].lon,
+		title:"End",
+		animate:true,
+		image:IMAGE_PATH+'run_finish/pin.png'
 	});
 	
 	//the map
@@ -20,6 +40,7 @@ function buildViewActivityView(aId){
 	    regionFit:true,
 	    userLocation:false,
 	    visible:true,
+	    annotations:[viewActivityAnnotationStart,viewActivityAnnotationEnd]
 	});
 	viewActivityView.add(viewActivityMap);
 	
@@ -214,15 +235,47 @@ function buildViewActivityView(aId){
 	var viewActivityTableView = Titanium.UI.createTableView({
 		minRowHeight:60,
 		width:320,
-		data:populateViewActivityTableView(aId),
+		data:populateViewActivityTableView(data),
 		backgroundColor:'transparent',
 		separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
 		top:240,
 		bottom:39,
-		allowsSelection:false
+		allowsSelection:false,
+		height:393
 	});
 	
 	viewActivityView.add(viewActivityTableView);
+	
+	//map region object
+	var viewActivityRegion = {
+		latitude: data.path[0].lat,
+		longitude: data.path[0].lon,
+		animate:true,
+		latitudeDelta:0.001,
+		longitudeDelta:0.001
+	};
+	
+	viewActivityMap.setLocation(viewActivityRegion);
+	
+	//push into object more data
+	data.path[0] = ({animate:1, 
+					 latitude:data.path[0].lat,
+					 latitudeDelta:0.001,
+					 longitude:data.path[0].lon,
+					 longitudeDelta:0.001
+					}); 
+	
+	//route object
+	var route = {
+	    name:"Your path",
+	    points:data.path,
+	    color:"f9bf30",
+	    borderColor:'black',
+	    width:8
+	};
+	
+	// add the route
+	viewActivityMap.addRoute(route);
 	
 	//background for comments
 	viewActivityCommentsBackgroundView = Ti.UI.createView({
@@ -248,11 +301,11 @@ function buildViewActivityView(aId){
 	
 	//plus buttton to create a new comment
 	var viewActivityPlusButton = Ti.UI.createButton({ 
-		backgroundColor:'red',
-		top:13,
+		backgroundImage:IMAGE_PATH+'checkin_place/add_icon.png',
+		bottom:4,
 		right:26,
-		width:20,
-		height:20,
+		width:12,
+		height:12,
 		button:'plus'
 	});
 	viewActivityCommentsButton.add(viewActivityPlusButton);
@@ -272,15 +325,15 @@ function buildViewActivityView(aId){
 	viewActivityCommentsButton.add(viewActivityCommentsTitleLabel);
 	
 	//create a comment textField
-	viewActivityCommentsTextField = Ti.UI.createTextField({
-		width:266,
-		height:36,
-		top:44,
-		borderWidth:2,
-		borderRadius:2
+	viewActivityCommentsTextArea = Ti.UI.createTextArea({
+		backgroundColor:'white',
+		width:276,
+		height:137,
+		top:55,
+		font:{fontSize:15}
 	});
-	viewActivityCommentsBackgroundView.add(viewActivityCommentsTextField);
-	viewActivityCommentsTextField.hide();
+	viewActivityCommentsBackgroundView.add(viewActivityCommentsTextArea);
+	viewActivityCommentsTextArea.hide();
 	
 	//comments tableView
 	viewActivityCommentsTableView = Titanium.UI.createTableView({
@@ -300,102 +353,100 @@ function buildViewActivityView(aId){
 	Ti.API.info('buildActivityView() created');
 }
 
-function populateViewActivityTableView(a){
+function populateViewActivityTableView(d){
 	//Get activity details
-	var data = getActivity(a); 
-	var tableRows = [];
 	
-	for(i=0; i<data.dogs.length; i++){	 
-		//row
-		var row = Ti.UI.createTableViewRow({ 
-			className:'runFinishRow',
-			height:65,
-			backgroundColor:UI_BACKGROUND_COLOR,
-			selectedBackgroundColor:'transparent'
-		});
-		//dog image 
-		var dogImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-		var dogImageBlob = dogImageFile.toBlob();
-		var dogImageBlobCropped = dogImageBlob.imageAsThumbnail(50,0,25);
-		
-		var rowDogImage = Titanium.UI.createImageView({ 
-			image:dogImageBlobCropped,
-			left:14,
-			borderRadius:25,
-			borderWidth:2,
-			borderColor:'#f9bf30'
-		});
-		row.add(rowDogImage);
-		
-		//dog name label
-		var rowDogNameLabel = Titanium.UI.createLabel({ 
-			text:data.dogs[i].name,
-			color:'black',
-			height:65,
-			textAlign:'center',
-			left:91,
-			opacity:0.7,
-			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
-		});
-		row.add(rowDogNameLabel);
-		
-		//bone image
-		var rowBoneImage = Ti.UI.createImageView({ 
-			image:IMAGE_PATH+'run_finish/bone_icon.png',
-			right:105
-		});
-		
-		row.add(rowBoneImage);
-		
-		//bone fill image
-		var boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'run_finish/bone_icon_fill.png');
-		var boneFillImageBlob = boneFillImage.toBlob();
-		var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:10});
-		var rowBoneFillImage = Ti.UI.createImageView({ 
-			image:boneFillImageBlobCropped,
-			right:105,
-			zIndex:2
-		}); 
-		
-		row.add(rowBoneFillImage);
-		
-		//mood label
-		var rowMoodLabel = Titanium.UI.createLabel({ 
-			text:'Happy',
-			color:'black',
-			height:15,
-			textAlign:'center',
-			right:120,
-			bottom:10,
-			opacity:0.3,
-			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
-		});
-		row.add(rowMoodLabel);
-		
-		//mood percent label
-		var rowMoodPercentLabel = Titanium.UI.createLabel({ 
-			text:'14%',
-			color:'999900',
-			height:15,
-			textAlign:'center',
-			right:97,
-			bottom:10,
-			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
-		});
-		row.add(rowMoodPercentLabel);
-		
-		//sepparator for rows
-		var rowSepparator = Titanium.UI.createView({ 
-			backgroundColor:'black',
-			opacity:0.1,
-			bottom:0,
-			height:1,
-			width:299
-		});
-		row.add(rowSepparator);
-		
-		tableRows.push(row);
-	}
+	var tableRows = [];
+	//row
+	var row = Ti.UI.createTableViewRow({ 
+		className:'runFinishRow',
+		height:65,
+		backgroundColor:UI_BACKGROUND_COLOR,
+		selectedBackgroundColor:'transparent'
+	});
+	//dog image 
+	var dogImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
+	var dogImageBlob = dogImageFile.toBlob();
+	var dogImageBlobCropped = dogImageBlob.imageAsThumbnail(50,0,25);
+	
+	var rowDogImage = Titanium.UI.createImageView({ 
+		image:dogImageBlobCropped,
+		left:14,
+		borderRadius:25,
+		borderWidth:2,
+		borderColor:'#f9bf30'
+	});
+	row.add(rowDogImage);
+	
+	//dog name label
+	var rowDogNameLabel = Titanium.UI.createLabel({ 
+		text:d.dogs[0].name,
+		color:'black',
+		height:65,
+		textAlign:'center',
+		left:91,
+		opacity:0.7,
+		font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
+	});
+	row.add(rowDogNameLabel);
+	
+	//bone image
+	var rowBoneImage = Ti.UI.createImageView({ 
+		image:IMAGE_PATH+'run_finish/bone_icon.png',
+		right:105
+	});
+	
+	row.add(rowBoneImage);
+	
+	//bone fill image
+	var boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'run_finish/bone_icon_fill.png');
+	var boneFillImageBlob = boneFillImage.toBlob();
+	var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:10});
+	var rowBoneFillImage = Ti.UI.createImageView({ 
+		image:boneFillImageBlobCropped,
+		right:105,
+		zIndex:2
+	}); 
+	
+	row.add(rowBoneFillImage);
+	
+	//mood label
+	var rowMoodLabel = Titanium.UI.createLabel({ 
+		text:'Happy',
+		color:'black',
+		height:15,
+		textAlign:'center',
+		right:120,
+		bottom:10,
+		opacity:0.3,
+		font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	row.add(rowMoodLabel);
+	
+	//mood percent label
+	var rowMoodPercentLabel = Titanium.UI.createLabel({ 
+		text:'14%',
+		color:'999900',
+		height:15,
+		textAlign:'center',
+		right:97,
+		bottom:10,
+		font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	row.add(rowMoodPercentLabel);
+	
+	//sepparator for rows
+	var rowSepparator = Titanium.UI.createView({ 
+		backgroundColor:'black',
+		opacity:0.1,
+		bottom:0,
+		height:1,
+		width:299
+	});
+	row.add(rowSepparator);
+	
+	tableRows.push(row);
+	
 	return tableRows;
 }
 
@@ -458,23 +509,23 @@ function handleViewActivityCommentButtons(e){
 	
 	if(toggle && button != 'plus'){
 		viewActivityCommentsBackgroundView.animate({top:332, duration:500});
-		viewActivityCommentsTextField.blur();
-		viewActivityCommentsTextField.hide();
+		viewActivityCommentsTextArea.blur();
+		viewActivityCommentsTextArea.hide();
 		viewActivityCommentsTableView.show();
 		e.source.toggle = false;
 	}else if(!toggle && button != 'plus'){
-		viewActivityCommentsBackgroundView.animate({top:96, duration:500});
-		viewActivityCommentsTextField.blur();
-		viewActivityCommentsTextField.hide();
+		viewActivityCommentsBackgroundView.animate({top:-13, duration:500});
+		viewActivityCommentsTextArea.blur();
+		viewActivityCommentsTextArea.hide();
 		viewActivityCommentsTableView.show();
 		e.source.toggle = true;
 	}else if(button == 'plus'){
-		viewActivityCommentsBackgroundView.animate({top:96, duration:300});
+		viewActivityCommentsBackgroundView.animate({top:-13, duration:300});
 		viewActivityCommentsButton.toggle = true;
 		
-		viewActivityCommentsTextField.focus();
+		viewActivityCommentsTextArea.focus();
 		viewActivityCommentsTableView.hide();
-		viewActivityCommentsTextField.show();
+		viewActivityCommentsTextArea.show();
 	}
 	
 }

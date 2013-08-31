@@ -13,14 +13,14 @@ var addDogPickerType = null;
 
 var addDogObject = {};
 
-// done button
-var addDogDoneButton = Ti.UI.createButton({
-	backgroundImage:IMAGE_PATH+'common/Done_button.png',
-    width:58,
-    height:29
+// save button
+var addDogSaveButton = Ti.UI.createButton({
+	title:'Save',
+    width:48,
+    height:33
 });
-navController.getWindow().setRightNavButton(addDogDoneButton);
-addDogDoneButton.addEventListener('click', handleAddDogDoneClick);
+navController.getWindow().setRightNavButton(addDogSaveButton);
+addDogSaveButton.addEventListener('click', handleAddDogDoneClick);
 
 //form field
 var addDogFormFieldImage = Ti.UI.createImageView({ 
@@ -328,7 +328,7 @@ function handlePickerDoneButton(e){
 	Ti.API.info('inside picker');
 	
 	addDogPicker.animate({bottom:-216, duration:500});
- 	navController.getWindow().setRightNavButton(addDogDoneButton);
+ 	navController.getWindow().setRightNavButton(addDogSaveButton);
 	
 	//change text to the chosen picker row
 	if(addDogPickerType === DOG_BREED_PICKER){
@@ -394,7 +394,7 @@ function handleCameraSelection(){
 }	
 
 function handleAddDogTextFieldFocus(){
-	navController.getWindow().setRightNavButton(addDogDoneButton);
+	navController.getWindow().setRightNavButton(addDogSaveButton);
 }
 
 //handle all textfields when changed
@@ -467,8 +467,19 @@ function doSaveDogOnline(dObj){
 			
 			navController.getWindow().setRightNavButton(rightBtn);
 			Ti.include('ui/iphone/dog_profile.js');
-			navController.getWindow().add(dogProfileView);
-			navController.getWindow().setTitle('dog profile');
+			
+			var dogProfileView = buildDogProfileView(dObj.dog_id);
+			
+			var dogProfileWindow = Ti.UI.createWindow({
+				backgroundColor:'white',
+				barImage:IMAGE_PATH+'common/bar.png',
+				barColor:UI_COLOR
+			});
+			
+			dogProfileWindow.add(dogProfileView);
+			
+			navController.getWindow().add(dogProfileWindow);
+			navController.getWindow().setTitle(dObj.dog_id);
 			
 		} else {
 			alert(getErrorMessage(jsonData.response));

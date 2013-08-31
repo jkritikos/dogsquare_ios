@@ -13,6 +13,16 @@ var addPlacePickerDoneButton = Ti.UI.createButton({
 });
 addPlacePickerDoneButton.addEventListener("click", handlePickerDoneButton);
 
+//save button
+var addPlaceSaveButton = Ti.UI.createButton({
+    title:'Save',
+    width:48,
+    height:33
+});
+
+addPlaceWindow.setRightNavButton(addPlaceSaveButton);
+addPlaceSaveButton.addEventListener('click', handleAddPlaceSaveButton);
+
 //back button
 var addPlaceBackButton = Ti.UI.createButton({
     backgroundImage: IMAGE_PATH+'common/back_button.png',
@@ -47,6 +57,7 @@ var addPlacePhotoAreaButton = Ti.UI.createButton({
 	width:320
 });
 addPlaceWindow.add(addPlacePhotoAreaButton);
+addPlacePhotoAreaButton.addEventListener('click', addPlaceShowPhotoOptions);
 
 //photo icon
 var addPlacePhotoIcon = Ti.UI.createImageView({ 
@@ -67,6 +78,21 @@ var addPlacePhotoLabel = Titanium.UI.createLabel({
 	font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
 addPlacePhotoAreaButton.add(addPlacePhotoLabel);
+
+//photo dialog
+var addPlacePhotoDialog = Titanium.UI.createOptionDialog({
+	options:['Take Photo', 'Choose From Library', 'Cancel'],
+	cancel:2
+});
+
+//photo dialog event listener
+addPlacePhotoDialog.addEventListener('click',function(e){
+	if(e.index == 0){
+		handlePlaceCameraSelection();
+	} else if(e.index == 1){
+		handlePlacePhotoSelection();
+	}
+});
 
 //fields background
 var addPlaceFieldsBackground = Ti.UI.createView({
@@ -174,7 +200,7 @@ function handleCategoryButton(){
 //handle picker done button
 function handlePickerDoneButton(){
 	addPlacePicker.animate({bottom:-216, duration:500});
-	addPlaceWindow.setRightNavButton(null);
+	addPlaceWindow.setRightNavButton(addPlaceSaveButton);
 	addPlaceCategoryLabel.text = addPlacePicker.getSelectedRow(0).title;
 	addPlaceCategoryLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 	addPlaceCategoryLabel.opacity = 1;
@@ -197,4 +223,70 @@ function handleTextFieldNameFocus(){
 //handle textfield blur
 function handleTextFieldNameBlur(){
 	addPlaceFieldsBackground.animate({bottom:0, duration:200});
+}
+
+function validatePlaceForm(){
+	if(isStringNullOrEmpty(addPlaceTxtFieldName.value)){
+		alert('NAME IS MISSING');
+		return false;
+	}else if(addPlaceCategoryLabel.text == 'Category'){
+		alert('CATEGORY IS MISSING');
+		return false;
+	}
+	
+	return true;
+}
+
+//handle photo button
+function addPlaceShowPhotoOptions(){
+	addPlacePhotoDialog.show();
+}
+
+//handle camera selection
+function handlePlaceCameraSelection(){
+	
+}	
+
+//handle photo selection
+function handlePlacePhotoSelection(){
+	Titanium.Media.openPhotoGallery({	
+		
+		success:function(event){
+			var image = event.media;
+			
+			//Jpeg compression module
+			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
+			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setWorstCompressQuality(0.40);
+			var resizedImage = jpgcompressor.scale(image, 1024, 768);
+			var compressedImage = jpgcompressor.compress(resizedImage);
+			
+			//addDogObject.photo = compressedImage;
+			
+			var uniquePlaceFilename = new Date().getTime() + '.jpg';
+			//addDogObject.photo_filename = uniqueDogFilename;
+			
+			// create new file name and remove old
+			
+			var filename = Titanium.Filesystem.applicationDataDirectory + uniquePlaceFilename;
+			var tmpImage = Titanium.Filesystem.getFile(filename);
+			tmpImage.write(compressedImage);
+			Ti.API.info('saved image to '+filename);
+		},
+		cancel:function(){
+	
+		},
+		error:function(error){
+		}
+	});
+}
+
+function handleAddPlaceSaveButton(){
+	if(validatePlaceForm()){
+		Ti.API.info('note form is valid');
+		alert('place has been served');
+	}else{
+		Ti.API.info('note form is not valid');
+	}
+
 }

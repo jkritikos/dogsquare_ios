@@ -1,7 +1,7 @@
 
 
 var runFinishCommentsBackgroundView = null;
-var runFinishCommentsTextField = null;
+var runfinishCommentsTextArea = null;
 var runFinishCommentsTableView = null;
 var runFinishCommentsButton = null;
 
@@ -275,11 +275,11 @@ function buildRunFinishView(obj){
 	
 	//plus buttton to create a new comment
 	var runFinishPlusButton = Ti.UI.createButton({ 
-		backgroundColor:'red',
-		top:13,
+		backgroundImage:IMAGE_PATH+'checkin_place/add_icon.png',
+		bottom:4,
 		right:26,
-		width:20,
-		height:20,
+		width:12,
+		height:12,
 		button:'plus'
 	});
 	runFinishCommentsButton.add(runFinishPlusButton);
@@ -298,16 +298,16 @@ function buildRunFinishView(obj){
 	});
 	runFinishCommentsButton.add(runFinishCommentsTitleLabel);
 	
-	//create a comment textField
-	runFinishCommentsTextField = Ti.UI.createTextField({
-		width:266,
-		height:36,
-		top:44,
-		borderWidth:2,
-		borderRadius:2
+	//create a comment text area
+	runfinishCommentsTextArea = Ti.UI.createTextArea({
+		backgroundColor:'white',
+		width:276,
+		height:137,
+		top:55,
+		font:{fontSize:15}
 	});
-	runFinishCommentsBackgroundView.add(runFinishCommentsTextField);
-	runFinishCommentsTextField.hide();
+	runFinishCommentsBackgroundView.add(runfinishCommentsTextArea);
+	runfinishCommentsTextArea.hide();
 	
 	//comments tableView
 	runFinishCommentsTableView = Titanium.UI.createTableView({
@@ -317,7 +317,8 @@ function buildRunFinishView(obj){
 		backgroundColor:'e7e7e7',
 		top:36,
 		bottom:0,
-		allowsSelection:false
+		allowsSelection:false,
+		height:393
 	});
 	runFinishCommentsBackgroundView.add(runFinishCommentsTableView);
 
@@ -481,24 +482,24 @@ function handleCommentButtons(e){
 	var button = e.source.button;
 	
 	if(toggle && button != 'plus'){
-		runFinishCommentsBackgroundView.animate({top:383, duration:500});
-		runFinishCommentsTextField.blur();
-		runFinishCommentsTextField.hide();
+		runFinishCommentsBackgroundView.animate({top:383, duration:600});
+		runfinishCommentsTextArea.blur();
+		runfinishCommentsTextArea.hide();
 		runFinishCommentsTableView.show();
 		e.source.toggle = false;
 	}else if(!toggle && button != 'plus'){
-		runFinishCommentsBackgroundView.animate({top:96, duration:500});
-		runFinishCommentsTextField.blur();
-		runFinishCommentsTextField.hide();
+		runFinishCommentsBackgroundView.animate({top:-13, duration:600});
+		runfinishCommentsTextArea.blur();
+		runfinishCommentsTextArea.hide();
 		runFinishCommentsTableView.show();
 		e.source.toggle = true;
 	}else if(button == 'plus'){
-		runFinishCommentsBackgroundView.animate({top:96, duration:300});
+		runFinishCommentsBackgroundView.animate({top:-13, duration:200});
 		runFinishCommentsButton.toggle = true;
 		
-		runFinishCommentsTextField.focus();
+		runfinishCommentsTextArea.focus();
 		runFinishCommentsTableView.hide();
-		runFinishCommentsTextField.show();
+		runfinishCommentsTextArea.show();
 	}
 	
 }
