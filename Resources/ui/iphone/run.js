@@ -400,8 +400,6 @@ function calculateDistance(newCoordinates){
 		var lon1 = newCoordinates.longitude;
 		var lat2 = runningPathCoordinates[runningPathCoordinates.length-1].latitude;
 		var lon2 = runningPathCoordinates[runningPathCoordinates.length-1].longitude;
-		
-		rad = function(x) {return x*Math.PI/180;}
 			
 		var R     = 6371.0090667;                          
 		var dLat  = rad( lat2 - lat1 );

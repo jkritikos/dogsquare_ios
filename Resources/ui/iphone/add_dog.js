@@ -158,7 +158,7 @@ var addDogFieldWeight = Ti.UI.createTextField({
 addDogFieldWeight.blur();
 addDogFieldWeight.addEventListener('focus', handleAddDogTextFieldFocus);
 addDogFieldWeight.addEventListener('change', handleAddDogTextFieldChange);
-addDogFieldWeight.addEventListener('blur', handleAddDogTextFieldBlur)
+addDogFieldWeight.addEventListener('blur', handleAddDogTextFieldBlur);
 
 //Event listener for the weight textfield
 addDogFieldWeight.addEventListener('return', function() {

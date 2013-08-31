@@ -288,7 +288,7 @@ function getActivities(){
 			end_time:rows.field(3),
 			duration:duration,
 			dogs:getActivityDetails(rows.field(0))
-		}
+		};
 		
 		activities.push(obj);
 		rows.next();
@@ -320,7 +320,7 @@ function getActivity(id){
 			duration:duration,
 			dogs:getActivityDetails(rows.field(0)),
 			path:getActivityCoordinates(rows.field(0))
-		}
+		};
 		
 		rows.next();
 	}
@@ -349,7 +349,7 @@ function getActivityDetails(id){
 			dog_id:rows.field(0),
 			name:rows.field(1),
 			photo:rows.field(2)
-		}
+		};
 		
 		info.push(obj);
 		rows.next();

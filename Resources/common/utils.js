@@ -87,6 +87,10 @@ function createLoadingView(){
 	return loadingView;
 }
 
+function rad(x){
+	return x*Math.PI/180;
+}
+
 function relativeTime(eventTime){
 	var nowTime = new Date().getTime();
 	var t = '';
