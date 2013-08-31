@@ -284,7 +284,7 @@ function handleEndRunButton(){
 		clearInterval(cronometerInterval);
 		
 		//Update our activity object
-		endActivity(runObject.activity_id);
+		endActivity(runObject);
 		
 		//Prepare run object for the next window
 		runObject.coordinates = runningPathCoordinates;

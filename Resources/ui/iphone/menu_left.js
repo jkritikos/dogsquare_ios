@@ -276,10 +276,10 @@ function createLeftMenuRow(menuItem){
 		icon = IMAGE_PATH+'menu_left/Settings_icon.png';
 		label = 'Settings';
 	} else if(menuItem == MENU_BADGES){
-		icon = IMAGE_PATH+'menu_left/Settings_icon.png';
+		icon = IMAGE_PATH+'menu_left/badges_menu.png';
 		label = 'Badges';
 	} else if(menuItem == MENU_NOTIFICATIONS){
-		icon = IMAGE_PATH+'menu_left/Settings_icon.png';
+		icon = IMAGE_PATH+'menu_left/notifications_menu.png';
 		label = 'Notifications';
 	}
 	
