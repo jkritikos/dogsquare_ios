@@ -22,7 +22,7 @@ var leftmenuSearchView = Ti.UI.createView({
 
 var leftmenuSearchContainer = Titanium.UI.createImageView({
 	image:IMAGE_PATH+'menu_left/search_field.png',
-	left:1
+	left:0
 });
 
 var leftmenuSearchIcon = Titanium.UI.createImageView({
