@@ -79,7 +79,7 @@ var LANGUAGE_ENGLISH = 1;
 //Server constants
 var NETWORK_TIMEOUT = 20000;
 var NETWORK_RESPONSE_OK = 1;
-var ERROR_MESSAGE_EMAIL_TAKEN = -1;
+var NETWORK_RESPONSE_ERROR = -1;
 
 //Updates the global user object - only keys in obj are updated
 function saveUserObject(obj){

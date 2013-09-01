@@ -444,6 +444,12 @@ function handleRegisterTextFieldBlur(e){
 function doSignup(uObj){
 	Ti.API.info('doSignup() called with userObject='+uObj); 	
 	
+	//progress view
+	var progressView = new ProgressView({window:registerWindow});
+	progressView.show({
+		text:"Loading..."
+	});
+	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
@@ -457,11 +463,31 @@ function doSignup(uObj){
 		
 		//Update user object and close the signup window
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			//Show success
+			progressView.change({
+		        success:true
+		    });
+			
+			//Save data & update UI
 			saveUserObject(uObj);
 			updateLeftMenu(userObject);
+			
+			//Hide message and close register window
+			progressView.hide();
 			closeRegisterWindow();
 		} else {
-			alert(getErrorMessage(jsonData.response));
+			
+			//Show the error message we got back from the server
+			progressView.change({
+		        error:true,
+		        text:getErrorMessage(jsonData.data.response)
+		    });
+			//and hide it after a while		    
+		    setTimeout(function() {
+			    progressView.hide();
+			}, ERROR_MSG_REMOVE_TIMEOUT);
+		    
 		}
 	};
 	

@@ -21,7 +21,7 @@ var userObject = {
 	userId:1,
 	dogId:1
 };
-
+Ti.include("modules/progress.view.js");
 Ti.include('common/dao.js');
 
 //DEBUG STUFF
