@@ -84,6 +84,13 @@ var NETWORK_RESPONSE_ERROR = -1;
 //Updates the global user object - only keys in obj are updated
 function saveUserObject(obj){
 	//image
+	if(obj.image_path){
+		userObject.image_path = obj.image_path;	
+	}
+	
+	if(obj.thumb_path){
+		userObject.thumb_path = obj.thumb_path;	
+	}
 	
 	if(obj.name){
 		userObject.name = obj.name;	
@@ -291,7 +298,7 @@ function saveActivity(dogs){
 function endActivity(obj){
 	var now = new Date().getTime();
 	
-	Ti.API.info('updateActivity() called for activity id '+id);
+	Ti.API.info('updateActivity() called for activity id '+obj.activity_id);
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
 	db.execute('update activities set end_time=?, temperature=?, pace=?,distance=? where id=?',now,obj.temperature,obj.pace,obj.distance,obj.activity_id);

@@ -146,20 +146,18 @@ leftTableView.addEventListener("click", function(e){
 });
 
 //Updates the menu with user specific properties
-function updateLeftMenu(userObject){
-	Ti.API.info('updating left menu for user '+userObject.name +' with '+userObject.followers+' followers');
+function updateLeftMenu(obj){
+	Ti.API.info('updating left menu for user '+obj.name +' with '+obj.followers+' followers');
 	
-	var profileImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-	var menuImageViewBlob = profileImageFile.toBlob();
-	var menuImageBlobCropped = menuImageViewBlob.imageAsThumbnail(60,0,30);
+	var profileImageFile = Titanium.Filesystem.getFile(obj.thumb_path);
+	var menuImageBlobCropped = profileImageFile.toBlob();
 	
 	//photo
 	leftTableView.data[0].rows[0].children[0].image = menuImageBlobCropped;
-	
 	//name
-	leftTableView.data[0].rows[0].children[2].text = userObject.name;
+	leftTableView.data[0].rows[0].children[2].text = obj.name;
 	//followers
-	leftTableView.data[0].rows[0].children[1].text = userObject.followers +' followers';
+	leftTableView.data[0].rows[0].children[1].text = obj.followers +' followers';
 }
 
 //Creates and populates the left menu
@@ -182,20 +180,22 @@ function createLeftMenu(){
 		menuItem:MENU_PROFILE
 	});
 	
-	//Create the rounded thumbnail image
-	var profileImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-	var menuImageViewBlob = profileImageFile.toBlob();
-	var menuImageBlobCropped = menuImageViewBlob.imageAsThumbnail(60,0,30);
-	
 	//Profile image
 	var menuProfileImage = Titanium.UI.createImageView({
-		image:menuImageBlobCropped,
 		left:11,
 		top:11,
 		borderRadius:30,
 		borderWidth:2,
 		borderColor:'#f9bf30'
 	});
+	
+	topRow.add(menuProfileImage);
+	
+	//Load the rounded thumbnail image
+	if(userObject.thumb_path != null){
+		var profileImageFile = Titanium.Filesystem.getFile(userObject.thumb_path);
+		menuProfileImage.image = profileImageFile.toBlob();
+	}
 	
 	var usernameLabel = Titanium.UI.createLabel({
 		text:userObject.name,
@@ -219,7 +219,6 @@ function createLeftMenu(){
 		width:322
 	});
 	
-	topRow.add(menuProfileImage);
 	topRow.add(followersLabel);
 	topRow.add(usernameLabel);
 	topRow.add(rowSeparator);

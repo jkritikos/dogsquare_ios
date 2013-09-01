@@ -401,6 +401,7 @@ function validateSignupForm(){
 	signupUserObject.email = registerFieldEmail.value;
 	signupUserObject.password = registerFieldPassword.value;
 	signupUserObject.age = registerFieldAge.value;
+	signupUserObject.followers = 0;
 	//signupUserObject.gender =;
 	//signupUserObject.facebook_id = d;
 	
@@ -471,7 +472,7 @@ function doSignup(uObj){
 			
 			//Save data & update UI
 			saveUserObject(uObj);
-			updateLeftMenu(userObject);
+			updateLeftMenu(uObj);
 			
 			//Hide message and close register window
 			progressView.hide();
@@ -495,6 +496,7 @@ function doSignup(uObj){
 	xhr.open('POST',API+'signup');
 	xhr.send({
 		photo:uObj.image,
+		thumb:uObj.thumb,
 		name:uObj.name,
 		email:uObj.email,
 		password:uObj.password,
@@ -522,24 +524,32 @@ function handlePhotoSelection(){
 			
 			//Reduce image size first
 			Ti.API.info('Selected image with h:'+image.height+' w:'+image.width);
-			//var resizedImage = image.imageAsResized((image.width/4), (image.height/4));
 			
 			//Jpeg compression module
 			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
 			jpgcompressor.setCompressSize(200000);
 			jpgcompressor.setWorstCompressQuality(0.40);
+			
+			//Make image smaller
 			var resizedImage = jpgcompressor.scale(image, 1024, 768);
 			var compressedImage = jpgcompressor.compress(resizedImage);
 			
+			//Create thumbnail
+			var imageThumbnail = resizedImage.imageAsThumbnail(60,0,30);
+			
 			Ti.API.info('Resized image with h:'+resizedImage.height+' w:'+resizedImage.width);
+			Ti.API.info('Thumbnailed image with h:'+imageThumbnail.height+' w:'+imageThumbnail.width);
 			
 			signupUserObject.image = compressedImage;
+			signupUserObject.thumb = imageThumbnail;
+			signupUserObject.image_path = Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg";
+			signupUserObject.thumb_path = Titanium.Filesystem.applicationDataDirectory + "pic_profile_thumb.jpg";
 			
-			// create new file name and remove old
-			var filename = Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg";
-			var tmpImage = Titanium.Filesystem.getFile(filename);
+			//Save images on the filesystem
+			var tmpImage = Titanium.Filesystem.getFile(signupUserObject.image_path);
 			tmpImage.write(compressedImage);
-			Ti.API.info('saved image to '+filename);
+			tmpImage = Titanium.Filesystem.getFile(signupUserObject.thumb_path);
+			tmpImage.write(imageThumbnail);
 		},
 		cancel:function(){
 	

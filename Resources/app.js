@@ -11,7 +11,8 @@ var openWindows = [];
 var userObject = {
 	name:'Jason',
 	email:'',
-	//image
+	image_path:null,
+	thumb_path:null,
 	age:0,
 	facebook_id:null,
 	gender:null,
