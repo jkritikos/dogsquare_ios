@@ -531,7 +531,7 @@ function handlePhotoSelection(){
 			jpgcompressor.setWorstCompressQuality(0.40);
 			
 			//Make image smaller
-			var resizedImage = jpgcompressor.scale(image, 1024, 768);
+			var resizedImage = jpgcompressor.scale(image, 2048, 1536);
 			var compressedImage = jpgcompressor.compress(resizedImage);
 			
 			//Create thumbnail
