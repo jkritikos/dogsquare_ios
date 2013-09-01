@@ -412,11 +412,14 @@ function handleFindFriendsTabs(e){
 function getOnlineUser(n){
 	Ti.API.info('getOnlineUser() called for user='+ n);
 	
+	//progress view
+	var progressView = new ProgressView({window:viewFindFriends});
+	progressView.show({
+		text:"Loading..."
+	});
+	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
-	
-	var loading = createLoadingView();
-	viewFindFriends.add(loading);
 	
 	xhr.onerror = function(e){
 	
@@ -426,11 +429,29 @@ function getOnlineUser(n){
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			//Show success
+			progressView.change({
+		        success:true
+		    });
+			
 			var userObj = jsonData;
 			populateFindFriendsDogsquareTableView(userObj.data.users);
-			viewFindFriends.remove(loading);
+			
+			//Hide message and close register window
+			progressView.hide();
+			
 		}else{
-			alert(getErrorMessage(jsonData.response));
+			
+			//Show the error message we got back from the server
+			progressView.change({
+		        error:true,
+		        text:getErrorMessage(jsonData.data.response)
+		    });
+			//and hide it after a while		    
+		    setTimeout(function() {
+			    progressView.hide();
+			}, ERROR_MSG_REMOVE_TIMEOUT);
 		}
 		
 	};

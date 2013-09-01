@@ -2,6 +2,9 @@ var viewProfile = Ti.UI.createView({
 	backgroundColor:UI_BACKGROUND_COLOR
 });
 
+var TAB_FOLLOWERS = 1;
+var TAB_FOLLOWING = 2;
+
 var profileImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
 
 var profileImageView = Titanium.UI.createImageView({
@@ -14,62 +17,84 @@ var profileImageView = Titanium.UI.createImageView({
 var profileOpacityBar = Titanium.UI.createView({ 
 	backgroundColor:'white',
 	width:'100%',
-	bottom:12,
+	bottom:25,
 	height:36,
 	opacity:0.8
 });
+
+var profileTransparentFollowerView = Titanium.UI.createView({ 
+	backgroundColor:'transparent',
+	width:159,
+	left:0,
+	height:36,
+	opacity:0.8,
+	tab:TAB_FOLLOWERS
+});
+profileOpacityBar.add(profileTransparentFollowerView);
+profileTransparentFollowerView.addEventListener('click', handleFollowersFolowingTab);
+
+var profileTransparentFollowingView = Titanium.UI.createView({ 
+	backgroundColor:'transparent',
+	width:160,
+	right:0,
+	height:36,
+	opacity:0.8,
+	tab:TAB_FOLLOWING
+});
+profileOpacityBar.add(profileTransparentFollowingView);
+profileTransparentFollowingView.addEventListener('click', handleFollowersFolowingTab);
 
 //followers label on the opacity bar
 var profileOpacityBarLabel1 = Ti.UI.createLabel({
 	text:'followers',
 	color:'black',
-	textAlign:'left',
-	width:55,
+	textAlign:'center',
+	width:'auto',
 	height:15,
 	bottom:3,
-	left:55,
-	font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+	font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'},
+	tab:TAB_FOLLOWERS
 });
-profileOpacityBar.add(profileOpacityBarLabel1);
+profileTransparentFollowerView.add(profileOpacityBarLabel1);
 
 //number of followers label on the opacity bar
 var profileOpacityBarNumberLabel1 = Ti.UI.createLabel({
 	text:userObject.followers,
 	color:'black',
 	textAlign:'center',
-	width:50,
+	width:'auto',
 	height:22,
 	top:1,
-	left:53,
-	font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
+	font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'},
+	tab:TAB_FOLLOWERS
 });
-profileOpacityBar.add(profileOpacityBarNumberLabel1);
+profileTransparentFollowerView.add(profileOpacityBarNumberLabel1);
 
 //following label on the opacity bar
 var profileOpacityBarLabel2 = Ti.UI.createLabel({
 	text:'following',
 	color:'black',
 	textAlign:'left',
-	width:55,
+	width:'auto',
 	height:15,
 	bottom:3,
-	right:47,
-	font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+	font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'},
+	tab:TAB_FOLLOWING
 });
-profileOpacityBar.add(profileOpacityBarLabel2);
+profileTransparentFollowingView.add(profileOpacityBarLabel2);
 
 //number of following label on the opacity bar
 var profileOpacityBarNumberLabel2 = Ti.UI.createLabel({
 	text:userObject.following,
 	color:'black',
 	textAlign:'center',
-	width:50,
+	width:'auto',
 	height:22,
 	top:1,
-	right:55,
-	font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
+	font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'},
+	tab:TAB_FOLLOWING
 });
-profileOpacityBar.add(profileOpacityBarNumberLabel2);
+profileTransparentFollowingView.add(profileOpacityBarNumberLabel2);
 
 //opacity bar sepparator
 var profileOpacityBarSepparator = Titanium.UI.createView({ 
@@ -373,4 +398,40 @@ function handleProfileActivityRows(e){
 	
 	openWindows.push(viewActivityWindow);
 	navController.open(viewActivityWindow);
+}
+
+function handleFollowersFolowingTab(e){
+	Ti.include('ui/iphone/list_users.js');
+	
+	var listUsersView = buildListUsersView();
+	
+	
+	var listUsersWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR
+	});
+	
+	if(e.source.tab == TAB_FOLLOWERS){
+		listUsersWindow.setTitle('followers');
+	}else if(e.source.tab == TAB_FOLLOWING){
+		listUsersWindow.setTitle('following');
+	}
+	
+	//back button & event listener
+	var listUsersBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	listUsersWindow.setLeftNavButton(listUsersBackButton);
+	listUsersBackButton.addEventListener("click", function() {
+	    navController.close(listUsersWindow);
+	});
+	
+	listUsersWindow.add(listUsersView);
+	
+	openWindows.push(listUsersWindow);
+	navController.open(listUsersWindow);
 }
