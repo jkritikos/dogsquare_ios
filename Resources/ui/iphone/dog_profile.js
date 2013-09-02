@@ -1,4 +1,6 @@
 	
+var dogProfileHeartImage = null;	
+	
 function buildDogProfileView(dId){
 	var data = getDogById(dId);
 	navController.getWindow().setTitle(data[0].name);
@@ -64,8 +66,6 @@ function buildDogProfileView(dId){
 	dogProfilePhotoImage.add(dogProfileBreedTypeLabel);
 	
 	dogProfileView.add(dogProfilePhotoImage);
-	
-	
 	
 	//opacity bar for info
 	var dogProfileOpacityInfoBar = Titanium.UI.createView({ 
@@ -155,8 +155,9 @@ function buildDogProfileView(dId){
 	var dogProfileWeightNumberLabel = Titanium.UI.createLabel({
 		text:data[0].weight,
 		height:21,
-		textAlign:'center',
-		left:181,
+		textAlign:'right',
+		width:30,
+		left:169,
 		top:10,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -243,12 +244,15 @@ function buildDogProfileView(dId){
 	});
 	dogProfileView.add(dogProfileBoneImage);
 	
-	var dogProfileHeartImage = Ti.UI.createImageView({ 
-		image:IMAGE_PATH+'checkin_place/best_icon_default.png',
-		bottom:35,
-		right:89
+	dogProfileHeartImage = Ti.UI.createImageView({ 
+		image:IMAGE_PATH+'common/best_icon_default.png',
+		bottom:25,
+		right:79,
+		dogId:dId,
+		toggle:false
 	});
 	dogProfileView.add(dogProfileHeartImage);
+	dogProfileHeartImage.addEventListener('click', handleDogLikeButton);
 	
 	var dogProfileLikeMeLabel = Titanium.UI.createLabel({ 
 		text:'Like me?',
@@ -262,6 +266,79 @@ function buildDogProfileView(dId){
 	});
 	dogProfileView.add(dogProfileLikeMeLabel);
 	
-	
 	return dogProfileView;
+}
+
+function handleDogLikeButton(e){
+	var dogId = e.source.dogId;
+	var toggle = e.source.toggle;
+	
+	if(toggle){
+		unlikeDog(dogId);
+		e.source.toggle = false;
+	}else{
+		likeDog(dogId);
+		e.source.toggle = true;
+	}
+}
+
+
+//get info if contact has the app or not or has been followed by the user
+function likeDog(dId){
+	Ti.API.info('likeDog() with id: ' + dId);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			dogProfileHeartImage.image = IMAGE_PATH+'common/best_icon_selected_red.png';
+			
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.setRequestHeader("Content-Type", "multipart/form-data");
+	xhr.open('POST',API+'likeDog');
+	xhr.send({
+		user_id:userObject.userId,
+		dog_id:dId
+	});
+}
+
+//get info if contact has the app or not or has been followed by the user
+function unlikeDog(dId){
+	Ti.API.info('unlikeDog() with id: ' + dId);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			dogProfileHeartImage.image = IMAGE_PATH+'common/best_icon_default.png';
+			
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.setRequestHeader("Content-Type", "multipart/form-data");
+	xhr.open('POST',API+'unlikeDog');
+	xhr.send({
+		user_id:userObject.userId,
+		dog_id:dId
+	});
 }
