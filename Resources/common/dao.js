@@ -83,6 +83,7 @@ var NETWORK_RESPONSE_ERROR = -1;
 
 //Updates the global user object - only keys in obj are updated
 function saveUserObject(obj){
+	Ti.API.info('saveUserObject '+JSON.stringify(obj));
 	//image
 	if(obj.image_path){
 		userObject.image_path = obj.image_path;	
@@ -112,11 +113,15 @@ function saveUserObject(obj){
 		userObject.gender = obj.gender;
 	}
 	
-	if(obj.followers){
+	if(obj.followers != null){
 		userObject.followers = obj.followers;
+	}
+	
+	if(obj.following != null){
+		userObject.following = obj.following;
 	} 
 	
-	if(obj.inbox){
+	if(obj.inbox != null){
 		userObject.inbox = obj.inbox;
 	}
 	
@@ -124,10 +129,17 @@ function saveUserObject(obj){
 		userObject.userId = obj.userId;
 	}
 	
+	Ti.App.Properties.setObject('user', userObject);
 }
 
+//Returns the persisted user object
 function getUserObject(){
+	var obj = {};
+	if(Ti.App.Properties.getObject('user') != null){
+		obj = Ti.App.Properties.getObject('user');
+	}
 	
+	return obj; 
 }
 
 function hello(){

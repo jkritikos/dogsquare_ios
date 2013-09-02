@@ -8,6 +8,7 @@ Ti.Geolocation.distanceFilter = 10;
 var openWindows = [];
 
 //TMP DEBUG
+/*
 var userObject = {
 	name:'Jason',
 	email:'',
@@ -21,9 +22,15 @@ var userObject = {
 	inbox:0,
 	userId:1,
 	dogId:1
-};
+};*/
+
+
+
+
 Ti.include("modules/progress.view.js");
 Ti.include('common/dao.js');
+
+var userObject = getUserObject();
 
 //DEBUG STUFF
 createDB();

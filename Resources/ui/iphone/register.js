@@ -402,6 +402,7 @@ function validateSignupForm(){
 	signupUserObject.password = registerFieldPassword.value;
 	signupUserObject.age = registerFieldAge.value;
 	signupUserObject.followers = 0;
+	signupUserObject.following = 0;
 	//signupUserObject.gender =;
 	//signupUserObject.facebook_id = d;
 	
@@ -443,7 +444,7 @@ function handleRegisterTextFieldBlur(e){
 
 //Server call for signup
 function doSignup(uObj){
-	Ti.API.info('doSignup() called with userObject='+uObj); 	
+	Ti.API.info('doSignup() called with userObject='+ JSON.stringify(uObj)); 	
 	
 	//progress view
 	var progressView = new ProgressView({window:registerWindow});

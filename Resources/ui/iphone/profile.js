@@ -84,6 +84,7 @@ var profileOpacityBarLabel2 = Ti.UI.createLabel({
 profileTransparentFollowingView.add(profileOpacityBarLabel2);
 
 //number of following label on the opacity bar
+Ti.API.info('Creating profile view - using object = '+JSON.stringify(userObject));
 var profileOpacityBarNumberLabel2 = Ti.UI.createLabel({
 	text:userObject.following,
 	color:'black',

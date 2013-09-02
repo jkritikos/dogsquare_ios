@@ -147,7 +147,7 @@ leftTableView.addEventListener("click", function(e){
 
 //Updates the menu with user specific properties
 function updateLeftMenu(obj){
-	Ti.API.info('updating left menu for user '+obj.name +' with '+obj.followers+' followers');
+	Ti.API.info('updating left menu for user '+obj.name +' with '+obj.followers+' followers. Thumb path is '+obj.thumb_path);
 	
 	var profileImageFile = Titanium.Filesystem.getFile(obj.thumb_path);
 	var menuImageBlobCropped = profileImageFile.toBlob();
@@ -162,6 +162,7 @@ function updateLeftMenu(obj){
 
 //Creates and populates the left menu
 function createLeftMenu(){
+	Ti.API.info('createLeftMenu with userObject '+JSON.stringify(userObject));
 	var leftTableView = Ti.UI.createTableView({
 		backgroundColor:UI_MENU_BACKGROUND_COLOR,
 		separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
@@ -192,7 +193,7 @@ function createLeftMenu(){
 	topRow.add(menuProfileImage);
 	
 	//Load the rounded thumbnail image
-	if(userObject.thumb_path != null){
+	if(userObject.thumb_path){
 		var profileImageFile = Titanium.Filesystem.getFile(userObject.thumb_path);
 		menuProfileImage.image = profileImageFile.toBlob();
 	}
@@ -251,7 +252,7 @@ function createLeftMenuRow(menuItem){
 		
 	var icon, label;
 	if(menuItem == MENU_FEED){
-		icon = IMAGE_PATH+'menu_left/Home_icon.png';
+		icon = IMAGE_PATH+'menu_left/newsFeed_menu.png';
 		label = 'Feed';
 	} else if(menuItem == MENU_PROFILE){
 		icon = IMAGE_PATH+'menu_left/Home_icon.png';
