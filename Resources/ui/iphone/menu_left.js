@@ -138,6 +138,13 @@ leftTableView.addEventListener("click", function(e){
 			navController.getWindow().add(viewSettings);
 			navController.getWindow().setTitle('Settings');
 			break;
+			
+		case MENU_NOTIFICATIONS:
+			Ti.include('ui/iphone/notifications.js');
+			buildNotificationsView();
+			navController.getWindow().add(viewNotifications);
+			navController.getWindow().setTitle('Notifications');
+			break;
 	}
 	
 	if(window.isAnyViewOpen()){

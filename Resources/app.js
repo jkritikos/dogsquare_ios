@@ -27,7 +27,7 @@ var userObject = {
 
 
 
-Ti.include("modules/progress.view.js");
+
 Ti.include('common/dao.js');
 
 var userObject = getUserObject();
@@ -40,6 +40,8 @@ Ti.include('common/translator.js');
 
 //Left & center windows
 Ti.include('ui/iphone/navigation.js');
+//Progress view component
+Ti.include("modules/progress.view.js");
 
 window.add(loginWindow);
 window.open(); //init the app

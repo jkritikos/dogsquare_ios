@@ -1,7 +1,10 @@
 var ProgressView = function(dictionary) {
-    var isAndroid = (Ti.Platform.osname != "android") ? false : true;
-
-	var _window  = (dictionary) ? ((dictionary.window) ? dictionary.window : Ti.UI.currentWindow) : Ti.UI.currentWindow;
+    //var isAndroid = (Ti.Platform.osname != "android") ? false : true;
+	var isAndroid = false;
+	
+	var _window  = (dictionary) ? ((dictionary.window) ? dictionary.window : navController.getWindow()) : navController.getWindow();
+    
+    Ti.API.info('ProgressView instance for window '+_window);
     
     var _activityIndicator;
     var _viewFullBackgroundActivityIndicator;

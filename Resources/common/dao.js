@@ -1,4 +1,4 @@
-var API = '';
+var SERVER = '';
 
 var PRODUCTION_MODE = false;
 
@@ -8,14 +8,21 @@ if(!PRODUCTION_MODE){
 	//UrbanAirship.master_secret='qK_-SzSeQP6NA_UQ8g-ENw';
 	//UrbanAirship.baseurl = 'https://go.urbanairship.com';
 	//API = 'http://dev.mindthebuzz.com/api/';
-	API = 'http://dogsquare/api/';
+	SERVER = 'http://dogsquare/';
+	
 } else {
 	//UrbanAirship.key='W1NHMmPjR56aHc3u6nu6iA';
 	//UrbanAirship.secret ='KBiUUr_mQwKYNmTXX5oVpQ';
 	//UrbanAirship.master_secret='0louzaRKRLmStWwb0qEHjw';
 	//UrbanAirship.baseurl = 'https://go.urbanairship.com';
-	API = 'http://dogsquare.veladia.com/api/';
+	SERVER = 'http://dogsquare.veladia.com/';
 }
+
+//Server properties
+var API = SERVER + 'api/';
+var REMOTE_USER_IMAGES = SERVER+'uploaded_files/users/';
+var REMOTE_DOG_IMAGES = SERVER+'uploaded_files/dogs/';
+var REMOTE_PLACE_IMAGES = SERVER+'uploaded_files/places/';
 
 //Facebook connectivity (Titanium 3.1 and up)
 var FB_APP_ID = '509577672446427';
