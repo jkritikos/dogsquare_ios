@@ -3,32 +3,32 @@ var viewNotifications = null;
 var notificationsTableView = null;
 
 function buildNotificationsView(){
-	//notifications view
-	viewNotifications = Ti.UI.createView({
-		backgroundColor:UI_BACKGROUND_COLOR
-	});
-	
-	//notifications table view
-	notificationsTableView = Titanium.UI.createTableView({
-		minRowHeight:71,
-		width:293,
-		backgroundColor:UI_BACKGROUND_COLOR,
-		top:13,
-		bottom:0
-	});
-	viewNotifications.add(notificationsTableView);
-	
-	//notifications table view footer
-	notificationsTableView.footerView = Ti.UI.createView({
-	    height: 1,
-	    backgroundColor:'transparent'
-	});
+	if(viewNotifications == null){
+		//notifications view
+		viewNotifications = Ti.UI.createView({
+			backgroundColor:UI_BACKGROUND_COLOR
+		});
+		
+		//notifications table view
+		notificationsTableView = Titanium.UI.createTableView({
+			minRowHeight:71,
+			width:293,
+			backgroundColor:UI_BACKGROUND_COLOR,
+			top:13,
+			bottom:0
+		});
+		viewNotifications.add(notificationsTableView);
+		
+		//notifications table view footer
+		notificationsTableView.footerView = Ti.UI.createView({
+		    height: 1,
+		    backgroundColor:'transparent'
+		});
+	}
 	
 	//Get unread notifications from the server and populate the table
 	doGetNotifications();
 }
-
-
 
 function doGetNotifications(){
 	Ti.API.info('doGetNotifications() called');
