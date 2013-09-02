@@ -193,26 +193,6 @@ function buildRunFinishView(obj){
 	});
 	runFinishTitleBar.add(runFinishTitleLabel);
 	
-	//Activity bar
-	var runFinishActivityBar = Ti.UI.createImageView({ 
-		image:IMAGE_PATH+'profile/Activitybar.png',
-		bottom:0,
-		zIndex:2
-	});
-	viewRunSummary.add(runFinishActivityBar);
-
-	//comments label
-	var runFinishCommentsLabel = Titanium.UI.createLabel({ 
-		text:'Comments',
-		color:'white',
-		top:13,
-		height:20,
-		textAlign:'center',
-		left:18,
-		font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
-	});
-	runFinishActivityBar.add(runFinishCommentsLabel);
-	
 	//dogs table view
 	var runFinishTableView = Titanium.UI.createTableView({
 		minRowHeight:60,

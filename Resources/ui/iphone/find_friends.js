@@ -7,6 +7,9 @@ var FACEBOOK_TAB = 1;
 var CONTACTS_TAB = 2;
 var DOGSQUARE_TAB = 3;
 
+var TYPE_ROW = 1;
+var TYPE_FOLLOW_BUTTON = 2;
+
 //temporary variable to store data from server
 var localDataForContacts = null;
 
@@ -176,10 +179,10 @@ var findFriendsTableView = Titanium.UI.createTableView({
 	width:290,
 	backgroundColor:'transparent',
 	top:133,
-	bottom:0,
-	allowsSelection:false
+	bottom:0
 });
 viewFindFriends.add(findFriendsTableView);
+findFriendsTableView.addEventListener('click', handlefriendsTableViewRows);
 
 //get all contacts from iphone
 var people = Titanium.Contacts.getAllPeople();
@@ -227,7 +230,8 @@ function populateFindFriendsContactsTableView(uData){
 			className:'contactsRow',
 			height:73,
 			backgroundColor:'white',
-			selectedBackgroundColor:'transparent'
+			selectedBackgroundColor:'transparent',
+			type:TYPE_ROW
 		});
 		
 		//friend's profile image
@@ -239,7 +243,8 @@ function populateFindFriendsContactsTableView(uData){
 			left:3,
 			borderRadius:30,
 			borderWidth:2,
-			borderColor:'#f9bf30'
+			borderColor:'#f9bf30',
+			type:TYPE_ROW
 		});
 		row.add(rowFriendImage);
 		
@@ -251,18 +256,10 @@ function populateFindFriendsContactsTableView(uData){
 			textAlign:'center',
 			opacity:0.6,
 			left:72,
-			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'},
+			type:TYPE_ROW
 		});
 		row.add(rowFullNameLabel);
-		
-		//invite button
-		var rowInviteButton = Titanium.UI.createButton({
-			backgroundImage:IMAGE_PATH+'follow_invite/Invite_btn.png',
-			right:9,
-			width:86,
-			height:29
-		});
-		row.add(rowInviteButton);
 		
 		var userEmail = null;
 		//check what type of email the user has - from work or home
@@ -283,13 +280,25 @@ function populateFindFriendsContactsTableView(uData){
 						right:9,
 						width:86,
 						height:29,
-						userId:uData.results.users[k].User.id
+						userId:uData.results.users[k].User.id,
+						type:TYPE_FOLLOW_BUTTON
 					});
 					row.add(rowFollowButton);
 					rowFollowButton.addEventListener('click', handleFollowButton);
 				}
 			}
 		}
+		
+		//invite button
+		var rowInviteButton = Titanium.UI.createButton({
+			backgroundImage:IMAGE_PATH+'follow_invite/Invite_btn.png',
+			right:9,
+			width:86,
+			height:29,
+			userId:null
+		});
+		row.add(rowInviteButton);
+		
 		tableRows.push(row);
 	}
 	findFriendsTableView.setData(tableRows);
@@ -306,7 +315,8 @@ function populateFindFriendsDogsquareTableView(uObj){
 			className:'dogsquareRow',
 			height:73,
 			backgroundColor:'white',
-			selectedBackgroundColor:'transparent'
+			selectedBackgroundColor:'transparent',
+			type:TYPE_ROW
 		});
 		
 		//friend's profile name
@@ -318,7 +328,8 @@ function populateFindFriendsDogsquareTableView(uObj){
 			left:3,
 			borderRadius:30,
 			borderWidth:2,
-			borderColor:'#f9bf30'
+			borderColor:'#f9bf30',
+			type:TYPE_ROW
 		});
 		row.add(rowFriendImage);
 		
@@ -330,7 +341,8 @@ function populateFindFriendsDogsquareTableView(uObj){
 			textAlign:'center',
 			opacity:0.6,
 			left:72,
-			font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'},
+			type:TYPE_ROW
 		});
 		row.add(rowNameLabel);
 		
@@ -340,7 +352,8 @@ function populateFindFriendsDogsquareTableView(uObj){
 			right:9,
 			width:86,
 			height:29,
-			userId:uObj[i].User.id
+			userId:uObj[i].User.id,
+			type:TYPE_FOLLOW_BUTTON
 		});
 		row.add(rowFollowButton);
 		rowFollowButton.addEventListener('click', handleFollowButton);
@@ -492,37 +505,48 @@ function doSearchUserByEmail(cEmail){
 	});
 }
 
-//save user whom you follow, in web database
-function saveFollowingUser(uId){
-	Ti.API.info('doSearchUserByEmail() with emails');
-	
-	var xhr = Ti.Network.createHTTPClient();
-	xhr.setTimeout(NETWORK_TIMEOUT);
-	
-	xhr.onerror = function(e){
-	
-	};
-	xhr.onload = function(e) {
-		var jsonData = JSON.parse(this.responseText);
-		
-		if (jsonData.data.response == NETWORK_RESPONSE_OK){
-			alert('successfully followed!');
-		}else{
-			alert(getErrorMessage(jsonData.response));
-		}
-		
-	};
-	xhr.setRequestHeader("Content-Type", "multipart/form-data");
-	xhr.open('POST',API+'followUser');
-	xhr.send({
-		user_id:userObject.userId,
-		follow_user:uId
-	});
-}
-
 //handle follow button
 function handleFollowButton(e){
-	var userId = e.source.userId;
+	alert('button');
+	if(e.source.type == TYPE_FOLLOW_BUTTON){
+		var userId = e.source.userId;
+		
+		saveFollowingUser(userId);
+	}
+}
+
+
+function handlefriendsTableViewRows(e){
 	
-	saveFollowingUser(userId);
+	if(e.source.type == TYPE_ROW){
+		Ti.include('ui/iphone/profile_other.js');
+		
+		var userId = e.row.children[2].userId;
+		var profileOtherView = buildProfileOtherView(userId);
+		var nameUser = e.row.children[1].text;
+		
+		var profileOtherWindow = Ti.UI.createWindow({
+			backgroundColor:'white',
+			barImage:IMAGE_PATH+'common/bar.png',
+			barColor:UI_COLOR,
+			title:nameUser
+		});
+		
+		//back button & event listener
+		var profileOtherBackButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'common/back_button.png',
+		    width:48,
+		    height:33
+		});
+		
+		profileOtherWindow.setLeftNavButton(profileOtherBackButton);
+		profileOtherBackButton.addEventListener("click", function() {
+		    navController.close(profileOtherWindow);
+		});
+		
+		profileOtherWindow.add(profileOtherView);
+		
+		openWindows.push(profileOtherWindow);
+		navController.open(profileOtherWindow);
+	}
 }

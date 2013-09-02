@@ -289,6 +289,34 @@ function getNotes(){
 	return noteRows;
 }
 
+//save user whom you follow, in web database
+function saveFollowingUser(uId){
+	Ti.API.info('doSearchUserByEmail() with emails');
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			alert('successfully followed!');
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.setRequestHeader("Content-Type", "multipart/form-data");
+	xhr.open('POST',API+'followUser');
+	xhr.send({
+		user_id:userObject.userId,
+		follow_user:uId
+	});
+}
+
 //Saves an activity to the local db
 function saveActivity(dogs){
 	var now = new Date().getTime();
