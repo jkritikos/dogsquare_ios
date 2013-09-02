@@ -471,6 +471,9 @@ function doSignup(uObj){
 		        success:true
 		    });
 			
+			//Add our new user_id to the user object
+			uObj.userId = jsonData.data.user_id;
+			
 			//Save data & update UI
 			saveUserObject(uObj);
 			updateLeftMenu(uObj);
