@@ -10,6 +10,8 @@ var DOGSQUARE_TAB = 3;
 var TYPE_ROW = 1;
 var TYPE_FOLLOW_BUTTON = 2;
 
+var FIND_FRIENDS_WIN = 1;
+
 //temporary variable to store data from server
 var localDataForContacts = null;
 
@@ -133,7 +135,8 @@ var findFriendsSearchIcon = Titanium.UI.createImageView({
 //search textfield
 var findFriendsSearchTxtfield = Titanium.UI.createTextField({
 	left:35,
-	width:200,
+	height:28,
+	width:278,
 	field:'search'
 });
 
@@ -231,7 +234,8 @@ function populateFindFriendsContactsTableView(uData){
 			height:73,
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',
-			type:TYPE_ROW
+			type:TYPE_ROW,
+			button:'invite'
 		});
 		
 		//friend's profile image
@@ -244,7 +248,8 @@ function populateFindFriendsContactsTableView(uData){
 			borderRadius:30,
 			borderWidth:2,
 			borderColor:'#f9bf30',
-			type:TYPE_ROW
+			type:TYPE_ROW,
+			button:'invite'
 		});
 		row.add(rowFriendImage);
 		
@@ -257,7 +262,8 @@ function populateFindFriendsContactsTableView(uData){
 			opacity:0.6,
 			left:72,
 			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'},
-			type:TYPE_ROW
+			type:TYPE_ROW,
+			button:'invite'
 		});
 		row.add(rowFullNameLabel);
 		
@@ -268,6 +274,16 @@ function populateFindFriendsContactsTableView(uData){
 		}else if(people[i].email.work != null){
 			userEmail = people[i].email.work[0];
 		}
+		
+		//invite button
+		var rowInviteButton = Titanium.UI.createButton({
+			backgroundImage:IMAGE_PATH+'follow_invite/Invite_btn.png',
+			right:9,
+			width:86,
+			height:29,
+			userId:null
+		});
+		row.add(rowInviteButton);
 		
 		if(uData != null){
 			//show follow button if user exists in web database and insert userId on follow button
@@ -281,23 +297,25 @@ function populateFindFriendsContactsTableView(uData){
 						width:86,
 						height:29,
 						userId:uData.results.users[k].User.id,
-						type:TYPE_FOLLOW_BUTTON
+						type:TYPE_FOLLOW_BUTTON,
+						toggle:false
 					});
+					row.remove(rowInviteButton);//remove invite button and add follow button 
 					row.add(rowFollowButton);
+					
+					//these exist to identify that the row is a row with a follow button
+					row.button = 'follow';
+					rowFriendImage.button = 'follow';
+					rowFullNameLabel.button = 'follow';
+					
 					rowFollowButton.addEventListener('click', handleFollowButton);
 				}
 			}
 		}
 		
-		//invite button
-		var rowInviteButton = Titanium.UI.createButton({
-			backgroundImage:IMAGE_PATH+'follow_invite/Invite_btn.png',
-			right:9,
-			width:86,
-			height:29,
-			userId:null
-		});
-		row.add(rowInviteButton);
+		
+			
+		
 		
 		tableRows.push(row);
 	}
@@ -353,7 +371,8 @@ function populateFindFriendsDogsquareTableView(uObj){
 			width:86,
 			height:29,
 			userId:uObj[i].User.id,
-			type:TYPE_FOLLOW_BUTTON
+			type:TYPE_FOLLOW_BUTTON,
+			toggle:false
 		});
 		row.add(rowFollowButton);
 		rowFollowButton.addEventListener('click', handleFollowButton);
@@ -507,18 +526,25 @@ function doSearchUserByEmail(cEmail){
 
 //handle follow button
 function handleFollowButton(e){
-	alert('button');
 	if(e.source.type == TYPE_FOLLOW_BUTTON){
 		var userId = e.source.userId;
+		var win = FIND_FRIENDS_WIN;
 		
-		saveFollowingUser(userId);
+		if(e.source.toggle){
+			unfollowUser(userId, e.source, win);
+			e.source.toggle = false;
+		}else{
+			followUser(userId, e.source, win);
+			e.source.toggle = true;
+		}
+		
 	}
 }
 
 
 function handlefriendsTableViewRows(e){
 	
-	if(e.source.type == TYPE_ROW){
+	if(e.source.type == TYPE_ROW && e.source.button == 'follow'){
 		Ti.include('ui/iphone/profile_other.js');
 		
 		var userId = e.row.children[2].userId;

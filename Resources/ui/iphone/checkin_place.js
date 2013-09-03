@@ -24,6 +24,7 @@ var checkinPlaceCommentsBackgroundView = null;
 var checkinPlaceCommentsTextArea = null;
 var checkinPlaceCommentsTableView = null;
 var checkinPlaceCommentsButton = null;
+var checkinPlaceHeartImage = null;
 
 function buildCheckinPlaceView(view){
 	
@@ -137,11 +138,14 @@ function buildCheckinPlaceView(view){
 	}
 	
 	//heart image
-	var checkinPlaceHeartImage = Ti.UI.createImageView({
-		image:IMAGE_PATH+'checkin_place/best_icon_default.png',
-		right:46
+	checkinPlaceHeartImage = Ti.UI.createImageView({
+		image:IMAGE_PATH+'common/best_icon_default.png',
+		right:46,
+		placeId:6,
+		toggle:false
 	});
 	checkinPlaceButtonBarView.add(checkinPlaceHeartImage);
+	checkinPlaceHeartImage.addEventListener('click', handlePlaceLikeButton);
 	
 	//background for comments
 	checkinPlaceCommentsBackgroundView = Ti.UI.createView({
@@ -301,4 +305,75 @@ function handleCommentButtons(e){
 		checkinPlaceCommentsTextArea.show();
 	}
 	
+}
+
+function handlePlaceLikeButton(e){
+	var placeId = e.source.placeId;
+	var toggle = e.source.toggle;
+	
+	if(toggle){
+		unlikePlace(placeId);
+		e.source.toggle = false;
+	}else{
+		likePlace(placeId);
+		e.source.toggle = true;
+	}
+}
+
+
+function likePlace(pId){
+	Ti.API.info('likePlace() with id: ' + pId);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			checkinPlaceHeartImage.image = IMAGE_PATH+'common/best_icon_selected_red.png';
+			
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('POST',API+'likePlace');
+	xhr.send({
+		user_id:userObject.userId,
+		place_id:pId
+	});
+}
+
+
+function unlikePlace(pId){
+	Ti.API.info('unlikeDog() with id: ' + pId);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			checkinPlaceHeartImage.image = IMAGE_PATH+'common/best_icon_default.png';
+			
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('POST',API+'unlikePlace');
+	xhr.send({
+		user_id:userObject.userId,
+		place_id:pId
+	});
 }

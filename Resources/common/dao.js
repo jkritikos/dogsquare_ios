@@ -290,8 +290,8 @@ function getNotes(){
 }
 
 //save user whom you follow, in web database
-function saveFollowingUser(uId){
-	Ti.API.info('doSearchUserByEmail() with emails');
+function followUser(uId, button, win){
+	Ti.API.info('saveFollowingUser() called');
 	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
@@ -303,14 +303,49 @@ function saveFollowingUser(uId){
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
-			alert('successfully followed!');
+			if(win == 1){
+				button.backgroundImage = IMAGE_PATH+'follow_invite/Unfollow_btn.png';
+			}else if(win == 2){
+				button.backgroundImage = IMAGE_PATH+'profile_other/Unfollow_button.png';
+			}
+			
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
 		
 	};
-	xhr.setRequestHeader("Content-Type", "multipart/form-data");
 	xhr.open('POST',API+'followUser');
+	xhr.send({
+		user_id:userObject.userId,
+		follow_user:uId
+	});
+}
+
+//unfollow user
+function unfollowUser(uId, button, win){
+	Ti.API.info('unfollowUser() called');
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			if(win == 1){
+				button.backgroundImage = IMAGE_PATH+'follow_invite/Follow_btn.png';
+			}else if(win == 2){
+				button.backgroundImage = IMAGE_PATH+'profile_other/Follow_button.png';
+			}
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('POST',API+'unfollowUser');
 	xhr.send({
 		user_id:userObject.userId,
 		follow_user:uId

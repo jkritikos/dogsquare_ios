@@ -283,7 +283,6 @@ function handleDogLikeButton(e){
 }
 
 
-//get info if contact has the app or not or has been followed by the user
 function likeDog(dId){
 	Ti.API.info('likeDog() with id: ' + dId);
 	
@@ -305,7 +304,6 @@ function likeDog(dId){
 		}
 		
 	};
-	xhr.setRequestHeader("Content-Type", "multipart/form-data");
 	xhr.open('POST',API+'likeDog');
 	xhr.send({
 		user_id:userObject.userId,
@@ -313,7 +311,7 @@ function likeDog(dId){
 	});
 }
 
-//get info if contact has the app or not or has been followed by the user
+
 function unlikeDog(dId){
 	Ti.API.info('unlikeDog() with id: ' + dId);
 	
@@ -335,7 +333,6 @@ function unlikeDog(dId){
 		}
 		
 	};
-	xhr.setRequestHeader("Content-Type", "multipart/form-data");
 	xhr.open('POST',API+'unlikeDog');
 	xhr.send({
 		user_id:userObject.userId,

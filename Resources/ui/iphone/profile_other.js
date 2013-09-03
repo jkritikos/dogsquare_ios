@@ -4,6 +4,8 @@ var profileOtherTableViewBackground = null;
 var TAB_FOLLOWERS = 1;
 var TAB_FOLLOWING = 2;
 
+var PROFILE_OTHER_WIN = 2;
+
 function buildProfileOtherView(uId) {
 	
 	//profile other window
@@ -312,7 +314,15 @@ function handleProfileOtherFollowButton(e){
 	
 	if(e.source.userId != null){
 		var userId = e.source.userId;
-		saveFollowingUser(userId);
+		var win = PROFILE_OTHER_WIN;
+		
+		if(e.source.toggle){
+			unfollowUser(userId, e.source, win);
+			e.source.toggle = false;
+		}else{
+			followUser(userId, e.source, win);
+			e.source.toggle = true;
+		}
 	}
 }
 

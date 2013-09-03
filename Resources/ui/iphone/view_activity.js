@@ -3,6 +3,7 @@ var viewActivityCommentsBackgroundView = null;
 var viewActivityCommentsTextArea = null;
 var viewActivityCommentsTableView  = null;
 var viewActivityCommentsButton = null;
+var viewActivityHeartImage = null;
 
 function buildViewActivityView(aId){
 	var data = getActivity(aId); 
@@ -42,7 +43,17 @@ function buildViewActivityView(aId){
 	    visible:true,
 	    annotations:[viewActivityAnnotationStart,viewActivityAnnotationEnd]
 	});
-	viewActivityView.add(viewActivityMap);
+	
+	//heart image
+	viewActivityHeartImage = Ti.UI.createImageView({
+		image:IMAGE_PATH+'common/best_icon_default.png',
+		left:7,
+		top:7,
+		activityId:aId,
+		toggle:false
+	});
+	viewActivityMap.add(viewActivityHeartImage);
+	viewActivityHeartImage.addEventListener('click', handleActivityLikeButton);
 	
 	//opacity bar
 	var viewActivityOpacityBar = Titanium.UI.createView({ 
@@ -190,6 +201,7 @@ function buildViewActivityView(aId){
 		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	viewActivityOpacityBar.add(viewActivityLikesLabel);
+	viewActivityView.add(viewActivityMap);
 	
 	//Table view title bar	
 	var viewActivityTitleBar = Titanium.UI.createView({ 
@@ -508,4 +520,75 @@ function handleViewActivityCommentButtons(e){
 		viewActivityCommentsTextArea.show();
 	}
 	
+}
+
+function handleActivityLikeButton(e){
+	var activityId = e.source.activityId;
+	var toggle = e.source.toggle;
+	
+	if(toggle){
+		unlikeActivity(activityId);
+		e.source.toggle = false;
+	}else{
+		likeActivity(activityId);
+		e.source.toggle = true;
+	}
+}
+
+
+function likeActivity(aId){
+	Ti.API.info('likeActivity() with id: ' + aId);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			viewActivityHeartImage.image = IMAGE_PATH+'common/best_icon_selected_red.png';
+			
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('POST',API+'likeActivity');
+	xhr.send({
+		user_id:userObject.userId,
+		activity_id:aId
+	});
+}
+
+
+function unlikeActivity(aId){
+	Ti.API.info('unlikeActivity() with id: ' + aId);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			viewActivityHeartImage.image = IMAGE_PATH+'common/best_icon_default.png';
+			
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('POST',API+'unlikeActivity');
+	xhr.send({
+		user_id:userObject.userId,
+		activity_id:aId
+	});
 }
