@@ -6,7 +6,7 @@ var TAB_FOLLOWING = 2;
 
 var PROFILE_OTHER_WIN = 2;
 
-function buildProfileOtherView(uId) {
+function buildProfileOtherView(uId, ufollowed) {
 	
 	//profile other window
 	var profileOtherView = Ti.UI.createView({
@@ -115,7 +115,6 @@ function buildProfileOtherView(uId) {
 	profileOtherPhotoImage.add(profileOtherOpacityBar);
 	
 	var profileOtherFollowButton = Ti.UI.createButton({
-	    backgroundImage: IMAGE_PATH+'profile_other/Follow_button.png',
 	    width:174,
 	    height:51,
 	    top:229,
@@ -123,6 +122,12 @@ function buildProfileOtherView(uId) {
 	});
 	profileOtherView.add(profileOtherFollowButton);
 	profileOtherFollowButton.addEventListener('click', handleProfileOtherFollowButton);
+	
+	if(ufollowed){
+		profileOtherFollowButton.backgroundImage = IMAGE_PATH+'profile_other/Unfollow_button.png';
+	}else{
+		profileOtherFollowButton.backgroundImage = IMAGE_PATH+'profile_other/Follow_button.png';
+	}
 	
 	//chat button
 	var profileOtherChatButton = Ti.UI.createButton({

@@ -352,6 +352,41 @@ function unfollowUser(uId, button, win){
 	});
 }
 
+//get all whom the user follows - 
+//emailString is used to call doSearchUserByEmail after getFollowers is successful
+function getFollowers(emailString, userObj){
+	Ti.API.info('getFollowers() called');
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			Ti.API.info('getFollowers successfull!');
+			//find user info via email from the server - to check if he owns the app 
+			//pass the jsonData for the Follows in order to use it afterwards
+			if(emailString != null){
+				doSearchUserByEmail(emailString, jsonData);
+			}else{
+				populateFindFriendsDogsquareTableView(userObj, jsonData);//populate dogsquare
+			}
+			
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('GET',API+'getFollowers');
+	xhr.send({
+		user_id:userObject.userId
+	});
+}
+
 //Saves an activity to the local db
 function saveActivity(dogs){
 	var now = new Date().getTime();
