@@ -20,7 +20,7 @@ var addDogSaveButton = Ti.UI.createButton({
     height:33
 });
 navController.getWindow().setRightNavButton(addDogSaveButton);
-addDogSaveButton.addEventListener('click', handleAddDogDoneClick);
+addDogSaveButton.addEventListener('click', handleAddDogSaveButton);
 
 //form field
 var addDogFormFieldImage = Ti.UI.createImageView({ 
@@ -479,7 +479,6 @@ function doSaveDogOnline(dObj){
 			dogProfileWindow.add(dogProfileView);
 			
 			navController.getWindow().add(dogProfileWindow);
-			navController.getWindow().setTitle(dObj.dog_id);
 			
 		} else {
 			alert(getErrorMessage(jsonData.response));
@@ -534,7 +533,7 @@ function validateDogForm(){
 	return true;
 }
 
-function handleAddDogDoneClick(){
+function handleAddDogSaveButton(){
 	
 	if(validateDogForm()){
 		Ti.API.info('dog form is valid');
