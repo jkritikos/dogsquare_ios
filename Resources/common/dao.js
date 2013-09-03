@@ -254,6 +254,8 @@ function getDogById(dogId){
 	return dogRows;
 }
 
+
+
 //Gets all notes from the local db
 function getNotes(){
 	var dbNoteObject = {};
@@ -352,9 +354,8 @@ function unfollowUser(uId, button, win){
 	});
 }
 
-//get all whom the user follows - 
-//emailString is used to call doSearchUserByEmail after getFollowers is successful
-function getFollowers(emailString, userObj){
+//Gets all followers of the user
+function getFollowers(uId){
 	Ti.API.info('getFollowers() called');
 	
 	var xhr = Ti.Network.createHTTPClient();
@@ -367,15 +368,7 @@ function getFollowers(emailString, userObj){
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
-			Ti.API.info('getFollowers successfull!');
-			//find user info via email from the server - to check if he owns the app 
-			//pass the jsonData for the Follows in order to use it afterwards
-			if(emailString != null){
-				doSearchUserByEmail(emailString, jsonData);
-			}else{
-				populateFindFriendsDogsquareTableView(userObj, jsonData);//populate dogsquare
-			}
-			
+			populateListUsersTableView(jsonData.data);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -383,7 +376,34 @@ function getFollowers(emailString, userObj){
 	};
 	xhr.open('GET',API+'getFollowers');
 	xhr.send({
-		user_id:userObject.userId
+		target_id:uId
+	});
+}
+
+//Gets all users who follow the user
+function getFollowing(uId){
+	
+	Ti.API.info('getFollowing() called');
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			populateListUsersTableView(jsonData.data);
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('GET',API+'getFollowing');
+	xhr.send({
+		target_id:uId
 	});
 }
 

@@ -21,27 +21,23 @@ function buildListUsersView(){
 	    backgroundColor: 'transparent'
 	});
 	
-	populateListUsersTableView();
-	
 	return listUsersView;
 }
 
-function populateListUsersTableView(){
+function populateListUsersTableView(uData){
 	var tableRows = [];
-
-	for(i=0;i<2;i++){	
+	
+	for(i=0;i<uData.users.length;i++){	
 		var userRow = Ti.UI.createTableViewRow({
 			className:'usersRow',
 			height:73,
 			backgroundColor:'white',
-			selectedBackgroundColor:'transparent'
+			selectedBackgroundColor:'transparent',
+			userId:uData.users[i].User.id
 		});
 		
-		var userImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-		var userImageBlob = userImageFile.toBlob();
-		var userImageBlobCropped = userImageBlob.imageAsThumbnail(60,0,30);
 		var rowUserImage = Titanium.UI.createImageView({
-			image:userImageBlobCropped,
+			image:REMOTE_USER_IMAGES + uData.users[i].User.thumb,
 			left:3,
 			borderRadius:30,
 			borderWidth:2,
@@ -50,7 +46,7 @@ function populateListUsersTableView(){
 		userRow.add(rowUserImage);
 		
 		var rowUserNameLabel = Titanium.UI.createLabel({
-			text:'noobie',
+			text:uData.users[i].User.name,
 			color:'black',
 			height:22,
 			textAlign:'center',

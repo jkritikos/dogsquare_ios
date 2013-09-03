@@ -6,7 +6,10 @@ var TAB_FOLLOWING = 2;
 
 var PROFILE_OTHER_WIN = 2;
 
-function buildProfileOtherView(uId, ufollowed) {
+var profileOtherUserId = null;
+
+function buildProfileOtherView(uId) {
+	profileOtherUserId = uId;
 	
 	//profile other window
 	var profileOtherView = Ti.UI.createView({
@@ -115,6 +118,7 @@ function buildProfileOtherView(uId, ufollowed) {
 	profileOtherPhotoImage.add(profileOtherOpacityBar);
 	
 	var profileOtherFollowButton = Ti.UI.createButton({
+		backgroundImage: IMAGE_PATH+'profile_other/Follow_button.png',
 	    width:174,
 	    height:51,
 	    top:229,
@@ -122,12 +126,6 @@ function buildProfileOtherView(uId, ufollowed) {
 	});
 	profileOtherView.add(profileOtherFollowButton);
 	profileOtherFollowButton.addEventListener('click', handleProfileOtherFollowButton);
-	
-	if(ufollowed){
-		profileOtherFollowButton.backgroundImage = IMAGE_PATH+'profile_other/Unfollow_button.png';
-	}else{
-		profileOtherFollowButton.backgroundImage = IMAGE_PATH+'profile_other/Follow_button.png';
-	}
 	
 	//chat button
 	var profileOtherChatButton = Ti.UI.createButton({
@@ -332,6 +330,7 @@ function handleProfileOtherFollowButton(e){
 }
 
 function handleProfileOtherFollowersFolowingTab(e){
+	
 	Ti.include('ui/iphone/list_users.js');
 	
 	var listUsersView = buildListUsersView();
@@ -345,8 +344,10 @@ function handleProfileOtherFollowersFolowingTab(e){
 	
 	if(e.source.tab == TAB_FOLLOWERS){
 		listUsersWindow.setTitle('followers');
+		getFollowers(profileOtherUserId);
 	}else if(e.source.tab == TAB_FOLLOWING){
 		listUsersWindow.setTitle('following');
+		getFollowing(profileOtherUserId);
 	}
 	
 	//back button & event listener

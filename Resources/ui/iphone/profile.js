@@ -402,10 +402,11 @@ function handleProfileActivityRows(e){
 }
 
 function handleFollowersFolowingTab(e){
+	var userId = userObject.userId;
+	
 	Ti.include('ui/iphone/list_users.js');
 	
 	var listUsersView = buildListUsersView();
-	
 	
 	var listUsersWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
@@ -415,8 +416,10 @@ function handleFollowersFolowingTab(e){
 	
 	if(e.source.tab == TAB_FOLLOWERS){
 		listUsersWindow.setTitle('followers');
+		getFollowers(userId);
 	}else if(e.source.tab == TAB_FOLLOWING){
 		listUsersWindow.setTitle('following');
+		getFollowing(userId);
 	}
 	
 	//back button & event listener

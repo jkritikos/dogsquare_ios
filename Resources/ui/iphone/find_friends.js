@@ -12,6 +12,9 @@ var TYPE_FOLLOW_BUTTON = 2;
 
 var FIND_FRIENDS_WIN = 1;
 
+//temporary variable to store data from server
+var localDataForContacts = null;
+
 //tabs Area Image
 var findFriendsTabsAreaImage = Ti.UI.createImageView({
 	image:IMAGE_PATH+'follow_invite/Tabs_Area.png',
@@ -217,13 +220,11 @@ for(l=0;l<contactsEmailObj.length;l++){
 	
 }
 
-//get all the followers - pass string list of contact names to use as  
-//parameter for doSearchUserByEmail inside the getFollowers function and null -
-//through here contacts table view is populated
-getFollowers(contactsEmailStringList, null);
+//find user info via email from the server - to check if he owns the app 
+doSearchUserByEmail(contactsEmailStringList);
 
-//populate contacts table view - pass 2 parameters, followed users and users with the app
-function populateFindFriendsContactsTableView(uData, followedUsers){
+//populate contacts table view
+function populateFindFriendsContactsTableView(uData){
 	var tableRows = [];
 	//populate each row with the people in the contacts
 	for(i=0;i<people.length;i++){	
@@ -300,15 +301,6 @@ function populateFindFriendsContactsTableView(uData, followedUsers){
 					rowFullNameLabel.button = 'follow';
 					
 					rowFollowButton.addEventListener('click', handleFollowButton);
-					
-					//check if the user has been followed 
-					for(l=0;l<followedUsers.data.users.length;l++){
-						if(followedUsers.data.users[l].User.id == uData.results.users[k].User.id){
-							rowFollowButton.backgroundImage = IMAGE_PATH+'follow_invite/Unfollow_btn.png';
-							rowFollowButton.toggle = true;
-							Ti.API.info('followed user with id: ' + uData.results.users[k].User.id);
-						}
-					}
 				}
 			}
 		}
@@ -333,7 +325,7 @@ function populateFindFriendsContactsTableView(uData, followedUsers){
 }
 
 //populate dogsquare table view
-function populateFindFriendsDogsquareTableView(uObj, followedUsers){
+function populateFindFriendsDogsquareTableView(uObj){
 	var tableRows = [];
 	
 	for(i=0;i<uObj.length;i++){	
@@ -392,15 +384,6 @@ function populateFindFriendsDogsquareTableView(uObj, followedUsers){
 		
 		rowFollowButton.addEventListener('click', handleFollowButton);
 		
-		//check if the user has been followed 
-		for(l=0;l<followedUsers.data.users.length;l++){
-			if(followedUsers.data.users[l].User.id == uObj[i].User.id){
-				rowFollowButton.backgroundImage = IMAGE_PATH+'follow_invite/Unfollow_btn.png';
-				rowFollowButton.toggle = true;
-				Ti.API.info('followed user with id: ' + uObj[i].User.id);
-			}
-		}
-		
 		tableRows.push(row);
 	}
 	findFriendsTableView.setData(tableRows);
@@ -446,10 +429,7 @@ function handleFindFriendsTabs(e){
 		findFriendsTabContactsSelection.show();
 		findFriendsTabDogsquareSelection.hide();
 		
-		//get all the followers - pass string list of contact names to use as  
-		//parameter for doSearchUserByEmail inside the getFollowers function and null -
-		//through here contacts table view is populated
-		getFollowers(contactsEmailStringList, null);
+		populateFindFriendsContactsTableView(localDataForContacts);
 		
 		findFriendsTableView.show();
 		findFriendsFacebookView.hide();
@@ -495,9 +475,7 @@ function getOnlineUser(n){
 		    });
 			
 			var userObj = jsonData;
-			//get all the followers - pass parameters null for string and 
-			//pass users to populate dogsquare
-			getFollowers(null, userObj.data.users);
+			populateFindFriendsDogsquareTableView(userObj.data.users);
 			
 			
 			//Hide message and close register window
@@ -524,9 +502,8 @@ function getOnlineUser(n){
 }
 
 
-//get info if contact has the app or not or has been followed by the user -
-//needs 2 parameters - contacts string and results from getFollowers 
-function doSearchUserByEmail(cEmail, follows){
+//get info if contact has the app or not or has been followed by the user
+function doSearchUserByEmail(cEmail){
 	Ti.API.info('doSearchUserByEmail() with emails');
 	
 	var xhr = Ti.Network.createHTTPClient();
@@ -539,14 +516,14 @@ function doSearchUserByEmail(cEmail, follows){
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
-			//pass 2 parameters - jsonData and results from getFollowers 
-			populateFindFriendsContactsTableView(jsonData.data, follows);
+			populateFindFriendsContactsTableView(jsonData.data);
+			localDataForContacts = jsonData.data;
+			
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
 		
 	};
-	xhr.setRequestHeader("Content-Type", "multipart/form-data");
 	xhr.open('GET',API+'areUsers');
 	xhr.send({
 		user_id:userObject.userId,
@@ -577,10 +554,9 @@ function handlefriendsTableViewRows(e){
 	if(e.source.type == TYPE_ROW && e.source.button == 'follow'){
 		
 		Ti.include('ui/iphone/profile_other.js');
-		var userFollowed = e.row.children[2].toggle;
 		
 		var userId = e.row.children[2].userId;
-		var profileOtherView = buildProfileOtherView(userId, userFollowed);
+		var profileOtherView = buildProfileOtherView(userId);
 		var nameUser = e.row.children[1].text;
 		
 		var profileOtherWindow = Ti.UI.createWindow({
