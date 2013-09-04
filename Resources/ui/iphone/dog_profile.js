@@ -31,8 +31,9 @@ function buildDogProfileView(dogObj){
 		borderRadius:37.5,
 		borderWidth:1,
 		borderColor:'transparent',
+		zIndex:2
 	});
-	dogProfilePhotoImage.add(dogProfileBreedBackground);
+	dogProfileView.add(dogProfileBreedBackground);
 	
 	var dogProfileBreedLabel = Titanium.UI.createLabel({ 
 		text:'breed',
@@ -40,9 +41,10 @@ function buildDogProfileView(dogObj){
 		textAlign:'center',
 		top:63,
 		left:36,
+		zIndex:3,
 		font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
-	dogProfilePhotoImage.add(dogProfileBreedLabel);
+	dogProfileView.add(dogProfileBreedLabel);
 	
 	var dogProfileBreedTypeLabel = Titanium.UI.createLabel({ 
 		text:dogObj[0].Dog.dog_breed,
@@ -51,9 +53,10 @@ function buildDogProfileView(dogObj){
 		textAlign:'center',
 		top:25,
 		left:27,
+		zIndex:2,
 		font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
-	dogProfilePhotoImage.add(dogProfileBreedTypeLabel);
+	dogProfileView.add(dogProfileBreedTypeLabel);
 
 	//opacity bar for info
 	var dogProfileOpacityInfoBar = Titanium.UI.createView({ 
@@ -61,7 +64,8 @@ function buildDogProfileView(dogObj){
 		width:'100%',
 		top:169,
 		height:56,
-		opacity:0.8
+		opacity:0.8,
+		zIndex:2
 	});
 	
 	var dividerLeftOffset = 0;
@@ -181,7 +185,7 @@ function buildDogProfileView(dogObj){
 	});
 	dogProfileOpacityInfoBar.add(dogProfileLikesNumberLabel);
 	
-	dogProfilePhotoImage.add(dogProfileOpacityInfoBar);
+	dogProfileView.add(dogProfileOpacityInfoBar);
 	
 	//opacity bar for description
 	var dogProfileOpacityDescriptionBar = Titanium.UI.createView({ 
@@ -189,7 +193,8 @@ function buildDogProfileView(dogObj){
 		width:'100%',
 		top:229,
 		height:31,
-		opacity:0.8
+		opacity:0.8,
+		zIndex:2
 	});
 	
 	var dogProfileDescriptionLabel = Titanium.UI.createLabel({ 
@@ -200,7 +205,7 @@ function buildDogProfileView(dogObj){
 	});
 	dogProfileOpacityDescriptionBar.add(dogProfileDescriptionLabel);
 	
-	dogProfilePhotoImage.add(dogProfileOpacityDescriptionBar);
+	dogProfileView.add(dogProfileOpacityDescriptionBar);
 	
 	dogProfileView.add(dogProfilePhotoImage);
 	
