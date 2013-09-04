@@ -464,22 +464,8 @@ function doSaveDogOnline(dObj){
 			saveDog(dObj);
 			
 			populateRightMenu(getDogs());
-			
 			navController.getWindow().setRightNavButton(rightBtn);
-			Ti.include('ui/iphone/dog_profile.js');
-			
-			var dogProfileView = buildDogProfileView(dObj.dog_id);
-			
-			var dogProfileWindow = Ti.UI.createWindow({
-				backgroundColor:'white',
-				barImage:IMAGE_PATH+'common/bar.png',
-				barColor:UI_COLOR
-			});
-			
-			dogProfileWindow.add(dogProfileView);
-			
-			navController.getWindow().add(dogProfileWindow);
-			
+			getOnlineDog(dObj.dog_id);
 		} else {
 			alert(getErrorMessage(jsonData.response));
 		}

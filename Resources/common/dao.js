@@ -407,6 +407,51 @@ function getFollowing(uId){
 	});
 }
 
+//get dog info by id from server
+function getOnlineDog(dId){
+	Ti.API.info('getOnlineDog() called for dog_id='+ dId); 	
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	
+	xhr.onload = function(e){
+			
+		var jsonData = JSON.parse(this.responseText);
+		
+		//Update user object and close the signup window
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+		    Ti.include('ui/iphone/dog_profile.js');
+			var dogProfileView = buildDogProfileView(jsonData.data.dog);
+			
+			var dogProfileWindow = Ti.UI.createWindow({
+				backgroundColor:'white',
+				barImage:IMAGE_PATH+'common/bar.png',
+				barColor:UI_COLOR
+			});
+			
+			dogProfileWindow.add(dogProfileView);
+			
+			navController.getWindow().add(dogProfileWindow);
+			
+			if(window.isAnyViewOpen()){
+				window.toggleRightView();
+			}
+		    
+		} else {
+			alert(getErrorMessage(jsonData.response));
+		}
+	};
+	xhr.open('GET',API+'getDog');
+	xhr.send({
+		dog_id:dId
+	});
+}
+
 //Saves an activity to the local db
 function saveActivity(dogs){
 	var now = new Date().getTime();

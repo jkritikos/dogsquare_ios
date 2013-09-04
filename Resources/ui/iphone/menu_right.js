@@ -213,22 +213,7 @@ function handleTableViewRows(e){
 		
 		var dogId = e.row.dogId;
 		
-		Ti.include('ui/iphone/dog_profile.js');
-		var dogProfileView = buildDogProfileView(dogId);
-		
-		var dogProfileWindow = Ti.UI.createWindow({
-			backgroundColor:'white',
-			barImage:IMAGE_PATH+'common/bar.png',
-			barColor:UI_COLOR
-		});
-		
-		dogProfileWindow.add(dogProfileView);
-		
-		navController.getWindow().add(dogProfileWindow);
-		
-		if(window.isAnyViewOpen()){
-			window.toggleRightView();
-		}
+		getOnlineDog(dogId);
 	}
 }
 
@@ -257,3 +242,4 @@ function handleCheckBoxInteraction(e){
 		}	
 	}
 }
+
