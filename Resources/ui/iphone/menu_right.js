@@ -213,7 +213,14 @@ function handleTableViewRows(e){
 		
 		var dogId = e.row.dogId;
 		
-		getOnlineDog(dogId);
+		Ti.include('ui/iphone/dog_profile.js');
+		var dogProfileView = buildDogProfileView(dogId);
+		
+		navController.getWindow().add(dogProfileView);
+		
+		if(window.isAnyViewOpen()){
+			window.toggleRightView();
+		}
 	}
 }
 

@@ -1,5 +1,5 @@
 var profileOtherDogBar = null;
-var profileOtherTableViewBackground = null;
+var profileOtherDogTableViewBackground = null;
 
 var TAB_FOLLOWERS = 1;
 var TAB_FOLLOWING = 2;
@@ -220,25 +220,26 @@ function buildProfileOtherView(uId) {
 	profileOtherDogBar.addEventListener('click', handleDogBarButton);
 	
 	//background of the table view
-	profileOtherTableViewBackground = Titanium.UI.createView({ 
+	profileOtherDogTableViewBackground = Titanium.UI.createView({ 
 		backgroundColor:'d2d2d2',
 		width:'100%',
 		height:324,
 		top:416
 	});
-	profileOtherView.add(profileOtherTableViewBackground);
+	profileOtherView.add(profileOtherDogTableViewBackground);
 	
 	//profile other tableView
-	var profileOtherTableView = Titanium.UI.createTableView({
+	var profileOtherDogTableView = Titanium.UI.createTableView({
 		minRowHeight:51,
 		width:320,
-		data:populateProfileOtherTableView(uId),
+		data:populateProfileOtherDogTableView(),
 		separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
 		backgroundColor:'d2d2d2',
 		top:3,
 		bottom:0
 	});
-	profileOtherTableViewBackground.add(profileOtherTableView);
+	profileOtherDogTableViewBackground.add(profileOtherDogTableView);
+	profileOtherDogTableView.addEventListener('click', handleProfileOtherDogTableViewRows);
 	
 	return profileOtherView;
 }
@@ -247,27 +248,29 @@ function handleDogBarButton(e){
 	var toggle = e.source.toggle;
 	if(toggle){
 		profileOtherDogBar.animate({bottom:0, duration:500});
-		profileOtherTableViewBackground.animate({top:416, duration:500});
+		profileOtherDogTableViewBackground.animate({top:416, duration:500});
 		e.source.toggle = false;
 	}else{
 		profileOtherDogBar.animate({bottom:192, duration:500});
-		profileOtherTableViewBackground.animate({top:224, duration:500});
+		profileOtherDogTableViewBackground.animate({top:224, duration:500});
 		e.source.toggle = true;
 	}
 }
 
-function populateProfileOtherTableView(){
+function populateProfileOtherDogTableView(){
 	var tableRows = [];
 	
-	var dogsArray = ['Lucy', 'Boney', 'Minsey'];
+	var dogsArray = ['Pluto', 'Bravo', 'Hono'];
+	var dogsIdArray = ['1', '2', '3'];
 	
-	for(i=0;i<=1;i++){
+	for(i=0;i<=2;i++){
 		var dogRow = Ti.UI.createTableViewRow({
 			className:'dogRow',
 			height:51,
 			width:'100%',
 			backgroundColor:'e7e7e7',
-			selectedBackgroundColor:'transparent'
+			selectedBackgroundColor:'transparent',
+			dogId:dogsIdArray[i]
 		});
 		
 		var rowDogImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
@@ -366,4 +369,15 @@ function handleProfileOtherFollowersFolowingTab(e){
 	
 	openWindows.push(listUsersWindow);
 	navController.open(listUsersWindow);
+}
+
+function handleProfileOtherDogTableViewRows(e){
+	var dogId = e.row.dogId;
+	
+	Ti.include('ui/iphone/dog_profile.js');
+	var dogProfileView = buildDogProfileView(dogId);
+	
+	dogProfileWindow.add(dogProfileView);
+	openWindows.push(dogProfileWindow);
+	navController.open(dogProfileWindow);
 }

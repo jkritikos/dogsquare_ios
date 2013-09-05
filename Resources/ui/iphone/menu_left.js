@@ -76,7 +76,8 @@ leftTableView.addEventListener("click", function(e){
 	switch(menuItem){
 		case MENU_FEED:
 			Ti.include('ui/iphone/profile_other.js');
-			navController.getWindow().add(profileOtherWindow);
+			var profileOtherView = buildProfileOtherView(1);
+			navController.getWindow().add(profileOtherView);
 			navController.getWindow().setTitle('John D.');
 			break;
 		case MENU_PROFILE:
