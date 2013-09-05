@@ -5,6 +5,8 @@ var addPlaceWindow = Ti.UI.createWindow({
 	title:'Add Place'
 });
 
+var addPlaceObject = {};
+
 //done button for picker
 var addPlacePickerDoneButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'common/Done_button.png',
@@ -202,6 +204,7 @@ function handlePickerDoneButton(){
 	addPlacePicker.animate({bottom:-216, duration:500});
 	addPlaceWindow.setRightNavButton(addPlaceSaveButton);
 	addPlaceCategoryLabel.text = addPlacePicker.getSelectedRow(0).title;
+	addPlaceCategoryLabel.id = addPlacePicker.getSelectedRow(0).id;
 	addPlaceCategoryLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 	addPlaceCategoryLabel.opacity = 1;
 }
@@ -229,10 +232,18 @@ function validatePlaceForm(){
 	if(isStringNullOrEmpty(addPlaceTxtFieldName.value)){
 		alert('NAME IS MISSING');
 		return false;
-	}else if(addPlaceCategoryLabel.text == 'Category'){
+	}else if(addPlaceCategoryLabel.id == null){
 		alert('CATEGORY IS MISSING');
 		return false;
+	}else if(addPlaceObject.photo == null){
+		alert('PLACE PHOTO MISSING');
+		return false;
 	}
+	
+	addPlaceObject.name = addPlaceTxtFieldName.value;
+	addPlaceObject.category_id = addPlaceCategoryLabel.id;
+	addPlaceObject.longitude = 2345234;
+	addPlaceObject.latitude = 4635634;
 	
 	return true;
 }
@@ -261,13 +272,12 @@ function handlePlacePhotoSelection(){
 			var resizedImage = jpgcompressor.scale(image, 1024, 768);
 			var compressedImage = jpgcompressor.compress(resizedImage);
 			
-			//addDogObject.photo = compressedImage;
+			addPlaceObject.photo = compressedImage;
 			
 			var uniquePlaceFilename = new Date().getTime() + '.jpg';
-			//addDogObject.photo_filename = uniqueDogFilename;
+			addPlaceObject.photo_filename = uniquePlaceFilename;
 			
 			// create new file name and remove old
-			
 			var filename = Titanium.Filesystem.applicationDataDirectory + uniquePlaceFilename;
 			var tmpImage = Titanium.Filesystem.getFile(filename);
 			tmpImage.write(compressedImage);
@@ -284,9 +294,46 @@ function handlePlacePhotoSelection(){
 function handleAddPlaceSaveButton(){
 	if(validatePlaceForm()){
 		Ti.API.info('note form is valid');
-		alert('place has been served');
+		doSavePlaceOnline(addPlaceObject);
 	}else{
 		Ti.API.info('note form is not valid');
 	}
 
+}
+
+//Server call for saving places
+function doSavePlaceOnline(pObj){
+	Ti.API.info('doSavePlaceOnline() called with userObject='+pObj); 	
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('doSavePlaceOnline() got back from server '+this.responseText); 	
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			Ti.API.info('doSavePlaceOnline() got back place id from server '+jsonData.data.place_id);
+			//Add the server place id to the object
+			pObj.place_id = jsonData.data.place_id;
+			alert('place successfully added');
+		} else {
+			alert(getErrorMessage(jsonData.response));
+		}
+	};
+	
+	xhr.setRequestHeader("Content-Type", "multipart/form-data");
+	xhr.open('POST',API+'addPlace');
+	xhr.send({
+		user_id:userObject.userId,
+		photo:pObj.photo,
+		name:pObj.name,
+		latitude:pObj.latitude,
+		longitude:pObj.longitude,
+		category_id:pObj.category_id
+	});
 }

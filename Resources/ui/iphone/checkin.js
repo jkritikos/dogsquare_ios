@@ -116,14 +116,16 @@ var checkinPlacesTableView = Titanium.UI.createTableView({
 	bottom:0
 });
 checkinWindow.add(checkinPlacesTableView);
+checkinPlacesTableView.addEventListener('click', handleCheckinPlacesTableViewRow);
 
 function populatecheckinPlacesTableView(){
 	var tableRows = [];
 	var placeArray = ['Pet City', 'Pet and Bath', 'Pet Vet'];
+	var placeArrayId = ['6', '7', '8'];
 	var descriptionArray = ['Pet Shop', 'Grooming Services', 'Veterinary Clinic'];
 	var distanceArray = ['0,5km', '1km', '1km'];
 	
-	for(i=0;i<=3;i++){
+	for(i=0;i<=2;i++){
 		
 		//places row
 		var placeRow = Ti.UI.createTableViewRow({
@@ -131,9 +133,9 @@ function populatecheckinPlacesTableView(){
 			height:51,
 			width:'100%',
 			backgroundColor:'e7e7e7',
-			selectedBackgroundColor:'transparent'
+			selectedBackgroundColor:'transparent',
+			placeId:placeArrayId[i]
 		});
-		placeRow.addEventListener('click', handlePlaceRow);
 		
 		//place image
 		var rowPlaceImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
@@ -207,10 +209,34 @@ function populatecheckinPlacesTableView(){
 	return tableRows;
 }
 
-function handlePlaceRow(){
-	Ti.include('ui/iphone/checkin_place.js');
+function handleCheckinPlacesTableViewRow(e){
+	var placeId = e.row.placeId;
+	var placeTitle = e.row.children[0].text;
 	
+	Ti.include('ui/iphone/checkin_place.js');
+	var checkinPlaceView = buildCheckinPlaceView(CHECKIN_PLACE_VIEW, placeId);
+	
+	var checkinPlaceWindow = Ti.UI.createWindow({
+		backgroundColor:UI_BACKGROUND_COLOR,
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:placeTitle
+	});
+	
+	//back button
+	var checkinPlaceBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	checkinPlaceWindow.setLeftNavButton(checkinPlaceBackButton);
+	
+	checkinPlaceBackButton.addEventListener("click", function() {
+	    navController.close(checkinPlaceWindow);
+	});
+	
+	checkinPlaceWindow.add(checkinPlaceView);
 	openWindows.push(checkinPlaceWindow);
-	buildCheckinPlaceView(CHECKIN_PLACE_VIEW);
 	navController.open(checkinPlaceWindow);
 }

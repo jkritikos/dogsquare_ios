@@ -443,7 +443,7 @@ function handleAddDogTextFieldBlur(e){
 
 //Server call for saving dogs
 function doSaveDogOnline(dObj){
-	Ti.API.info('doSaveDogOnline() called with userObject='+dObj); 	
+	Ti.API.info('doSaveDogOnline() called with dogObject='+dObj); 	
 	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
@@ -456,7 +456,6 @@ function doSaveDogOnline(dObj){
 		Ti.API.info('doSaveDogOnline() got back from server '+this.responseText); 	
 		var jsonData = JSON.parse(this.responseText);
 		
-		//Update user object and close the signup window
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			//Add the server dog id to the object
 			dObj.dog_id = jsonData.data.dog_id;
@@ -523,9 +522,7 @@ function handleAddDogSaveButton(){
 	
 	if(validateDogForm()){
 		Ti.API.info('dog form is valid');
-		
 		doSaveDogOnline(addDogObject);	
-		//alert(addDogObject);
 	}else{
 		Ti.API.info('dog form is not valid');
 	}

@@ -377,6 +377,26 @@ function handleProfileOtherDogTableViewRows(e){
 	Ti.include('ui/iphone/dog_profile.js');
 	var dogProfileView = buildDogProfileView(dogId);
 	
+	var dogProfileWindow = Ti.UI.createWindow({
+		backgroundColor:UI_BACKGROUND_COLOR,
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:e.row.children[2].text
+	});
+	
+	//back button
+	var dogProfileBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	dogProfileWindow.setLeftNavButton(dogProfileBackButton);
+	
+	dogProfileBackButton.addEventListener("click", function() {
+	    navController.close(dogProfileWindow);
+	});	
+	
 	dogProfileWindow.add(dogProfileView);
 	openWindows.push(dogProfileWindow);
 	navController.open(dogProfileWindow);

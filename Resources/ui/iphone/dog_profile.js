@@ -1,21 +1,3 @@
-var dogProfileWindow = Ti.UI.createWindow({
-	backgroundColor:UI_BACKGROUND_COLOR,
-	barImage:IMAGE_PATH+'common/bar.png',
-	barColor:UI_COLOR
-});
-
-//back button
-var dogProfileBackButton = Ti.UI.createButton({
-    backgroundImage: IMAGE_PATH+'common/back_button.png',
-    width:48,
-    height:33
-});
-
-dogProfileWindow.setLeftNavButton(dogProfileBackButton);
-
-dogProfileBackButton.addEventListener("click", function() {
-    navController.close(dogProfileWindow);
-});	
 	
 var dogProfileHeartImage = null;
 var dogProfileBreedTypeLabel = null;
@@ -26,7 +8,7 @@ var dogProfileWeightNumberLabel = null;
 var dogProfileLikesNumberLabel = null;
 var dogProfileView = null;	
 	
-function buildDogProfileView(dId){
+function buildDogProfileView(dogId){
 	if(dogProfileView == null){
 		dogProfileView = Ti.UI.createView({
 			backgroundColor:'white'
@@ -243,7 +225,7 @@ function buildDogProfileView(dId){
 		dogProfileHeartImage = Ti.UI.createImageView({ 
 			bottom:25,
 			right:79,
-			dogId:dId
+			dogId:dogId
 		});
 		dogProfileView.add(dogProfileHeartImage);
 		dogProfileHeartImage.addEventListener('click', handleDogLikeButton);
@@ -262,7 +244,7 @@ function buildDogProfileView(dId){
 		
 		Ti.API.info('buildDogProfileView has been built');
 	}
-	getOnlineDog(dId);
+	getOnlineDog(dogId);
 	
 	return dogProfileView;
 }
@@ -389,7 +371,6 @@ function getOnlineDog(dId){
 //update dog profile UI
 function updateDogProfile(dogObj){
 	navController.getWindow().setTitle(dogObj.name);
-	dogProfileWindow.setTitle(dogObj.name);
 	
 	dogProfileBreedTypeLabel.text = dogObj.dog_breed;
     dogProfilePhotoImage.image = REMOTE_DOG_IMAGES + dogObj.photo;
