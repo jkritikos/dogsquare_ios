@@ -7,7 +7,7 @@ var FACEBOOK_TAB = 1;
 var CONTACTS_TAB = 2;
 var DOGSQUARE_TAB = 3;
 
-var TYPE_ROW = 1;
+var FRIENDS_TYPE_ROW = 1;
 var TYPE_FOLLOW_BUTTON = 2;
 
 var FIND_FRIENDS_WIN = 1;
@@ -235,7 +235,7 @@ function populateFindFriendsContactsTableView(uData){
 			height:73,
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',
-			type:TYPE_ROW,
+			type:FRIENDS_TYPE_ROW,
 			button:'invite'
 		});
 		
@@ -249,7 +249,7 @@ function populateFindFriendsContactsTableView(uData){
 			borderRadius:30,
 			borderWidth:2,
 			borderColor:'#f9bf30',
-			type:TYPE_ROW,
+			type:FRIENDS_TYPE_ROW,
 			button:'invite'
 		});
 		row.add(rowFriendImage);
@@ -263,7 +263,7 @@ function populateFindFriendsContactsTableView(uData){
 			opacity:0.6,
 			left:72,
 			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'},
-			type:TYPE_ROW,
+			type:FRIENDS_TYPE_ROW,
 			button:'invite'
 		});
 		row.add(rowFullNameLabel);
@@ -335,7 +335,7 @@ function populateFindFriendsDogsquareTableView(uObj){
 			height:73,
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',
-			type:TYPE_ROW
+			type:FRIENDS_TYPE_ROW
 		});
 		
 		//friend's profile name
@@ -348,7 +348,7 @@ function populateFindFriendsDogsquareTableView(uObj){
 			borderRadius:30,
 			borderWidth:2,
 			borderColor:'#f9bf30',
-			type:TYPE_ROW
+			type:FRIENDS_TYPE_ROW
 		});
 		row.add(rowFriendImage);
 		
@@ -361,7 +361,7 @@ function populateFindFriendsDogsquareTableView(uObj){
 			opacity:0.6,
 			left:72,
 			font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'},
-			type:TYPE_ROW
+			type:FRIENDS_TYPE_ROW
 		});
 		row.add(rowNameLabel);
 		
@@ -551,7 +551,7 @@ function handleFollowButton(e){
 function handlefriendsTableViewRows(e){
 	
 	
-	if(e.source.type == TYPE_ROW && e.source.button == 'follow'){
+	if(e.source.type == FRIENDS_TYPE_ROW && e.source.button == 'follow'){
 		
 		Ti.include('ui/iphone/profile_other.js');
 		

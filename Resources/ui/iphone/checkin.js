@@ -2,26 +2,9 @@
 var VIEW_PLACE_VIEW = 1;
 var CHECKIN_PLACE_VIEW = 2;
 
-
-//checkin window
-var checkinWindow = Ti.UI.createWindow({
-	backgroundColor:UI_BACKGROUND_COLOR,
-	barImage:IMAGE_PATH+'common/bar.png',
-	barColor:UI_COLOR,
-	title:'Check in'
-});
-
-//back button
-var checkinBackButton = Ti.UI.createButton({
-    backgroundImage: IMAGE_PATH+'common/back_button.png',
-    width:48,
-    height:33
-});
-
-checkinWindow.setLeftNavButton(checkinBackButton);
-
-checkinBackButton.addEventListener("click", function() {
-    navController.close(checkinWindow);
+//checkin view
+var checkinView = Ti.UI.createView({
+	backgroundColor:UI_BACKGROUND_COLOR
 });
 
 //the checkin map
@@ -35,14 +18,14 @@ var checkinMap = Titanium.Map.createView({
     userLocation:true,
     visible:true
 });
-checkinWindow.add(checkinMap);
+checkinView.add(checkinMap);
 
 //checkin title yellow bar
 var checkinTitleBar = Ti.UI.createImageView({ 
 	image:IMAGE_PATH+'profile/Activitybar.png',
 	top:226
 });
-checkinWindow.add(checkinTitleBar);
+checkinView.add(checkinTitleBar);
 
 //checkin title label of the bar
 var checkinBarTitleLabel = Titanium.UI.createLabel({ 
@@ -103,7 +86,7 @@ var checkinPlacesTableViewBackground = Titanium.UI.createView({
 	bottom:0,
 	top:259
 });
-checkinWindow.add(checkinPlacesTableViewBackground);
+checkinView.add(checkinPlacesTableViewBackground);
 
 //checkin places tableView
 var checkinPlacesTableView = Titanium.UI.createTableView({
@@ -115,7 +98,7 @@ var checkinPlacesTableView = Titanium.UI.createTableView({
 	top:263,
 	bottom:0
 });
-checkinWindow.add(checkinPlacesTableView);
+checkinView.add(checkinPlacesTableView);
 checkinPlacesTableView.addEventListener('click', handleCheckinPlacesTableViewRow);
 
 function populatecheckinPlacesTableView(){

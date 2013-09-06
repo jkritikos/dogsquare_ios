@@ -1,7 +1,7 @@
 //UI components
 var ADD_DOG = 8;
 var TYPE_CHECKBOX = 1;
-var TYPE_ROW = 2;
+var RIGHT_MENU_TYPE_ROW = 2;
 
 //Right window
 var winRight = Ti.UI.createWindow();
@@ -14,6 +14,7 @@ var rightTableView = Ti.UI.createTableView({
 });
 populateRightMenu(dRows);
 winRight.add(rightTableView);
+rightTableView.addEventListener('click', handleTableViewRows);
 
 /*Returns an array of the selected dog ids*/
 function getSelectedDogs(){
@@ -43,19 +44,6 @@ function populateRightMenu(dogObject){
 		backgroundColor:UI_MENU_BACKGROUND_COLOR,
 		selectedBackgroundColor:'#1c2027',
 		rowId:ADD_DOG
-	});
-	
-	// add dog button event listener
-	rightMenuAddDogRow.addEventListener("click", function(){
-		closeOpenWindows();
-		
-		Ti.include('ui/iphone/add_dog.js');
-		navController.getWindow().add(viewAddDog);
-		navController.getWindow().setTitle('Add new dog');
-		
-		if(window.isAnyViewOpen()){
-			window.toggleRightView();
-		}
 	});
 	
 	//plus image inside button UI
@@ -99,10 +87,9 @@ function populateRightMenu(dogObject){
 			backgroundColor:'1c2027',
 			selectionStyle:0,
 			active:false,
-			type:TYPE_ROW,
+			type:RIGHT_MENU_TYPE_ROW,
 			dogId:dogObject[i].id
 		});
-		rightMenuRow.addEventListener('click', handleTableViewRows);
 		
 		//border image inside the dog row - right menu row
 		var rowBorderImage = Ti.UI.createImageView({ 
@@ -123,7 +110,7 @@ function populateRightMenu(dogObject){
 			borderRadius:40,
 			borderWidth:4,
 			borderColor:'454950',
-			type:TYPE_ROW
+			type:RIGHT_MENU_TYPE_ROW
 		});
 		
 		//dog name label inside the dog row - right menu row
@@ -136,7 +123,7 @@ function populateRightMenu(dogObject){
 			left:156,
 			top:14,
 			font:{fontSize:24, fontWeight:'semibold', fontFamily:'Open Sans'},
-			type:TYPE_ROW
+			type:RIGHT_MENU_TYPE_ROW
 		});
 		
 		//dog mood label inside the dog row - right menu row
@@ -149,7 +136,7 @@ function populateRightMenu(dogObject){
 			left:158,
 			top:47,
 			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
-			type:TYPE_ROW
+			type:RIGHT_MENU_TYPE_ROW
 		});
 		
 		//dog percent label inside the dog row - right menu row
@@ -162,7 +149,7 @@ function populateRightMenu(dogObject){
 			left:199,
 			top:47,
 			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
-			type:TYPE_ROW
+			type:RIGHT_MENU_TYPE_ROW
 		});
 		
 		//bone image inside the dog row - right menu row
@@ -170,7 +157,7 @@ function populateRightMenu(dogObject){
 			image:IMAGE_PATH+'run_finish/bone_icon.png',
 			left:232,
 			top:47,
-			type:TYPE_ROW
+			type:RIGHT_MENU_TYPE_ROW
 		});
 		
 		//check box view inside the dog row - right menu row
@@ -205,10 +192,10 @@ function populateRightMenu(dogObject){
 	rightTableView.setData(rightMenuData);
 }
 
-//handle all rows and show dog profile
+//handle all rows and show dog profile - also handle add dog
 function handleTableViewRows(e){
 	
-	if(e.source.type == TYPE_ROW) {
+	if(e.source.type == RIGHT_MENU_TYPE_ROW) {
 		closeOpenWindows();
 		
 		var dogId = e.row.dogId;
@@ -217,6 +204,16 @@ function handleTableViewRows(e){
 		var dogProfileView = buildDogProfileView(dogId);
 		
 		navController.getWindow().add(dogProfileView);
+		
+		if(window.isAnyViewOpen()){
+			window.toggleRightView();
+		}
+	}else if(e.row.rowId == ADD_DOG){
+		closeOpenWindows();
+		
+		Ti.include('ui/iphone/add_dog.js');
+		navController.getWindow().add(viewAddDog);
+		navController.getWindow().setTitle('Add new dog');
 		
 		if(window.isAnyViewOpen()){
 			window.toggleRightView();

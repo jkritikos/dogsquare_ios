@@ -26,16 +26,30 @@ viewMap.add(mapLabel);
 
 mapCheckInButton.addEventListener('click', function(){
 	
-	/*var checkinWindow = Ti.UI.createWindow({
-		url:'ui/iphone/checkin.js',
-		backgroundColor:'red',
-		barColor:'#28292c',
-		title:'Check in',
-		backButtonTitle:'Back'
-	});*/
-	
 	Ti.include('ui/iphone/checkin.js');
 	
+	//checkin window
+	var checkinWindow = Ti.UI.createWindow({
+		backgroundColor:UI_BACKGROUND_COLOR,
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Check in'
+	});
+	
+	//back button
+	var checkinBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	checkinWindow.setLeftNavButton(checkinBackButton);
+	
+	checkinBackButton.addEventListener("click", function() {
+	    navController.close(checkinWindow);
+	});
+	
+	checkinWindow.add(checkinView);
 	openWindows.push(checkinWindow);
 	navController.open(checkinWindow);
 });
