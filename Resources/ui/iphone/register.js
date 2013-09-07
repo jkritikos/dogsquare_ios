@@ -527,7 +527,9 @@ function handlePhotoSelection(){
 			var image = event.media;
 			
 			//Reduce image size first
-			Ti.API.info('Selected image with h:'+image.height+' w:'+image.width);
+			var isPortrait = false;
+			if(image.height > image.width) isPortrait = true;
+			Ti.API.info('Selected image with h:'+image.height+' w:'+image.width+' isPortrait='+isPortrait);
 			
 			//Jpeg compression module
 			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
@@ -535,7 +537,13 @@ function handlePhotoSelection(){
 			jpgcompressor.setWorstCompressQuality(0.40);
 			
 			//Make image smaller
-			var resizedImage = jpgcompressor.scale(image, 2048, 1536);
+			var resizedImage = null;
+			if(isPortrait){
+				resizedImage = jpgcompressor.scale(image, 768, 1024);
+			} else {
+				resizedImage = jpgcompressor.scale(image, 1024, 768);
+			}
+			
 			var compressedImage = jpgcompressor.compress(resizedImage);
 			
 			//Create thumbnail

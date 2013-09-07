@@ -107,7 +107,7 @@ profileOpacityBar.add(profileOpacityBarSepparator);
 profileImageView.add(profileOpacityBar);
 
 var profileImageViewBlob = profileImageView.toBlob();
-var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:2536});
+var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:640});
 profileImageView.image = profileImageBlobCropped;
 
 viewProfile.add(profileImageView);
