@@ -25,6 +25,7 @@ function closeOpenWindows(){
 	for(var i=0; i < openWindows.length; i++){
 		navController.close(openWindows[i], {animated:false});
 	}
+	openWindows = [];
 }
 
 ////////////////////////////////////////////////

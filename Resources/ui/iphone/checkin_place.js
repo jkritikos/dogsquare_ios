@@ -1,4 +1,5 @@
 
+
 //UI Components
 var checkinPlaceCommentsBackgroundView = null;
 var checkinPlaceCommentsTextArea = null;
@@ -11,7 +12,9 @@ var checkinPlaceDescriptionLabel = null;
 var checkinPlaceMap= null;
 var checkinPlaceMapAnnotation = null;
 var checkinPlaceView = null;
+var checkinPlaceSaveCommentButton = null;
 var annotations = [];
+var addPlaceComObject = {};
 
 function buildCheckinPlaceView(view, placeId){
 	if(checkinPlaceView == null){
@@ -164,6 +167,15 @@ function buildCheckinPlaceView(view, placeId){
 		//event listener for button
 		checkinPlaceCommentsButton.addEventListener('click', handleCommentButtons);
 		
+		// save button
+		checkinPlaceSaveCommentButton = Ti.UI.createButton({
+			backgroundImage:IMAGE_PATH+'common/save_button.png',
+		    width:54,
+		    height:34,
+		    placeId:placeId
+		});
+		checkinPlaceSaveCommentButton.addEventListener('click', handlePlaceCommentSaveButton);
+		
 		//plus buttton to create a new comment
 		var checkinPlacePlusButton = Ti.UI.createButton({ 
 			backgroundImage:IMAGE_PATH+'checkin_place/add_icon.png',
@@ -282,12 +294,14 @@ function handleCommentButtons(e){
 	var button = e.source.button;
 	
 	if(toggle && button != 'plus'){
+		openWindows[1].setRightNavButton(null);
 		checkinPlaceCommentsBackgroundView.animate({top:332, duration:600});
 		checkinPlaceCommentsTextArea.blur();
 		checkinPlaceCommentsTextArea.hide();
 		checkinPlaceCommentsTableView.show();
 		e.source.toggle = false;
 	}else if(!toggle && button != 'plus'){
+		openWindows[1].setRightNavButton(null);
 		checkinPlaceCommentsBackgroundView.animate({top:-13, duration:600});
 		checkinPlaceCommentsTextArea.blur();
 		checkinPlaceCommentsTextArea.hide();
@@ -296,6 +310,8 @@ function handleCommentButtons(e){
 	}else if(button == 'plus'){
 		checkinPlaceCommentsBackgroundView.animate({top:-13, duration:200});
 		checkinPlaceCommentsButton.toggle = true;
+		openWindows[1].setRightNavButton(checkinPlaceSaveCommentButton);
+		
 		
 		checkinPlaceCommentsTextArea.focus();
 		checkinPlaceCommentsTableView.hide();
@@ -446,4 +462,45 @@ function updateCheckinPlace(placeObj){
 		checkinPlaceHeartImage.image = IMAGE_PATH+'common/best_icon_selected_red.png';
 		checkinPlaceHeartImage.toggle = true;
 	}
+}
+
+function handlePlaceCommentSaveButton(e){
+	if(checkinPlaceCommentsTextArea.value != ''){
+		addPlaceComObject.comment = checkinPlaceCommentsTextArea.value;
+		addPlaceComObject.place_id = e.source.placeId;
+		//save place comment
+		doSavePlaceCommentOnline(addPlaceComObject);
+	}
+}
+
+//Server call for saving place comments
+function doSavePlaceCommentOnline(comObj){
+	Ti.API.info('doSavePlaceCommentOnline() called with commentObject='+comObj); 	
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('doSavePlaceCommentOnline() got back from server '+this.responseText); 	
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			Ti.API.info('doSavePlaceCommentOnline() got back place id from server '+jsonData.data.comment_id);
+			
+			comObj.comment_id = jsonData.data.comment_id;
+			alert('place comment successfully added');
+		} else {
+			alert(getErrorMessage(jsonData.response));
+		}
+	};
+	xhr.open('POST',API+'addPlaceComment');
+	xhr.send({
+		user_id:userObject.userId,
+		comment:comObj.comment,
+		place_id:comObj.place_id,
+	});
 }

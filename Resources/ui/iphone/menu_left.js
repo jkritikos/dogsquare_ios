@@ -87,6 +87,7 @@ leftTableView.addEventListener("click", function(e){
 			break;
 			
 		case MENU_MAP:
+			closeOpenWindows();
 			Ti.include('ui/iphone/map.js');
 			navController.getWindow().add(viewMap);
 			navController.getWindow().setTitle('Map');

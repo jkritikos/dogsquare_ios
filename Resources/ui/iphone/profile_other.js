@@ -324,10 +324,12 @@ function handleProfileOtherFollowButton(e){
 		
 		if(e.source.toggle){
 			unfollowUser(userId, e.source, win);
+			profileOtherFollowersNumberLabel.text --;
 			e.source.toggle = false;
 		}else{
 			followUser(userId, e.source, win);
 			e.source.toggle = true;
+			profileOtherFollowersNumberLabel.text ++;
 		}
 	}
 }

@@ -197,13 +197,11 @@ function handleCheckinPlacesTableViewRow(e){
 	var placeTitle = e.row.children[0].text;
 	
 	Ti.include('ui/iphone/checkin_place.js');
-	var checkinPlaceView = buildCheckinPlaceView(CHECKIN_PLACE_VIEW, placeId);
 	
 	var checkinPlaceWindow = Ti.UI.createWindow({
 		backgroundColor:UI_BACKGROUND_COLOR,
 		barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR,
-		title:placeTitle
+		barColor:UI_COLOR
 	});
 	
 	//back button
@@ -218,6 +216,9 @@ function handleCheckinPlacesTableViewRow(e){
 	checkinPlaceBackButton.addEventListener("click", function() {
 	    navController.close(checkinPlaceWindow);
 	});
+	
+	checkinPlaceWindow.setTitle(placeTitle);
+	var checkinPlaceView = buildCheckinPlaceView(CHECKIN_PLACE_VIEW, placeId);
 	
 	checkinPlaceWindow.add(checkinPlaceView);
 	openWindows.push(checkinPlaceWindow);
