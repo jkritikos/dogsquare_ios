@@ -76,19 +76,17 @@ winLeft.add(leftTableView);
 
 //background for search results
 var leftmenuSearchBackgroundView = Ti.UI.createView({
-	backgroundColor:'black',
+	backgroundColor:UI_MENU_BACKGROUND_COLOR,
 	opacity:0.5
 });
-
-winLeft.add(leftmenuSearchBackgroundView);
-leftmenuSearchBackgroundView.hide();
 
 //activity indicator for search
 var leftmenuSearchActivityIndicator = Titanium.UI.createActivityIndicator({
 	top:50,
-    style:Titanium.UI.iPhone.ActivityIndicatorStyle.PLAIN
+    style:Titanium.UI.iPhone.ActivityIndicatorStyle.PLAIN,
+    zIndex:2
 });
-winLeft.add(leftmenuSearchActivityIndicator);
+leftmenuSearchBackgroundView.add(leftmenuSearchActivityIndicator);
 
 //table view for search results
 var menuLeftSearchResultsTableView = Titanium.UI.createTableView({
@@ -104,6 +102,9 @@ menuLeftSearchResultsTableView.footerView = Ti.UI.createView({
     backgroundColor: 'transparent'
 });
 leftmenuSearchBackgroundView.add(menuLeftSearchResultsTableView);
+
+winLeft.add(leftmenuSearchBackgroundView);
+leftmenuSearchBackgroundView.hide();
 
 leftTableView.addEventListener("click", function(e){
 	Ti.API.info("isAnyViewOpen: " + window.isAnyViewOpen());
@@ -413,8 +414,8 @@ function handleLeftMenuTextFieldChange(e){
 			getLeftMenuOnlineUser(name);
 		}else{
 			//if textfield empty, reset search view
+			leftmenuSearchActivityIndicator.hide();
 			leftmenuSearchBackgroundView.opacity = 0.5;
-			leftmenuSearchBackgroundView.backgroundColor = 'black';
 			menuLeftSearchResultsTableView.data = [];
 		}
 		
@@ -440,6 +441,7 @@ function handleLeftMenuTextFieldFocus(e){
 //handle close button for search
 function handleLeftCloseSearchButton(){
 	clearSearchBackground();
+	leftmenuSearchTxtfield.blur();
 	window.leftLedge = 65;
 	window.setParallaxAmount(0.3);
 }
@@ -448,6 +450,7 @@ function handleLeftCloseSearchButton(){
 function handleLeftMenuTextFieldBlur(e){
 	var field = e.source.field;
 	
+	leftmenuSearchActivityIndicator.hide();
 	if(field == 'search'){
 		
 		if(leftmenuSearchTxtfield.value == ''){
@@ -459,7 +462,6 @@ function handleLeftMenuTextFieldBlur(e){
 //get online users
 function getLeftMenuOnlineUser(n){
 	Ti.API.info('getLeftMenuOnlineUser() called for user='+ n);
-	leftmenuSearchBackgroundView.backgroundColor = UI_MENU_BACKGROUND_COLOR;
 	leftmenuSearchActivityIndicator.show();
 	
 	var xhr = Ti.Network.createHTTPClient();
@@ -488,8 +490,8 @@ function getLeftMenuOnlineUser(n){
 
 //handle user rows from search 
 function handleLeftSearchResultRows(e){
-	clearSearchBackground();
-	
+	leftmenuSearchTxtfield.blur();
+	setTimeout(function(){clearSearchBackground();},400);
 	closeOpenWindows();
 	
 	var userId = e.row.user_id;
@@ -520,5 +522,4 @@ function clearSearchBackground(){
 	leftmenuSearchActivityIndicator.hide();
 	leftmenuSearchBackgroundView.hide();
 	menuLeftCloseSearchViewButton.hide();
-	leftmenuSearchTxtfield.blur();
 }

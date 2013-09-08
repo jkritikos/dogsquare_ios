@@ -4,6 +4,7 @@ var viewActivityCommentsTextArea = null;
 var viewActivityCommentsTableView  = null;
 var viewActivityCommentsButton = null;
 var viewActivityHeartImage = null;
+var viewActivityComObject = {};
 
 function buildViewActivityView(aId){
 	var data = getActivity(aId); 
@@ -291,6 +292,15 @@ function buildViewActivityView(aId){
 	//event listener for button
 	viewActivityCommentsButton.addEventListener('click', handleViewActivityCommentButtons);
 	
+	// save button
+	viewActivitySaveCommentButton = Ti.UI.createButton({
+		backgroundImage:IMAGE_PATH+'common/save_button.png',
+	    width:54,
+	    height:34,
+	    activityId:aId
+	});
+	viewActivitySaveCommentButton.addEventListener('click', handleActivityCommentSaveButton);
+	
 	//plus buttton to create a new comment
 	var viewActivityPlusButton = Ti.UI.createButton({ 
 		backgroundImage:IMAGE_PATH+'checkin_place/add_icon.png',
@@ -500,12 +510,14 @@ function handleViewActivityCommentButtons(e){
 	var button = e.source.button;
 	
 	if(toggle && button != 'plus'){
+		openWindows[0].setRightNavButton(null);
 		viewActivityCommentsBackgroundView.animate({top:332, duration:500});
 		viewActivityCommentsTextArea.blur();
 		viewActivityCommentsTextArea.hide();
 		viewActivityCommentsTableView.show();
 		e.source.toggle = false;
 	}else if(!toggle && button != 'plus'){
+		openWindows[0].setRightNavButton(null);
 		viewActivityCommentsBackgroundView.animate({top:-13, duration:500});
 		viewActivityCommentsTextArea.blur();
 		viewActivityCommentsTextArea.hide();
@@ -514,6 +526,7 @@ function handleViewActivityCommentButtons(e){
 	}else if(button == 'plus'){
 		viewActivityCommentsBackgroundView.animate({top:-13, duration:300});
 		viewActivityCommentsButton.toggle = true;
+		openWindows[0].setRightNavButton(viewActivitySaveCommentButton);
 		
 		viewActivityCommentsTextArea.focus();
 		viewActivityCommentsTableView.hide();
@@ -590,5 +603,46 @@ function unlikeActivity(aId){
 	xhr.send({
 		user_id:userObject.userId,
 		activity_id:aId
+	});
+}
+
+function handleActivityCommentSaveButton(e){
+	if(viewActivityCommentsTextArea.value != ''){
+		viewActivityComObject.comment = viewActivityCommentsTextArea.value;
+		viewActivityComObject.activity_id = e.source.activityId;
+		//save place comment
+		doSaveActivityCommentOnline(viewActivityComObject);
+	}
+}
+
+//Server call for saving activity comments
+function doSaveActivityCommentOnline(comObj){
+	Ti.API.info('doSaveActivityCommentOnline() called with commentObject='+comObj); 	
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('doSaveActivityCommentOnline() got back from server '+this.responseText); 	
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			Ti.API.info('doSaveActivityCommentOnline() got back comment id from server '+jsonData.data.comment_id);
+			
+			comObj.comment_id = jsonData.data.comment_id;
+			alert('activity comment successfully added');
+		} else {
+			alert(getErrorMessage(jsonData.response));
+		}
+	};
+	xhr.open('POST',API+'addActivityComment');
+	xhr.send({
+		user_id:userObject.userId,
+		comment:comObj.comment,
+		activity_id:comObj.activity_id,
 	});
 }

@@ -489,7 +489,7 @@ function doSavePlaceCommentOnline(comObj){
 		var jsonData = JSON.parse(this.responseText);
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
-			Ti.API.info('doSavePlaceCommentOnline() got back place id from server '+jsonData.data.comment_id);
+			Ti.API.info('doSavePlaceCommentOnline() got back comment id from server '+jsonData.data.comment_id);
 			
 			comObj.comment_id = jsonData.data.comment_id;
 			alert('place comment successfully added');
