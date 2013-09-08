@@ -166,6 +166,15 @@ leftTableView.addEventListener("click", function(e){
 			Ti.include('ui/iphone/inbox.js');
 			navController.getWindow().add(viewInbox);
 			navController.getWindow().setTitle('Inbox');
+			
+			//Change right nav button
+			var newMessageRightNavButton = Ti.UI.createButton({ 
+				backgroundImage:IMAGE_PATH+'checkin_place/add_icon.png',
+				width:12,
+				height:12
+			});
+			
+			navController.getWindow().rightNavButton = newMessageRightNavButton;
 			break;
 		
 		case MENU_PASSPORT:

@@ -57,14 +57,13 @@ function populateInboxTableView() {
 		//message label
 		var rowMessageLabel = Titanium.UI.createLabel({ 
 			text:messageArray[i],
-			color:'black',
+			color:'gray',
 			bottom:18,
 			height:18,
 			width:'auto',
 			textAlign:'left',
 			left:65,
-			opacity:0.7,
-			font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
 		//name label
@@ -76,8 +75,7 @@ function populateInboxTableView() {
 			width:'auto',
 			textAlign:'left',
 			left:65,
-			opacity:0.7,
-			font:{fontSize:9, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		//date label
@@ -89,8 +87,7 @@ function populateInboxTableView() {
 			width:'auto',
 			textAlign:'center',
 			right:9,
-			opacity:0.7,
-			font:{fontSize:9, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
 		messageRow.add(rowMessageProfileImage);
