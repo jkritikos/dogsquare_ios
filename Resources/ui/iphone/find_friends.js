@@ -283,16 +283,23 @@ function populateFindFriendsContactsTableView(uData){
 				if(userEmail == uData.results.users[k].User.email){
 					//create follow button if the email exists in the server
 					var rowFollowButton = Titanium.UI.createButton({
-						backgroundImage:IMAGE_PATH+'follow_invite/Follow_btn.png',
 						right:9,
 						width:86,
 						height:29,
 						userId:uData.results.users[k].User.id,
-						type:TYPE_FOLLOW_BUTTON,
-						toggle:false
+						type:TYPE_FOLLOW_BUTTON
 					});
 					row.add(rowFollowButton);
 					
+					//check if contact user has been already followed
+					if(uData.results.users[k].User.followed == null){
+						rowFollowButton.backgroundImage = IMAGE_PATH+'follow_invite/Follow_btn.png';
+						rowFollowButton.toggle = false;
+					}else{
+						rowFollowButton.backgroundImage = IMAGE_PATH+'follow_invite/Unfollow_btn.png';
+						rowFollowButton.toggle = true;
+					}
+						
 					followCreated = true;//follow is created
 					
 					//these exist to identify that the row is a row with a follow button
@@ -372,10 +379,18 @@ function populateFindFriendsDogsquareTableView(uObj){
 			width:86,
 			height:29,
 			userId:uObj[i].User.id,
-			type:TYPE_FOLLOW_BUTTON,
-			toggle:false
+			type:TYPE_FOLLOW_BUTTON
 		});
 		row.add(rowFollowButton);
+		
+		//check if contact user has been already followed
+		if(uObj[i].User.followed == null){
+			rowFollowButton.backgroundImage = IMAGE_PATH+'follow_invite/Follow_btn.png';
+			rowFollowButton.toggle = false;
+		}else{
+			rowFollowButton.backgroundImage = IMAGE_PATH+'follow_invite/Unfollow_btn.png';
+			rowFollowButton.toggle = true;
+		}
 		
 		//these exist to identify that the row is a row with a follow button
 		row.button = 'follow';
@@ -429,7 +444,7 @@ function handleFindFriendsTabs(e){
 		findFriendsTabContactsSelection.show();
 		findFriendsTabDogsquareSelection.hide();
 		
-		populateFindFriendsContactsTableView(localDataForContacts);
+		doSearchUserByEmail(contactsEmailStringList);
 		
 		findFriendsTableView.show();
 		findFriendsFacebookView.hide();
@@ -497,6 +512,7 @@ function getOnlineUser(n){
 	};
 	xhr.open('GET',API+'searchUser');
 	xhr.send({
+		user_id:userObject.userId,
 		name:n
 	});
 }
@@ -549,7 +565,6 @@ function handleFollowButton(e){
 
 
 function handlefriendsTableViewRows(e){
-	
 	
 	if(e.source.type == FRIENDS_TYPE_ROW && e.source.button == 'follow'){
 		
