@@ -1,41 +1,40 @@
 //UI components
-var viewNotifications = null;
-var notificationsTableView = null;
+var viewFeeds = null;
+var feedsTableView = null;
 
-function buildNotificationsView(){
-	if(viewNotifications == null){
-		//notifications view
-		viewNotifications = Ti.UI.createView({
+function buildFeedsView(){
+	if(viewFeeds == null){
+		//feeds view
+		viewFeeds = Ti.UI.createView({
 			backgroundColor:UI_BACKGROUND_COLOR
 		});
 		
-		//notifications table view
-		notificationsTableView = Titanium.UI.createTableView({
+		//feeds table view
+		feedsTableView = Titanium.UI.createTableView({
 			minRowHeight:71,
 			width:293,
 			backgroundColor:UI_BACKGROUND_COLOR,
 			top:13,
 			bottom:0
 		});
-		viewNotifications.add(notificationsTableView);
-		notificationsTableView.addEventListener('click', handleNotificationsTableView);
+		viewFeeds.add(feedsTableView);
 		
-		//notifications table view footer
-		notificationsTableView.footerView = Ti.UI.createView({
+		//feeds table view footer
+		feedsTableView.footerView = Ti.UI.createView({
 		    height: 1,
 		    backgroundColor:'transparent'
 		});
 	}
 	
-	//Get unread notifications from the server and populate the table
-	doGetNotifications();
+	//Get unread feeds from the server and populate the table
+	doGetFeeds();
 }
 
-function doGetNotifications(){
-	Ti.API.info('doGetNotifications() called');
+function doGetFeeds(){
+	Ti.API.info('doGetFeeds() called');
 	
 	//progress view
-	var progressView = new ProgressView({window:viewNotifications});
+	var progressView = new ProgressView({window:viewFeeds});
 	progressView.show({
 		text:"Loading..."
 	});
@@ -50,13 +49,14 @@ function doGetNotifications(){
 	};
 	
 	xhr.onload = function(e){
-		Ti.API.info('doGetNotifications() got back from server '+this.responseText);
+		Ti.API.info('doGetFeeds() got back from server '+this.responseText);
 		var jsonData = JSON.parse(this.responseText);
+		
 		//Hide progress view
 		progressView.hide();
 		
 		//Update UI
-		populateNotificationsTableView(jsonData.data.notifications);
+		populateFeedsTableView(jsonData.data.notifications);
 	};
 	
 	xhr.open('GET',API+'getNotifications');
@@ -66,7 +66,7 @@ function doGetNotifications(){
 }
 
 //populate table view
-function populateNotificationsTableView(data) {
+function populateFeedsTableView(data) {
 	
 	var tableRows = [];
 	
@@ -81,9 +81,7 @@ function populateNotificationsTableView(data) {
 			width:'100%',
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',
-			notification_type:data[i].type_id,
-			fromUserId:data[i].user_from,
-			fromUserName:data[i].name
+			notification_type:data[i].type_id
 		});
 		
 		//profile image
@@ -125,37 +123,5 @@ function populateNotificationsTableView(data) {
 		tableRows.push(notificationRow);
 	}
 	
-	notificationsTableView.setData(tableRows);
-}
-
-function handleNotificationsTableView(e){
-	Ti.include('ui/iphone/profile_other.js');
-		
-	var userId = e.row.fromUserId;
-	var profileOtherView = buildProfileOtherView(userId);
-	var name = e.row.fromUserName;
-	
-	var profileOtherWindow = Ti.UI.createWindow({
-		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR,
-		title:name
-	});
-	
-	//back button & event listener
-	var profileOtherBackButton = Ti.UI.createButton({
-	    backgroundImage: IMAGE_PATH+'common/back_button.png',
-	    width:48,
-	    height:33
-	});
-	
-	profileOtherWindow.setLeftNavButton(profileOtherBackButton);
-	profileOtherBackButton.addEventListener("click", function() {
-	    navController.close(profileOtherWindow);
-	});
-	
-	profileOtherWindow.add(profileOtherView);
-	
-	openWindows.push(profileOtherWindow);
-	navController.open(profileOtherWindow);
+	feedsTableView.setData(tableRows);
 }

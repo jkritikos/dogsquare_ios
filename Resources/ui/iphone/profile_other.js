@@ -19,7 +19,7 @@ function buildProfileOtherView(uId) {
 	profileOtherUserId = uId;
 	if(profileOtherView == null){
 		//profile other window
-		var profileOtherView = Ti.UI.createView({
+		profileOtherView = Ti.UI.createView({
 			backgroundColor:UI_BACKGROUND_COLOR
 		});
 		
