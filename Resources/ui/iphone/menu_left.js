@@ -490,6 +490,7 @@ function getLeftMenuOnlineUser(n){
 	};
 	xhr.open('GET',API+'searchUser');
 	xhr.send({
+		user_id:userObject.userId,
 		name:n
 	});
 }

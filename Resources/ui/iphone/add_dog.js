@@ -464,7 +464,11 @@ function doSaveDogOnline(dObj){
 			
 			populateRightMenu(getDogs());
 			navController.getWindow().setRightNavButton(rightBtn);
-			getOnlineDog(dObj.dog_id);
+			
+			Ti.include('ui/iphone/dog_profile.js');
+			var dogProfileView = buildDogProfileView(dObj.dog_id);
+		
+			navController.getWindow().add(dogProfileView);
 		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
