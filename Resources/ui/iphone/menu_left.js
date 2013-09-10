@@ -351,6 +351,23 @@ function createLeftMenuRow(menuItem){
 	} else if(menuItem == MENU_NOTIFICATIONS){
 		icon = IMAGE_PATH+'menu_left/notifications_menu.png';
 		label = 'Notifications';
+		
+		var notificationCountBackground = Titanium.UI.createView({
+			backgroundColor:'454950',
+			right:82,
+			width:18,
+			height:18,
+			bottom:15
+		});
+		row.add(notificationCountBackground);
+		notificationCountBackground.hide();
+		
+		var notificationCountLabel = Titanium.UI.createLabel({
+			width:'auto',
+			color:'#ab7b04',
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		notificationCountBackground.add(notificationCountLabel);
 	}
 	
 	var rowIcon = Titanium.UI.createImageView({
@@ -483,6 +500,12 @@ function getLeftMenuOnlineUser(n){
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
 			leftmenuSearchActivityIndicator.hide();
 			populateSearchResultsTableView(jsonData.data.users);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -529,4 +552,21 @@ function clearSearchBackground(){
 	leftmenuSearchActivityIndicator.hide();
 	leftmenuSearchBackgroundView.hide();
 	menuLeftCloseSearchViewButton.hide();
+}
+
+
+function updateLeftMenuCounts(cFollowers, cInbox, cNotifications){
+	var notifBackground = leftTableView.data[0].rows[5].children[0];
+	var notifLabel = leftTableView.data[0].rows[5].children[0].children[0];
+	var followersLabel = leftTableView.data[0].rows[0].children[1];
+	
+	followersLabel.text = cFollowers +' followers';
+	if(cNotifications != 0){
+		notifBackground.backgroundColor = '454950';
+		notifLabel.text = cNotifications;
+		notifBackground.width = notifLabel.toImage().width + 9;
+		notifBackground.show();
+	}else{
+		notifBackground.hide();
+	}
 }

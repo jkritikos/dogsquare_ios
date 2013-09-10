@@ -350,6 +350,11 @@ function likePlace(pId){
 			
 			checkinPlaceHeartImage.image = IMAGE_PATH+'common/best_icon_selected_red.png';
 			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -379,6 +384,11 @@ function unlikePlace(pId){
 			
 			checkinPlaceHeartImage.image = IMAGE_PATH+'common/best_icon_default.png';
 			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -416,7 +426,13 @@ function getOnlinePlace(pId){
 			//Hide progress view
 			progressView.hide();
 			
-			updateCheckinPlace(jsonData.data.place)
+			updateCheckinPlace(jsonData.data.place);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		} else {
 			//Show the error message we got back from the server
 			progressView.change({
@@ -433,6 +449,7 @@ function getOnlinePlace(pId){
 	};
 	xhr.open('GET',API+'getPlace');
 	xhr.send({
+		user_id:userObject.userId,
 		place_id:pId
 	});
 }
@@ -492,6 +509,13 @@ function doSavePlaceCommentOnline(comObj){
 			Ti.API.info('doSavePlaceCommentOnline() got back comment id from server '+jsonData.data.comment_id);
 			
 			comObj.comment_id = jsonData.data.comment_id;
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
 			alert('place comment successfully added');
 		} else {
 			alert(getErrorMessage(jsonData.response));

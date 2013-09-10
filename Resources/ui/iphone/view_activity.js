@@ -565,6 +565,11 @@ function likeActivity(aId){
 			
 			viewActivityHeartImage.image = IMAGE_PATH+'common/best_icon_selected_red.png';
 			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -594,6 +599,11 @@ function unlikeActivity(aId){
 			
 			viewActivityHeartImage.image = IMAGE_PATH+'common/best_icon_default.png';
 			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -634,6 +644,13 @@ function doSaveActivityCommentOnline(comObj){
 			Ti.API.info('doSaveActivityCommentOnline() got back comment id from server '+jsonData.data.comment_id);
 			
 			comObj.comment_id = jsonData.data.comment_id;
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
 			alert('activity comment successfully added');
 		} else {
 			alert(getErrorMessage(jsonData.response));

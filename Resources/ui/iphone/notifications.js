@@ -57,6 +57,12 @@ function doGetNotifications(){
 		//Hide progress view
 		progressView.hide();
 		
+		var followers = jsonData.data.count_followers;
+		var inbox = jsonData.data.count_inbox;
+		var notifications = jsonData.data.count_notifications;
+		
+		updateLeftMenuCounts(followers, inbox, notifications);
+		
 		//Update UI
 		if(jsonData.data.notifications.length > 0){
 			populateNotificationsTableView(jsonData.data.notifications);	

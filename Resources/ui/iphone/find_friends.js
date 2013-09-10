@@ -492,6 +492,11 @@ function getOnlineUser(n){
 			var userObj = jsonData;
 			populateFindFriendsDogsquareTableView(userObj.data.users);
 			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 			
 			//Hide message and close register window
 			progressView.hide();
@@ -535,6 +540,11 @@ function doSearchUserByEmail(cEmail){
 			populateFindFriendsContactsTableView(jsonData.data);
 			localDataForContacts = jsonData.data;
 			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}

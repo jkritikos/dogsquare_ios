@@ -312,6 +312,11 @@ function followUser(uId, button, win){
 				button.backgroundImage = IMAGE_PATH+'profile_other/Unfollow_button.png';
 			}
 			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -343,6 +348,12 @@ function unfollowUser(uId, button, win){
 			}else if(win == 2){
 				button.backgroundImage = IMAGE_PATH+'profile_other/Follow_button.png';
 			}
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -370,13 +381,19 @@ function getFollowers(uId){
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
 			populateListUsersTableView(jsonData.data);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
-		
 	};
 	xhr.open('GET',API+'getFollowers');
 	xhr.send({
+		user_id:userObject.userId,
 		target_id:uId
 	});
 }
@@ -397,13 +414,19 @@ function getFollowing(uId){
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
 			populateListUsersTableView(jsonData.data);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
-		
 	};
 	xhr.open('GET',API+'getFollowing');
 	xhr.send({
+		user_id:userObject.userId,
 		target_id:uId
 	});
 }

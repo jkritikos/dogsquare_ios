@@ -462,6 +462,12 @@ function doSaveDogOnline(dObj){
 			Ti.API.info('doSaveDogOnline() got back dog id from server '+jsonData.data.dog_id);
 			saveDog(dObj);
 			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
 			populateRightMenu(getDogs());
 			navController.getWindow().setRightNavButton(rightBtn);
 			

@@ -320,6 +320,12 @@ function doSavePlaceOnline(pObj){
 			Ti.API.info('doSavePlaceOnline() got back place id from server '+jsonData.data.place_id);
 			//Add the server place id to the object
 			pObj.place_id = jsonData.data.place_id;
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 			alert('place successfully added');
 		} else {
 			alert(getErrorMessage(jsonData.response));

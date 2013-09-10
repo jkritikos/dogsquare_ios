@@ -279,6 +279,11 @@ function likeDog(dId){
 			
 			dogProfileHeartImage.image = IMAGE_PATH+'common/best_icon_selected_red.png';
 			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -308,6 +313,11 @@ function unlikeDog(dId){
 			
 			dogProfileHeartImage.image = IMAGE_PATH+'common/best_icon_default.png';
 			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -348,6 +358,12 @@ function getOnlineDog(dId){
 			
 			//update dog profile UI
 			updateDogProfile(jsonData.data.dog);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		} else {
 			//Show the error message we got back from the server
 			progressView.change({
@@ -364,6 +380,7 @@ function getOnlineDog(dId){
 	};
 	xhr.open('GET',API+'getDog');
 	xhr.send({
+		user_id:userObject.userId,
 		dog_id:dId
 	});
 }

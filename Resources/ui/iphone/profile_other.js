@@ -429,6 +429,12 @@ function getOnlineOtherUser(uId){
 			progressView.hide();
 			updateProfileOther(jsonData.data.user);
 			populateProfileOtherDogTableView(jsonData.data.dogs);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 		} else {
 			//Show the error message we got back from the server
 			progressView.change({
