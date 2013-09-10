@@ -568,6 +568,20 @@ function getActivityCoordinates(activityId){
 	return data;
 }
 
+//Stores a message object to our local inbox
+function saveInboxMessage(obj){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	db.execute('insert into inbox (remote_user_id, remote_user_name, my_message, read, date, message) values (?,?,?,?,?,?)',obj.remote_user_id, obj.remote_user_name, obj.my_message, obj.read, obj.date, obj.message);
+	db.close();
+}
+
+//Returns all messages from our inbox
+function getInbox(){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.close();
+}
+
 function createDB(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
@@ -577,7 +591,8 @@ function createDB(){
 	db.execute('create table if not exists ACTIVITY_DOGS (\"activity_id\" integer, \"dog_id\" integer, \"walk_distance\" real, \"playtime\" integer, \"dogfuel\" integer)');
 	db.execute('create table if not exists ACTIVITY_COORDINATES (\"activity_id\" integer, \"lat\" real, \"lon\" real, \"log_time\" real)');
 	db.execute('create table if not exists PASSPORT (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"title\" varchar(128), \"description\" varchar(128), \"date\" real, \"remind_flag\" integer)');
-	db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from\" integer, \"user_to\" integer, \"date\" real, \"message\" text)');
+	db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"remote_user_id\" integer, \"remote_user_name\" varchar(128), \"remote_user_thumb\" varchar(128), \"my_message\" integer, \"read\" integer, \"date\" real, \"message\" text)');
+	//db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from\" integer, \"user_to\" integer, \"date\" real, \"message\" text)');
 	
 	db.close();
 	Ti.API.info('createDB() ends');

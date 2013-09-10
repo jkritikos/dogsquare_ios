@@ -17,7 +17,7 @@ var profileImageView = Titanium.UI.createImageView({
 var profileOpacityBar = Titanium.UI.createView({ 
 	backgroundColor:'white',
 	width:'100%',
-	bottom:25,
+	bottom:15,
 	height:36,
 	opacity:0.8
 });
@@ -158,7 +158,7 @@ var profileActivityLabel = Titanium.UI.createLabel({
 	height:20,
 	textAlign:'center',
 	left:29,
-	font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+	font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
 profileActivityBar.add(profileActivityLabel);
 

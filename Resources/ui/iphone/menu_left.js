@@ -130,7 +130,7 @@ leftTableView.addEventListener("click", function(e){
 			Ti.include('ui/iphone/feeds.js');
 			buildFeedsView();
 			navController.getWindow().add(viewFeeds);
-			navController.getWindow().setTitle('Feeds');
+			navController.getWindow().setTitle('Feed');
 			break;
 		case MENU_PROFILE:
 			Ti.include('ui/iphone/profile.js');
