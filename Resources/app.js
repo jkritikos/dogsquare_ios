@@ -43,7 +43,7 @@ Ti.include('ui/iphone/navigation.js');
 //Progress view component
 Ti.include("modules/progress.view.js");
 
-window.add(loginWindow);
+window.add(initialWindow);
 window.open(); //init the app
 window.setParallaxAmount(0.3);
 

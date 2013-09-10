@@ -46,6 +46,20 @@ function buildRegisterWindow(){
 		top:0
 	});
 	
+	//back button
+	var registerBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33,
+	    left:6
+	});
+	registerNavBar.add(registerBackButton);
+	
+	registerBackButton.addEventListener("click", function() {
+	   	registerWindow.close();
+	   	initialWindow.remove(registerWindow);
+	});
+	
 	registerNavBarLabel = Ti.UI.createLabel({
 		text:'Welcome',
 		color:'white',

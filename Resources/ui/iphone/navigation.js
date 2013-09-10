@@ -97,4 +97,4 @@ var window = NappSlideMenu.createSlideMenuWindow({
 	rightLedge:43
 });
 
-Ti.include('login.js');
+Ti.include('initial.js');
