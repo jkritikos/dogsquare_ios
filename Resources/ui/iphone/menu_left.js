@@ -119,6 +119,12 @@ leftTableView.addEventListener("click", function(e){
 	
 	var menuItem = e.row != null ? e.row.menuItem : e.menuItem;
 	
+	//Remove previous view?
+	if(CURRENT_VIEW == VIEW_NOTIFICATIONS){
+		navController.getWindow().remove(viewNotifications);
+	}
+	
+	
 	switch(menuItem){
 		case MENU_FEED:
 			Ti.include('ui/iphone/feeds.js');

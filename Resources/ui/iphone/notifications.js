@@ -3,6 +3,8 @@ var viewNotifications = null;
 var notificationsTableView = null;
 
 function buildNotificationsView(){
+	CURRENT_VIEW = VIEW_NOTIFICATIONS;
+	
 	if(viewNotifications == null){
 		//notifications view
 		viewNotifications = Ti.UI.createView({
@@ -32,15 +34,15 @@ function buildNotificationsView(){
 }
 
 function doGetNotifications(){
-	Ti.API.info('doGetNotifications() called');
+	var currentUser = getUserObject();
+	
+	Ti.API.info('doGetNotifications() called for user_id '+currentUser.userId);
 	
 	//progress view
 	var progressView = new ProgressView({window:viewNotifications});
 	progressView.show({
 		text:"Loading..."
 	});
-	
-	var currentUser = getUserObject();
 	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
@@ -56,7 +58,9 @@ function doGetNotifications(){
 		progressView.hide();
 		
 		//Update UI
-		populateNotificationsTableView(jsonData.data.notifications);
+		if(jsonData.data.notifications.length > 0){
+			populateNotificationsTableView(jsonData.data.notifications);	
+		}
 	};
 	
 	xhr.open('GET',API+'getNotifications');

@@ -11,14 +11,25 @@ var UI_FONT_LEFTMENU = {fontSize:15, fontWeight:'regular', fontFamily:'Open Sans
 var IMAGE_PATH = 'images/iphone/';
 //End UI properties
 
-//Left & right menus
-Ti.include('menu_left.js');
-Ti.include('menu_right.js');
-
 //Various views
 var currentDogView = null;
 var VIEW_SIGNUP = 1;
+var VIEW_NOTIFICATIONS = 2;
+var VIEW_PROFILE = 3;
+var VIEW_FEED = 4;
+var VIEW_MAP = 5;
+var VIEW_GALLERY = 6;
+var VIEW_INBOX = 7;
+var VIEW_BADGES = 8;
+var VIEW_PASSPORT = 9;
+var VIEW_FIND_FRIENDS = 10;
+var VIEW_SETTINGS = 11;
 
+var CURRENT_VIEW = null;
+
+//Left & right menus
+Ti.include('menu_left.js');
+Ti.include('menu_right.js');
 
 function closeOpenWindows(){
 	Ti.API.info('closeOpenWindows() closed '+openWindows.length+' windows');
