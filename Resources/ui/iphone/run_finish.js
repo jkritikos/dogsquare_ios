@@ -1,5 +1,3 @@
-
-
 var runFinishCommentsBackgroundView = null;
 var runfinishCommentsTextArea = null;
 var runFinishCommentsTableView = null;
@@ -23,8 +21,8 @@ function buildRunFinishView(obj){
 	
 	//end point annotation
 	var runFinishAnnotationEnd = Titanium.Map.createAnnotation({
-		latitude:obj.coordinates[0].latitude,
-		longitude:obj.coordinates[0].longitude,
+		latitude:obj.coordinates[obj.coordinates.length - 1].latitude,
+		longitude:obj.coordinates[obj.coordinates.length - 1].longitude,
 		title:"End",
 		animate:true,
 		image:IMAGE_PATH+'run_finish/pin.png'

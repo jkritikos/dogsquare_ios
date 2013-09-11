@@ -158,7 +158,7 @@ function hello(){
 var weather = ( function() {
     var api = {};
     api.getWeather = function(la, lo) {
-    	alert('weather for lat '+la +' lon '+lo);
+    	//alert('weather for lat '+la +' lon '+lo);
     	Ti.Yahoo.yql('select * from yahoo.maps.findLocation where q="' + la + ',' + lo + '" and gflags="R"', function(e) {
         	var url = 'http://weather.yahooapis.com/forecastrss?w=' + e.data.ResultSet.Results.woeid + '&u=c';
         	var xhr = Ti.Network.createHTTPClient({});
@@ -254,8 +254,6 @@ function getDogById(dogId){
 	
 	return dogRows;
 }
-
-
 
 //Gets all notes from the local db
 function getNotes(){
@@ -453,6 +451,25 @@ function saveActivity(dogs){
 	
 	Ti.API.info('saveActivity() returns activity id '+activityId);
 	return activityId;
+}
+
+//Saves an activity, related dogs and coordinates to the remote db
+function saveActivityOnline(obj){
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	
+	xhr.onload = function(e){
+	
+	};
+	
+	xhr.open('POST',API+'saveActivity');
+	xhr.send({
+		user_id:userObject.userId
+	});
 }
 
 //Updates an activity in the local db
