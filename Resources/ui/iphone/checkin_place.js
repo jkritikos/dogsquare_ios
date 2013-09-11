@@ -9,7 +9,7 @@ var checkinPlaceHeartImage = null;
 var checkinPlacePhotoImage = null;
 var checkinPlaceTitleLabel = null;
 var checkinPlaceDescriptionLabel = null;
-var checkinPlaceMap= null;
+var checkinPlaceMap = null;
 var checkinPlaceMapAnnotation = null;
 var checkinPlaceView = null;
 var checkinPlaceSaveCommentButton = null;
@@ -220,8 +220,7 @@ function buildCheckinPlaceView(view, placeId){
 			backgroundColor:'e7e7e7',
 			top:36,
 			bottom:0,
-			allowsSelection:false,
-			height:393
+			allowsSelection:false
 		});
 		checkinPlaceCommentsBackgroundView.add(checkinPlaceCommentsTableView);
 		

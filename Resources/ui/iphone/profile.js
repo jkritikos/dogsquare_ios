@@ -398,6 +398,7 @@ function handleProfileActivityRows(e){
 	viewActivityWindow.add(viewActivityView);
 	
 	openWindows.push(viewActivityWindow);
+	//openWindows[0] = viewActivityWindow;
 	navController.open(viewActivityWindow);
 }
 

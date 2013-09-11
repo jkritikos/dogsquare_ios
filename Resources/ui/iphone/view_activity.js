@@ -273,7 +273,7 @@ function buildViewActivityView(aId){
 	//background for comments
 	viewActivityCommentsBackgroundView = Ti.UI.createView({
 		top:332,
-		height:320,
+		height:429,
 		width:'100%',
 		backgroundColor:UI_BACKGROUND_COLOR,
 		zIndex:2
@@ -349,6 +349,12 @@ function buildViewActivityView(aId){
 	});
 	viewActivityCommentsBackgroundView.add(viewActivityCommentsTableView);
 	viewActivityView.add(viewActivityCommentsBackgroundView);
+	
+	//remove empty rows
+	viewActivityCommentsTableView.footerView = Ti.UI.createView({
+	    height: 1,
+	    backgroundColor: 'transparent'
+	});
 	
 	return viewActivityView;
 	

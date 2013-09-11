@@ -352,18 +352,20 @@ function createLeftMenuRow(menuItem){
 		icon = IMAGE_PATH+'menu_left/notifications_menu.png';
 		label = 'Notifications';
 		
-		var notificationCountBackground = Titanium.UI.createView({
-			backgroundColor:'454950',
+		var notificationCountBackground = Titanium.UI.createImageView({
+			image:IMAGE_PATH+'menu_left/input_numbers_field.png',
 			right:82,
-			width:18,
-			height:18,
-			bottom:15
+			height:28,
+			width:30,
+			bottom:10
 		});
 		row.add(notificationCountBackground);
 		notificationCountBackground.hide();
 		
 		var notificationCountLabel = Titanium.UI.createLabel({
 			width:'auto',
+			height:15,
+			bottom:7,
 			color:'#ab7b04',
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
@@ -562,10 +564,12 @@ function updateLeftMenuCounts(cFollowers, cInbox, cNotifications){
 	
 	followersLabel.text = cFollowers +' followers';
 	if(cNotifications != 0){
-		notifBackground.backgroundColor = '454950';
 		notifLabel.text = cNotifications;
-		notifBackground.width = notifLabel.toImage().width + 9;
-		notifBackground.show();
+		//need to put a setTimeout because it searches the label width while it is not yet created
+		var t = setTimeout(function(){
+			notifBackground.width = notifLabel.toImage().width + 20;
+			notifBackground.show();
+		}, 100);
 	}else{
 		notifBackground.hide();
 	}

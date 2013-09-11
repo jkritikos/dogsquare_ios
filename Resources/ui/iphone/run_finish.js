@@ -233,7 +233,7 @@ function buildRunFinishView(obj){
 	//background for comments
 	runFinishCommentsBackgroundView = Ti.UI.createView({
 		top:383,
-		height:320,
+		height:429,
 		width:'100%',
 		backgroundColor:UI_BACKGROUND_COLOR,
 		zIndex:2
@@ -297,10 +297,15 @@ function buildRunFinishView(obj){
 		backgroundColor:'e7e7e7',
 		top:36,
 		bottom:0,
-		allowsSelection:false,
-		height:393
+		allowsSelection:false
 	});
 	runFinishCommentsBackgroundView.add(runFinishCommentsTableView);
+	
+	//remove empty rows
+	runFinishCommentsTableView.footerView = Ti.UI.createView({
+	    height: 1,
+	    backgroundColor: 'transparent'
+	});
 
 	return viewRunSummary;
 }

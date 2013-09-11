@@ -222,5 +222,6 @@ function handleCheckinPlacesTableViewRow(e){
 	
 	checkinPlaceWindow.add(checkinPlaceView);
 	openWindows.push(checkinPlaceWindow);
+	//openWindows[1] = checkinPlaceWindow;
 	navController.open(checkinPlaceWindow);
 }
