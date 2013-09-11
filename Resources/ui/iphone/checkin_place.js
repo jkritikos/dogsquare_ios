@@ -25,7 +25,7 @@ function buildCheckinPlaceView(view, placeId){
 		checkinPlaceMapAnnotation = Ti.Map.createAnnotation({
 	        animate: true,
 	        pincolor: Ti.Map.ANNOTATION_GREEN
-	    })
+	   });
 		
 		//the map
 		checkinPlaceMap = Titanium.Map.createView({ 
