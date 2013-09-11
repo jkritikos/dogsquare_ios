@@ -202,7 +202,9 @@ function handleMapButton(){
 	});
 	
 	Ti.include('ui/iphone/map.js');
+	runMapWindow.setTitleControl(mapSearchContainer);
 	runMapWindow.add(viewMap);
+	openWindows.push(runMapWindow);
 	navController.open(runMapWindow);
 }
 

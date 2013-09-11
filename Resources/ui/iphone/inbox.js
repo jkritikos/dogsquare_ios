@@ -3,6 +3,15 @@ var viewInbox = Ti.UI.createView({
 	backgroundColor:UI_BACKGROUND_COLOR
 });
 
+//Change right nav button
+var newMessageRightNavButton = Ti.UI.createButton({ 
+	backgroundImage:IMAGE_PATH+'checkin_place/add_icon.png',
+	width:12,
+	height:12
+});
+newMessageRightNavButton.addEventListener('click', handleNewMessage);
+navController.getWindow().rightNavButton = newMessageRightNavButton;
+
 //inbox table view
 var inboxTableView = Titanium.UI.createTableView({
 	minRowHeight:71,
@@ -106,4 +115,11 @@ function handleInboxMessage(){
 	
 	openWindows.push(inboxViewWindow);
 	navController.open(inboxViewWindow);
+}
+
+function handleNewMessage(){
+	Ti.include('ui/iphone/inbox_new.js');
+	
+	openWindows.push(inboxNewWindow);
+	navController.open(inboxNewWindow);
 }

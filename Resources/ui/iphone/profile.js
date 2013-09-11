@@ -231,11 +231,15 @@ profileMapButton.addEventListener('click', function(){
 	profileMapWindow.setLeftNavButton(profileMapBackButton);
 	
 	profileMapBackButton.addEventListener("click", function() {
+		navController.getWindow().setTitleControl();
 	    navController.close(profileMapWindow);
 	});
 	
+	
 	Ti.include('ui/iphone/map.js');
+	profileMapWindow.setTitleControl(mapSearchContainer);
 	profileMapWindow.add(viewMap);
+	openWindows.push(profileMapWindow);
 	navController.open(profileMapWindow);
 });
 

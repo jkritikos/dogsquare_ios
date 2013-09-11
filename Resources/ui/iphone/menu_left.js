@@ -127,12 +127,15 @@ leftTableView.addEventListener("click", function(e){
 	
 	switch(menuItem){
 		case MENU_FEED:
+			navController.getWindow().setTitleControl();
 			Ti.include('ui/iphone/feeds.js');
 			buildFeedsView();
 			navController.getWindow().add(viewFeeds);
 			navController.getWindow().setTitle('Feed');
 			break;
 		case MENU_PROFILE:
+			CURRENT_VIEW = VIEW_PROFILE;
+			navController.getWindow().setTitleControl();
 			Ti.include('ui/iphone/profile.js');
 			navController.getWindow().add(viewProfile);
 			navController.getWindow().setTitle(userObject.name);
@@ -140,69 +143,49 @@ leftTableView.addEventListener("click", function(e){
 			
 		case MENU_MAP:
 			closeOpenWindows();
+			CURRENT_VIEW = VIEW_MAP;
 			Ti.include('ui/iphone/map.js');
 			navController.getWindow().add(viewMap);
 			navController.getWindow().setTitle('Map');
-			
-			//search field
-			/*
-			var mapSearchContainer = Titanium.UI.createView({
-				backgroundColor:'white',
-				width:100
-			});
-			
-			var mapSearchTxtfield = Titanium.UI.createTextField({
-				left:5,
-				width:100,
-				field:'search'
-			});
-			
-			mapSearchContainer.add(mapSearchTxtfield);
-			
-			navController.getWindow().setTitleControl(mapSearchContainer);
-			*/
 			break;
 			
 		case MENU_GALLERY:
+			navController.getWindow().setTitleControl();
 			Ti.include('ui/iphone/gallery.js');
 			navController.getWindow().add(viewGallery);
 			navController.getWindow().setTitle('Gallery');
 			break;
 			
 		case MENU_INBOX:
+			navController.getWindow().setTitleControl();
 			Ti.include('ui/iphone/inbox.js');
 			navController.getWindow().add(viewInbox);
 			navController.getWindow().setTitle('Inbox');
-			
-			//Change right nav button
-			var newMessageRightNavButton = Ti.UI.createButton({ 
-				backgroundImage:IMAGE_PATH+'checkin_place/add_icon.png',
-				width:12,
-				height:12
-			});
-			
-			navController.getWindow().rightNavButton = newMessageRightNavButton;
 			break;
 		
 		case MENU_PASSPORT:
+			navController.getWindow().setTitleControl();
 			Ti.include('ui/iphone/passport.js');
 			navController.getWindow().add(viewPassport);
 			navController.getWindow().setTitle('Passport');
 			break;
 		
 		case MENU_FIND_FRIENDS:
+			navController.getWindow().setTitleControl();
 			Ti.include('ui/iphone/find_friends.js');
 			navController.getWindow().add(viewFindFriends);
 			navController.getWindow().setTitle('Find friends');
 			break;
 			
 		case MENU_SETTINGS:
+			navController.getWindow().setTitleControl();
 			Ti.include('ui/iphone/settings.js');
 			navController.getWindow().add(viewSettings);
 			navController.getWindow().setTitle('Settings');
 			break;
 			
 		case MENU_NOTIFICATIONS:
+			navController.getWindow().setTitleControl();
 			_import('ui/iphone/notifications.js');
 			buildNotificationsView();
 			navController.getWindow().add(viewNotifications);
