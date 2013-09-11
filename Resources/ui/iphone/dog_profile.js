@@ -348,8 +348,9 @@ function getOnlineDog(dId){
 	};
 	
 	xhr.onload = function(e){
-			
+		Ti.API.info('getOnlineDog() got back from server '+this.responseText);	
 		var jsonData = JSON.parse(this.responseText);
+		
 		
 		//Update user object and close the signup window
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
