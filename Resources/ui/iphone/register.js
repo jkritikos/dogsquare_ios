@@ -527,9 +527,9 @@ function doSignup(uObj){
 //Closes the register window
 function closeRegisterWindow(){
 	
-	loginWindow.animate({opacity:0, duration:100}, function(){
+	initialWindow.animate({opacity:0, duration:100}, function(){
 		registerWindow.close();
-		window.remove(loginWindow);
+		window.remove(initialWindow);
 		leftTableView.fireEvent('click', {menuItem:MENU_PROFILE});
 	});
 }
