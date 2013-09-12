@@ -77,7 +77,7 @@ function populateRightMenu(dogObject){
 	rightMenuData.push(rightMenuAddDogRow);
 	
 	for(var i=0;i<dogObject.length;i++){
-		Ti.API.info('dog rows are being populated with dog id '+dogObject[i].id);
+		Ti.API.info('dog rows are being populated with dog id '+dogObject[i].dog_id);
 
 		//all dog rows
 		var rightMenuRow = Ti.UI.createTableViewRow({
@@ -88,7 +88,7 @@ function populateRightMenu(dogObject){
 			selectionStyle:0,
 			active:false,
 			type:RIGHT_MENU_TYPE_ROW,
-			dogId:dogObject[i].id
+			dogId:dogObject[i].dog_id
 		});
 		
 		//border image inside the dog row - right menu row
@@ -98,20 +98,16 @@ function populateRightMenu(dogObject){
 			width:319
 		});
 		
-		//dog image inside the dog row - right menu row
-		var rowDogImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + dogObject[i].photo);
-		var rowDogImageBlob = rowDogImageFile.toBlob();
-		var rowDogImageBlobCropped = rowDogImageBlob.imageAsThumbnail(80,0,40);
-		
 		var rowDogImage = Titanium.UI.createImageView({
-			image:rowDogImageBlobCropped,
+			image:REMOTE_DOG_IMAGES + dogObject[i].thumb_path,
 			left:58,
 			top:13,
-			borderRadius:40,
-			borderWidth:4,
+			borderRadius:30,
+			borderWidth:2,
 			borderColor:'454950',
 			type:RIGHT_MENU_TYPE_ROW
 		});
+		Ti.API.info(REMOTE_DOG_IMAGES + dogObject[i].thumb_path);
 		
 		//dog name label inside the dog row - right menu row
 		var rowDogNameLabel = Titanium.UI.createLabel({ 

@@ -202,11 +202,10 @@ leftTableView.addEventListener("click", function(e){
 function updateLeftMenu(obj){
 	Ti.API.info('updating left menu for user '+obj.name +' with '+obj.followers+' followers. Thumb path is '+obj.thumb_path);
 	
-	var profileImageFile = Titanium.Filesystem.getFile(obj.thumb_path);
-	var menuImageBlobCropped = profileImageFile.toBlob();
+	
 	
 	//photo
-	leftTableView.data[0].rows[0].children[0].image = menuImageBlobCropped;
+	leftTableView.data[0].rows[0].children[0].image = REMOTE_USER_IMAGES + obj.thumb_path;
 	//name
 	leftTableView.data[0].rows[0].children[2].text = obj.name;
 	//followers
@@ -247,8 +246,8 @@ function createLeftMenu(){
 	
 	//Load the rounded thumbnail image
 	if(userObject.thumb_path){
-		var profileImageFile = Titanium.Filesystem.getFile(userObject.thumb_path);
-		menuProfileImage.image = profileImageFile.toBlob();
+		
+		menuProfileImage.image = REMOTE_USER_IMAGES + userObject.thumb_path;
 	}
 	
 	var usernameLabel = Titanium.UI.createLabel({

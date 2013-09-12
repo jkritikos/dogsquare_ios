@@ -3,9 +3,12 @@ var loginFieldEmail = null;
 var loginFieldEmailHintTextLabel = null;
 var loginFieldPassword = null;
 var loginFieldPasswordHintTextLabel = null;
+var loginWindow = null;
+
+var loginObject = {};
 
 function buildLoginWindow(){
-	var loginWindow = Ti.UI.createWindow({
+	loginWindow = Ti.UI.createWindow({
 		title:'Login',
 		backgroundColor:UI_BACKGROUND_COLOR
 	});
@@ -146,6 +149,7 @@ function buildLoginWindow(){
 		top:198
 	});
 	loginWindow.add(loginButton);
+	loginButton.addEventListener('click', handleLoginButton);
 	
 	//login button
 	var facebookButton = Ti.UI.createButton({
@@ -191,4 +195,129 @@ function handleLoginTextFieldChange(e){
 			loginFieldPasswordHintTextLabel.show();
 		}
 	}
+}
+
+function handleLoginButton(){
+	if(loginFieldEmail.value != '' && loginFieldPassword.value != ''){
+		
+		loginObject.password = loginFieldPassword.value;
+		loginObject.email = loginFieldEmail.value;
+		
+		checkLoginCredentials(loginObject);
+	}
+	
+}
+
+//Server call for signup
+function checkLoginCredentials(lObj){
+	Ti.API.info('checkLoginCredentials() called with loginObject='+ JSON.stringify(lObj)); 	
+	
+	//progress view
+	var progressView = new ProgressView({window:loginWindow});
+	progressView.show({
+		text:"Loading..."
+	});
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('doSignup() got back from server '+this.responseText); 	
+		var jsonData = JSON.parse(this.responseText);
+		
+		//Update user object and close the signup window
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			//Show success
+			progressView.change({
+		        success:true
+		    });
+		    
+		    var userObj = {};
+			
+			userObj.userId = jsonData.data.user.id;
+			userObj.image_path = jsonData.data.user.photo;
+			userObj.thumb_path = jsonData.data.user.thumb;
+			userObj.name = jsonData.data.user.name;
+			userObj.email = jsonData.data.user.email;
+			userObj.facebook_id = jsonData.data.user.facebook_id;
+			userObj.gender = jsonData.data.user.gender;
+			userObj.followers = jsonData.data.user.following;
+			userObj.following = jsonData.data.user.following;
+			
+			//Save user data & update UI
+			saveUserObject(userObj);
+			updateLeftMenu(userObj);
+			
+			cleanDB();
+			
+			var dogArray = [];
+			var dogObj = {};
+			
+			
+			
+			for(i=0;i<jsonData.data.dogs.length;i++){
+				dogObj.name = jsonData.data.dogs[i].Dog.name;
+				dogObj.dog_id = jsonData.data.dogs[i].Dog.id;
+				dogObj.photo_filename = jsonData.data.dogs[i].Dog.photo;
+				dogObj.breed_id = 1;
+				dogObj.breed = jsonData.data.dogs[i].Dog.dog_breed;
+				dogObj.age = jsonData.data.dogs[i].Dog.age;
+				dogObj.gender = jsonData.data.dogs[i].Dog.gender;
+				dogObj.weight = jsonData.data.dogs[i].Dog.weight;
+				dogObj.thumb_path = jsonData.data.dogs[i].Dog.thumb;
+				dogObj.mating = jsonData.data.dogs[i].Dog.mating;
+				
+				//Save dog data
+				saveDog(dogObj);
+				dogArray.push(dogObj);
+				dogObj = {};
+			}
+			//populate dog rows
+			populateRightMenu(dogArray);
+			
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			//update menu counts
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+			//Hide message and close register window
+			progressView.hide();
+			closeLoginWindow();
+		} else {
+			
+			//Show the error message we got back from the server
+			progressView.change({
+		        error:true,
+		        text:getErrorMessage(jsonData.data.response)
+		    });
+			//and hide it after a while		    
+		    setTimeout(function() {
+			    progressView.hide();
+			}, ERROR_MSG_REMOVE_TIMEOUT);
+		    
+		}
+	};
+	xhr.open('GET',API+'login');
+	xhr.send({
+		password:lObj.password,
+		email:lObj.email
+	});
+}
+
+//Closes the login window
+function closeLoginWindow(){
+	
+	initialWindow.animate({opacity:0, duration:100}, function(){
+		loginWindow.close();
+		window.remove(initialWindow);
+		leftTableView.fireEvent('click', {menuItem:MENU_PROFILE});
+	});
 }

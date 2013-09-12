@@ -5,19 +5,23 @@ var viewProfile = Ti.UI.createView({
 var TAB_FOLLOWERS = 1;
 var TAB_FOLLOWING = 2;
 
-var profileImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-
 var profileImageView = Titanium.UI.createImageView({
-	image:profileImageFile.nativePath,
+	image:REMOTE_USER_IMAGES + userObject.image_path,
 	top:0,
 	width:'100%'
 });
+
+var profileImageViewBlob = profileImageView.toBlob();
+var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:640});
+profileImageView.image = profileImageBlobCropped;
+
+viewProfile.add(profileImageView);
 
 //opacity bar
 var profileOpacityBar = Titanium.UI.createView({ 
 	backgroundColor:'white',
 	width:'100%',
-	bottom:15,
+	top:170,
 	height:36,
 	opacity:0.8
 });
@@ -104,13 +108,8 @@ var profileOpacityBarSepparator = Titanium.UI.createView({
 	height:34
 });
 profileOpacityBar.add(profileOpacityBarSepparator);
-profileImageView.add(profileOpacityBar);
 
-var profileImageViewBlob = profileImageView.toBlob();
-var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:640});
-profileImageView.image = profileImageBlobCropped;
-
-viewProfile.add(profileImageView);
+viewProfile.add(profileOpacityBar);
 
 //Map button
 var profileMapButton = Ti.UI.createButton({

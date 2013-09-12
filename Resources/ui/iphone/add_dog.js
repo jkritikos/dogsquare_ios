@@ -368,7 +368,11 @@ function handlePhotoSelection(){
 			var resizedImage = jpgcompressor.scale(image, 1024, 768);
 			var compressedImage = jpgcompressor.compress(resizedImage);
 			
+			//Create thumbnail
+			var imageThumbnail = resizedImage.imageAsThumbnail(60,0,30);
+			
 			addDogObject.photo = compressedImage;
+			addDogObject.thumb = imageThumbnail;
 			
 			var uniqueDogFilename = new Date().getTime() + '.jpg';
 			addDogObject.photo_filename = uniqueDogFilename;
@@ -459,6 +463,8 @@ function doSaveDogOnline(dObj){
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			//Add the server dog id to the object
 			dObj.dog_id = jsonData.data.dog_id;
+			dObj.thumb_path = jsonData.data.thumb;
+			
 			Ti.API.info('doSaveDogOnline() got back dog id from server '+jsonData.data.dog_id);
 			saveDog(dObj);
 			
@@ -467,7 +473,6 @@ function doSaveDogOnline(dObj){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-			
 			populateRightMenu(getDogs());
 			navController.getWindow().setRightNavButton(rightBtn);
 			
@@ -485,6 +490,7 @@ function doSaveDogOnline(dObj){
 	xhr.send({
 		user_id:userObject.userId,
 		photo:dObj.photo,
+		thumb:dObj.thumb,
 		name:dObj.name,
 		weight:dObj.weight,
 		age:dObj.age,
