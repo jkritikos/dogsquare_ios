@@ -66,7 +66,6 @@ mapCloseFilterView.addEventListener('click', handleCloseFilterViewButton);
 
 var mapSearchCategoriesTableView = Ti.UI.createTableView({
 	backgroundColor:UI_BACKGROUND_COLOR,
-	scrollable:false,
 	sepparatorColor:'d3d2d2',
 	top:40,
 	height:329,
@@ -76,6 +75,12 @@ var mapSearchCategoriesTableView = Ti.UI.createTableView({
 	borderColor:'d3d2d2'
 });
 mapSearchCategoriesBackground.add(mapSearchCategoriesTableView);
+
+mapSearchCategoriesTableView.addEventListener('scroll', handleMapSearchCategoriesScroll);
+
+function handleMapSearchCategoriesScroll(){
+	mapSearchTxtfield.blur();
+}
 
 var mapSearchFilterData = [];
 
@@ -92,16 +97,6 @@ mapSearchCategoriesTableView.setData(mapSearchFilterData);
 viewMap.add(mapSearchCategoriesBackground);
 mapSearchCategoriesBackground.hide();
 
-var mapWebView = Ti.UI.createWebView({
-	url:'/web/m.html',
-	top:30,
-	height:200
-});
-
-var mapLabel = Ti.UI.createLabel({
-	text:'map'
-});
-
 var mapCheckInButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'map/pin_checkIn.png',
 	bottom:0,
@@ -112,7 +107,6 @@ var mapCheckInButton = Ti.UI.createButton({
 
 
 viewMap.add(mapCheckInButton);
-viewMap.add(mapLabel);
 
 mapCheckInButton.addEventListener('click', function(){
 	navController.getWindow().setTitleControl();
@@ -157,29 +151,7 @@ var mapview = Titanium.Map.createView({
     regionFit:true
 });
 
-/* 
-points = [
-    {latitude:42.31,longitude:-71.11},
-    {latitude:42.32,longitude:-71.13},
-    {latitude:42.31,longitude:-71.22},
-    {latitude:42.28,longitude:-71.26}
-]
- 
-// route object
-var route = {
-    name:"some name",
-    points:points,
-    color:"#00f",
-    width:3
-};
- 
-// add a route
-mapview.addRoute(route);
-*/
-
-
 viewMap.add(mapview);
-//Ti.UI.currentWindow.add(viewMap);
 
 function handleMapSearchTextFieldFocus(e){
 	mapSearchCategoriesBackground.show();
@@ -246,7 +218,7 @@ function createMapFilterRow(filter){
 	
 	var rowLabel = Titanium.UI.createLabel({
 		text:label,
-		color:'black',
+		color:'#716767',
 		left:52,
 		font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 	});

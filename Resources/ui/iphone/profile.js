@@ -175,7 +175,7 @@ viewProfile.add(profileTableViewBackground);
 
 //profile tableView
 var profileTableView = Titanium.UI.createTableView({
-	minRowHeight:51,
+	minRowHeight:71,
 	width:320,
 	data:populateProfileTableView(),
 	separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
@@ -283,7 +283,7 @@ function populateProfileTableView(){
 			
 			var activityRow = Ti.UI.createTableViewRow({
 				className:'activityRow',
-				height:51,
+				height:71,
 				width:'100%',
 				backgroundColor:'e7e7e7',
 				selectedBackgroundColor:'transparent',
@@ -292,13 +292,12 @@ function populateProfileTableView(){
 			
 			var rowActivityImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + dogPhoto);
 			var rowActivityImageBlob = rowActivityImageFile.toBlob();
-			var rowActivityImageBlobCropped = rowActivityImageBlob.imageAsThumbnail(42,0,21);
+			var rowActivityImageBlobCropped = rowActivityImageBlob.imageAsThumbnail(54,0,27);
 			var rowActivityImage = Titanium.UI.createImageView({
 				image:rowActivityImageBlobCropped,
-				left:28,
-				top:3,
-				borderRadius:21,
-				borderWidth:1,
+				left:25,
+				borderRadius:27,
+				borderWidth:3,
 				borderColor:'f5a92c'
 			});	
 		
@@ -313,27 +312,25 @@ function populateProfileTableView(){
 			//activity label
 			var activityLabel = Ti.UI.createLabel({
 				text:'Gone for a walk with '+dogNames,
-				top:10,
+				top:18,
 				textAlign:'left',
 				width:'auto',
 				height:'auto',
 				left:88,
-				opacity:0.6,
-				color:'black',
-				font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+				color:'#605353',
+				font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 			});
 			
 			//time label
 			var timeLabel = Ti.UI.createLabel({
 				text:relativeTime(userActivities[i].start_time),
-				bottom:12,
+				bottom:18,
 				textAlign:'left',
 				width:'auto',
 				height:'auto',
 				left:88,
-				opacity:0.4,
-				color:'black',
-				font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+				color:'#938787',
+				font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 			});
 		
 			activityRow.add(rowActivityImage);

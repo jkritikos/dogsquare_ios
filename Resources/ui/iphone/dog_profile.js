@@ -11,7 +11,7 @@ var dogProfileView = null;
 function buildDogProfileView(dogId){
 	if(dogProfileView == null){
 		dogProfileView = Ti.UI.createView({
-			backgroundColor:'white'
+			backgroundColor:'#eeeded'
 		});
 		
 		dogProfilePhotoImage = Ti.UI.createImageView({ 
@@ -159,14 +159,22 @@ function buildDogProfileView(dogId){
 		dogProfileOpacityInfoBar.add(dogProfileLikesLabel);
 		
 		dogProfileLikesNumberLabel = Titanium.UI.createLabel({
-			text:'25',
+			text:'',
 			height:21,
 			textAlign:'center',
-			left:260,
+			left:270,
 			top:10,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		dogProfileOpacityInfoBar.add(dogProfileLikesNumberLabel);
+		
+		var dogProfileLikesIcon = Ti.UI.createImageView({
+			image:IMAGE_PATH+'dog_profile/best_icon_selected.png',
+			left:287,
+			top:11
+		});
+		
+		dogProfileOpacityInfoBar.add(dogProfileLikesIcon);
 		
 		dogProfileView.add(dogProfileOpacityInfoBar);
 		

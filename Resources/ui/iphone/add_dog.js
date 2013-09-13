@@ -374,14 +374,23 @@ function handlePhotoSelection(){
 			addDogObject.photo = compressedImage;
 			addDogObject.thumb = imageThumbnail;
 			
-			var uniqueDogFilename = new Date().getTime() + '.jpg';
+			var timestamp = new Date().getTime();
+			var uniqueDogFilename = timestamp + '.jpg';
+			var uniqueDogFilenameThumb = 'thumb_' + timestamp + '.jpg';
+			
 			addDogObject.photo_filename = uniqueDogFilename;
+			addDogObject.thumb_filename = uniqueDogFilenameThumb;
 			
-			// create new file name and remove old
-			
+			//save images on the local filesystem
 			var filename = Titanium.Filesystem.applicationDataDirectory + uniqueDogFilename;
+			var filenameThumb = Titanium.Filesystem.applicationDataDirectory + uniqueDogFilenameThumb;
+			
 			var tmpImage = Titanium.Filesystem.getFile(filename);
 			tmpImage.write(compressedImage);
+			
+			tmpImage = Titanium.Filesystem.getFile(filenameThumb);
+			tmpImage.write(imageThumbnail);
+			
 			Ti.API.info('saved image to '+filename);
 		},
 		cancel:function(){
