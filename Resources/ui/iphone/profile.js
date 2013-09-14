@@ -11,9 +11,9 @@ var profileImageView = Titanium.UI.createImageView({
 	width:'100%'
 });
 
-var profileImageViewBlob = profileImageView.toBlob();
-var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:640});
-profileImageView.image = profileImageBlobCropped;
+//var profileImageViewBlob = profileImageView.toBlob();
+//var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:640});
+//profileImageView.image = profileImageBlobCropped;
 
 viewProfile.add(profileImageView);
 

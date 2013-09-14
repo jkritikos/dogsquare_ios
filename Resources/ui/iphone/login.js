@@ -198,6 +198,8 @@ function handleLoginTextFieldChange(e){
 }
 
 function handleLoginButton(){
+	loginFieldEmail.blur();
+	loginFieldPassword.blur();
 	if(loginFieldEmail.value != '' && loginFieldPassword.value != ''){
 		
 		loginObject.password = loginFieldPassword.value;

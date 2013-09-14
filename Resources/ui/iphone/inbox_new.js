@@ -91,41 +91,49 @@ inboxNewWindow.add(inboxNewSendToSepparator);
 var inboxNewContactsTableView = Titanium.UI.createTableView({
 	minRowHeight:60,
 	width:320,
-	backgroundColor:UI_MENU_BACKGROUND_COLOR,
+	backgroundColor:'transparent',
 	top:39,
 	bottom:0
 });
 inboxNewWindow.add(inboxNewContactsTableView);
+getMutualFollowers();
 
 //remove empty rows
 inboxNewContactsTableView.footerView = Ti.UI.createView({
     height: 1,
-    backgroundColor: UI_MENU_BACKGROUND_COLOR
+    backgroundColor: 'transparent'
 });
 
-populateInboxNewContactsTableView();
-
-function populateInboxNewContactsTableView(){
+function populateInboxNewContactsTableView(mObject){
 	
 	var tableRows = [];
 	
-	for(i=0;i<=2;i++){
+	for(i=0;i<mObject.length;i++){
 		
 		var row = Ti.UI.createTableViewRow({
-			height:60,
+			height:73,
 			className:'contactsResult',
-			backgroundColor:'transparent',
-			selectedBackgroundColor:'#1c2027',
-			user_id:1
+			backgroundColor:'white',
+			selectedBackgroundColor:'blue',
+			user_id:mObject[i].User.id
+		});
+		
+		var rowMutualFriendImage = Titanium.UI.createImageView({
+			image:REMOTE_USER_IMAGES + mObject[i].User.thumb,
+			left:3,
+			borderRadius:30,
+			borderWidth:2,
+			borderColor:'#f9bf30'
 		});
 		
 		var rowNameLabel = Titanium.UI.createLabel({
-			text:'Mike',
+			text:mObject[i].User.name,
 			color:'#ab7b04',
-			left:52,
+			left:72,
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
+		row.add(rowMutualFriendImage);
 		row.add(rowNameLabel);
 		tableRows.push(row);
 	}
@@ -135,4 +143,31 @@ function populateInboxNewContactsTableView(){
 
 function handleToolbarSendButton() { 
 	Titanium.UI.createAlertDialog({title:'Toolbar',message:'You clicked send!'}).show(); 
+}
+
+function getMutualFollowers(){
+	Ti.API.info('getMutualFollowers() called');
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			populateInboxNewContactsTableView(jsonData.data.mutual_followers);
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('GET',API+'getMutualFollowers');
+	xhr.send({
+		user_id:userObject.userId,
+		target_id:userObject.userId
+	});
 }

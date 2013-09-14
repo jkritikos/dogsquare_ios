@@ -55,14 +55,14 @@ var mapSearchCategoriesBackground = Titanium.UI.createView({
 	zIndex:3
 });
 
-var mapCloseFilterView = Titanium.UI.createButton({
+var mapCloseFilterButton = Titanium.UI.createButton({
 	title:'close',
 	bottom:7,
 	width:45,
 	height:29
 });
-mapSearchCategoriesBackground.add(mapCloseFilterView);
-mapCloseFilterView.addEventListener('click', handleCloseFilterViewButton);
+mapSearchCategoriesBackground.add(mapCloseFilterButton);
+mapCloseFilterButton.addEventListener('click', handleCloseFilterViewButton);
 
 var mapSearchCategoriesTableView = Ti.UI.createTableView({
 	backgroundColor:UI_BACKGROUND_COLOR,
@@ -77,6 +77,7 @@ var mapSearchCategoriesTableView = Ti.UI.createTableView({
 mapSearchCategoriesBackground.add(mapSearchCategoriesTableView);
 
 mapSearchCategoriesTableView.addEventListener('scroll', handleMapSearchCategoriesScroll);
+mapSearchCategoriesTableView.addEventListener('click', handleMapSearchCategoriesRows);
 
 function handleMapSearchCategoriesScroll(){
 	mapSearchTxtfield.blur();
@@ -230,5 +231,10 @@ function createMapFilterRow(filter){
 }
 
 function handleCloseFilterViewButton(){
+	mapSearchCategoriesBackground.hide();
+}
+
+function handleMapSearchCategoriesRows(){
+	mapSearchTxtfield.blur();
 	mapSearchCategoriesBackground.hide();
 }
