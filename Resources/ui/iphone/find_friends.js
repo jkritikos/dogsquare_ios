@@ -219,9 +219,8 @@ for(l=0;l<contactsEmailObj.length;l++){
 	}
 	
 }
-
 //find user info via email from the server - to check if he owns the app 
-doSearchUserByEmail(contactsEmailStringList);
+doSearchUserByEmail(contactsEmailObj);
 
 //populate contacts table view
 function populateFindFriendsContactsTableView(uData){
@@ -525,10 +524,12 @@ function getOnlineUser(n){
 
 //get info if contact has the app or not or has been followed by the user
 function doSearchUserByEmail(cEmail){
-	Ti.API.info('doSearchUserByEmail() with emails');
+	Ti.API.info('doSearchUserByEmail() with emails: '+cEmail);
 	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	var emailList = JSON.stringify(cEmail);
 	
 	xhr.onerror = function(e){
 	
@@ -553,7 +554,7 @@ function doSearchUserByEmail(cEmail){
 	xhr.open('GET',API+'areUsers');
 	xhr.send({
 		user_id:userObject.userId,
-		list:cEmail
+		list:emailList
 	});
 }
 

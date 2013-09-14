@@ -74,7 +74,7 @@ var inboxNewSendToTextField = Ti.UI.createTextField({
 	keyboardToolbarColor:'#999',
 	font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-
+inboxNewSendToTextField.addEventListener('change', handleSendToTextFieldChange);
 inboxNewSendToBackgroundView.add(inboxNewSendToTextField);
 inboxNewWindow.add(inboxNewSendToBackgroundView);
 
@@ -95,6 +95,7 @@ var inboxNewContactsTableView = Titanium.UI.createTableView({
 	top:39,
 	bottom:0
 });
+inboxNewContactsTableView.addEventListener('click', handleNewContactsTableRows);
 inboxNewWindow.add(inboxNewContactsTableView);
 getMutualFollowers();
 
@@ -115,11 +116,11 @@ function populateInboxNewContactsTableView(mObject){
 			className:'contactsResult',
 			backgroundColor:'white',
 			selectedBackgroundColor:'blue',
-			user_id:mObject[i].User.id
+			user_id:mObject[i].user_id
 		});
 		
 		var rowMutualFriendImage = Titanium.UI.createImageView({
-			image:REMOTE_USER_IMAGES + mObject[i].User.thumb,
+			image:REMOTE_USER_IMAGES + mObject[i].thumb,
 			left:3,
 			borderRadius:30,
 			borderWidth:2,
@@ -127,7 +128,7 @@ function populateInboxNewContactsTableView(mObject){
 		});
 		
 		var rowNameLabel = Titanium.UI.createLabel({
-			text:mObject[i].User.name,
+			text:mObject[i].name,
 			color:'#ab7b04',
 			left:72,
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -158,8 +159,7 @@ function getMutualFollowers(){
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
-			
-			populateInboxNewContactsTableView(jsonData.data.mutual_followers);
+			saveMutualFollowers(jsonData.data.mutual_followers);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -170,4 +170,21 @@ function getMutualFollowers(){
 		user_id:userObject.userId,
 		target_id:userObject.userId
 	});
+}
+
+function handleNewContactsTableRows(e){
+	inboxNewSendToTextField.blur();
+	inboxNewSendToTextField.value = e.row.children[1].text;
+	inboxNewContactsTableView.data = [];
+}
+
+function handleSendToTextFieldChange(e){
+	if(e.value != ''){
+		var mutualObj = null;
+		mutualObj = searchMutualFollowers(e.value);
+		populateInboxNewContactsTableView(mutualObj);
+	}else{
+		inboxNewContactsTableView.data = [];
+	}
+	
 }

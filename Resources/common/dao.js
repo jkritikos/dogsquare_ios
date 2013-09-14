@@ -1,6 +1,6 @@
 var SERVER = '';
 
-var PRODUCTION_MODE = true;
+var PRODUCTION_MODE = false;
 
 if(!PRODUCTION_MODE){
 	//UrbanAirship.key='QcPHp0gxT3-3yj5Y9aLDpA';
@@ -631,7 +631,7 @@ function saveMutualFollowers(obj){
 		db.execute('delete from mutual_followers');
 		
 		for(i=0; i < obj.length; i++){
-			db.execute('insert into mutual_followers (user_id, name, thumb) values (?,?,?)', obj.User.id, obj.User.name, obj.User.thumb);
+			db.execute('insert into mutual_followers (user_id, name, thumb) values (?,?,?)', obj[i].User.id, obj[i].User.name, obj[i].User.thumb);
 		}
 	
 		Ti.API.info('saveMutualFollowers() saved '+obj.length+' rows');
@@ -640,6 +640,31 @@ function saveMutualFollowers(obj){
 	}
 	
 	db.close();
+}
+
+//Updates the local db with the user's mutual followers
+function searchMutualFollowers(name){
+	
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	var mutualFollowerRows = [];
+	
+	var rows = db.execute("select user_id, name, thumb from mutual_followers where name like \'%" + name + "%\'");
+	while (rows.isValidRow()) {
+
+	  	var obj = {
+	  		user_id:rows.field(0),
+			name:rows.field(1),
+			thumb:rows.field(2)
+		};
+		
+	  	mutualFollowerRows.push(obj);	
+	  	rows.next();
+	}
+	
+	rows.close();
+	db.close();
+	
+	return mutualFollowerRows;
 }
 
 //Updates the local db with the list of dog breeds
