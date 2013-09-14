@@ -4,8 +4,6 @@ var ProgressView = function(dictionary) {
 	
 	var _window  = (dictionary) ? ((dictionary.window) ? dictionary.window : navController.getWindow()) : navController.getWindow();
     
-    Ti.API.info('ProgressView instance for window '+_window);
-    
     var _activityIndicator;
     var _viewFullBackgroundActivityIndicator;
     var _viewBackgroundBackActivityIndicator;

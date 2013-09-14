@@ -581,7 +581,8 @@ function handlePhotoSelection(){
 	
 		},
 		error:function(error){
-		}
+		},
+		allowEditing:true
 	});
 }
 	

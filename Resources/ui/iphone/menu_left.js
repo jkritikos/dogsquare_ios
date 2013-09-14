@@ -46,6 +46,7 @@ var leftmenuSearchTxtfield = Titanium.UI.createTextField({
 	left:35,
 	width:200,
 	field:'search',
+	color:'white',
 	returnKeyType: Ti.UI.RETURNKEY_SEARCH
 });
 

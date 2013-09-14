@@ -623,6 +623,45 @@ function getInbox(){
 	db.close();
 }
 
+//Updates the local db with the user's mutual followers
+function saveMutualFollowers(obj){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	if(obj !=  null && obj.length > 0){
+		db.execute('delete from mutual_followers');
+		
+		for(i=0; i < obj.length; i++){
+			db.execute('insert into mutual_followers (user_id, name, thumb) values (?,?,?)', obj.User.id, obj.User.name, obj.User.thumb);
+		}
+	
+		Ti.API.info('saveMutualFollowers() saved '+obj.length+' rows');
+	} else {
+		Ti.API.info('saveMutualFollowers() NO data to save');
+	}
+	
+	db.close();
+}
+
+//Updates the local db with the list of dog breeds
+function saveDogBreeds(obj){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	if(obj !=  null && obj.length > 0){
+		db.execute('delete from DOG_BREEDS');
+		
+		for(i=0; i < obj.length; i++){
+			db.execute('insert into DOG_BREEDS (name, origin, weight_from, weight_to, kennel_club, active) values (?,?,?,?,?,?)', obj[i].DogBreed.name,obj[i].DogBreed.origin,obj[i].DogBreed.weight_from,obj[i].DogBreed.weight_to,obj[i].DogBreed.kennel_club,obj[i].DogBreed.active);
+		}
+	
+		Ti.API.info('saveDogBreeds() saved '+obj.length+' rows');
+	} else {
+		Ti.API.info('saveDogBreeds() NO data to save');
+	}
+	
+	db.close();
+}
+
+//Cleans the local database
 function cleanDB(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
@@ -632,11 +671,14 @@ function cleanDB(){
 	db.execute('delete from ACTIVITY_COORDINATES');
 	db.execute('delete from PASSPORT');
 	db.execute('delete from INBOX');
+	db.execute('delete from DOG_BREEDS');
+	db.execute('delete from MUTUAL_FOLLOWERS');
 	
 	db.close();
 	Ti.API.info('cleanDB() ends');
 }
 
+//Creates the local database
 function createDB(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
@@ -647,6 +689,8 @@ function createDB(){
 	db.execute('create table if not exists ACTIVITY_COORDINATES (\"activity_id\" integer, \"lat\" real, \"lon\" real, \"log_time\" real)');
 	db.execute('create table if not exists PASSPORT (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"title\" varchar(128), \"description\" varchar(128), \"date\" real, \"remind_flag\" integer)');
 	db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"remote_user_id\" integer, \"remote_user_name\" varchar(128), \"remote_user_thumb\" varchar(128), \"my_message\" integer, \"read\" integer, \"date\" real, \"message\" text)');
+	db.execute('create table if not exists DOG_BREEDS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"name\" varchar(256), \"origin\" varchar(256), \"weight_from\" integer, \"weight_to\" integer, \"kennel_club\" varchar(256), \"active\" integer)');
+	db.execute('create table if not exists MUTUAL_FOLLOWERS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_id\" integer, \"name\" varchar(256),\"thumb\" varchar(128))');
 	//db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from\" integer, \"user_to\" integer, \"date\" real, \"message\" text)');
 	
 	db.close();

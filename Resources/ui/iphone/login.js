@@ -305,7 +305,7 @@ function checkLoginCredentials(lObj){
 		    
 		}
 	};
-	xhr.open('GET',API+'login');
+	xhr.open('POST',API+'login');
 	xhr.send({
 		password:lObj.password,
 		email:lObj.email
