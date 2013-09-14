@@ -686,6 +686,11 @@ function saveDogBreeds(obj){
 	db.close();
 }
 
+//Updates the local db with the list of dogfuel rules
+function saveDogfuelRules(obj){
+	
+}
+
 //Cleans the local database
 function cleanDB(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
