@@ -80,7 +80,8 @@ addDogFieldName.addEventListener('blur', handleAddDogTextFieldBlur);
 
 //Event listener for the name textfield
 addDogFieldName.addEventListener('return', function() {
-   addDogFieldDogBreedHintTextLabel.fireEvent('click');
+    addDogFieldDogBreedHintTextLabel.fireEvent('click');
+    addDogFormScrollBackground.scrollTo(0,40);
 });
 
 addDogFormScrollBackground.add(addDogFieldName);
@@ -163,7 +164,7 @@ addDogFieldWeight.addEventListener('blur', handleAddDogTextFieldBlur);
 //Event listener for the weight textfield
 addDogFieldWeight.addEventListener('return', function() {
    addDogFieldGenderHintTextLabel.fireEvent('click');
-   addDogFormScrollBackground.scrollTo(0,100); //sometimes it wouldn't open'
+   addDogFormScrollBackground.scrollTo(0,140); //sometimes it wouldn't open'
 });
 
 addDogFormScrollBackground.add(addDogFieldWeight);
@@ -211,34 +212,52 @@ var addDogFieldMattingHintTextLabel = Ti.UI.createLabel({
 addDogFormScrollBackground.add(addDogFieldMattingHintTextLabel);
 addDogFieldMattingHintTextLabel.addEventListener('click', addDogHandlePicker);
 
-//picker
-var addDogPicker = Ti.UI.createPicker({
-  bottom:-216
-});
-viewAddDog.add(addDogPicker);
-
 //picker done button
 var addDogPickerDoneButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'common/Done_button.png',
     width:58,
     height:29
 });
+addDogPickerDoneButton.addEventListener("click", handlePickerDoneButton);
+
+var addDogflexSpace = Titanium.UI.createButton({
+    systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+});
+
+var addDogtoolbar = Titanium.UI.iOS.createToolbar({
+    items:[addDogflexSpace, addDogPickerDoneButton],
+    bottom:-44,
+    borderTop:true,
+    borderBottom:false
+}); 
+viewAddDog.add(addDogtoolbar);
+
+//picker
+var addDogPicker = Ti.UI.createPicker({
+  bottom:-216
+});
+viewAddDog.add(addDogPicker);
 
 //picker data
 var genderPicker = [];
 
-genderPicker[0]=Ti.UI.createPickerRow({title:'male', id:1});
-genderPicker[1]=Ti.UI.createPickerRow({title:'female', id:2});
+genderPicker[0]=Ti.UI.createPickerRow({title:'Male', id:1});
+genderPicker[1]=Ti.UI.createPickerRow({title:'Female', id:2});
 
 var dogBreedPicker = [];
+var addDogViewBreeds = getDogBreeds();
+
+for(i=0;i<addDogViewBreeds.length;i++){
+	var name = addDogViewBreeds[i].name;
+	var id = addDogViewBreeds[i].id;
 	
-dogBreedPicker[0]=Ti.UI.createPickerRow({title:'kannis', id:1});
-dogBreedPicker[1]=Ti.UI.createPickerRow({title:'bull dog', id:2});
+	dogBreedPicker[i]=Ti.UI.createPickerRow({title:name, id:id});
+}
 
 var mattingPicker = [];
 	
-mattingPicker[0]=Ti.UI.createPickerRow({title:'yes', id:1});
-mattingPicker[1]=Ti.UI.createPickerRow({title:'no', id:2});
+mattingPicker[0]=Ti.UI.createPickerRow({title:'Yes', id:1});
+mattingPicker[1]=Ti.UI.createPickerRow({title:'No', id:2});
 
 //sepparator offset
 var sepparatorOffset = 0;
@@ -285,21 +304,20 @@ function addDogHandlePicker(e){
     var picker = e.source.picker;
     //add data for specified picker
 	if(picker === DOG_BREED_PICKER){
+		addDogFormScrollBackground.scrollTo(0,40);
 		addDogPicker.add(dogBreedPicker);
 	}else if(picker === GENDER_PICKER){
 		addDogPicker.add(genderPicker);
-		addDogFormScrollBackground.scrollTo(0,100);
+		addDogFormScrollBackground.scrollTo(0,140);
 	}else if(picker === MATTING_PICKER){
 		addDogPicker.add(mattingPicker);
-		addDogFormScrollBackground.scrollTo(0,135);
+		addDogFormScrollBackground.scrollTo(0,175);
 	}
 	
 	addDogPicker.selectionIndicator = true;
 	addDogPicker.animate({bottom:0, duration:500});
+	addDogtoolbar.animate({bottom:216, duration:500});
 	
-	
-	navController.getWindow().setRightNavButton(addDogPickerDoneButton);
-	addDogPickerDoneButton.addEventListener("click", handlePickerDoneButton);
 	addDogPickerType = picker;
 }
 
@@ -328,6 +346,7 @@ function handlePickerDoneButton(e){
 	Ti.API.info('inside picker');
 	
 	addDogPicker.animate({bottom:-216, duration:500});
+	addDogtoolbar.animate({bottom:-44, duration:500});
  	navController.getWindow().setRightNavButton(addDogSaveButton);
 	
 	//change text to the chosen picker row
@@ -407,6 +426,9 @@ function handleCameraSelection(){
 }	
 
 function handleAddDogTextFieldFocus(){
+	addDogPicker.animate({bottom:-216, duration:500});
+	addDogtoolbar.animate({bottom:-44, duration:500});
+	
 	navController.getWindow().setRightNavButton(addDogSaveButton);
 }
 

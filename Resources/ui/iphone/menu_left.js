@@ -92,6 +92,7 @@ leftmenuSearchBackgroundView.add(leftmenuSearchActivityIndicator);
 //table view for search results
 var menuLeftSearchResultsTableView = Titanium.UI.createTableView({
 	backgroundColor:UI_MENU_BACKGROUND_COLOR,
+	separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
 	font:UI_FONT_LEFTMENU,
 	top:40
 });
@@ -403,6 +404,14 @@ function populateSearchResultsTableView(uObj){
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
+		var rowSeparator = Titanium.UI.createImageView({
+			image:IMAGE_PATH+'menu_left/divider.png',
+			bottom:-4,
+			width:322,
+			height:9
+		});
+		
+		row.add(rowSeparator);
 		row.add(rowNameLabel);
 		tableRows.push(row);
 	}

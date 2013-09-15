@@ -81,7 +81,7 @@ checkinOpacityBar.add(checkinOpacityBarLabel);
 
 //background of the table view
 var checkinPlacesTableViewBackground = Titanium.UI.createView({ 
-	backgroundColor:'d2d2d2',
+	backgroundColor:UI_BACKGROUND_COLOR,
 	width:'100%',
 	bottom:0,
 	top:259
@@ -93,8 +93,7 @@ var checkinPlacesTableView = Titanium.UI.createTableView({
 	minRowHeight:51,
 	width:320,
 	data:populatecheckinPlacesTableView(),
-	separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
-	backgroundColor:'d2d2d2',
+	backgroundColor:UI_BACKGROUND_COLOR,
 	top:263,
 	bottom:0
 });
@@ -115,7 +114,7 @@ function populatecheckinPlacesTableView(){
 			className:'placeRow',
 			height:51,
 			width:'100%',
-			backgroundColor:'e7e7e7',
+			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',
 			placeId:placeArrayId[i]
 		});
@@ -127,7 +126,7 @@ function populatecheckinPlacesTableView(){
 		var rowPlaceImage = Titanium.UI.createImageView({
 			image:rowPlaceImageBlobCropped,
 			left:12,
-			top:2,
+			top:5,
 			borderRadius:21,
 			borderWidth:1,
 			borderColor:'f5a92c'
@@ -172,18 +171,9 @@ function populatecheckinPlacesTableView(){
 			font:{fontSize:10, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
-		//sepparator
-		var rowSepparator = Titanium.UI.createView({ 
-			backgroundColor:'d2d2d2',
-			width:'100%',
-			bottom:0,
-			height:3
-		});
-		
 		placeRow.add(rowPlaceTitleLabel);
 		placeRow.add(rowPlaceDescriptionLabel);
 		placeRow.add(rowPlaceDistanceLabel);
-		placeRow.add(rowSepparator);
 		placeRow.add(rowPlaceImage);
 		
 		tableRows.push(placeRow);

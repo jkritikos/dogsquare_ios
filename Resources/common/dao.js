@@ -1,6 +1,6 @@
 var SERVER = '';
 
-var PRODUCTION_MODE = true;
+var PRODUCTION_MODE = false;
 
 if(!PRODUCTION_MODE){
 	//UrbanAirship.key='QcPHp0gxT3-3yj5Y9aLDpA';
@@ -684,6 +684,31 @@ function saveDogBreeds(obj){
 	}
 	
 	db.close();
+}
+
+function getDogBreeds(){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	var breedRows = [];
+	
+	var rows = db.execute('select id, name, origin, weight_from, weight_to, kennel_club, active from dog_breeds');
+	
+	while(rows.isValidRow()) {
+	  	var obj = {
+	  		id:rows.field(0),
+			name:rows.field(1),
+			origin:rows.field(2),
+			weight_from:rows.field(3),
+			weight_to:rows.field(4),
+			kennel_club:rows.field(5),
+			active:rows.field(6)
+		};
+		
+	  	breedRows.push(obj);	
+	  	rows.next();
+	}
+	rows.close();
+	db.close();
+	return breedRows;
 }
 
 //Updates the local db with the list of dogfuel rules

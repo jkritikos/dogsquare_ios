@@ -529,7 +529,7 @@ function doSearchUserByEmail(cEmail){
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
-	var emailList = JSON.stringify(cEmail);
+	var emailList = escape(JSON.stringify(cEmail));
 	
 	xhr.onerror = function(e){
 	

@@ -52,6 +52,7 @@ var mapSearchCategoriesBackground = Titanium.UI.createView({
 	backgroundColor:UI_BACKGROUND_COLOR,
 	width:320,
 	height:416,
+	opacity:0,
 	zIndex:3
 });
 
@@ -96,7 +97,6 @@ mapSearchFilterData.push(createMapFilterRow(FILTER_RECENTLY_OPEN));
 mapSearchCategoriesTableView.setData(mapSearchFilterData);
 
 viewMap.add(mapSearchCategoriesBackground);
-mapSearchCategoriesBackground.hide();
 
 var mapCheckInButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'map/pin_checkIn.png',
@@ -155,7 +155,7 @@ var mapview = Titanium.Map.createView({
 viewMap.add(mapview);
 
 function handleMapSearchTextFieldFocus(e){
-	mapSearchCategoriesBackground.show();
+	mapSearchCategoriesBackground.animate({opacity:1, duration:400});
 	
 	if(CURRENT_VIEW == VIEW_MAP){
 		
@@ -182,9 +182,9 @@ function handleMapSearchTextFieldBlur(e){
 function createMapFilterRow(filter){
 	var row = Ti.UI.createTableViewRow({
 		height:47,
-		className:'LEFT_MENU',
-		backgroundColor:'transparent',
-		selectedBackgroundColor:'#1c2027',
+		className:'mapFilter',
+		backgroundColor:'white',
+		selectedBackgroundColor:'transparent',
 		filter:filter
 	});
 		
@@ -231,10 +231,10 @@ function createMapFilterRow(filter){
 }
 
 function handleCloseFilterViewButton(){
-	mapSearchCategoriesBackground.hide();
+	mapSearchCategoriesBackground.animate({opacity:0, duration:400});
 }
 
 function handleMapSearchCategoriesRows(){
 	mapSearchTxtfield.blur();
-	mapSearchCategoriesBackground.hide();
+	mapSearchCategoriesBackground.animate({opacity:0, duration:400});
 }

@@ -92,6 +92,7 @@ function buildLoginWindow(){
 		width:192,
 		height:29,
 		top:31,
+		passwordMask:true,
 		field:2
 	});
 	
@@ -239,6 +240,8 @@ function checkLoginCredentials(lObj){
 		        success:true
 		    });
 		    
+		    
+		    
 		    var userObj = {};
 			
 			userObj.userId = jsonData.data.user.id;
@@ -248,7 +251,7 @@ function checkLoginCredentials(lObj){
 			userObj.email = jsonData.data.user.email;
 			userObj.facebook_id = jsonData.data.user.facebook_id;
 			userObj.gender = jsonData.data.user.gender;
-			userObj.followers = jsonData.data.user.following;
+			userObj.followers = jsonData.data.user.followers;
 			userObj.following = jsonData.data.user.following;
 			
 			//Save user data & update UI
@@ -282,6 +285,7 @@ function checkLoginCredentials(lObj){
 			//populate dog rows
 			populateRightMenu(dogArray);
 			
+			saveDogBreeds(jsonData.data.breeds);
 			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;
