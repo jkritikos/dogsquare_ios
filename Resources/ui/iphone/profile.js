@@ -11,9 +11,9 @@ var profileImageView = Titanium.UI.createImageView({
 	width:'100%'
 });
 
-//var profileImageViewBlob = profileImageView.toBlob();
-//var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:640});
-//profileImageView.image = profileImageBlobCropped;
+var profileImageViewBlob = profileImageView.toBlob();
+var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:540});
+profileImageView.image = profileImageBlobCropped;
 
 viewProfile.add(profileImageView);
 
@@ -21,7 +21,7 @@ viewProfile.add(profileImageView);
 var profileOpacityBar = Titanium.UI.createView({ 
 	backgroundColor:'white',
 	width:'100%',
-	top:170,
+	top:190,
 	height:36,
 	opacity:0.8
 });
@@ -116,7 +116,7 @@ var profileMapButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'profile/Map_icon.png',
 	width:33,
 	height:32,
-	top:222,
+	top:242,
 	right:48
 });
 
@@ -124,7 +124,7 @@ viewProfile.add(profileMapButton);
 
 var profileMapLabel = Ti.UI.createLabel({
 	text:'View map',
-	top:252,
+	top:272,
 	right:32,
 	color:UI_COLOR_RUN,
 	font:{fontSize:13, fontWeight:'semibold',fontFamily:'Open Sans'}
@@ -134,7 +134,7 @@ viewProfile.add(profileMapLabel);
 //Start button
 var profileStartButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'profile/start_button.png',
-	top:218,
+	top:238,
 	width:178,
 	height:52,
 	left:18
@@ -144,7 +144,7 @@ viewProfile.add(profileStartButton);
 //Activity bar
 var profileActivityBar = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
-	top:280,
+	top:300,
 	width:320,
 	height:33,
 	toggle:false
@@ -169,7 +169,7 @@ var profileTableViewBackground = Titanium.UI.createView({
 	backgroundColor:'d2d2d2',
 	width:'100%',
 	height:324,
-	top:313
+	top:333
 });
 viewProfile.add(profileTableViewBackground);
 

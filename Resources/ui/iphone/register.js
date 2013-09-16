@@ -551,20 +551,21 @@ function handlePhotoSelection(){
 			jpgcompressor.setWorstCompressQuality(0.40);
 			
 			//Make image smaller
+			/*
 			var resizedImage = null;
 			if(isPortrait){
 				resizedImage = jpgcompressor.scale(image, 768, 1024);
 			} else {
 				resizedImage = jpgcompressor.scale(image, 1024, 768);
-			}
+			}*/
 			
-			var compressedImage = jpgcompressor.compress(resizedImage);
+			var compressedImage = jpgcompressor.compress(image);
 			
 			//Create thumbnail
-			var imageThumbnail = resizedImage.imageAsThumbnail(60,0,30);
+			var imageThumbnail = image.imageAsThumbnail(60,0,30);
 			
-			Ti.API.info('Resized image with h:'+resizedImage.height+' w:'+resizedImage.width);
-			Ti.API.info('Thumbnailed image with h:'+imageThumbnail.height+' w:'+imageThumbnail.width);
+			//Ti.API.info('Resized image with h:'+resizedImage.height+' w:'+resizedImage.width);
+			//Ti.API.info('Thumbnailed image with h:'+imageThumbnail.height+' w:'+imageThumbnail.width);
 			
 			signupUserObject.image = compressedImage;
 			signupUserObject.thumb = imageThumbnail;
