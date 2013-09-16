@@ -383,39 +383,85 @@ function createLeftMenuRow(menuItem){
 }
 
 //populate search result rows - primarily for users only
-function populateSearchResultsTableView(uObj){
-	
+function populateSearchResultsTableView(uObj, pObj){
+	Ti.API.info('populate search table');
 	var tableRows = [];
 	
+	var userTableViewSection = Titanium.UI.createTableViewSection({
+		height:'auto',
+		backgroundColor:'transparent'
+	});
+	userTableViewSection.headerTitle = "Users";
+	
+	var placeTableViewSection = Titanium.UI.createTableViewSection({
+		height:'auto',
+		backgroundColor:'transparent'
+	});
+	placeTableViewSection.headerTitle = "Places";
+	
 	for(i=0;i<uObj.length;i++){
-		
-		var row = Ti.UI.createTableViewRow({
+		Ti.API.info('populate search users table');
+		var userRow = Ti.UI.createTableViewRow({
 			height:49,
 			className:'searchResult',
 			backgroundColor:UI_MENU_BACKGROUND_COLOR,
 			selectedBackgroundColor:'#1c2027',
-			user_id:uObj[i].User.id
+			user_id:uObj[i].User.id,
+			type:'user'
 		});
 		
-		var rowNameLabel = Titanium.UI.createLabel({
+		var userRowNameLabel = Titanium.UI.createLabel({
 			text:uObj[i].User.name,
 			color:'#ab7b04',
 			left:52,
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
-		var rowSeparator = Titanium.UI.createImageView({
+		var userRowSeparator = Titanium.UI.createImageView({
 			image:IMAGE_PATH+'menu_left/divider.png',
 			bottom:-4,
 			width:322,
 			height:9
 		});
 		
-		row.add(rowSeparator);
-		row.add(rowNameLabel);
-		tableRows.push(row);
+		userRow.add(userRowSeparator);
+		userRow.add(userRowNameLabel);
+		userTableViewSection.add(userRow);
+		
 	}
 	
+	for(i=0;i<pObj.length;i++){
+		Ti.API.info('populate search places table');
+		var placeRow = Ti.UI.createTableViewRow({
+			height:49,
+			className:'searchResult',
+			backgroundColor:UI_MENU_BACKGROUND_COLOR,
+			selectedBackgroundColor:'#1c2027',
+			place_id:pObj[i].Place.id,
+			type:'place'
+		});
+		
+		var placeRowNameLabel = Titanium.UI.createLabel({
+			text:pObj[i].Place.name,
+			color:'#ab7b04',
+			left:52,
+			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
+		});
+		
+		var placeRowSeparator = Titanium.UI.createImageView({
+			image:IMAGE_PATH+'menu_left/divider.png',
+			bottom:-4,
+			width:322,
+			height:9
+		});
+		
+		placeRow.add(placeRowSeparator);
+		placeRow.add(placeRowNameLabel);
+		placeTableViewSection.add(placeRow);
+	}
+	
+	tableRows.push(userTableViewSection);
+	tableRows.push(placeTableViewSection);
 	menuLeftSearchResultsTableView.setData(tableRows);
 }
 
@@ -492,8 +538,9 @@ function getLeftMenuOnlineUser(n){
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
 			leftmenuSearchActivityIndicator.hide();
-			populateSearchResultsTableView(jsonData.data.users);
+			populateSearchResultsTableView(jsonData.data.users, jsonData.data.places);
 			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;
@@ -505,7 +552,7 @@ function getLeftMenuOnlineUser(n){
 		}
 		
 	};
-	xhr.open('GET',API+'searchUser');
+	xhr.open('GET',API+'search');
 	xhr.send({
 		user_id:userObject.userId,
 		name:n
@@ -519,20 +566,31 @@ function handleLeftSearchResultRows(e){
 	closeOpenWindows();
 	
 	var userId = e.row.user_id;
+	var placeId = e.row.place_id;
+	var type = e.row.type;
 	//show profile view if the user, is the device owner, else show profile other view
 	if (userId == userObject.userId){
 		Ti.include('ui/iphone/profile.js');
 		navController.getWindow().add(viewProfile);
 		navController.getWindow().setTitle(userObject.name);
-	}else{
+	}else if (type == 'user'){
 		Ti.include('ui/iphone/profile_other.js');
 		
 		var profileOtherView = buildProfileOtherView(userId);
-		var nameUser = e.row.children[0].text;
+		var nameUser = e.row.children[1].text;
 		
 		navController.getWindow().add(profileOtherView);
 		navController.getWindow().setTitle(nameUser);
+	}else if (type == 'place'){
+		Ti.include('ui/iphone/checkin_place.js');
+		
+		var checkinPlaceView = buildCheckinPlaceView(CHECKIN_PLACE_VIEW, placeId);
+		var namePlace = e.row.children[1].text;
+		
+		navController.getWindow().add(checkinPlaceView);
+		navController.getWindow().setTitle(namePlace);
 	}
+	
 	if(window.isAnyViewOpen()){
 		window.toggleLeftView();
 	}

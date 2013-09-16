@@ -364,10 +364,10 @@ function handleProfileOtherFollowersFolowingTab(e){
 	});
 	
 	if(e.source.tab == TAB_FOLLOWERS){
-		listUsersWindow.setTitle('followers');
+		listUsersWindow.setTitle('Followers');
 		getFollowers(profileOtherUserId);
 	}else if(e.source.tab == TAB_FOLLOWING){
-		listUsersWindow.setTitle('following');
+		listUsersWindow.setTitle('Following');
 		getFollowing(profileOtherUserId);
 	}
 	

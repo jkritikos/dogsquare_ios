@@ -10,10 +10,10 @@ function buildListUsersView(){
 		width:290,
 		backgroundColor:'transparent',
 		top:45,
-		bottom:0,
-		allowsSelection:false
+		bottom:0
 	});
 	listUsersView.add(listUsersTableView);
+	listUsersTableView.addEventListener('click', handleListUsersTableViewRows);
 	
 	//remove empty rows
 	listUsersTableView.footerView = Ti.UI.createView({
@@ -43,7 +43,7 @@ function populateListUsersTableView(uData){
 			borderWidth:2,
 			borderColor:'#f9bf30'
 		});
-		userRow.add(rowUserImage);
+		
 		
 		var rowUserNameLabel = Titanium.UI.createLabel({
 			text:uData.users[i].User.name,
@@ -54,10 +54,55 @@ function populateListUsersTableView(uData){
 			left:72,
 			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
-		userRow.add(rowUserNameLabel);
 		
+		userRow.add(rowUserImage);
+		userRow.add(rowUserNameLabel);
 		tableRows.push(userRow);
 	}
 	listUsersTableView.setData(tableRows);
 	Ti.API.info('followers table View has been populated');
+}
+
+function handleListUsersTableViewRows(e){
+	
+	var userId = e.row.userId;
+	
+	var profileWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR
+	});
+	
+	//back button & event listener
+	var profileBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	profileWindow.setLeftNavButton(profileBackButton);
+	profileBackButton.addEventListener("click", function() {
+	    navController.close(profileWindow);
+	});
+	
+	//show profile view if the user, is the device owner, else show profile other view
+	if (userId == userObject.userId){
+		Ti.include('ui/iphone/profile.js');
+		profileWindow.add(viewProfile);
+		profileWindow.setTitle(userObject.name);
+		
+		openWindows.push(profileWindow);
+		navController.open(profileWindow);
+	}else {
+		Ti.include('ui/iphone/profile_other.js');
+		
+		var profileOtherView = buildProfileOtherView(userId);
+		var nameUser = e.row.children[1].text;
+		
+		profileWindow.add(profileOtherView);
+		profileWindow.setTitle(nameUser);
+		
+		openWindows.push(profileWindow);
+		navController.open(profileWindow);
+	}
 }

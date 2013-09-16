@@ -160,6 +160,20 @@ function getMutualFollowers(){
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
 			saveMutualFollowers(jsonData.data.mutual_followers);
+			
+			var fArray = [];
+			var fObj = {};
+			
+			for(i=0;i<jsonData.data.mutual_followers.length;i++){
+				fObj.name = jsonData.data.mutual_followers[i].User.name;
+				fObj.user_id = jsonData.data.mutual_followers[i].User.id;
+				fObj.thumb = jsonData.data.mutual_followers[i].User.thumb;
+				
+				fArray.push(fObj);
+				fObj = {};
+			}
+			
+			populateInboxNewContactsTableView(fArray);
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -173,7 +187,7 @@ function getMutualFollowers(){
 }
 
 function handleNewContactsTableRows(e){
-	inboxNewSendToTextField.blur();
+	inboxNewSendToTextField.focus();
 	inboxNewSendToTextField.value = e.row.children[1].text;
 	inboxNewContactsTableView.data = [];
 }

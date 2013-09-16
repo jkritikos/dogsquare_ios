@@ -1,6 +1,3 @@
-//constants
-var VIEW_PLACE_VIEW = 1;
-var CHECKIN_PLACE_VIEW = 2;
 
 //checkin view
 var checkinView = Ti.UI.createView({
@@ -21,11 +18,13 @@ var checkinMap = Titanium.Map.createView({
 checkinView.add(checkinMap);
 
 //checkin title yellow bar
-var checkinTitleBar = Ti.UI.createImageView({ 
-	image:IMAGE_PATH+'profile/Activitybar.png',
-	top:226
+var checkinTitleBar = Ti.UI.createButton({ 
+	backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
+	top:226,
+	width:320,
+	height:33,
+	toggle:false
 });
-checkinView.add(checkinTitleBar);
 
 //checkin title label of the bar
 var checkinBarTitleLabel = Titanium.UI.createLabel({ 
@@ -38,6 +37,8 @@ var checkinBarTitleLabel = Titanium.UI.createLabel({
 	font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
 checkinTitleBar.add(checkinBarTitleLabel);
+checkinView.add(checkinTitleBar);
+checkinTitleBar.addEventListener('click', handleNearbyPlacesButton);
 
 //opacity bar
 var checkinOpacityBar = Titanium.UI.createView({ 
@@ -94,10 +95,17 @@ var checkinPlacesTableView = Titanium.UI.createTableView({
 	width:320,
 	data:populatecheckinPlacesTableView(),
 	backgroundColor:UI_BACKGROUND_COLOR,
-	top:263,
+	top:4,
 	bottom:0
 });
-checkinView.add(checkinPlacesTableView);
+
+//remove empty rows
+checkinPlacesTableView.footerView = Ti.UI.createView({
+    height: 1,
+    backgroundColor: 'transparent'
+});
+
+checkinPlacesTableViewBackground.add(checkinPlacesTableView);
 checkinPlacesTableView.addEventListener('click', handleCheckinPlacesTableViewRow);
 
 function populatecheckinPlacesTableView(){
@@ -112,7 +120,7 @@ function populatecheckinPlacesTableView(){
 		//places row
 		var placeRow = Ti.UI.createTableViewRow({
 			className:'placeRow',
-			height:51,
+			height:71,
 			width:'100%',
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',
@@ -120,15 +128,15 @@ function populatecheckinPlacesTableView(){
 		});
 		
 		//place image
-		var rowPlaceImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-		var rowPlaceImageBlob = rowPlaceImageFile.toBlob();
-		var rowPlaceImageBlobCropped = rowPlaceImageBlob.imageAsThumbnail(42,0,21);
+		//var rowPlaceImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
+		//var rowPlaceImageBlob = rowPlaceImageFile.toBlob();
+		//var rowPlaceImageBlobCropped = rowPlaceImageBlob.imageAsThumbnail(42,0,21);
 		var rowPlaceImage = Titanium.UI.createImageView({
-			image:rowPlaceImageBlobCropped,
-			left:12,
+			image:REMOTE_USER_IMAGES + userObject.thumb_path,
+			left:10,
 			top:5,
-			borderRadius:21,
-			borderWidth:1,
+			borderRadius:27,
+			borderWidth:3,
 			borderColor:'f5a92c'
 		});
 		
@@ -137,12 +145,12 @@ function populatecheckinPlacesTableView(){
 			text:placeArray[i],
 			color:'black',
 			height:16,
-			top:4,
+			top:14,
 			width:'auto',
 			textAlign:'left',
 			opacity:0.8,
-			left:67,
-			font:{fontSize:10, fontWeight:'semibold', fontFamily:'Open Sans'}
+			left:87,
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		//place description label for row
@@ -150,12 +158,12 @@ function populatecheckinPlacesTableView(){
 			text:descriptionArray[i],
 			color:'black',
 			height:14,
-			top:17,
+			top:27,
 			width:'auto',
 			textAlign:'left',
 			opacity:0.5,
-			left:67,
-			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
+			left:87,
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		//place distance label for row
@@ -163,12 +171,12 @@ function populatecheckinPlacesTableView(){
 			text:distanceArray[i],
 			color:'black',
 			height:14,
-			top:29,
+			top:39,
 			width:'auto',
 			textAlign:'left',
 			opacity:0.5,
-			left:67,
-			font:{fontSize:10, fontWeight:'semibold', fontFamily:'Open Sans'}
+			left:87,
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		placeRow.add(rowPlaceTitleLabel);
@@ -214,4 +222,17 @@ function handleCheckinPlacesTableViewRow(e){
 	openWindows.push(checkinPlaceWindow);
 	//openWindows[1] = checkinPlaceWindow;
 	navController.open(checkinPlaceWindow);
+}
+
+function handleNearbyPlacesButton(e){
+	var toggle = e.source.toggle;
+	if(toggle){
+		checkinTitleBar.animate({top:226, duration:500});
+		checkinPlacesTableViewBackground.animate({top:259, duration:500});
+		e.source.toggle = false;
+	}else{
+		checkinTitleBar.animate({top:102, duration:500});
+		checkinPlacesTableViewBackground.animate({top:135, duration:500});
+		e.source.toggle = true;
+	}
 }

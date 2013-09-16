@@ -95,7 +95,7 @@ function buildCheckinPlaceView(view, placeId){
 		checkinPlaceView.add(checkinPlaceButtonBarView);
 		
 		//change if it is the view place view
-		if(view == 1){
+		if(view == VIEW_PLACE_VIEW){
 			//checkin number label
 			var checkinNumberLabel = Ti.UI.createLabel({
 				text:'16 Check-ins',
@@ -122,7 +122,7 @@ function buildCheckinPlaceView(view, placeId){
 			});
 			checkinPlaceButtonBarView.add(checkinNumberOfHeartsLabel);
 			
-		}else if(view == 2){
+		}else if(view == CHECKIN_PLACE_VIEW){
 			
 			//checkinPlace button
 			var checkinPlaceButton = Ti.UI.createButton({

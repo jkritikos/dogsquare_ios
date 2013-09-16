@@ -52,11 +52,17 @@ function doGetFeeds(){
 		Ti.API.info('doGetFeeds() got back from server '+this.responseText);
 		var jsonData = JSON.parse(this.responseText);
 		
-		//Hide progress view
-		progressView.hide();
+		var followers = jsonData.data.count_followers;
+		var inbox = jsonData.data.count_inbox;
+		var notifications = jsonData.data.count_notifications;
+		
+		updateLeftMenuCounts(followers, inbox, notifications);
 		
 		//Update UI
 		populateFeedsTableView(jsonData.data.notifications);
+		
+		//Hide progress view
+		progressView.hide();
 	};
 	
 	xhr.open('GET',API+'getNotifications');

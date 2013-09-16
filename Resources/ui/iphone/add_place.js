@@ -17,9 +17,9 @@ addPlacePickerDoneButton.addEventListener("click", handlePickerDoneButton);
 
 //save button
 var addPlaceSaveButton = Ti.UI.createButton({
-    title:'Save',
-    width:48,
-    height:33
+    backgroundImage:IMAGE_PATH+'common/save_button.png',
+    width:54,
+    height:34
 });
 
 addPlaceWindow.setRightNavButton(addPlaceSaveButton);

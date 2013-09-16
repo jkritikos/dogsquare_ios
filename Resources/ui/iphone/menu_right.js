@@ -193,6 +193,7 @@ function handleTableViewRows(e){
 	
 	if(e.source.type == RIGHT_MENU_TYPE_ROW) {
 		closeOpenWindows();
+		navController.getWindow().setTitleControl();
 		
 		var dogId = e.row.dogId;
 		
@@ -206,6 +207,7 @@ function handleTableViewRows(e){
 		}
 	}else if(e.row.rowId == ADD_DOG){
 		closeOpenWindows();
+		navController.getWindow().setTitleControl();
 		
 		Ti.include('ui/iphone/add_dog.js');
 		navController.getWindow().add(viewAddDog);

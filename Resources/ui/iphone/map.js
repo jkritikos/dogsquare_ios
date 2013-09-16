@@ -68,12 +68,9 @@ mapCloseFilterButton.addEventListener('click', handleCloseFilterViewButton);
 var mapSearchCategoriesTableView = Ti.UI.createTableView({
 	backgroundColor:UI_BACKGROUND_COLOR,
 	sepparatorColor:'d3d2d2',
-	top:40,
+	top:13,
 	height:329,
-	width:265,
-	borderWidth:1,
-	borderRadius:3,
-	borderColor:'d3d2d2'
+	width:293
 });
 mapSearchCategoriesBackground.add(mapSearchCategoriesTableView);
 

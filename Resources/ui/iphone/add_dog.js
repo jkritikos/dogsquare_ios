@@ -15,9 +15,9 @@ var addDogObject = {};
 
 // save button
 var addDogSaveButton = Ti.UI.createButton({
-	title:'Save',
-    width:48,
-    height:33
+	backgroundImage:IMAGE_PATH+'common/save_button.png',
+    width:54,
+    height:34
 });
 navController.getWindow().setRightNavButton(addDogSaveButton);
 addDogSaveButton.addEventListener('click', handleAddDogSaveButton);
@@ -226,6 +226,7 @@ var addDogflexSpace = Titanium.UI.createButton({
 
 var addDogtoolbar = Titanium.UI.iOS.createToolbar({
     items:[addDogflexSpace, addDogPickerDoneButton],
+    barColor:'999999',
     bottom:-44,
     borderTop:true,
     borderBottom:false
