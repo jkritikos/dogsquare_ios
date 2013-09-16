@@ -8,14 +8,24 @@ var TAB_FOLLOWING = 2;
 var profileImageView = Titanium.UI.createImageView({
 	image:REMOTE_USER_IMAGES + userObject.image_path,
 	top:0,
-	width:'100%'
+	width:'100%',
+	processed:false
 });
 
-var profileImageViewBlob = profileImageView.toBlob();
-var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:540});
-profileImageView.image = profileImageBlobCropped;
-
 viewProfile.add(profileImageView);
+
+//Event handler for remote image
+profileImageView.addEventListener('load', function(){
+	Ti.API.info('Profile image loaded event');
+	
+	if(!profileImageView.processed){
+		Ti.API.info('Profile image loaded event processing');
+		var profileImageViewBlob = profileImageView.toBlob();
+		var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:500});
+		profileImageView.image = profileImageBlobCropped;
+		profileImageView.processed = true;
+	}
+});
 
 //opacity bar
 var profileOpacityBar = Titanium.UI.createView({ 

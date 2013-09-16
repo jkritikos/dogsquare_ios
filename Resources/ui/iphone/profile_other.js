@@ -16,6 +16,8 @@ var PROFILE_OTHER_WIN = 2;
 var profileOtherUserId = null;
 
 function buildProfileOtherView(uId) {
+	Ti.API.info('buildProfileOtherView() called for user_id '+uId);
+	
 	profileOtherUserId = uId;
 	if(profileOtherView == null){
 		//profile other window
@@ -25,11 +27,25 @@ function buildProfileOtherView(uId) {
 		
 		//photo image
 		profileOtherPhotoImage = Titanium.UI.createImageView({ 
-			width:320,
-			height:217,
-			top:0
+			top:0,
+			width:'100%',
+			processed:false
 		});
+		
 		profileOtherView.add(profileOtherPhotoImage);
+		
+		//Event handler for remote image
+		profileOtherPhotoImage.addEventListener('load', function(){
+			Ti.API.info('Profile_other image loaded event');
+			
+			if(!profileOtherPhotoImage.processed){
+				Ti.API.info('Profile_other image loaded event processing');
+				var profileImageViewBlob = profileOtherPhotoImage.toBlob();
+				var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:500});
+				profileOtherPhotoImage.image = profileImageBlobCropped;
+				profileOtherPhotoImage.processed = true;
+			}
+		});
 		
 		//opacity bar
 		var profileOtherOpacityBar = Titanium.UI.createView({ 
