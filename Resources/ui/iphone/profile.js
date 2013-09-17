@@ -31,7 +31,7 @@ profileImageView.addEventListener('load', function(){
 var profileOpacityBar = Titanium.UI.createView({ 
 	backgroundColor:'white',
 	width:'100%',
-	top:190,
+	top:175,
 	height:36,
 	opacity:0.8
 });

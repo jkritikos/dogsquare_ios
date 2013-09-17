@@ -41,7 +41,7 @@ function buildProfileOtherView(uId) {
 			if(!profileOtherPhotoImage.processed){
 				Ti.API.info('Profile_other image loaded event processing');
 				var profileImageViewBlob = profileOtherPhotoImage.toBlob();
-				var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:500});
+				var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:485});
 				profileOtherPhotoImage.image = profileImageBlobCropped;
 				profileOtherPhotoImage.processed = true;
 			}
@@ -51,7 +51,7 @@ function buildProfileOtherView(uId) {
 		var profileOtherOpacityBar = Titanium.UI.createView({ 
 			backgroundColor:'white',
 			width:'100%',
-			top:170,
+			top:195,
 			height:36,
 			opacity:0.8
 		});
@@ -141,7 +141,7 @@ function buildProfileOtherView(uId) {
 			backgroundImage: IMAGE_PATH+'profile_other/Follow_button.png',
 		    width:174,
 		    height:51,
-		    top:229,
+		    top:250,
 		    userId:uId
 		});
 		profileOtherView.add(profileOtherFollowButton);
@@ -233,7 +233,7 @@ function buildProfileOtherView(uId) {
 			height:20,
 			textAlign:'center',
 			left:15,
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		profileOtherDogBar.add(profileOtherDogBarLabel);
 		profileOtherView.add(profileOtherDogBar);
