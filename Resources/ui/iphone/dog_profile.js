@@ -263,9 +263,11 @@ function handleDogLikeButton(e){
 	
 	if(toggle){
 		unlikeDog(dogId);
+		dogProfileLikesNumberLabel.text--;
 		e.source.toggle = false;
 	}else{
 		likeDog(dogId);
+		dogProfileLikesNumberLabel.text++;
 		e.source.toggle = true;
 	}
 }

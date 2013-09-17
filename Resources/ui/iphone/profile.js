@@ -154,7 +154,7 @@ viewProfile.add(profileStartButton);
 //Activity bar
 var profileActivityBar = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
-	top:300,
+	top:310,
 	width:320,
 	height:33,
 	toggle:false
@@ -178,8 +178,8 @@ profileActivityBar.addEventListener('click', handleActivityButton);
 var profileTableViewBackground = Titanium.UI.createView({ 
 	backgroundColor:'d2d2d2',
 	width:'100%',
-	height:324,
-	top:333
+	height:69,
+	top:347
 });
 viewProfile.add(profileTableViewBackground);
 
@@ -188,7 +188,6 @@ var profileTableView = Titanium.UI.createTableView({
 	minRowHeight:71,
 	width:320,
 	data:populateProfileTableView(),
-	separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
 	backgroundColor:'d2d2d2',
 	top:0,
 	bottom:0
@@ -263,12 +262,14 @@ function handleRunBackButton() {
 function handleActivityButton(e){
 	var toggle = e.source.toggle;
 	if(toggle){
-		profileActivityBar.animate({top:280, duration:500});
-		profileTableViewBackground.animate({top:313, duration:500});
+		profileActivityBar.animate({top:310, duration:500});
+		profileTableViewBackground.height = 69;
+		profileTableViewBackground.animate({top:347, duration:470});
 		e.source.toggle = false;
 	}else{
 		profileActivityBar.animate({top:187, duration:500});
-		profileTableViewBackground.animate({top:220, duration:500});
+		profileTableViewBackground.height = 196;
+		profileTableViewBackground.animate({top:220, duration:470});
 		e.source.toggle = true;
 	}
 }
@@ -295,9 +296,9 @@ function populateProfileTableView(){
 				className:'activityRow',
 				height:71,
 				width:'100%',
-				backgroundColor:'e7e7e7',
+				backgroundColor:'white',
 				selectedBackgroundColor:'transparent',
-				activityId:userActivities[i].id
+				activityId:userActivities[i].activity_id
 			});
 			
 			var rowActivityImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + dogPhoto);
@@ -310,14 +311,6 @@ function populateProfileTableView(){
 				borderWidth:3,
 				borderColor:'f5a92c'
 			});	
-		
-			//sepparator
-			var rowSepparator = Titanium.UI.createView({ 
-				backgroundColor:'d2d2d2',
-				width:'100%',
-				bottom:0,
-				height:3
-			});
 			
 			//activity label
 			var activityLabel = Ti.UI.createLabel({
@@ -344,7 +337,6 @@ function populateProfileTableView(){
 			});
 		
 			activityRow.add(rowActivityImage);
-			activityRow.add(rowSepparator);
 			activityRow.add(activityLabel);
 			activityRow.add(timeLabel);
 			
@@ -384,6 +376,7 @@ function populateProfileTableView(){
 function handleProfileActivityRows(e){
 	var activityId = e.row.activityId;
 	Ti.include('ui/iphone/view_activity.js');
+	
 	var viewActivityView = buildViewActivityView(activityId);
 	
 	var viewActivityWindow = Ti.UI.createWindow({

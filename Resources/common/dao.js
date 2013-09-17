@@ -541,7 +541,7 @@ function getActivities(){
 	
 	var activities = [];
 	
-	var sql = 'select id,start_date, start_time, end_time,type_id from activities order by id desc';
+	var sql = 'select id,start_date, start_time, end_time,type_id, activity_id from activities order by id desc';
 	var rows = db.execute(sql);
 	while (rows.isValidRow()){
 		
@@ -552,6 +552,7 @@ function getActivities(){
 			start_date:rows.field(1),
 			start_time:rows.field(2),
 			end_time:rows.field(3),
+			activity_id:rows.field(5),
 			duration:duration,
 			dogs:getActivityDetails(rows.field(0))
 		};
@@ -572,7 +573,7 @@ function getActivity(id){
 	
 	var obj = null;
 	
-	var sql = 'select id,start_date, start_time, end_time,type_id,temperature,pace,distance from activities where id=?';
+	var sql = 'select id, start_date, start_time, end_time,type_id,temperature,pace,distance, activity_id from activities where id=?';
 	var rows = db.execute(sql,id);
 	while (rows.isValidRow()){
 		
@@ -588,6 +589,7 @@ function getActivity(id){
 			temperature:rows.field(5),
 			pace:rows.field(6),
 			distance:rows.field(7),
+			activity_id:rows.field(8),
 			dogs:getActivityDetails(rows.field(0)),
 			path:getActivityCoordinates(rows.field(0))
 		};

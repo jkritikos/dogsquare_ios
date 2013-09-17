@@ -97,6 +97,7 @@ var menuLeftSearchResultsTableView = Titanium.UI.createTableView({
 	top:40
 });
 menuLeftSearchResultsTableView.addEventListener('click', handleLeftSearchResultRows);
+menuLeftSearchResultsTableView.addEventListener('scroll', handleMenuLeftSearchResultsScroll);
 
 //remove empty rows
 menuLeftSearchResultsTableView.footerView = Ti.UI.createView({
@@ -203,8 +204,6 @@ leftTableView.addEventListener("click", function(e){
 //Updates the menu with user specific properties
 function updateLeftMenu(obj){
 	Ti.API.info('updating left menu for user '+obj.name +' with '+obj.followers+' followers. Thumb path is '+obj.thumb_path);
-	
-	
 	
 	//photo
 	leftTableView.data[0].rows[0].children[0].image = REMOTE_USER_IMAGES + obj.thumb_path;
@@ -625,4 +624,8 @@ function updateLeftMenuCounts(cFollowers, cInbox, cNotifications){
 	}else{
 		notifBackground.hide();
 	}
+}
+
+function handleMenuLeftSearchResultsScroll(){
+	leftmenuSearchTxtfield.blur();
 }
