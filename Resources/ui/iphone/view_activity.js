@@ -565,6 +565,8 @@ function likeActivity(aId){
 	
 	};
 	xhr.onload = function(e) {
+		Ti.API.info('likeActivity() got back from server '+this.responseText);
+		
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
@@ -587,7 +589,6 @@ function likeActivity(aId){
 		activity_id:aId
 	});
 }
-
 
 function unlikeActivity(aId){
 	Ti.API.info('unlikeActivity() with id: ' + aId);

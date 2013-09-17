@@ -608,6 +608,8 @@ function clearSearchBackground(){
 
 
 function updateLeftMenuCounts(cFollowers, cInbox, cNotifications){
+	Ti.API.info('updateLeftMenuCounts() called with '+cFollowers,' followers '+cInbox+' inbox '+cNotifications+' notifications');
+	
 	var notifBackground = leftTableView.data[0].rows[5].children[0];
 	var notifLabel = leftTableView.data[0].rows[5].children[0].children[0];
 	var followersLabel = leftTableView.data[0].rows[0].children[1];
