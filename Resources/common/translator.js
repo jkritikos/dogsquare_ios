@@ -13,6 +13,9 @@ var NOTIFICATION_WALK_REQUEST = 2;
 var NOTIFICATION_COMMENT_ACTIVITY = 3;
 var NOTIFICATION_LIKE_ACTIVITY = 4;
 
+//Feed types
+var FEED_NEW_WALK = 1;
+
 //Remove error messages after a while
 var ERROR_MSG_REMOVE_TIMEOUT = 1500;
 
@@ -20,9 +23,10 @@ function TT(s){
 	var currentLanguage = LANGUAGE_ENGLISH;
 }
 
+//Build the text description for a notification object
 function getNotificationMessage(code){
 	var currentLanguage = LANGUAGE_ENGLISH;
-	var msg = 'default msg';
+	var msg = 'default notification';
 	
 	if(code == NOTIFICATION_NEW_FOLLOWER){
 		msg = "is now following you.";
@@ -32,6 +36,18 @@ function getNotificationMessage(code){
 		msg = "commented on your activity.";
 	} else if(code == NOTIFICATION_LIKE_ACTIVITY){
 		msg = "liked your activity.";	
+	}
+	
+	return msg;
+}
+
+//Builds the text description for a feed object
+function getFeedMessage(obj){
+	var currentLanguage = LANGUAGE_ENGLISH;
+	var msg = 'default feed';
+	
+	if(obj.type_id == FEED_NEW_WALK){
+		msg = obj.user_from_name + ' went for a walk with ' + obj.target_dog_name;
 	}
 	
 	return msg;

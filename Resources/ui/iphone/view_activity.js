@@ -661,9 +661,11 @@ function getActivityOnline(aId){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in getActivityOnline()');
 	};
+	
 	xhr.onload = function(e) {
+		Ti.API.info('getActivityOnline() got back from server: '+this.responseText);
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
@@ -676,7 +678,7 @@ function getActivityOnline(aId){
 			
 			//Hide progress view
 			progressView.hide();
-		}else{
+		} else{
 			//Show the error message we got back from the server
 			progressView.change({
 		        error:true,
@@ -689,6 +691,7 @@ function getActivityOnline(aId){
 			}, ERROR_MSG_REMOVE_TIMEOUT);
 		}
 	};
+	
 	xhr.open('GET',API+'getActivity');
 	xhr.send({
 		user_id:userObject.userId,

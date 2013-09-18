@@ -59,13 +59,13 @@ function doGetFeeds(){
 		updateLeftMenuCounts(followers, inbox, notifications);
 		
 		//Update UI
-		populateFeedsTableView(jsonData.data.notifications);
+		populateFeedsTableView(jsonData.data.feed);
 		
 		//Hide progress view
 		progressView.hide();
 	};
 	
-	xhr.open('GET',API+'getNotifications');
+	xhr.open('GET',API+'getFeed');
 	xhr.send({
 		user_id:currentUser.userId
 	});
@@ -78,7 +78,7 @@ function populateFeedsTableView(data) {
 	
 	for(i=0; i< data.length; i++){
 		//build text
-		var notificationText = data[i].name + ' ' + getNotificationMessage(data[i].type_id);
+		var notificationText = getFeedMessage(data[i]);
 		
 		//notification row
 		var notificationRow = Ti.UI.createTableViewRow({
