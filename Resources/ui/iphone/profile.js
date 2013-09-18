@@ -312,10 +312,15 @@ function populateProfileTableView(){
 				borderColor:'f5a92c'
 			});	
 			
+			//Wrapper view with vertical layout for the text in each row
+			var activityWrapperView = Ti.UI.createView({
+				layout:'vertical'
+			});
+			
 			//activity label
 			var activityLabel = Ti.UI.createLabel({
 				text:'Gone for a walk with '+dogNames,
-				top:18,
+				top:10,
 				textAlign:'left',
 				width:'auto',
 				height:'auto',
@@ -327,18 +332,22 @@ function populateProfileTableView(){
 			//time label
 			var timeLabel = Ti.UI.createLabel({
 				text:relativeTime(userActivities[i].start_time),
-				bottom:18,
+				//bottom:18,
 				textAlign:'left',
 				width:'auto',
 				height:'auto',
 				left:88,
 				color:'#938787',
-				font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+				font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 			});
-		
+			
+			activityWrapperView.add(activityLabel);
+			activityWrapperView.add(timeLabel);
+			
 			activityRow.add(rowActivityImage);
-			activityRow.add(activityLabel);
-			activityRow.add(timeLabel);
+			//activityRow.add(activityLabel);
+			//activityRow.add(timeLabel);
+			activityRow.add(activityWrapperView);
 			
 			tableRows.push(activityRow);
 		}
