@@ -171,9 +171,10 @@ function buildDogProfileView(dogId){
 		var dogProfileLikesIcon = Ti.UI.createImageView({
 			image:IMAGE_PATH+'dog_profile/best_icon_selected.png',
 			left:287,
-			top:11
+			top:11,
+			dogId:dogId
 		});
-		
+		dogProfileLikesIcon.addEventListener('click', handleDogLikesButton);
 		dogProfileOpacityInfoBar.add(dogProfileLikesIcon);
 		
 		dogProfileView.add(dogProfileOpacityInfoBar);
@@ -396,6 +397,39 @@ function getOnlineDog(dId){
 	});
 }
 
+function getDogLikedUsersOnline(dId){
+	
+	Ti.API.info('getDogLikedUsersOnline() called with dog_id: '+dId);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			populateListUsersTableView(jsonData.data);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+		}else{
+			alert(getErrorMessage(jsonData.data.response));
+		}
+	};
+	xhr.open('GET',API+'getDogLikedUsers');
+	xhr.send({
+		user_id:userObject.userId,
+		dog_id:dId
+	});
+}
+
 //update dog profile UI
 function updateDogProfile(dogObj){
 	navController.getWindow().setTitle(dogObj.name);
@@ -424,4 +458,39 @@ function updateDogProfile(dogObj){
 		dogProfileHeartImage.image = IMAGE_PATH+'common/best_icon_selected_red.png';
 		dogProfileHeartImage.toggle = true;
 	}
+}
+
+function handleDogLikesButton(e){
+	var dogId = e.source.dogId;
+	
+	var userId = userObject.userId;
+	
+	Ti.include('ui/iphone/list_users.js');
+	
+	var listUsersView = buildListUsersView();
+	
+	getDogLikedUsersOnline(dogId);
+	
+	var listUsersWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR
+	});
+	
+	//back button & event listener
+	var listUsersBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	listUsersWindow.setLeftNavButton(listUsersBackButton);
+	listUsersBackButton.addEventListener("click", function() {
+	    navController.close(listUsersWindow);
+	});
+	
+	listUsersWindow.add(listUsersView);
+	
+	openWindows.push(listUsersWindow);
+	navController.open(listUsersWindow);
 }

@@ -9,7 +9,7 @@ function buildListUsersView(){
 		minRowHeight:60,
 		width:290,
 		backgroundColor:'transparent',
-		top:45,
+		top:13,
 		bottom:0
 	});
 	listUsersView.add(listUsersTableView);

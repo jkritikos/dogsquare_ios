@@ -196,6 +196,15 @@ function buildViewActivityView(aId){
 		});
 		viewActivityOpacityBar.add(viewActivityLikesNumberLabel);
 		
+		var viewActivityLikesIcon = Ti.UI.createImageView({
+			image:IMAGE_PATH+'dog_profile/best_icon_selected.png',
+			left:287,
+			top:11,
+			actId:aId
+		});
+		viewActivityLikesIcon.addEventListener('click', handleActivityLikesButton);
+		viewActivityOpacityBar.add(viewActivityLikesIcon);
+		
 		var viewActivityLikesLabel = Titanium.UI.createLabel({ 
 			text:'Likes',
 			height:19,
@@ -205,6 +214,7 @@ function buildViewActivityView(aId){
 			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		viewActivityOpacityBar.add(viewActivityLikesLabel);
+		
 		viewActivityView.add(viewActivityMap);
 		
 		//Table view title bar	
@@ -243,8 +253,8 @@ function buildViewActivityView(aId){
 		
 		//background for comments
 		viewActivityCommentsBackgroundView = Ti.UI.createView({
-			top:332,
-			height:84,
+			top:384,
+			height:429,
 			width:'100%',
 			backgroundColor:UI_BACKGROUND_COLOR,
 			zIndex:2
@@ -487,8 +497,7 @@ function handleViewActivityCommentButtons(e){
 	
 	if(toggle && button != 'plus'){
 		openWindows[0].setRightNavButton(null);
-		viewActivityCommentsBackgroundView.animate({top:332, duration:500});
-		viewActivityCommentsBackgroundView.animate({height:84, duration:500});
+		viewActivityCommentsBackgroundView.animate({top:384, duration:500});
 		viewActivityCommentsTextArea.blur();
 		viewActivityCommentsTextArea.hide();
 		viewActivityCommentsTableView.show();
@@ -496,14 +505,12 @@ function handleViewActivityCommentButtons(e){
 	}else if(!toggle && button != 'plus'){
 		openWindows[0].setRightNavButton(null);
 		viewActivityCommentsBackgroundView.animate({top:-13, duration:500});
-		viewActivityCommentsBackgroundView.animate({height:429, duration:500});
 		viewActivityCommentsTextArea.blur();
 		viewActivityCommentsTextArea.hide();
 		viewActivityCommentsTableView.show();
 		e.source.toggle = true;
 	}else if(button == 'plus'){
 		viewActivityCommentsBackgroundView.animate({top:-13, duration:300});
-		viewActivityCommentsBackgroundView.animate({height:429, duration:300});
 		viewActivityCommentsButton.toggle = true;
 		openWindows[0].setRightNavButton(viewActivitySaveCommentButton);
 		
@@ -646,7 +653,7 @@ function doSaveActivityCommentOnline(comObj){
 	});
 }
 
-//Gets all users who follow the user
+
 function getActivityOnline(aId){
 	
 	Ti.API.info('getActivityOnline() called with activity_id: '+aId);
@@ -669,7 +676,6 @@ function getActivityOnline(aId){
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
-			
 			updateActivityView(jsonData.data.activity);
 			updateActivityCoordinates(jsonData.data.coordinates);
 			
@@ -699,6 +705,39 @@ function getActivityOnline(aId){
 	});
 }
 
+function getActivityLikedUsersOnline(aId){
+	
+	Ti.API.info('getActivityLikedUsersOnline() called with activity_id: '+aId);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			populateListUsersTableView(jsonData.data);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+		}else{
+			alert(getErrorMessage(jsonData.data.response));
+		}
+	};
+	xhr.open('GET',API+'getActivityLikedUsers');
+	xhr.send({
+		user_id:userObject.userId,
+		activity_id:aId
+	});
+}
+
 function updateActivityView(activityObj){
 	
 	viewActivityDistanceNumberLabel.text = activityObj.distance;
@@ -717,42 +756,69 @@ function updateActivityView(activityObj){
 }
 
 function updateActivityCoordinates(coordsObj){
+	if(coordsObj.length != 0){
+		viewActivityAnnotationStart.latitude = coordsObj[0].latitude;
+		viewActivityAnnotationStart.longitude = coordsObj[0].longitude;
+		
+		viewActivityAnnotationEnd.latitude = coordsObj[coordsObj.length - 1].latitude;
+		viewActivityAnnotationEnd.longitude = coordsObj[coordsObj.length - 1].longitude;
+		
+		//map region object
+		var viewActivityRegion = {
+			latitude: coordsObj[0].latitude,
+			longitude: coordsObj[0].longitude,
+			animate:true,
+			latitudeDelta:0.001,
+			longitudeDelta:0.001
+		};
+		
+		viewActivityMap.setLocation(viewActivityRegion);
+		
+		//route object
+		var route = {
+		    name:"Your path",
+		    points:coordsObj,
+		    color:"f9bf30",
+		    borderColor:'black',
+		    width:8
+		};
+		
+		// add the route
+		viewActivityMap.addRoute(route);
+	}
+}
+
+function handleActivityLikesButton(e){
+	var activityId = e.source.actId;
 	
-	viewActivityAnnotationStart.latitude = coordsObj[0].coords.latitude;
-	viewActivityAnnotationStart.longitude = coordsObj[0].coords.longitude;
+	var userId = userObject.userId;
 	
-	viewActivityAnnotationEnd.latitude = coordsObj[0].coords.latitude;
-	viewActivityAnnotationEnd.longitude = coordsObj[0].coords.longitude;
+	Ti.include('ui/iphone/list_users.js');
 	
-	//map region object
-	var viewActivityRegion = {
-		latitude: coordsObj[0].coords.latitude,
-		longitude: coordsObj[0].coords.longitude,
-		animate:true,
-		latitudeDelta:0.001,
-		longitudeDelta:0.001
-	};
+	var listUsersView = buildListUsersView();
 	
-	viewActivityMap.setLocation(viewActivityRegion);
+	getActivityLikedUsersOnline(activityId);
 	
-	//push into object more data
-	coordsObj[0].coords = ({animate:1, 
-							  latitude:coordsObj[0].coords.latitude,
-							  latitudeDelta:0.001,
-							  longitude:coordsObj[0].coords.longitude,
-							  longitudeDelta:0.001
-							}); 
-							
-	//route object
-	var route = {
-	    name:"Your path",
-	    points:coordsObj[0].coords,
-	    color:"f9bf30",
-	    borderColor:'black',
-	    width:8
-	};
+	var listUsersWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR
+	});
 	
-	// add the route
-	viewActivityMap.addRoute(route);
+	//back button & event listener
+	var listUsersBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
 	
+	listUsersWindow.setLeftNavButton(listUsersBackButton);
+	listUsersBackButton.addEventListener("click", function() {
+	    navController.close(listUsersWindow);
+	});
+	
+	listUsersWindow.add(listUsersView);
+	
+	openWindows.push(listUsersWindow);
+	navController.open(listUsersWindow);
 }
