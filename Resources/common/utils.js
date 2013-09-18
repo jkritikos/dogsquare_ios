@@ -82,6 +82,8 @@ function relativeTime(eventTime){
 	var variable = 0;
 	var metric = '';
 	
+	//Ti.API.info('relativeTime() now = '+nowTime+' eventTime = '+eventTime+ ' and calculates diff = '+diff);
+	
 	if(diff <= 10000){
 		t = 'Just now';
 	} else if(diff > 10000 && diff <= 60000){

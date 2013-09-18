@@ -15,6 +15,11 @@ var NOTIFICATION_LIKE_ACTIVITY = 4;
 
 //Feed types
 var FEED_NEW_WALK = 1;
+var FEED_NEW_DOG = 2;
+var FEED_FRIEND_NEW_FOLLOWER = 3;
+var FEED_FRIEND_LIKE_DOG = 4;
+var FEED_FRIEND_LIKE_ACTIVITY = 5;
+var FEED_FRIEND_COMMENT_ACTIVITY = 6;
 
 //Remove error messages after a while
 var ERROR_MSG_REMOVE_TIMEOUT = 1500;
@@ -46,8 +51,14 @@ function getFeedMessage(obj){
 	var currentLanguage = LANGUAGE_ENGLISH;
 	var msg = 'default feed';
 	
-	if(obj.type_id == FEED_NEW_WALK){
-		msg = obj.user_from_name + ' went for a walk with ' + obj.target_dog_name;
+	if(obj.Feed.type_id == FEED_NEW_WALK){
+		msg = obj.Feed.user_from_name + ' went for a walk with ' + obj.Feed.target_dog_name;
+	} else if(obj.Feed.type_id == FEED_NEW_DOG){
+		msg = obj.Feed.user_from_name + ' added dog ' + obj.Feed.target_dog_name;
+	} else if(obj.Feed.type_id == FEED_FRIEND_NEW_FOLLOWER){
+		msg = obj.Feed.user_from_name + ' is now following ' + obj.Feed.target_user_name;
+	} else if(obj.Feed.type_id == FEED_FRIEND_LIKE_DOG){
+		msg = obj.Feed.user_from_name + ' likes ' + obj.Feed.target_dog_name;
 	}
 	
 	return msg;

@@ -92,7 +92,7 @@ function populateFeedsTableView(data) {
 		
 		//profile image
 		var rowNotificationProfileImage = Titanium.UI.createImageView({
-			image:REMOTE_USER_IMAGES+data[i].thumb,
+			image:REMOTE_USER_IMAGES+data[i].Feed.user_from_thumb,
 			left:2,
 			width:54,
 			height:54,
@@ -113,12 +113,13 @@ function populateFeedsTableView(data) {
 		
 		//date label
 		var rowDateLabel = Titanium.UI.createLabel({ 
-			text:'Sept 7',
+			text:relativeTime(data[i].Feed.created),
 			color:'black',
 			height:18,
 			width:'auto',
 			textAlign:'right',
 			right:9,
+			bottom:4,
 			font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
