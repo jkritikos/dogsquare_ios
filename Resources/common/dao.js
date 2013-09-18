@@ -1,6 +1,6 @@
 var SERVER = '';
 
-var PRODUCTION_MODE = true;
+var PRODUCTION_MODE = false;
 
 if(!PRODUCTION_MODE){
 	//UrbanAirship.key='QcPHp0gxT3-3yj5Y9aLDpA';
@@ -671,6 +671,8 @@ function saveInboxMessage(obj){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	db.execute('insert into inbox (remote_user_id, remote_user_name, my_message, read, date, message) values (?,?,?,?,?,?)',obj.remote_user_id, obj.remote_user_name, obj.my_message, obj.read, obj.date, obj.message);
 	db.close();
+	
+	Ti.API.info('saveInboxMessage() saved message locally');
 }
 
 //Returns all messages from our inbox

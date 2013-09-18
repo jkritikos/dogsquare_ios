@@ -65,7 +65,7 @@ var inboxNewSendMessageSendButton = Titanium.UI.createButton({
     style:Titanium.UI.iPhone.SystemButtonStyle.DONE 
 }); 
 
-inboxNewSendMessageSendButton.addEventListener('click', handleToolbarSendButton);
+inboxNewSendMessageSendButton.addEventListener('click', sendMessageToUser);
 
 var inboxNewSendToTextField = Ti.UI.createTextField({
 	width:238,
@@ -142,8 +142,54 @@ function populateInboxNewContactsTableView(mObject){
 	inboxNewContactsTableView.setData(tableRows);
 }
 
-function handleToolbarSendButton() { 
-	Titanium.UI.createAlertDialog({title:'Toolbar',message:'You clicked send!'}).show(); 
+//Sends a message to a remote user and stores it locally upon server callback
+function sendMessageToUser() {
+	var from = 97;
+	var to = 99; 
+	var toName = 'hardcoded';
+	
+	Ti.API.info('sendMessageToUser() called. Sender: '+from+' message: '+inboxNewSendMessageTextField.value);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in sendMessageToUser()');
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('sendMessageToUser() got back from server '+this.responseText);
+		
+		var jsonData = JSON.parse(this.responseText);
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			Ti.API.info('sendMessageToUser() got back message_id '+jsonData.data.message_id);
+			
+			//Save to our local db
+			var messageObject = {
+				remote_user_id:to,
+				remote_user_name:toName,
+				my_message:1,
+				read:1,
+				date:new Date().getTime(),
+				message:inboxNewSendMessageTextField.value
+			};
+			
+			saveInboxMessage(messageObject);
+		}
+	};
+	
+	xhr.open('POST',API+'sendMessage');
+	
+	xhr.send({
+		user_id:from,
+		target_id:to,
+		message:inboxNewSendMessageTextField.value
+	});
+	/*
+	xhr.send({
+		user_id:userObject.userId,
+		target_id:userObject.userId
+	});*/
 }
 
 function getMutualFollowers(){
@@ -156,6 +202,8 @@ function getMutualFollowers(){
 	
 	};
 	xhr.onload = function(e) {
+		Ti.API.info('getMutualFollowers() got back from server '+this.responseText);
+		
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
@@ -179,6 +227,7 @@ function getMutualFollowers(){
 		}
 		
 	};
+	
 	xhr.open('GET',API+'getMutualFollowers');
 	xhr.send({
 		user_id:userObject.userId,
