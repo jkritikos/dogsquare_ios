@@ -187,7 +187,6 @@ function buildViewActivityView(aId){
 		
 		//number of the Likes label
 		viewActivityLikesNumberLabel = Titanium.UI.createLabel({
-			text:'32',
 			height:21,
 			textAlign:'center',
 			left:269,
@@ -706,7 +705,6 @@ function getActivityOnline(aId){
 }
 
 function getActivityLikedUsersOnline(aId){
-	
 	Ti.API.info('getActivityLikedUsersOnline() called with activity_id: '+aId);
 	
 	var xhr = Ti.Network.createHTTPClient();

@@ -59,6 +59,10 @@ function getFeedMessage(obj){
 		msg = obj.Feed.user_from_name + ' is now following ' + obj.Feed.target_user_name;
 	} else if(obj.Feed.type_id == FEED_FRIEND_LIKE_DOG){
 		msg = obj.Feed.user_from_name + ' likes ' + obj.Feed.target_dog_name;
+	}else if(obj.Feed.type_id == FEED_FRIEND_LIKE_ACTIVITY){
+		msg = obj.Feed.user_from_name + ' likes activity: ' + obj.Feed.activity_id;
+	}else if(obj.Feed.type_id == FEED_FRIEND_COMMENT_ACTIVITY){
+		msg = obj.Feed.user_from_name + ' commented on activity: ' + obj.Feed.activity_id;
 	}
 	
 	return msg;

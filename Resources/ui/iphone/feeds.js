@@ -17,6 +17,7 @@ function buildFeedsView(){
 			top:13,
 			bottom:0
 		});
+		feedsTableView.addEventListener('click', handleFeedsTableViewRows);
 		viewFeeds.add(feedsTableView);
 		
 		//feeds table view footer
@@ -80,6 +81,23 @@ function populateFeedsTableView(data) {
 		//build text
 		var notificationText = getFeedMessage(data[i]);
 		
+		var id = null;
+		var type = null;
+		var name = null;
+		
+		if(data[i].Feed.activity_id != null){
+			var type = data[i].Feed.type_id;
+			var id = data[i].Feed.activity_id;
+		}else if(data[i].Feed.target_user_id != null){
+			var type = data[i].Feed.type_id;
+			var id = data[i].Feed.target_user_id;
+			var name = data[i].Feed.target_user_name;
+		}else if(data[i].Feed.target_dog_id != null){
+			var type = data[i].Feed.type_id;
+			var id = data[i].Feed.target_dog_id;
+			var name = data[i].Feed.target_dog_name;
+		}
+		
 		//notification row
 		var notificationRow = Ti.UI.createTableViewRow({
 			className:'notificationRow',
@@ -87,7 +105,9 @@ function populateFeedsTableView(data) {
 			width:'100%',
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',
-			notification_type:data[i].type_id
+			feedType:type,
+			id:id,
+			name:name
 		});
 		
 		//profile image
@@ -131,4 +151,66 @@ function populateFeedsTableView(data) {
 	}
 	
 	feedsTableView.setData(tableRows);
+}
+
+function handleFeedsTableViewRows(e){
+	var feedType = e.row.feedType;
+	var id = e.row.id;
+	var name = e.row.name;
+	
+	var feedsRowWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR
+	});
+	
+	//back button & event listener
+	var feedsRowBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	feedsRowWindow.setLeftNavButton(feedsRowBackButton);
+	feedsRowBackButton.addEventListener("click", function() {
+	    navController.close(feedsRowWindow);
+	});
+	
+	
+	if(feedType == FEED_NEW_WALK || feedType == FEED_FRIEND_COMMENT_ACTIVITY || feedType == FEED_FRIEND_LIKE_ACTIVITY){
+		
+		Ti.include('ui/iphone/view_activity.js');
+	
+		var viewActivityView = buildViewActivityView(id);
+		
+		feedsRowWindow.add(viewActivityView);
+		feedsRowWindow.setTitle('Activity');
+		
+		openWindows.push(feedsRowWindow);
+		navController.open(feedsRowWindow);
+	}else if(feedType == FEED_NEW_DOG){
+		
+		Ti.include('ui/iphone/dog_profile.js');
+		
+		var dogProfileView = buildDogProfileView(id);
+		
+		feedsRowWindow.add(dogProfileView);
+		feedsRowWindow.setTitle(name);
+		
+		openWindows.push(feedsRowWindow);
+		navController.open(feedsRowWindow);
+	}else if(feedType == FEED_FRIEND_NEW_FOLLOWER){
+		
+		Ti.include('ui/iphone/profile_other.js');
+		
+		var profileOtherView = buildProfileOtherView(id);
+		
+		feedsRowWindow.add(profileOtherView);
+		feedsRowWindow.setTitle(name);
+		
+		openWindows.push(feedsRowWindow);
+		navController.open(feedsRowWindow);
+	}
+	
+	
 }
