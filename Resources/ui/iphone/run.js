@@ -202,6 +202,8 @@ function handleMapButton(){
 	});
 	
 	Ti.include('ui/iphone/map.js');
+	buildMapView(TARGET_MODE_NEW_WINDOW);
+	
 	runMapWindow.setTitleControl(mapSearchContainer);
 	runMapWindow.add(viewMap);
 	openWindows.push(runMapWindow);

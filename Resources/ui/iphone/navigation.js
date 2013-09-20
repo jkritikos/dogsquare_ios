@@ -29,6 +29,10 @@ var CHECKIN_PLACE_VIEW = 13;
 
 var CURRENT_VIEW = null;
 
+//Hack for reusing views within current or new window
+var TARGET_MODE_REUSE = 1;
+var TARGET_MODE_NEW_WINDOW = 2;
+
 //Left & right menus
 Ti.include('menu_left.js');
 Ti.include('menu_right.js');

@@ -48,7 +48,7 @@ window.open(); //init the app
 window.setParallaxAmount(0.3);
 
 Ti.include('ui/iphone/run.js');
-Ti.include('ui/iphone/map.js');
+//Ti.include('ui/iphone/map.js');
 
 var a = getActivities();
 for(var i=0; i<a.length; a++){

@@ -245,6 +245,8 @@ profileMapButton.addEventListener('click', function(){
 	
 	
 	Ti.include('ui/iphone/map.js');
+	buildMapView(TARGET_MODE_NEW_WINDOW);
+	
 	profileMapWindow.setTitleControl(mapSearchContainer);
 	profileMapWindow.add(viewMap);
 	openWindows.push(profileMapWindow);

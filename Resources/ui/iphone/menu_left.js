@@ -148,6 +148,8 @@ leftTableView.addEventListener("click", function(e){
 			closeOpenWindows();
 			CURRENT_VIEW = VIEW_MAP;
 			Ti.include('ui/iphone/map.js');
+			
+			buildMapView(TARGET_MODE_REUSE);
 			navController.getWindow().add(viewMap);
 			navController.getWindow().setTitle('Map');
 			break;
