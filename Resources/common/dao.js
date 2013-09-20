@@ -669,17 +669,73 @@ function getActivityCoordinates(activityId){
 //Stores a message object to our local inbox
 function saveInboxMessage(obj){
 	var db = Ti.Database.install('dog.sqlite', 'db');
-	db.execute('insert into inbox (remote_user_id, remote_user_name, my_message, read, date, message) values (?,?,?,?,?,?)',obj.remote_user_id, obj.remote_user_name, obj.my_message, obj.read, obj.date, obj.message);
+	db.execute('insert into inbox (remote_user_id, remote_user_name, my_message, read, date, message) values (?,?,?,?,?,?)',obj.user_from_id, obj.user_from_name, obj.my_message, obj.read, obj.created, obj.message);
 	db.close();
 	
 	Ti.API.info('saveInboxMessage() saved message locally');
 }
 
 //Returns all messages from our inbox
-function getInbox(){
+//TODO order by id and group by remote_user_id - get latest message of each user
+function getInboxMessages(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
+	var messagesRows = [];
+	
+	var rows = db.execute('select i.remote_user_id, i.remote_user_name, i.date, i.message from inbox i where i.date = (select max(i2.date) from inbox i2 where i.remote_user_id = i2.remote_user_id)');
+	var i=0;
+	while (rows.isValidRow())
+	{
+		
+	  var user_id = rows.field(0);
+	  var name = rows.field(1);
+	  var date = rows.field(2);
+	  var message = rows.field(3);
+	  
+	  var obj = {
+			user_id:user_id,
+			name:name,
+			date:date,
+			message:message,
+		};
+	
+		messagesRows.push(obj);
+		rows.next();
+	}
+	rows.close();
 	db.close();
+	
+	return messagesRows;
+}
+
+//Returns all messages from from a specific user
+function getInboxMessagesByUserId(userId){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	var messagesRows = [];
+	
+	var rows = db.execute('select date, my_message, message from inbox where remote_user_id = ? order by date asc', userId);
+	
+	while (rows.isValidRow())
+	{
+		
+	  var date = rows.field(0);
+	  var my_message = rows.field(1);
+	  var message = rows.field(2);
+	  
+	  var obj = {
+			date:date,
+			my_message:my_message,
+			message:message
+		};
+	
+		messagesRows.push(obj);
+		rows.next();
+	}
+	rows.close();
+	db.close();
+	
+	return messagesRows;
 }
 
 //Updates the local db with the user's mutual followers

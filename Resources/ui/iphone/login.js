@@ -263,8 +263,6 @@ function checkLoginCredentials(lObj){
 			var dogArray = [];
 			var dogObj = {};
 			
-			
-			
 			for(i=0;i<jsonData.data.dogs.length;i++){
 				dogObj.name = jsonData.data.dogs[i].Dog.name;
 				dogObj.dog_id = jsonData.data.dogs[i].Dog.id;

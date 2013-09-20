@@ -17,7 +17,10 @@ inboxNewWindow.setLeftNavButton(inboxNewBackButton);
 
 inboxNewBackButton.addEventListener("click", function() {
     navController.close(inboxNewWindow);
+    inboxNewSendToTextField.blur();
 });
+
+var toUserId = null;
 
 //inbox new send to background
 var inboxNewSendToBackgroundView = Ti.UI.createView({
@@ -44,7 +47,7 @@ var inboxNewFlexSpace = Titanium.UI.createButton({
     systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
 });
 
-var inboxNewSendMessageTextField = Titanium.UI.createTextField({ 
+var inboxNewSendToTextArea = Titanium.UI.createTextArea({ 
 	height:31, 
 	backgroundColor:'white',
 	width:239, 
@@ -67,11 +70,15 @@ var inboxNewSendMessageSendButton = Titanium.UI.createButton({
 
 inboxNewSendMessageSendButton.addEventListener('click', sendMessageToUser);
 
+var inboxNewSendMessageToolbar = Titanium.UI.createToolbar({
+	 items:[inboxNewSendToTextArea, inboxNewFlexSpace, inboxNewSendMessageSendButton],
+	 barColor:'#999'
+ });
+
 var inboxNewSendToTextField = Ti.UI.createTextField({
 	width:238,
 	height:38,
-	keyboardToolbar:[inboxNewSendMessageTextField, inboxNewFlexSpace, inboxNewSendMessageSendButton], 
-	keyboardToolbarColor:'#999',
+	keyboardToolbar:inboxNewSendMessageToolbar, 
 	font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 });
 inboxNewSendToTextField.addEventListener('change', handleSendToTextFieldChange);
@@ -144,11 +151,11 @@ function populateInboxNewContactsTableView(mObject){
 
 //Sends a message to a remote user and stores it locally upon server callback
 function sendMessageToUser() {
-	var from = 97;
-	var to = 99; 
-	var toName = 'hardcoded';
+	var from = userObject.userId;
+	var to = toUserId; 
+	var toName = inboxNewSendToTextField.value;
 	
-	Ti.API.info('sendMessageToUser() called. Sender: '+from+' message: '+inboxNewSendMessageTextField.value);
+	Ti.API.info('sendMessageToUser() called. Sender: '+from+' message: '+inboxNewSendToTextArea.value);
 	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
@@ -166,12 +173,12 @@ function sendMessageToUser() {
 			
 			//Save to our local db
 			var messageObject = {
-				remote_user_id:to,
-				remote_user_name:toName,
+				user_from_id:to,
+				user_from_name:toName,
 				my_message:1,
 				read:1,
-				date:new Date().getTime(),
-				message:inboxNewSendMessageTextField.value
+				created:new Date().getTime(),
+				message:inboxNewSendToTextArea.value
 			};
 			
 			saveInboxMessage(messageObject);
@@ -183,7 +190,7 @@ function sendMessageToUser() {
 	xhr.send({
 		user_id:from,
 		target_id:to,
-		message:inboxNewSendMessageTextField.value
+		message:inboxNewSendToTextArea.value
 	});
 	/*
 	xhr.send({
@@ -237,6 +244,8 @@ function getMutualFollowers(){
 
 function handleNewContactsTableRows(e){
 	inboxNewSendToTextField.focus();
+	toUserId = e.row.user_id;
+	
 	inboxNewSendToTextField.value = e.row.children[1].text;
 	inboxNewContactsTableView.data = [];
 }

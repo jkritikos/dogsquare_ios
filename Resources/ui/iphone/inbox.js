@@ -16,12 +16,14 @@ navController.getWindow().rightNavButton = newMessageRightNavButton;
 var inboxTableView = Titanium.UI.createTableView({
 	minRowHeight:71,
 	width:293,
-	data:populateInboxTableView(),
 	backgroundColor:UI_BACKGROUND_COLOR,
 	top:13,
 	bottom:0
 });
 viewInbox.add(inboxTableView);
+inboxTableView.addEventListener('click', handleInboxTableViewRows);
+
+getUnreadInboxMessages();
 
 //inbox table view footer
 inboxTableView.footerView = Ti.UI.createView({
@@ -30,66 +32,55 @@ inboxTableView.footerView = Ti.UI.createView({
 });
 
 //populate table view
-function populateInboxTableView() {
+function populateInboxTableView(mObj) {
 	var tableRows = [];
 	
-	//arrays for the labels
-	var namesArray = ['Ben Howdle', 'Rogie King', 'Mike Beecham', 'Ryan Murphy'];
-	var messageArray = ['Hey Jamie, I wanted to show you Kashflow...', 
-						'Hey Jamie, of course you can have all the ... ', 
-						'I agree, bagels are pretty good!',
-						'Hey Jamie, Rockpack is a great place...'];
-	
-	for(i=0;i<=3;i++){
+	for(i=0;i<mObj.length;i++){
 		//message row
 		var messageRow = Ti.UI.createTableViewRow({
 			className:'messageRow',
-			height:71,
+			height:79,
 			width:'100%',
 			backgroundColor:'white',
-			selectedBackgroundColor:'transparent'
+			selectedBackgroundColor:'transparent',
+			user_id:mObj[i].user_id
 		});
-		messageRow.addEventListener('click', handleInboxMessage);
 		
-		//profile image
-		var rowMessageImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-		var rowMessageImageBlob = rowMessageImageFile.toBlob();
-		var rowMessageImageBlobCropped = rowMessageImageBlob.imageAsThumbnail(54,0,27);
 		var rowMessageProfileImage = Titanium.UI.createImageView({
-			image:rowMessageImageBlobCropped,
+			image:API+'photo?user_id='+mObj[i].user_id,
 			left:2,
-			borderRadius:27,
-			borderWidth:3,
+			borderRadius:30,
+			borderWidth:2,
 			borderColor:'f5a92c'
 		});
 		
 		//message label
 		var rowMessageLabel = Titanium.UI.createLabel({ 
-			text:messageArray[i],
+			text:mObj[i].message,
 			color:'gray',
 			bottom:18,
 			height:18,
 			width:'auto',
 			textAlign:'left',
-			left:65,
+			left:75,
 			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
 		//name label
 		var rowNameLabel = Titanium.UI.createLabel({ 
-			text:namesArray[i],
+			text:mObj[i].name,
 			color:'black',
 			top:18,
 			height:18,
 			width:'auto',
 			textAlign:'left',
-			left:65,
+			left:75,
 			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		//date label
 		var rowDateLabel = Titanium.UI.createLabel({ 
-			text:'Sept 7',
+			text:relativeTime(mObj[i].date),
 			color:'black',
 			top:10,
 			height:18,
@@ -107,14 +98,7 @@ function populateInboxTableView() {
 		tableRows.push(messageRow);
 	}
 	
-	return tableRows;
-}
-
-function handleInboxMessage(){
-	Ti.include('ui/iphone/inbox_view.js');
-	
-	openWindows.push(inboxViewWindow);
-	navController.open(inboxViewWindow);
+	inboxTableView.setData(tableRows);
 }
 
 function handleNewMessage(){
@@ -122,4 +106,123 @@ function handleNewMessage(){
 	
 	openWindows.push(inboxNewWindow);
 	navController.open(inboxNewWindow);
+}
+
+function getUnreadInboxMessages(){
+	Ti.API.info('getUnreadInboxMessages() called for user='+ userObject.userId);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			var messagesList = [];
+			
+			for(i=0;i<jsonData.data.messages.length;i++){
+				messagesList.push(jsonData.data.messages[i].UserInbox.id);
+				
+				jsonData.data.messages[i].UserInbox.read = 0;
+				
+				if(jsonData.data.messages[i].UserInbox.user_from_id == userObject.userId){
+					jsonData.data.messages[i].UserInbox.my_message = 1;
+				}else{
+					jsonData.data.messages[i].UserInbox.my_message = 0;
+				}
+				
+				saveInboxMessage(jsonData.data.messages[i].UserInbox);
+				
+			}
+			
+			if(messagesList != 0){
+				setMessagesIntoRead(messagesList);
+			}
+			
+			var messages = getInboxMessages();
+			populateInboxTableView(messages);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('GET',API+'getMessages');
+	xhr.send({
+		user_id:userObject.userId
+	});
+}
+
+function setMessagesIntoRead(list){
+	Ti.API.info('setMessagesIntoRead() read: '+ list);
+	
+	var list = JSON.stringify(list);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	
+	xhr.onload = function(e) {
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('POST',API+'setMessagesRead');
+	xhr.send({
+		list:list
+	});
+}
+
+function handleInboxTableViewRows(e){
+	var userId = e.row.user_id;
+	
+	var messages = getInboxMessagesByUserId(userId);
+	
+	Ti.include('ui/iphone/inbox_view.js');
+	
+	//inbox view window
+	var inboxViewWindow = Ti.UI.createWindow({
+		backgroundColor:UI_BACKGROUND_COLOR,
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Chat'
+	});
+	
+	//back button
+	var inboxViewBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	inboxViewWindow.setLeftNavButton(inboxViewBackButton);
+	
+	inboxViewBackButton.addEventListener("click", function() {
+	    navController.close(inboxViewWindow);
+	});
+	
+	var viewInboxView = buildViewInboxView(messages);
+	populateInboxViewTableView(messages, userId);
+	
+	inboxViewWindow.add(viewInboxView);
+	
+	openWindows.push(inboxViewWindow);
+	navController.open(inboxViewWindow);
 }
