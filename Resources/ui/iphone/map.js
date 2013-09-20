@@ -1,11 +1,11 @@
 //Map filters
-var FILTER_PARK = 0;
-var FILTER_HOMELESS = 1;
-var FILTER_CRUELTY = 2;
-var FILTER_PETSHOP = 3;
-var FILTER_VETERINARY = 4;
-var FILTER_DOG_HOSPITAL = 5;
-var FILTER_RECENTLY_OPEN = 6;
+var FILTER_PARK = 1;
+var FILTER_HOMELESS = 2;
+var FILTER_CRUELTY = 3;
+var FILTER_PETSHOP = 4;
+var FILTER_VETERINARY = 5;
+var FILTER_DOG_HOSPITAL = 6;
+var FILTER_RECENTLY_OPEN = 7;
 
 //UI components
 var viewMapTargetMode = null;
