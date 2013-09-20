@@ -135,7 +135,7 @@ function buildRegisterWindow(){
 		text:'Female',
 		top:17,
 		right:28,
-		color:'white',
+		color:'#6a5b5b',
 		font:{fontSize:14, fontWeight:'bold', fontFamily:'Open Sans'},
 		zIndex:2
 	});
@@ -543,31 +543,17 @@ function handlePhotoSelection(){
 			var image = event.media;
 			
 			//Reduce image size first
-			var isPortrait = false;
-			if(image.height > image.width) isPortrait = true;
-			Ti.API.info('Selected image with h:'+image.height+' w:'+image.width+' isPortrait='+isPortrait);
+			Ti.API.info('Selected image with h:'+image.height+' w:'+image.width);
 			
 			//Jpeg compression module
 			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
 			jpgcompressor.setCompressSize(200000);
 			jpgcompressor.setWorstCompressQuality(0.40);
 			
-			//Make image smaller
-			/*
-			var resizedImage = null;
-			if(isPortrait){
-				resizedImage = jpgcompressor.scale(image, 768, 1024);
-			} else {
-				resizedImage = jpgcompressor.scale(image, 1024, 768);
-			}*/
-			
 			var compressedImage = jpgcompressor.compress(image);
 			
 			//Create thumbnail
 			var imageThumbnail = image.imageAsThumbnail(60,0,30);
-			
-			//Ti.API.info('Resized image with h:'+resizedImage.height+' w:'+resizedImage.width);
-			//Ti.API.info('Thumbnailed image with h:'+imageThumbnail.height+' w:'+imageThumbnail.width);
 			
 			signupUserObject.image = compressedImage;
 			signupUserObject.thumb = imageThumbnail;
@@ -576,8 +562,16 @@ function handlePhotoSelection(){
 			
 			//Save images on the filesystem
 			var tmpImage = Titanium.Filesystem.getFile(signupUserObject.image_path);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
 			tmpImage.write(compressedImage);
+			
 			tmpImage = Titanium.Filesystem.getFile(signupUserObject.thumb_path);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
+			
 			tmpImage.write(imageThumbnail);
 		},
 		cancel:function(){

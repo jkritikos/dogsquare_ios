@@ -8,7 +8,8 @@ var TAB_FOLLOWING = 2;
 var profileImageView = Titanium.UI.createImageView({
 	image:REMOTE_USER_IMAGES + userObject.image_path,
 	top:0,
-	width:'100%',
+	height:240,
+	width:320,
 	processed:false
 });
 
@@ -19,11 +20,20 @@ profileImageView.addEventListener('load', function(){
 	Ti.API.info('Profile image loaded event');
 	
 	if(!profileImageView.processed){
-		Ti.API.info('Profile image loaded event processing');
 		var profileImageViewBlob = profileImageView.toBlob();
-		var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:500});
+		//profileImageView.image = profileImageViewBlob;
+		
+		//Cropping
+		//var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:440});
+		//profileImageView.image = profileImageBlobCropped;
+		
+		//Resizing imageAsResized
+		var profileImageBlobCropped = profileImageViewBlob.imageAsResized(320,240);
 		profileImageView.image = profileImageBlobCropped;
+		
 		profileImageView.processed = true;
+		
+		Ti.API.info('Profile image loaded event processing. Image height:'+profileImageViewBlob.height+' width '+profileImageViewBlob.width + ' cropped to height '+profileImageBlobCropped.height + ' and width '+profileImageBlobCropped.width);
 	}
 });
 
@@ -31,7 +41,7 @@ profileImageView.addEventListener('load', function(){
 var profileOpacityBar = Titanium.UI.createView({ 
 	backgroundColor:'white',
 	width:'100%',
-	top:175,
+	top:195,
 	height:36,
 	opacity:0.8
 });
@@ -126,7 +136,7 @@ var profileMapButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'profile/Map_icon.png',
 	width:33,
 	height:32,
-	top:242,
+	top:252,
 	right:48
 });
 
@@ -134,7 +144,7 @@ viewProfile.add(profileMapButton);
 
 var profileMapLabel = Ti.UI.createLabel({
 	text:'View map',
-	top:272,
+	top:282,
 	right:32,
 	color:UI_COLOR_RUN,
 	font:{fontSize:13, fontWeight:'semibold',fontFamily:'Open Sans'}
@@ -144,7 +154,7 @@ viewProfile.add(profileMapLabel);
 //Start button
 var profileStartButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'profile/start_button.png',
-	top:238,
+	top:248,
 	width:178,
 	height:52,
 	left:18

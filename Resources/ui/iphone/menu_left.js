@@ -109,6 +109,17 @@ leftmenuSearchBackgroundView.add(menuLeftSearchResultsTableView);
 winLeft.add(leftmenuSearchBackgroundView);
 leftmenuSearchBackgroundView.hide();
 
+//Remove previous views, navbar elements etc.
+function restoreWindowState(){
+	//Remove previous view?
+	if(CURRENT_VIEW == VIEW_NOTIFICATIONS){
+		navController.getWindow().remove(viewNotifications);
+	} else if(CURRENT_VIEW == VIEW_MAP){
+		navController.getWindow().remove(viewMap);
+		navController.getWindow().setTitleControl(null);
+	}
+}
+
 leftTableView.addEventListener("click", function(e){
 	Ti.API.info("isAnyViewOpen: " + window.isAnyViewOpen());
 	
@@ -122,11 +133,8 @@ leftTableView.addEventListener("click", function(e){
 	
 	var menuItem = e.row != null ? e.row.menuItem : e.menuItem;
 	
-	//Remove previous view?
-	if(CURRENT_VIEW == VIEW_NOTIFICATIONS){
-		navController.getWindow().remove(viewNotifications);
-	}
-	
+	//Remove previous views, navbar elements etc.
+	restoreWindowState();
 	
 	switch(menuItem){
 		case MENU_FEED:
@@ -565,6 +573,7 @@ function handleLeftSearchResultRows(e){
 	leftmenuSearchTxtfield.blur();
 	setTimeout(function(){clearSearchBackground();},400);
 	closeOpenWindows();
+	restoreWindowState();
 	
 	var userId = e.row.user_id;
 	var placeId = e.row.place_id;

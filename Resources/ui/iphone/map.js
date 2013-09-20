@@ -22,6 +22,7 @@ var mapview = null;
 
 function buildMapView(windowMode){
 	viewMapTargetMode = windowMode;
+	CURRENT_VIEW = VIEW_MAP;
 	
 	viewMap = Ti.UI.createView({
 		backgroundColor:'white'

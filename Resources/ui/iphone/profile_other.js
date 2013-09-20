@@ -28,7 +28,8 @@ function buildProfileOtherView(uId) {
 		//photo image
 		profileOtherPhotoImage = Titanium.UI.createImageView({ 
 			top:0,
-			width:'100%',
+			height:240,
+			width:320,
 			processed:false
 		});
 		
@@ -41,7 +42,7 @@ function buildProfileOtherView(uId) {
 			if(!profileOtherPhotoImage.processed){
 				Ti.API.info('Profile_other image loaded event processing');
 				var profileImageViewBlob = profileOtherPhotoImage.toBlob();
-				var profileImageBlobCropped = profileImageViewBlob.imageAsCropped({y:0,x:0,height:485});
+				var profileImageBlobCropped = profileImageViewBlob.imageAsResized(320,240);
 				profileOtherPhotoImage.image = profileImageBlobCropped;
 				profileOtherPhotoImage.processed = true;
 			}
