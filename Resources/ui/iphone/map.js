@@ -6,6 +6,8 @@ var FILTER_PETSHOP = 4;
 var FILTER_VETERINARY = 5;
 var FILTER_DOG_HOSPITAL = 6;
 var FILTER_RECENTLY_OPEN = 7;
+var FILTER_MATING = 8;
+var FILTER_SAME_BREED = 9;
 
 //UI components
 var viewMapTargetMode = null;
@@ -44,7 +46,7 @@ function buildMapView(windowMode){
 	
 	mapSearchTxtfield = Titanium.UI.createTextField({
 		left:35,
-		width:100,
+		width:155,
 		field:'search'
 	});
 	
@@ -96,6 +98,8 @@ function buildMapView(windowMode){
 	mapSearchFilterData.push(createMapFilterRow(FILTER_VETERINARY));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_DOG_HOSPITAL));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_RECENTLY_OPEN));
+	mapSearchFilterData.push(createMapFilterRow(FILTER_MATING));
+	mapSearchFilterData.push(createMapFilterRow(FILTER_SAME_BREED));
 	
 	mapSearchCategoriesTableView.setData(mapSearchFilterData);
 
@@ -223,7 +227,13 @@ function createMapFilterRow(filter){
 	} else if(filter == FILTER_RECENTLY_OPEN){
 		icon = IMAGE_PATH+'map_filters/recentlyOpened_icon.png';
 		label = 'Recently open';
-	} 
+	} else if(filter == FILTER_MATING){
+		icon = IMAGE_PATH+'map_filters/matting_icon.png';
+		label = 'Mating';
+	} else if(filter == FILTER_SAME_BREED){
+		icon = IMAGE_PATH+'map_filters/sameBreed_icon.png';
+		label = 'Same breed';
+	}
 	
 	var rowIcon = Titanium.UI.createImageView({
 		image:icon,
