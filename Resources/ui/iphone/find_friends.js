@@ -233,7 +233,7 @@ function populateFindFriendsContactsTableView(uData){
 			className:'contactsRow',
 			height:73,
 			backgroundColor:'white',
-			selectedBackgroundColor:'transparent',
+			selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 			type:FRIENDS_TYPE_ROW,
 			button:'invite'
 		});

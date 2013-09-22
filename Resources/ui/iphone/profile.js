@@ -8,7 +8,7 @@ var TAB_FOLLOWING = 2;
 var profileImageView = Titanium.UI.createImageView({
 	image:REMOTE_USER_IMAGES + userObject.image_path,
 	top:0,
-	height:240,
+	height:320,
 	width:320,
 	processed:false
 });
@@ -28,7 +28,7 @@ profileImageView.addEventListener('load', function(){
 		//profileImageView.image = profileImageBlobCropped;
 		
 		//Resizing imageAsResized
-		var profileImageBlobCropped = profileImageViewBlob.imageAsResized(320,240);
+		var profileImageBlobCropped = profileImageViewBlob.imageAsResized(320,320);
 		profileImageView.image = profileImageBlobCropped;
 		
 		profileImageView.processed = true;
