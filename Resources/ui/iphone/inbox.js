@@ -176,7 +176,7 @@ function setMessagesIntoRead(list){
 	};
 	
 	xhr.onload = function(e) {
-		Ti.API.info('setMessagesIntoRead() got back from server '+this.responseText);
+		Ti.API.info('setMessagesIntoRead() got back from server : '+ this.responseText);
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){

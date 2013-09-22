@@ -1,4 +1,4 @@
-
+//UI components
 var profileOtherDogBar = null;
 var profileOtherDogTableViewBackground = null;
 var profileOtherFollowersNumberLabel = null;
@@ -180,6 +180,8 @@ function buildProfileOtherView(uId) {
 		});
 		profileOtherView.add(profileOtherWalkWithButton);
 		
+		profileOtherWalkWithButton.addEventListener('click', sendWalkRequest);
+		
 		//walk with me button label
 		var profileOtherWalkWithButtonLabel = Ti.UI.createLabel({
 			text:'Walk with me',
@@ -264,6 +266,11 @@ function buildProfileOtherView(uId) {
 	getOnlineOtherUser(uId);
 	
 	return profileOtherView;
+}
+
+//Event handler for the walk with me button - sends a walk request to this user
+function sendWalkRequest(){
+	
 }
 
 function handleDogBarButton(e){

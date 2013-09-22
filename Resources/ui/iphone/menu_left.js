@@ -23,11 +23,12 @@ var leftmenuSearchView = Ti.UI.createView({
 
 //close button for search - default hidden
 var menuLeftCloseSearchViewButton = Titanium.UI.createButton({
-	title:'close',
+	backgroundImage:IMAGE_PATH+'common/cancel_button.png',
 	right:9,
-	width:50,
-	height:29
+	width:54,
+	height:31
 });
+
 leftmenuSearchView.add(menuLeftCloseSearchViewButton);
 menuLeftCloseSearchViewButton.addEventListener('click', handleLeftCloseSearchButton);
 menuLeftCloseSearchViewButton.hide();
@@ -46,7 +47,7 @@ var leftmenuSearchTxtfield = Titanium.UI.createTextField({
 	left:35,
 	width:200,
 	field:'search',
-	color:'white',
+	color:'#bdbcbc',
 	returnKeyType: Ti.UI.RETURNKEY_SEARCH
 });
 
