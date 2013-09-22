@@ -7,6 +7,8 @@ var profileOtherPhotoImage = null;
 var profileOtherFollowButton = null;
 var profileOtherDogTableView = null;
 var profileOtherView = null;
+var profileOtherWalkWithButtonLabel = null;
+var profileOtherWalkWithButton = null;
 
 var TAB_FOLLOWERS = 1;
 var TAB_FOLLOWING = 2;
@@ -171,7 +173,7 @@ function buildProfileOtherView(uId) {
 		profileOtherView.add(profileOtherChatButtonLabel);
 		
 		//walk with me button
-		var profileOtherWalkWithButton = Ti.UI.createButton({
+		profileOtherWalkWithButton = Ti.UI.createButton({
 		    backgroundImage: IMAGE_PATH+'profile_other/Walk_with_icon.png',
 		    width:45,
 		    height:43,
@@ -183,7 +185,7 @@ function buildProfileOtherView(uId) {
 		profileOtherWalkWithButton.addEventListener('click', sendWalkRequest);
 		
 		//walk with me button label
-		var profileOtherWalkWithButtonLabel = Ti.UI.createLabel({
+		profileOtherWalkWithButtonLabel = Ti.UI.createLabel({
 			text:'Walk with me',
 			color:'black',
 			opacity:0.6,
@@ -270,7 +272,38 @@ function buildProfileOtherView(uId) {
 
 //Event handler for the walk with me button - sends a walk request to this user
 function sendWalkRequest(){
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
 	
+	xhr.onerror = function(e){
+		Ti.API.error('sendWalkRequest() got an error');
+	};
+	
+	xhr.onload = function(e) {
+		Ti.API.info('sendWalkRequest() got back from server '+this.responseText);
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			//Update UI
+			profileOtherWalkWithButtonLabel.text = 'Request sent';
+			profileOtherWalkWithButton.removeEventListener('click', sendWalkRequest);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+		} else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('POST',API+'walkRequest');
+	xhr.send({
+		user_id:userObject.userId,
+		target_id:profileOtherUserId
+	});
 }
 
 function handleDogBarButton(e){

@@ -82,7 +82,6 @@ function buildMapView(windowMode){
 		backgroundColor:UI_BACKGROUND_COLOR,
 		sepparatorColor:'d3d2d2',
 		top:13,
-		height:329,
 		width:293
 	});
 	mapSearchCategoriesBackground.add(mapSearchCategoriesTableView);
