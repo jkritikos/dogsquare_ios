@@ -328,6 +328,55 @@ function followUser(uId, button, win){
 	});
 }
 
+//Sends a message to a remote user and stores it locally upon server callback
+function sendMessageToUser(id, name, message, view){
+	Ti.API.info('sendMessageToUser() called. Sender: '+userObject.userId+' message: '+message);
+	
+	var date = new Date().getTime();
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in sendMessageToUser()');
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('sendMessageToUser() got back from server '+this.responseText);
+		
+		var jsonData = JSON.parse(this.responseText);
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			Ti.API.info('sendMessageToUser() got back message_id '+jsonData.data.message_id);
+			
+			//Save to our local db
+			var messageObject = {
+				user_from_id:id,
+				user_from_name:name,
+				my_message:1,
+				read:1,
+				created:date,
+				message:message
+			};
+			
+			saveInboxMessage(messageObject);
+			
+			if(view == VIEW_INBOX_VIEW){
+				appendRowInboxViewTableView(date, message);
+			}else if(view == VIEW_INBOX_NEW){
+				appendRowInboxNewTableView(date, message);
+			}
+		}
+	};
+	
+	xhr.open('POST',API+'sendMessage');
+	
+	xhr.send({
+		user_id:userObject.userId,
+		target_id:id,
+		message:message
+	});
+}
+
 //unfollow user
 function unfollowUser(uId, button, win){
 	Ti.API.info('unfollowUser() called');
@@ -714,7 +763,7 @@ function getInboxMessagesByUserId(userId){
 	
 	var messagesRows = [];
 	
-	var rows = db.execute('select date, my_message, message from inbox where remote_user_id = ? order by date asc', userId);
+	var rows = db.execute('select date, my_message, message, remote_user_name from inbox where remote_user_id = ? order by date asc', userId);
 	
 	while (rows.isValidRow())
 	{
@@ -722,11 +771,13 @@ function getInboxMessagesByUserId(userId){
 	  var date = rows.field(0);
 	  var my_message = rows.field(1);
 	  var message = rows.field(2);
+	  var name = rows.field(3);
 	  
 	  var obj = {
 			date:date,
 			my_message:my_message,
-			message:message
+			message:message,
+			name:name
 		};
 	
 		messagesRows.push(obj);

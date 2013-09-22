@@ -229,7 +229,7 @@ function checkLoginCredentials(lObj){
 	};
 	
 	xhr.onload = function(e){
-		Ti.API.info('doSignup() got back from server '+this.responseText); 	
+		Ti.API.info('checkLoginCredentials() got back from server '+this.responseText); 	
 		var jsonData = JSON.parse(this.responseText);
 		
 		//Update user object and close the signup window

@@ -119,6 +119,7 @@ function getUnreadInboxMessages(){
 	};
 	
 	xhr.onload = function(e) {
+		Ti.API.info('getUnreadInboxMessages() got back from server '+this.responseText);
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
@@ -175,6 +176,7 @@ function setMessagesIntoRead(list){
 	};
 	
 	xhr.onload = function(e) {
+		Ti.API.info('setMessagesIntoRead() got back from server '+this.responseText);
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
