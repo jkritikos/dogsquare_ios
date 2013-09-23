@@ -239,13 +239,12 @@ function buildViewActivityView(aId){
 		//dogs table view
 		viewActivityTableView = Titanium.UI.createTableView({
 			minRowHeight:60,
-			width:320,
+			width:299,
 			backgroundColor:'transparent',
-			separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
 			top:240,
 			bottom:39,
 			allowsSelection:false,
-			height:93
+			height:140
 		});
 		
 		viewActivityView.add(viewActivityTableView);
@@ -420,16 +419,6 @@ function populateViewActivityDogsTableView(dogObj){
 			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		row.add(rowMoodPercentLabel);
-		
-		//sepparator for rows
-		var rowSepparator = Titanium.UI.createView({ 
-			backgroundColor:'black',
-			opacity:0.1,
-			bottom:0,
-			height:1,
-			width:299
-		});
-		row.add(rowSepparator);
 		
 		tableRows.push(row);
 	}

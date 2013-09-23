@@ -23,6 +23,12 @@ var registerFacebookButton = null;
 var registerSignupButton = null;
 var registerPhotoDialog = null;
 
+var GENDER_FEMALE = 'female';
+var GENDER_MALE = 'male';
+
+
+var registerGenderNumber = GENDER_MALE;
+
 //Data components
 //Holds the user data entered through the signup form
 var signupUserObject = {};
@@ -345,12 +351,16 @@ function buildRegisterWindow(){
 	registerGenderSelectorSlider.addEventListener('touchend', function(e){ //changed by alex
 	   
 	    if(registerGenderSelectorSlider.left >= 60){
+	    	registerGenderNumber = GENDER_FEMALE;
+	    	
 	        // Positioning the slider to the right
 	        registerGenderSelectorSlider.animate({
 	            left:102,
 	            duration:300
 	        });
 	    }else if(registerGenderSelectorSlider.left <= 60){
+	    	registerGenderNumber = GENDER_MALE;
+	    	
 	        // Positioning the slider to the left
 	        registerGenderSelectorSlider.animate({
 	            left:8,
@@ -417,6 +427,7 @@ function validateSignupForm(){
 	signupUserObject.age = registerFieldAge.value;
 	signupUserObject.followers = 0;
 	signupUserObject.following = 0;
+	signupUserObject.gender = registerGenderNumber;
 	//signupUserObject.gender =;
 	//signupUserObject.facebook_id = d;
 	

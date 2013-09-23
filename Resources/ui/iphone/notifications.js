@@ -66,6 +66,8 @@ function doGetNotifications(){
 		//Update UI
 		if(jsonData.data.notifications.length > 0){
 			populateNotificationsTableView(jsonData.data.notifications);	
+		}else{
+			notificationsTableView.data = [];
 		}
 	};
 	
@@ -91,6 +93,7 @@ function populateNotificationsTableView(data) {
 			width:'100%',
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',
+			id:data[i].id,
 			notification_type:data[i].type_id,
 			fromUserId:data[i].user_from,
 			fromUserName:data[i].name
@@ -144,6 +147,9 @@ function handleNotificationsTableView(e){
 	var userId = e.row.fromUserId;
 	var profileOtherView = buildProfileOtherView(userId);
 	var name = e.row.fromUserName;
+	var notificationId = e.row.id;
+	
+	setNotificationToRead(notificationId);
 	
 	var profileOtherWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
@@ -168,4 +174,42 @@ function handleNotificationsTableView(e){
 	
 	openWindows.push(profileOtherWindow);
 	navController.open(profileOtherWindow);
+}
+
+
+function setNotificationToRead(notifId){
+	
+	Ti.API.info('setNotificationToRead() already read, notification: '+ notifId);
+	
+	var list = JSON.stringify(list);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	
+	xhr.onload = function(e) {
+		Ti.API.info('setNotificationToRead() got back from server : '+ this.responseText);
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+		}else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('POST',API+'setNotificationRead');
+	xhr.send({
+		user_id:userObject.userId,
+		notification:notifId
+	});
 }

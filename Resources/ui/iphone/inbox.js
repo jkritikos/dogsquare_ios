@@ -181,6 +181,12 @@ function setMessagesIntoRead(list){
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
 			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
 		}else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -188,6 +194,7 @@ function setMessagesIntoRead(list){
 	};
 	xhr.open('POST',API+'setMessagesRead');
 	xhr.send({
+		user_id:userObject.userId,
 		list:list
 	});
 }

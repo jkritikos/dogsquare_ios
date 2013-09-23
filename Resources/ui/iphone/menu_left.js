@@ -43,9 +43,19 @@ var leftmenuSearchIcon = Titanium.UI.createImageView({
 	left:5
 });
 
+var leftmenuEraseIcon = Titanium.UI.createButton({
+	backgroundImage:IMAGE_PATH+'common/erase_icon.png',
+	right:5,
+	width:16,
+	height:18
+});
+leftmenuSearchContainer.add(leftmenuEraseIcon);
+leftmenuEraseIcon.addEventListener('click', handleMenuLeftEraseButton);
+leftmenuEraseIcon.hide();
+
 var leftmenuSearchTxtfield = Titanium.UI.createTextField({
 	left:35,
-	width:200,
+	width:179,
 	field:'search',
 	color:'#bdbcbc',
 	returnKeyType: Ti.UI.RETURNKEY_SEARCH
@@ -258,7 +268,6 @@ function createLeftMenu(){
 	
 	//Load the rounded thumbnail image
 	if(userObject.thumb_path){
-		
 		menuProfileImage.image = REMOTE_USER_IMAGES + userObject.thumb_path;
 	}
 	
@@ -397,17 +406,49 @@ function populateSearchResultsTableView(uObj, pObj){
 	Ti.API.info('populate search table');
 	var tableRows = [];
 	
-	var userTableViewSection = Titanium.UI.createTableViewSection({
-		height:'auto',
-		backgroundColor:'transparent'
+	var sectionUserHeader = Titanium.UI.createView({
+		backgroundColor:'1c2027',
+		width:'100%',
+		height:20
 	});
-	userTableViewSection.headerTitle = "Users";
 	
-	var placeTableViewSection = Titanium.UI.createTableViewSection({
-		height:'auto',
-		backgroundColor:'transparent'
+	var sectionPlaceHeader = Titanium.UI.createView({
+		backgroundColor:'1c2027',
+		width:'100%',
+		height:20
 	});
-	placeTableViewSection.headerTitle = "Places";
+	
+	var headerSectionUserLabel = Titanium.UI.createLabel({
+		text:'Users',
+		color:'#ab7b04',
+		left:12,
+		textAlign:'left'
+	});
+	sectionUserHeader.add(headerSectionUserLabel);
+	
+	var headerSectionPlaceLabel = Titanium.UI.createLabel({
+		text:'Places',
+		color:'#ab7b04',
+		left:12,
+		textAlign:'left'
+	});
+	sectionPlaceHeader.add(headerSectionPlaceLabel);
+	
+	if(uObj.length != 0){
+		var userTableViewSection = Titanium.UI.createTableViewSection({
+			height:'auto',
+			backgroundColor:'transparent'
+		});
+		userTableViewSection.setHeaderView(sectionUserHeader);
+	}
+	
+	if(pObj.length != 0){
+		var placeTableViewSection = Titanium.UI.createTableViewSection({
+			height:'auto',
+			backgroundColor:'transparent'
+		});
+		placeTableViewSection.setHeaderView(sectionPlaceHeader);
+	}
 	
 	for(i=0;i<uObj.length;i++){
 		Ti.API.info('populate search users table');
@@ -470,8 +511,13 @@ function populateSearchResultsTableView(uObj, pObj){
 		placeTableViewSection.add(placeRow);
 	}
 	
-	tableRows.push(userTableViewSection);
-	tableRows.push(placeTableViewSection);
+	if(uObj.length != 0){
+		tableRows.push(userTableViewSection);
+	}
+	
+	if(pObj.length != 0){
+		tableRows.push(placeTableViewSection);
+	}
 	menuLeftSearchResultsTableView.setData(tableRows);
 }
 
@@ -483,9 +529,11 @@ function handleLeftMenuTextFieldChange(e){
 	if(field == 'search'){
 		//on textfield change, change the opacity and get users found
 		if(name != ''){
+			leftmenuEraseIcon.show();
 			leftmenuSearchBackgroundView.opacity = 1;
 			getLeftMenuOnlineUser(name);
 		}else{
+			leftmenuEraseIcon.hide();
 			//if textfield empty, reset search view
 			leftmenuSearchActivityIndicator.hide();
 			leftmenuSearchBackgroundView.opacity = 0.5;
@@ -550,6 +598,7 @@ function getLeftMenuOnlineUser(n){
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
 			
 			leftmenuSearchActivityIndicator.hide();
+			
 			populateSearchResultsTableView(jsonData.data.users, jsonData.data.places);
 			
 			var followers = jsonData.data.count_followers;
@@ -640,4 +689,12 @@ function updateLeftMenuCounts(cFollowers, cInbox, cNotifications){
 
 function handleMenuLeftSearchResultsScroll(){
 	leftmenuSearchTxtfield.blur();
+}
+
+function handleMenuLeftEraseButton(){
+	leftmenuSearchTxtfield.value = '';
+	leftmenuEraseIcon.hide();
+	
+	leftmenuSearchBackgroundView.opacity = 0.5;
+	menuLeftSearchResultsTableView.data = [];
 }

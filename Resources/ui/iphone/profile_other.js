@@ -246,7 +246,7 @@ function buildProfileOtherView(uId) {
 		
 		//background of the table view
 		profileOtherDogTableViewBackground = Titanium.UI.createView({ 
-			backgroundColor:'d2d2d2',
+			backgroundColor:UI_BACKGROUND_COLOR,
 			width:'100%',
 			height:192,
 			top:416
@@ -257,13 +257,18 @@ function buildProfileOtherView(uId) {
 		profileOtherDogTableView = Titanium.UI.createTableView({
 			minRowHeight:51,
 			width:320,
-			separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
-			backgroundColor:'d2d2d2',
+			backgroundColor:UI_BACKGROUND_COLOR,
 			top:3,
 			bottom:0
 		});
 		profileOtherDogTableViewBackground.add(profileOtherDogTableView);
 		profileOtherDogTableView.addEventListener('click', handleProfileOtherDogTableViewRows);
+		
+		//remove empty rows
+		profileOtherDogTableView.footerView = Ti.UI.createView({
+		    height: 1,
+		    backgroundColor: 'transparent'
+		});
 	}
 	getOnlineOtherUser(uId);
 	
@@ -321,51 +326,66 @@ function handleDogBarButton(e){
 
 function populateProfileOtherDogTableView(dogsObj){
 	var tableRows = [];
-	
-	for(i=0;i<dogsObj.length;i++){
-		
+	if(dogsObj.length > 0){
+		for(i=0;i<dogsObj.length;i++){
+			
+			var dogRow = Ti.UI.createTableViewRow({
+				className:'dogRow',
+				height:73,
+				width:'100%',
+				backgroundColor:'white',
+				selectedBackgroundColor:'transparent',
+				dogId:dogsObj[i].Dog.id
+			});
+			
+			var rowDogImage = Titanium.UI.createImageView({
+				image:REMOTE_DOG_IMAGES + dogsObj[i].Dog.thumb,
+				left:15,
+				top:6,
+				borderRadius:30,
+				borderWidth:2,
+				borderColor:'f9bf30'
+			});	
+			
+			//dog name label
+			var dogNameLabel = Ti.UI.createLabel({
+				text:dogsObj[i].Dog.name,
+				top:25,
+				textAlign:'left',
+				width:'auto',
+				height:'auto',
+				left:100,
+				opacity:0.6,
+				color:'black',
+				font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+			});
+			
+			dogRow.add(rowDogImage);
+			dogRow.add(dogNameLabel);
+			
+			tableRows.push(dogRow);
+		}
+	}else {
 		var dogRow = Ti.UI.createTableViewRow({
 			className:'dogRow',
 			height:73,
 			width:'100%',
-			backgroundColor:'e7e7e7',
-			selectedBackgroundColor:'transparent',
-			dogId:dogsObj[i].Dog.id
+			backgroundColor:'white',
+			selectedBackgroundColor:'transparent'
 		});
 		
-		var rowDogImage = Titanium.UI.createImageView({
-			image:REMOTE_DOG_IMAGES + dogsObj[i].Dog.thumb,
-			left:15,
-			top:6,
-			borderRadius:30,
-			borderWidth:2,
-			borderColor:'f9bf30'
-		});	
-		
-		//sepparator
-		var rowSepparator = Titanium.UI.createView({ 
-			backgroundColor:'d2d2d2',
-			width:'100%',
-			bottom:0,
-			height:3
-		});
-		
-		//dog name label
-		var dogNameLabel = Ti.UI.createLabel({
-			text:dogsObj[i].Dog.name,
-			top:32,
+		//dog label
+		var dogLabel = Ti.UI.createLabel({
+			text:'User has no dogs',
 			textAlign:'left',
 			width:'auto',
 			height:'auto',
-			left:120,
 			opacity:0.6,
 			color:'black',
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
-		dogRow.add(rowDogImage);
-		dogRow.add(rowSepparator);
-		dogRow.add(dogNameLabel);
+		dogRow.add(dogLabel);
 		
 		tableRows.push(dogRow);
 	}
@@ -440,7 +460,7 @@ function handleProfileOtherDogTableViewRows(e){
 		backgroundColor:UI_BACKGROUND_COLOR,
 		barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR,
-		title:e.row.children[2].text
+		title:e.row.children[1].text
 	});
 	
 	//back button
