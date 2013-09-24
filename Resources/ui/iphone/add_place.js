@@ -176,13 +176,14 @@ addPlaceCategoryButton.addEventListener('click', handleCategoryButton);
 //picker data
 var pickerCategories = [];
 
-pickerCategories[0]=Ti.UI.createPickerRow({title:'park', id:1});
-pickerCategories[1]=Ti.UI.createPickerRow({title:'homeless', id:2});
-pickerCategories[2]=Ti.UI.createPickerRow({title:'cruelty', id:3});
-pickerCategories[3]=Ti.UI.createPickerRow({title:'pet shop', id:4});
-pickerCategories[4]=Ti.UI.createPickerRow({title:'veterinary', id:5});
-pickerCategories[5]=Ti.UI.createPickerRow({title:'dog hospital', id:6});
-pickerCategories[6]=Ti.UI.createPickerRow({title:'other', id:7});
+var addPlaceCategories = getPlaceCategories();
+
+for(i=0;i<addPlaceCategories.length;i++){
+	var name = addPlaceCategories[i].name;
+	var id = addPlaceCategories[i].id;
+	
+	pickerCategories[i]=Ti.UI.createPickerRow({title:name, id:id});
+}
 
 //picker
 var addPlacePicker = Ti.UI.createPicker({

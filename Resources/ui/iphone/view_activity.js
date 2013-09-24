@@ -430,47 +430,72 @@ function populateViewActivityDogsTableView(dogObj){
 function populateViewActivityCommentsTableView(comObj){
 	var tableRows = [];
 	
-	for(i=0;i<comObj.length;i++){
-		//comment row
+	if(comObj.length > 0){
+		for(i=0;i<comObj.length;i++){
+			//comment row
+			var commentRow = Ti.UI.createTableViewRow({
+				className:'commentRow',
+				height:'auto',
+				width:'100%',
+				backgroundColor:'transparent',
+				selectedBackgroundColor:'transparent'
+			});
+			
+			//comment label
+			var commentLabel = Ti.UI.createLabel({
+				text:comObj[i].comm.text,
+				top:8,
+				textAlign:'left',
+				width:292,
+				bottom:24,
+				height:'auto',
+				left:14,
+				opacity:0.6,
+				color:'black',
+				font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			});
+			
+			var date = new Date(comObj[i].comm.date * 1000);
+			
+			//comment time
+			var timeLabel = Ti.UI.createLabel({
+				text:relativeTime(date),
+				bottom:10,
+				textAlign:'left',
+				width:180,
+				height:15,
+				left:16,
+				opacity:0.4,
+				color:'black',
+				font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			});
+			
+			commentRow.add(commentLabel);
+			commentRow.add(timeLabel);
+			
+			tableRows.push(commentRow);
+		}
+	}else {
 		var commentRow = Ti.UI.createTableViewRow({
 			className:'commentRow',
-			height:'auto',
+			height:48,
 			width:'100%',
-			backgroundColor:'transparent',
+			backgroundColor:'white',
 			selectedBackgroundColor:'transparent'
 		});
 		
 		//comment label
 		var commentLabel = Ti.UI.createLabel({
-			text:comObj[i].comm.text,
-			top:8,
+			text:'No comments',
 			textAlign:'left',
-			width:292,
-			bottom:24,
+			width:'auto',
 			height:'auto',
-			left:14,
 			opacity:0.6,
 			color:'black',
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
-		});
-		
-		var date = new Date(comObj[i].comm.date * 1000);
-		
-		//comment time
-		var timeLabel = Ti.UI.createLabel({
-			text:relativeTime(date),
-			bottom:10,
-			textAlign:'left',
-			width:180,
-			height:15,
-			left:16,
-			opacity:0.4,
-			color:'black',
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		commentRow.add(commentLabel);
-		commentRow.add(timeLabel);
 		
 		tableRows.push(commentRow);
 	}

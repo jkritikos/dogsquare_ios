@@ -403,6 +403,7 @@ function createLeftMenuRow(menuItem){
 
 //populate search result rows - primarily for users only
 function populateSearchResultsTableView(uObj, pObj){
+	
 	Ti.API.info('populate search table');
 	var tableRows = [];
 	
@@ -453,7 +454,7 @@ function populateSearchResultsTableView(uObj, pObj){
 	for(i=0;i<uObj.length;i++){
 		Ti.API.info('populate search users table');
 		var userRow = Ti.UI.createTableViewRow({
-			height:49,
+			height:70,
 			className:'searchResult',
 			backgroundColor:UI_MENU_BACKGROUND_COLOR,
 			selectedBackgroundColor:'#1c2027',
@@ -461,10 +462,19 @@ function populateSearchResultsTableView(uObj, pObj){
 			type:'user'
 		});
 		
+		var userRowThumbImage = Titanium.UI.createImageView({
+			image:REMOTE_USER_IMAGES + uObj[i].User.thumb,
+			left:4,
+			top:4,
+			borderRadius:30,
+			borderWidth:2,
+			borderColor:'454950'
+		});
+		
 		var userRowNameLabel = Titanium.UI.createLabel({
 			text:uObj[i].User.name,
 			color:'#ab7b04',
-			left:52,
+			left:77,
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
@@ -477,6 +487,7 @@ function populateSearchResultsTableView(uObj, pObj){
 		
 		userRow.add(userRowSeparator);
 		userRow.add(userRowNameLabel);
+		userRow.add(userRowThumbImage);
 		userTableViewSection.add(userRow);
 		
 	}
@@ -484,7 +495,7 @@ function populateSearchResultsTableView(uObj, pObj){
 	for(i=0;i<pObj.length;i++){
 		Ti.API.info('populate search places table');
 		var placeRow = Ti.UI.createTableViewRow({
-			height:49,
+			height:70,
 			className:'searchResult',
 			backgroundColor:UI_MENU_BACKGROUND_COLOR,
 			selectedBackgroundColor:'#1c2027',

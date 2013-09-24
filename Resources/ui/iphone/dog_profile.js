@@ -1,7 +1,7 @@
 	
 var dogProfileHeartImage = null;
-var dogProfileBreedTypeLabel = null;
 var dogProfilePhotoImage = null;
+var dogProfileBreedTypeLabel = null;
 var dogProfileDogGenderLabel = null;
 var dogProfileAgeNumberLabel = null;
 var dogProfileWeightNumberLabel = null;
@@ -20,41 +20,12 @@ function buildDogProfileView(dogId){
 			width:'100%'
 		});
 		
-		var dogProfileBreedBackground = Titanium.UI.createView({
-			backgroundColor:'white',
+		var dogProfileMatingBackground = Titanium.UI.createImageView({
 			left:11,
 			top:11,
-			width:75,
-			height:75,
-			opacity:0.4,
-			borderRadius:37.5,
-			borderWidth:1,
-			borderColor:'transparent',
 			zIndex:2
 		});
-		dogProfileView.add(dogProfileBreedBackground);
-		
-		var dogProfileBreedLabel = Titanium.UI.createLabel({ 
-			text:'breed',
-			height:14,
-			textAlign:'center',
-			top:63,
-			left:36,
-			zIndex:3,
-			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
-		});
-		dogProfileView.add(dogProfileBreedLabel);
-		
-		dogProfileBreedTypeLabel = Titanium.UI.createLabel({ 
-			height:'auto',
-			width:42,
-			textAlign:'center',
-			top:25,
-			left:27,
-			zIndex:2,
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
-		});
-		dogProfileView.add(dogProfileBreedTypeLabel);
+		dogProfileView.add(dogProfileMatingBackground);
 	
 		//opacity bar for info
 		var dogProfileOpacityInfoBar = Titanium.UI.createView({ 
@@ -189,13 +160,12 @@ function buildDogProfileView(dogId){
 			zIndex:2
 		});
 		
-		var dogProfileDescriptionLabel = Titanium.UI.createLabel({ 
-			text:'I\'m currently searching for a mate',
+		dogProfileBreedTypeLabel = Titanium.UI.createLabel({ 
 			height:19,
 			textAlign:'center',
-			font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:16, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
-		dogProfileOpacityDescriptionBar.add(dogProfileDescriptionLabel);
+		dogProfileOpacityDescriptionBar.add(dogProfileBreedTypeLabel);
 		
 		dogProfileView.add(dogProfileOpacityDescriptionBar);
 		
