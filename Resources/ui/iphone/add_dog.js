@@ -385,11 +385,11 @@ function handlePhotoSelection(){
 			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
 			jpgcompressor.setCompressSize(200000);
 			jpgcompressor.setWorstCompressQuality(0.40);
-			var resizedImage = jpgcompressor.scale(image, 1024, 768);
-			var compressedImage = jpgcompressor.compress(resizedImage);
+			
+			var compressedImage = jpgcompressor.compress(image);
 			
 			//Create thumbnail
-			var imageThumbnail = resizedImage.imageAsThumbnail(60,0,30);
+			var imageThumbnail = image.imageAsThumbnail(60,0,30);
 			
 			addDogObject.photo = compressedImage;
 			addDogObject.thumb = imageThumbnail;
@@ -406,9 +406,15 @@ function handlePhotoSelection(){
 			var filenameThumb = Titanium.Filesystem.applicationDataDirectory + uniqueDogFilenameThumb;
 			
 			var tmpImage = Titanium.Filesystem.getFile(filename);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
 			tmpImage.write(compressedImage);
 			
 			tmpImage = Titanium.Filesystem.getFile(filenameThumb);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
 			tmpImage.write(imageThumbnail);
 			
 			Ti.API.info('saved image to '+filename);
@@ -417,7 +423,8 @@ function handlePhotoSelection(){
 	
 		},
 		error:function(error){
-		}
+		},
+		allowEditing:true
 	});
 }
 

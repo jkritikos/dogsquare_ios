@@ -16,9 +16,9 @@ function buildDogProfileView(dogId){
 		});
 		
 		dogProfilePhotoImage = Ti.UI.createImageView({ 
-			height:272,
+			height:320,
 			top:0,
-			width:'100%'
+			width:320
 		});
 		
 		dogProfileMatingBackground = Titanium.UI.createImageView({
@@ -32,7 +32,7 @@ function buildDogProfileView(dogId){
 		var dogProfileOpacityInfoBar = Titanium.UI.createView({ 
 			backgroundColor:'white',
 			width:'100%',
-			top:169,
+			top:225,
 			height:56,
 			opacity:0.8,
 			zIndex:2
@@ -155,16 +155,16 @@ function buildDogProfileView(dogId){
 		var dogProfileOpacityDescriptionBar = Titanium.UI.createView({ 
 			backgroundColor:'white',
 			width:'100%',
-			top:229,
+			top:289,
 			height:31,
 			opacity:0.8,
 			zIndex:2
 		});
 		
-		dogProfileBreedTypeLabel = Titanium.UI.createLabel({ 
-			height:19,
+		dogProfileBreedTypeLabel = Titanium.UI.createLabel({
 			textAlign:'center',
-			font:{fontSize:16, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:16, fontWeight:'semibold', fontFamily:'Open Sans'},
+			zIndex:2
 		});
 		dogProfileOpacityDescriptionBar.add(dogProfileBreedTypeLabel);
 		
@@ -178,7 +178,7 @@ function buildDogProfileView(dogId){
 			height:'auto',
 			textAlign:'left',
 			left:46,
-			bottom:86,
+			bottom:66,
 			opacity:0.6,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
@@ -190,21 +190,21 @@ function buildDogProfileView(dogId){
 			height:'auto',
 			textAlign:'left',
 			left:91,
-			bottom:86,
+			bottom:66,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		dogProfileView.add(dogProfileMoodPercentLabel);
 		
 		var dogProfileBoneImage = Ti.UI.createImageView({ 
-			image:IMAGE_PATH+'dog_profile/bone_default.png',
-			bottom:79,
-			right:38
+			image:IMAGE_PATH+'dog_profile/bone_grey.png',
+			bottom:44,
+			right:30
 		});
 		dogProfileView.add(dogProfileBoneImage);
 		
 		dogProfileHeartImage = Ti.UI.createImageView({ 
-			bottom:25,
-			right:79,
+			bottom:5,
+			right:77,
 			dogId:dogId
 		});
 		dogProfileView.add(dogProfileHeartImage);
@@ -216,9 +216,9 @@ function buildDogProfileView(dogId){
 			height:'auto',
 			textAlign:'left',
 			left:47,
-			bottom:36,
-			opacity:0.8,
-			font:{fontSize:11, fontWeight:'regular', fontFamily:'Open Sans'}
+			bottom:16,
+			opacity:0.6,
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		dogProfileView.add(dogProfileLikeMeLabel);
 		
@@ -243,7 +243,6 @@ function handleDogLikeButton(e){
 		e.source.toggle = true;
 	}
 }
-
 
 function likeDog(dId){
 	Ti.API.info('likeDog() with id: ' + dId);

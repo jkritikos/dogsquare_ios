@@ -552,9 +552,6 @@ function handlePhotoSelection(){
 		success:function(event){
 			var image = event.media;
 			
-			//Reduce image size first
-			Ti.API.info('Selected image with h:'+image.height+' w:'+image.width);
-			
 			//Jpeg compression module
 			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
 			jpgcompressor.setCompressSize(200000);

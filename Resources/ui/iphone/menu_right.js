@@ -81,7 +81,7 @@ function populateRightMenu(dogObject){
 
 		//all dog rows
 		var rightMenuRow = Ti.UI.createTableViewRow({
-			height:116,
+			height:90,
 			className:'RIGHT_MENU',
 			selectedBackgroundColor:'transparent',
 			backgroundColor:'1c2027',
@@ -116,7 +116,7 @@ function populateRightMenu(dogObject){
 			height:31,
 			width:'auto',
 			textAlign:'left',
-			left:156,
+			left:134,
 			top:14,
 			font:{fontSize:24, fontWeight:'semibold', fontFamily:'Open Sans'},
 			type:RIGHT_MENU_TYPE_ROW
@@ -129,8 +129,8 @@ function populateRightMenu(dogObject){
 			height:18,
 			width:45,
 			textAlign:'left',
-			left:158,
-			top:47,
+			left:136,
+			top:50,
 			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
 			type:RIGHT_MENU_TYPE_ROW
 		});
@@ -143,7 +143,7 @@ function populateRightMenu(dogObject){
 			width:35,
 			textAlign:'left',
 			left:199,
-			top:47,
+			top:50,
 			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
 			type:RIGHT_MENU_TYPE_ROW
 		});
@@ -152,15 +152,15 @@ function populateRightMenu(dogObject){
 		var rowBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_icon.png',
 			left:232,
-			top:47,
+			top:50,
 			type:RIGHT_MENU_TYPE_ROW
 		});
 		
 		//check box view inside the dog row - right menu row
 		var rowCheckBox = Titanium.UI.createView({
 			backgroundColor:'454950',
-			bottom:16,
-			right:28,
+			top:20,
+			right:25,
 			width: 23,
 			height:23,
 			type:TYPE_CHECKBOX
