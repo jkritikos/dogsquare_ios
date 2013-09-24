@@ -128,7 +128,7 @@ function populateFeedsTableView(data) {
 			width:180,
 			textAlign:'left',
 			left:65,
-			font:{fontSize:11, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
 		//date label

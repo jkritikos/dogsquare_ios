@@ -5,9 +5,10 @@ var viewPassport = Ti.UI.createView({
 
 //creation of a button
 var addNoteButton = Ti.UI.createButton({
+	backgroundImage:IMAGE_PATH+'common/edit_icon.png',
 	title:'add',
-    width:48,
-    height:33
+    width:24,
+    height:23
 });
 navController.getWindow().setRightNavButton(addNoteButton);
 //next button event listener

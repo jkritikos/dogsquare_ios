@@ -131,35 +131,40 @@ profileOpacityBar.add(profileOpacityBarSepparator);
 
 viewProfile.add(profileOpacityBar);
 
+//opacity bar for buttons
+var profileOpacityBarBottom = Titanium.UI.createView({ 
+	backgroundColor:'white',
+	width:'100%',
+	top:240,
+	height:60,
+	opacity:0.8
+});
+
 //Map button
 var profileMapButton = Ti.UI.createButton({
-	backgroundImage:IMAGE_PATH+'profile/Map_icon.png',
-	width:33,
-	height:32,
-	top:252,
-	right:48
+	backgroundImage:IMAGE_PATH+'profile/map_button.png',
+	width:108,
+	height:49,
+	top:245,
+	right:12,
+	zIndex:5
 });
 
 viewProfile.add(profileMapButton);
 
-var profileMapLabel = Ti.UI.createLabel({
-	text:'View map',
-	top:282,
-	right:32,
-	color:UI_COLOR_RUN,
-	font:{fontSize:13, fontWeight:'semibold',fontFamily:'Open Sans'}
-});
-viewProfile.add(profileMapLabel);
-
 //Start button
 var profileStartButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'profile/start_button.png',
-	top:248,
+	top:243,
 	width:178,
 	height:52,
-	left:18
+	left:15,
+	zIndex:5
 });
+
 viewProfile.add(profileStartButton);
+
+viewProfile.add(profileOpacityBarBottom);
 
 //Activity bar
 var profileActivityBar = Ti.UI.createButton({
@@ -252,7 +257,6 @@ profileMapButton.addEventListener('click', function(){
 		navController.getWindow().setTitleControl();
 	    navController.close(profileMapWindow);
 	});
-	
 	
 	Ti.include('ui/iphone/map.js');
 	buildMapView(TARGET_MODE_NEW_WINDOW);

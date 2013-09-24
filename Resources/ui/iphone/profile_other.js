@@ -30,7 +30,7 @@ function buildProfileOtherView(uId) {
 		//photo image
 		profileOtherPhotoImage = Titanium.UI.createImageView({ 
 			top:0,
-			height:240,
+			height:320,
 			width:320,
 			processed:false
 		});
@@ -44,7 +44,7 @@ function buildProfileOtherView(uId) {
 			if(!profileOtherPhotoImage.processed){
 				Ti.API.info('Profile_other image loaded event processing');
 				var profileImageViewBlob = profileOtherPhotoImage.toBlob();
-				var profileImageBlobCropped = profileImageViewBlob.imageAsResized(320,240);
+				var profileImageBlobCropped = profileImageViewBlob.imageAsResized(320,320);
 				profileOtherPhotoImage.image = profileImageBlobCropped;
 				profileOtherPhotoImage.processed = true;
 			}
@@ -155,7 +155,7 @@ function buildProfileOtherView(uId) {
 		    backgroundImage: IMAGE_PATH+'profile_other/Chat_icon.png',
 		    width:45,
 		    height:43,
-		    top:310
+		    top:320
 		});
 		profileOtherView.add(profileOtherChatButton);
 		
@@ -165,7 +165,7 @@ function buildProfileOtherView(uId) {
 			color:'black',
 			opacity:0.6,
 			textAlign:'center',
-			top:354,
+			top:364,
 			width:88,
 			height:18,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
@@ -177,7 +177,7 @@ function buildProfileOtherView(uId) {
 		    backgroundImage: IMAGE_PATH+'profile_other/Walk_with_icon.png',
 		    width:45,
 		    height:43,
-		    top:310,
+		    top:320,
 		    left:42
 		});
 		profileOtherView.add(profileOtherWalkWithButton);
@@ -190,7 +190,7 @@ function buildProfileOtherView(uId) {
 			color:'black',
 			opacity:0.6,
 			textAlign:'left',
-			top:354,
+			top:364,
 			width:88,
 			height:18,
 			left:21,
@@ -203,7 +203,7 @@ function buildProfileOtherView(uId) {
 		    backgroundImage: IMAGE_PATH+'profile_other/Gallery_icon.png',
 		    width:45,
 		    height:43,
-		    top:310,
+		    top:320,
 		    right:42
 		});
 		profileOtherView.add(profileOtherGalleryButton);
@@ -214,7 +214,7 @@ function buildProfileOtherView(uId) {
 			color:'black',
 			opacity:0.6,
 			textAlign:'center',
-			top:354,
+			top:364,
 			width:88,
 			height:18,
 			right:21,

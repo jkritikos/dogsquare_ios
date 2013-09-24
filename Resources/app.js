@@ -1,4 +1,4 @@
-Ti.API.info('debug 2');
+Ti.API.info('debug 3');
 
 Ti.Geolocation.purpose = "Retrieve user location";
 Ti.Geolocation.accuracy = Ti.Geolocation.ACCURACY_BEST_FOR_NAVIGATION;
@@ -23,11 +23,6 @@ var userObject = {
 	userId:1,
 	dogId:1
 };*/
-
-
-
-
-
 Ti.include('common/dao.js');
 
 var userObject = getUserObject();
@@ -48,19 +43,20 @@ window.open(); //init the app
 window.setParallaxAmount(0.3);
 
 Ti.include('ui/iphone/run.js');
-//Ti.include('ui/iphone/map.js');
 
-var a = getActivities();
-for(var i=0; i<a.length; a++){
-	Ti.API.info('activities saved id '+a[i].id+' start date '+a[i].start_date+' start time '+a[i].start_time+' duration '+a[i].duration);
+var notify = require('bencoding.localnotify');
+notify.scheduleLocalNotification({
+    alertBody:"notification 1",
+    alertAction:"Just a test",
+    userInfo:{"id":1,"hello":"world"},
+    date:new Date(new Date().getTime() + 10000) 
+});
 
-	var dogInfo = a[i].dogs;
-	if(a[i].dogs && dogInfo.length > 0){
-		for(var z=0; z<dogInfo.length; z++){
-			Ti.API.info('------ activity '+a[i].id+' dog '+dogInfo[z].name);
-		}
-	}
-	
-	
-}
+notify.scheduleLocalNotification({
+    alertBody:"notification 2",
+    alertAction:"Just a test",
+    userInfo:{"id":1,"hello":"world"},
+    date:new Date(new Date().getTime() + 15000) 
+});
 
+alert("LocalNotification Scheduled");

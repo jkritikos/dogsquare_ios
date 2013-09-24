@@ -175,20 +175,23 @@ addNoteRemindBackground.addEventListener('click', function(e){
 	}
 });	
 
+//Set up minimum dates
+var today = new Date();
+
 var minDate = new Date();
-minDate.setFullYear(2013);
-minDate.setMonth(7);
-minDate.setDate(1);
+minDate.setFullYear(today.getFullYear());
+minDate.setMonth(today.getMonth());
+minDate.setDate(today.getDate());
 
 var maxDate = new Date();
-maxDate.setFullYear(2016);
+maxDate.setFullYear(2020);
 maxDate.setMonth(11);
 maxDate.setDate(31);
 
 var value = new Date();
-value.setFullYear(2013);
-value.setMonth(7);
-value.setDate(28);
+value.setFullYear(today.getFullYear());
+value.setMonth(today.getMonth());
+value.setDate(today.getDate());
 
 var addNoteDatePicker = Ti.UI.createPicker({
 	type:Ti.UI.PICKER_TYPE_DATE,

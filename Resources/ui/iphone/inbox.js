@@ -5,9 +5,9 @@ var viewInbox = Ti.UI.createView({
 
 //Change right nav button
 var newMessageRightNavButton = Ti.UI.createButton({ 
-	backgroundImage:IMAGE_PATH+'checkin_place/add_icon.png',
-	width:12,
-	height:12
+	backgroundImage:IMAGE_PATH+'common/edit_icon.png',
+	width:24,
+	height:23
 });
 newMessageRightNavButton.addEventListener('click', handleNewMessage);
 navController.getWindow().rightNavButton = newMessageRightNavButton;

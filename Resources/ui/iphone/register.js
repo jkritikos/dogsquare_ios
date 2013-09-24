@@ -26,7 +26,6 @@ var registerPhotoDialog = null;
 var GENDER_FEMALE = 'female';
 var GENDER_MALE = 'male';
 
-
 var registerGenderNumber = GENDER_MALE;
 
 //Data components
@@ -595,7 +594,49 @@ function handlePhotoSelection(){
 }
 	
 function handleCameraSelection(){
+	Titanium.Media.takePicture({
+		success:function(event){
+			var image = event.media;
+			
+			//Reduce image size first
+			Ti.API.info('Took image with h:'+image.height+' w:'+image.width);
+			
+			//Jpeg compression module
+			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
+			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setWorstCompressQuality(0.40);
+			
+			var compressedImage = jpgcompressor.compress(image);
+			
+			//Create thumbnail
+			var imageThumbnail = image.imageAsThumbnail(60,0,30);
+			
+			signupUserObject.image = compressedImage;
+			signupUserObject.thumb = imageThumbnail;
+			signupUserObject.image_path = Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg";
+			signupUserObject.thumb_path = Titanium.Filesystem.applicationDataDirectory + "pic_profile_thumb.jpg";
+			
+			//Save images on the filesystem
+			var tmpImage = Titanium.Filesystem.getFile(signupUserObject.image_path);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
+			tmpImage.write(compressedImage);
+			
+			tmpImage = Titanium.Filesystem.getFile(signupUserObject.thumb_path);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
+			
+			tmpImage.write(imageThumbnail);
+		},
+		cancel:function(){
 	
+		},
+		error:function(error){
+		},
+		allowEditing:true
+	});
 }	
 	
 function handleRegisterTextFieldFocus(e){
