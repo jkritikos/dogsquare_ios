@@ -653,7 +653,7 @@ function handleLeftSearchResultRows(e){
 		navController.getWindow().add(profileOtherView);
 		navController.getWindow().setTitle(nameUser);
 	}else if (type == 'place'){
-		Ti.include('ui/iphone/checkin_place.js');
+		Ti.include('ui/iphone/place_view.js');
 		
 		var checkinPlaceView = buildCheckinPlaceView(CHECKIN_PLACE_VIEW, placeId);
 		var namePlace = e.row.children[1].text;

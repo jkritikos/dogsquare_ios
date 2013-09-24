@@ -6,6 +6,7 @@ var dogProfileDogGenderLabel = null;
 var dogProfileAgeNumberLabel = null;
 var dogProfileWeightNumberLabel = null;
 var dogProfileLikesNumberLabel = null;
+var dogProfileMatingBackground = null;
 var dogProfileView = null;	
 	
 function buildDogProfileView(dogId){
@@ -20,7 +21,7 @@ function buildDogProfileView(dogId){
 			width:'100%'
 		});
 		
-		var dogProfileMatingBackground = Titanium.UI.createImageView({
+		dogProfileMatingBackground = Titanium.UI.createImageView({
 			left:11,
 			top:11,
 			zIndex:2
@@ -409,6 +410,9 @@ function updateDogProfile(dogObj){
     dogProfileAgeNumberLabel.text = dogObj.age;
     dogProfileWeightNumberLabel.text = dogObj.weight;
     dogProfileLikesNumberLabel.text = dogObj.likes;
+    if(dogObj.mating == 1){
+    	dogProfileMatingBackground.image = IMAGE_PATH+'dog_profile/badge_matting.png';
+    }
     
     if(dogObj.gender == 1){
 		dogGender = 'male';
