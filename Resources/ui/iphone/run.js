@@ -289,6 +289,8 @@ function handleEndRunButton(){
 		runningMode = false;
 		clearInterval(cronometerInterval);
 		
+		var dogfuelEarned = calculateDogfuel(runningPathCoordinates);
+		
 		//Update our activity object
 		endActivity(runObject);
 		

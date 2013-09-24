@@ -16,7 +16,7 @@ function buildRunFinishView(obj){
 		longitude:obj.coordinates[0].longitude,
 		title:"Start",
 		animate:true,
-		image:IMAGE_PATH+'run_finish/pin.png'
+		image:IMAGE_PATH+'run_finish/pin2.png'
 	});
 	
 	//end point annotation
@@ -25,7 +25,7 @@ function buildRunFinishView(obj){
 		longitude:obj.coordinates[obj.coordinates.length - 1].longitude,
 		title:"End",
 		animate:true,
-		image:IMAGE_PATH+'run_finish/pin.png'
+		image:IMAGE_PATH+'run_finish/pin2.png'
 	});
 	
 	//the map

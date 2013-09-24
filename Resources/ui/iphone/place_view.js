@@ -317,14 +317,14 @@ function handleCommentButtons(e){
 	var button = e.source.button;
 	
 	if(toggle && button != 'plus'){
-		openWindows[1].setRightNavButton(null);
+		openWindows[openWindows.length -1].setRightNavButton(null);
 		checkinPlaceCommentsBackgroundView.animate({top:332, duration:600});
 		checkinPlaceCommentsTextArea.blur();
 		checkinPlaceCommentsTextArea.hide();
 		checkinPlaceCommentsTableView.show();
 		e.source.toggle = false;
 	}else if(!toggle && button != 'plus'){
-		openWindows[1].setRightNavButton(null);
+		openWindows[openWindows.length -1].setRightNavButton(null);
 		checkinPlaceCommentsBackgroundView.animate({top:-13, duration:600});
 		checkinPlaceCommentsTextArea.blur();
 		checkinPlaceCommentsTextArea.hide();
@@ -333,7 +333,7 @@ function handleCommentButtons(e){
 	}else if(button == 'plus'){
 		checkinPlaceCommentsBackgroundView.animate({top:-13, duration:200});
 		checkinPlaceCommentsButton.toggle = true;
-		openWindows[1].setRightNavButton(checkinPlaceSaveCommentButton);
+		openWindows[openWindows.length -1].setRightNavButton(checkinPlaceSaveCommentButton);
 		
 		
 		checkinPlaceCommentsTextArea.focus();

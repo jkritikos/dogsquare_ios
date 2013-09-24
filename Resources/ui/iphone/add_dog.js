@@ -199,7 +199,7 @@ addDogFieldGenderHintTextLabel.addEventListener('click', addDogHandlePicker);
 
 //Matting textfield label
 var addDogFieldMattingHintTextLabel = Ti.UI.createLabel({
-	text:'Matting*',
+	text:'Mating*',
 	picker:MATTING_PICKER,
 	color:'999999',
 	textAlign:'left',

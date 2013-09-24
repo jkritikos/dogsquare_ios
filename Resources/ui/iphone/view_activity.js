@@ -377,34 +377,36 @@ function populateViewActivityDogsTableView(dogObj){
 		
 		//bone image
 		var rowBoneImage = Ti.UI.createImageView({ 
-			image:IMAGE_PATH+'run_finish/bone_icon.png',
-			right:105
+			image:IMAGE_PATH+'run_finish/bone_grey.png',
+			right:10,
+			top:20,
+			type:RIGHT_MENU_TYPE_ROW
 		});
 		
 		row.add(rowBoneImage);
 		
-		//bone fill image
-		var boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'run_finish/bone_icon_fill.png');
+		//Filled bone image
+		var boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'run_finish/bone_colours.png');
 		var boneFillImageBlob = boneFillImage.toBlob();
-		var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:10});
+		var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:110});
 		var rowBoneFillImage = Ti.UI.createImageView({ 
 			image:boneFillImageBlobCropped,
-			right:105,
+			right:10,
+			top:20,
 			zIndex:2
-		}); 
+		});
 		
 		row.add(rowBoneFillImage);
 		
 		//mood label
 		var rowMoodLabel = Titanium.UI.createLabel({ 
 			text:'Happy',
-			color:'black',
+			color:'#605353',
 			height:15,
 			textAlign:'center',
-			right:120,
-			bottom:10,
-			//opacity:0.3,
-			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
+			right:40,
+			bottom:20,
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		row.add(rowMoodLabel);
 		
@@ -414,9 +416,9 @@ function populateViewActivityDogsTableView(dogObj){
 			color:'999900',
 			height:15,
 			textAlign:'center',
-			right:97,
-			bottom:10,
-			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
+			right:12,
+			bottom:20,
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		row.add(rowMoodPercentLabel);
 		

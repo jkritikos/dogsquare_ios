@@ -74,7 +74,7 @@ function buildDogProfileView(dogId){
 		dogProfileAgeNumberLabel = Titanium.UI.createLabel({
 			height:21,
 			textAlign:'right',
-			left:111,
+			left:109,
 			top:10,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
@@ -104,7 +104,7 @@ function buildDogProfileView(dogId){
 			height:21,
 			textAlign:'right',
 			width:30,
-			left:169,
+			left:167,
 			top:10,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
