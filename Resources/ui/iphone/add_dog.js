@@ -220,18 +220,18 @@ var addDogPickerDoneButton = Ti.UI.createButton({
 });
 addDogPickerDoneButton.addEventListener("click", handlePickerDoneButton);
 
-var addDogflexSpace = Titanium.UI.createButton({
+var addDogFlexSpace = Titanium.UI.createButton({
     systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
 });
 
-var addDogtoolbar = Titanium.UI.iOS.createToolbar({
-    items:[addDogflexSpace, addDogPickerDoneButton],
+var addDogToolbar = Titanium.UI.iOS.createToolbar({
+    items:[addDogFlexSpace, addDogPickerDoneButton],
     barColor:'999999',
     bottom:-44,
     borderTop:true,
     borderBottom:false
 }); 
-viewAddDog.add(addDogtoolbar);
+viewAddDog.add(addDogToolbar);
 
 //picker
 var addDogPicker = Ti.UI.createPicker({
@@ -317,7 +317,7 @@ function addDogHandlePicker(e){
 	
 	addDogPicker.selectionIndicator = true;
 	addDogPicker.animate({bottom:0, duration:500});
-	addDogtoolbar.animate({bottom:216, duration:500});
+	addDogToolbar.animate({bottom:216, duration:500});
 	
 	addDogPickerType = picker;
 }
@@ -347,7 +347,7 @@ function handlePickerDoneButton(e){
 	Ti.API.info('inside picker');
 	
 	addDogPicker.animate({bottom:-216, duration:500});
-	addDogtoolbar.animate({bottom:-44, duration:500});
+	addDogToolbar.animate({bottom:-44, duration:500});
  	navController.getWindow().setRightNavButton(addDogSaveButton);
 	
 	//change text to the chosen picker row
@@ -428,7 +428,7 @@ function handleCameraSelection(){
 
 function handleAddDogTextFieldFocus(){
 	addDogPicker.animate({bottom:-216, duration:500});
-	addDogtoolbar.animate({bottom:-44, duration:500});
+	addDogToolbar.animate({bottom:-44, duration:500});
 	
 	navController.getWindow().setRightNavButton(addDogSaveButton);
 }

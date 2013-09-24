@@ -194,7 +194,7 @@ function handleCheckinPlacesTableViewRow(e){
 	var placeId = e.row.placeId;
 	var placeTitle = e.row.children[0].text;
 	
-	Ti.include('ui/iphone/checkin_place.js');
+	Ti.include('ui/iphone/place_view.js');
 	
 	var checkinPlaceWindow = Ti.UI.createWindow({
 		backgroundColor:UI_BACKGROUND_COLOR,

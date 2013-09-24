@@ -877,6 +877,47 @@ function getDogBreeds(){
 	return breedRows;
 }
 
+//Updates the local db with the list of place categories
+function savePlaceCategories(obj){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	if(obj !=  null && obj.length > 0){
+		db.execute('delete from PLACE_CATEGORIES');
+		
+		for(i=0; i < obj.length; i++){
+			db.execute('insert into PLACE_CATEGORIES (name, active) values (?,?)', obj[i].PlaceCategory.name, obj[i].PlaceCategory.active);
+		}
+	
+		Ti.API.info('savePlaceCategories() saved '+obj.length+' rows');
+	} else {
+		Ti.API.info('savePlaceCategories() NO data to save');
+	}
+	
+	db.close();
+}
+
+function getPlaceCategories(){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	var categoryRows = [];
+	
+	var rows = db.execute('select id, name, active from place_categories');
+	
+	while(rows.isValidRow()) {
+	  	var obj = {
+	  		id:rows.field(0),
+			name:rows.field(1),
+			active:rows.field(2)
+		};
+		
+	  	categoryRows.push(obj);	
+	  	rows.next();
+	}
+	rows.close();
+	db.close();
+	
+	return categoryRows;
+}
+
 //Updates the local db with the list of dogfuel rules
 function saveDogfuelRules(obj){
 	
@@ -912,6 +953,7 @@ function createDB(){
 	db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"remote_user_id\" integer, \"remote_user_name\" varchar(128), \"remote_user_thumb\" varchar(128), \"my_message\" integer, \"read\" integer, \"date\" real, \"message\" text)');
 	db.execute('create table if not exists DOG_BREEDS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"name\" varchar(256), \"origin\" varchar(256), \"weight_from\" integer, \"weight_to\" integer, \"kennel_club\" varchar(256), \"active\" integer)');
 	db.execute('create table if not exists MUTUAL_FOLLOWERS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_id\" integer, \"name\" varchar(256),\"thumb\" varchar(128))');
+	db.execute('create table if not exists PLACE_CATEGORIES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"name\" varchar(256), \"active\" integer)');
 	//db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from\" integer, \"user_to\" integer, \"date\" real, \"message\" text)');
 	
 	db.close();

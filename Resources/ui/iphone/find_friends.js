@@ -322,6 +322,7 @@ function populateFindFriendsContactsTableView(uData){
 				userId:null
 			});
 			row.add(rowInviteButton);
+			rowInviteButton.addEventListener('click', handleContactsInviteButton);
 		}
 		
 		tableRows.push(row);
@@ -609,4 +610,14 @@ function handlefriendsTableViewRows(e){
 		openWindows.push(profileOtherWindow);
 		navController.open(profileOtherWindow);
 	}
+}
+
+function handleContactsInviteButton(e){
+	var smsModule = require("com.omorandi");
+	var smsDialog = smsModule.createSMSDialog({ 
+	    messageBody: 'hey',
+	    barColor: 'black'
+	});
+
+    smsDialog.open({animated: true});
 }

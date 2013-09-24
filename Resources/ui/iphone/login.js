@@ -284,6 +284,7 @@ function checkLoginCredentials(lObj){
 			populateRightMenu(dogArray);
 			
 			saveDogBreeds(jsonData.data.breeds);
+			savePlaceCategories(jsonData.data.categories);
 			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;

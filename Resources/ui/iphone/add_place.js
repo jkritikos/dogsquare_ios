@@ -7,14 +7,6 @@ var addPlaceWindow = Ti.UI.createWindow({
 
 var addPlaceObject = {};
 
-//done button for picker
-var addPlacePickerDoneButton = Ti.UI.createButton({
-	backgroundImage:IMAGE_PATH+'common/Done_button.png',
-    width:58,
-    height:29
-});
-addPlacePickerDoneButton.addEventListener("click", handlePickerDoneButton);
-
 //save button
 var addPlaceSaveButton = Ti.UI.createButton({
     backgroundImage:IMAGE_PATH+'common/save_button.png',
@@ -176,13 +168,35 @@ addPlaceCategoryButton.addEventListener('click', handleCategoryButton);
 //picker data
 var pickerCategories = [];
 
-pickerCategories[0]=Ti.UI.createPickerRow({title:'park', id:1});
-pickerCategories[1]=Ti.UI.createPickerRow({title:'homeless', id:2});
-pickerCategories[2]=Ti.UI.createPickerRow({title:'cruelty', id:3});
-pickerCategories[3]=Ti.UI.createPickerRow({title:'pet shop', id:4});
-pickerCategories[4]=Ti.UI.createPickerRow({title:'veterinary', id:5});
-pickerCategories[5]=Ti.UI.createPickerRow({title:'dog hospital', id:6});
-pickerCategories[6]=Ti.UI.createPickerRow({title:'other', id:7});
+var addPlaceCategories = getPlaceCategories();
+
+for(i=0;i<addPlaceCategories.length;i++){
+	var name = addPlaceCategories[i].name;
+	var id = addPlaceCategories[i].id;
+	
+	pickerCategories[i]=Ti.UI.createPickerRow({title:name, id:id});
+}
+
+//done button for picker
+var addPlacePickerDoneButton = Ti.UI.createButton({
+	backgroundImage:IMAGE_PATH+'common/Done_button.png',
+    width:58,
+    height:29
+});
+addPlacePickerDoneButton.addEventListener("click", handlePickerDoneButton);
+
+var addPlaceFlexSpace = Titanium.UI.createButton({
+    systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+});
+
+var addPlaceToolbar = Titanium.UI.iOS.createToolbar({
+    items:[addPlaceFlexSpace, addPlacePickerDoneButton],
+    barColor:'999999',
+    bottom:-44,
+    borderTop:true,
+    borderBottom:false
+}); 
+addPlaceWindow.add(addPlaceToolbar);
 
 //picker
 var addPlacePicker = Ti.UI.createPicker({
@@ -196,11 +210,12 @@ addPlaceWindow.add(addPlacePicker);
 //handle category button
 function handleCategoryButton(){
 	addPlacePicker.animate({bottom:0, duration:500});
-	addPlaceWindow.setRightNavButton(addPlacePickerDoneButton);
+	addPlaceToolbar.animate({bottom:216, duration:500});
 }
 
 //handle picker done button
 function handlePickerDoneButton(){
+	addPlaceToolbar.animate({bottom:-44, duration:500});
 	addPlacePicker.animate({bottom:-216, duration:500});
 	addPlaceWindow.setRightNavButton(addPlaceSaveButton);
 	addPlaceCategoryLabel.text = addPlacePicker.getSelectedRow(0).title;
@@ -242,8 +257,8 @@ function validatePlaceForm(){
 	
 	addPlaceObject.name = addPlaceTxtFieldName.value;
 	addPlaceObject.category_id = addPlaceCategoryLabel.id;
-	addPlaceObject.longitude = 2345234;
-	addPlaceObject.latitude = 4635634;
+	addPlaceObject.longitude = 23.717422;
+	addPlaceObject.latitude = 37.970257;
 	
 	return true;
 }
