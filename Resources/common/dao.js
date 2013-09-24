@@ -841,7 +841,8 @@ function saveDogBreeds(obj){
 		db.execute('delete from DOG_BREEDS');
 		
 		for(i=0; i < obj.length; i++){
-			db.execute('insert into DOG_BREEDS (name, origin, weight_from, weight_to, kennel_club, active) values (?,?,?,?,?,?)', obj[i].DogBreed.name,obj[i].DogBreed.origin,obj[i].DogBreed.weight_from,obj[i].DogBreed.weight_to,obj[i].DogBreed.kennel_club,obj[i].DogBreed.active);
+			Ti.API.info('saveDogBreeds() saving breed '+obj[i].DogBreed.id);
+			db.execute('insert into DOG_BREEDS (id,name, origin, weight_from, weight_to, kennel_club, active) values (?,?,?,?,?,?,?)', obj[i].DogBreed.id,obj[i].DogBreed.name,obj[i].DogBreed.origin,obj[i].DogBreed.weight_from,obj[i].DogBreed.weight_to,obj[i].DogBreed.kennel_club,obj[i].DogBreed.active);
 		}
 	
 		Ti.API.info('saveDogBreeds() saved '+obj.length+' rows');
@@ -885,7 +886,8 @@ function savePlaceCategories(obj){
 		db.execute('delete from PLACE_CATEGORIES');
 		
 		for(i=0; i < obj.length; i++){
-			db.execute('insert into PLACE_CATEGORIES (name, active) values (?,?)', obj[i].PlaceCategory.name, obj[i].PlaceCategory.active);
+			Ti.API.info('savePlaceCategories() saved category '+obj[i].PlaceCategory.id);
+			db.execute('insert into PLACE_CATEGORIES (id, name, active) values (?,?,?)', obj[i].PlaceCategory.id, obj[i].PlaceCategory.name, obj[i].PlaceCategory.active);
 		}
 	
 		Ti.API.info('savePlaceCategories() saved '+obj.length+' rows');
@@ -951,9 +953,9 @@ function createDB(){
 	db.execute('create table if not exists ACTIVITY_COORDINATES (\"activity_id\" integer, \"lat\" real, \"lon\" real, \"log_time\" real)');
 	db.execute('create table if not exists PASSPORT (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"title\" varchar(128), \"description\" varchar(128), \"date\" real, \"remind_flag\" integer)');
 	db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"remote_user_id\" integer, \"remote_user_name\" varchar(128), \"remote_user_thumb\" varchar(128), \"my_message\" integer, \"read\" integer, \"date\" real, \"message\" text)');
-	db.execute('create table if not exists DOG_BREEDS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"name\" varchar(256), \"origin\" varchar(256), \"weight_from\" integer, \"weight_to\" integer, \"kennel_club\" varchar(256), \"active\" integer)');
+	db.execute('create table if not exists DOG_BREEDS (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"origin\" varchar(256), \"weight_from\" integer, \"weight_to\" integer, \"kennel_club\" varchar(256), \"active\" integer)');
 	db.execute('create table if not exists MUTUAL_FOLLOWERS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_id\" integer, \"name\" varchar(256),\"thumb\" varchar(128))');
-	db.execute('create table if not exists PLACE_CATEGORIES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"name\" varchar(256), \"active\" integer)');
+	db.execute('create table if not exists PLACE_CATEGORIES (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"active\" integer)');
 	//db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from\" integer, \"user_to\" integer, \"date\" real, \"message\" text)');
 	
 	db.close();

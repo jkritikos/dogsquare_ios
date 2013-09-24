@@ -131,7 +131,7 @@ function populateRightMenu(dogObject){
 			textAlign:'left',
 			left:136,
 			top:50,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'},
 			type:RIGHT_MENU_TYPE_ROW
 		});
 		
@@ -142,7 +142,7 @@ function populateRightMenu(dogObject){
 			height:18,
 			width:35,
 			textAlign:'left',
-			left:199,
+			left:180,
 			top:50,
 			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
 			type:RIGHT_MENU_TYPE_ROW
@@ -150,8 +150,8 @@ function populateRightMenu(dogObject){
 		
 		//bone image inside the dog row - right menu row
 		var rowBoneImage = Ti.UI.createImageView({ 
-			image:IMAGE_PATH+'run_finish/bone_icon.png',
-			left:232,
+			image:IMAGE_PATH+'menu_right/bone_grey.png',
+			left:222,
 			top:50,
 			type:RIGHT_MENU_TYPE_ROW
 		});

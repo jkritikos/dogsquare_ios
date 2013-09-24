@@ -48,6 +48,7 @@ function buildRunView(){
 		font:{fontSize:41, fontWeight:'bold', fontFamily:'Open Sans'}
 	});
 	
+	/*
 	var t3 = Ti.UI.create2DMatrix();
 	t3 = t3.scale(1, -1);
 	
@@ -60,6 +61,7 @@ function buildRunView(){
 		color:UI_COLOR_RUN,
 		font:{fontSize:41, fontWeight:'bold', fontFamily:'Open Sans'}
 	}); 
+	*/
 	
 	runAvgPaceMinuteLabel = Ti.UI.createLabel({
 		text:'0.0',
@@ -116,7 +118,7 @@ function buildRunView(){
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	
-	viewRun.add(runDistanceUnitReflectionLabel);
+	//viewRun.add(runDistanceUnitReflectionLabel);
 	viewRun.add(runDurationLabel);
 	viewRun.add(runDurationValueLabel);
 	viewRun.add(runAvgPaceLabel);

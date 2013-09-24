@@ -58,5 +58,3 @@ notify.scheduleLocalNotification({
     userInfo:{"id":1,"hello":"world"},
     date:new Date(new Date().getTime() + 15000) 
 });
-
-alert("LocalNotification Scheduled");

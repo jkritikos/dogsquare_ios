@@ -370,7 +370,7 @@ function populateViewActivityDogsTableView(dogObj){
 			height:65,
 			textAlign:'center',
 			left:91,
-			opacity:0.7,
+			//opacity:0.7,
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		row.add(rowDogNameLabel);
@@ -403,7 +403,7 @@ function populateViewActivityDogsTableView(dogObj){
 			textAlign:'center',
 			right:120,
 			bottom:10,
-			opacity:0.3,
+			//opacity:0.3,
 			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		row.add(rowMoodLabel);

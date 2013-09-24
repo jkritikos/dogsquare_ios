@@ -34,7 +34,7 @@ function buildDogProfileView(dogId){
 			width:'100%',
 			top:225,
 			height:56,
-			opacity:0.8,
+			opacity:0.7,
 			zIndex:2
 		});
 		
@@ -157,7 +157,7 @@ function buildDogProfileView(dogId){
 			width:'100%',
 			top:289,
 			height:31,
-			opacity:0.8,
+			opacity:0.7,
 			zIndex:2
 		});
 		
@@ -177,10 +177,10 @@ function buildDogProfileView(dogId){
 			color:'black',
 			height:'auto',
 			textAlign:'left',
-			left:46,
-			bottom:66,
+			left:35,
+			bottom:58,
 			opacity:0.6,
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		dogProfileView.add(dogProfileMoodLabel);
 		
@@ -190,11 +190,12 @@ function buildDogProfileView(dogId){
 			height:'auto',
 			textAlign:'left',
 			left:91,
-			bottom:66,
+			bottom:58,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		dogProfileView.add(dogProfileMoodPercentLabel);
 		
+		//Empty bone image
 		var dogProfileBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'dog_profile/bone_grey.png',
 			bottom:44,
@@ -202,6 +203,19 @@ function buildDogProfileView(dogId){
 		});
 		dogProfileView.add(dogProfileBoneImage);
 		
+		//Filled bone image
+		var boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'dog_profile/bone_colours.png');
+		var boneFillImageBlob = boneFillImage.toBlob();
+		var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:90});
+		var dogProfileBoneImageColor = Ti.UI.createImageView({ 
+			image:boneFillImageBlobCropped,
+			bottom:44,
+			left:143
+		});
+		
+		dogProfileView.add(dogProfileBoneImageColor);
+		
+		//Heart image for likes
 		dogProfileHeartImage = Ti.UI.createImageView({ 
 			bottom:5,
 			right:77,
@@ -215,10 +229,10 @@ function buildDogProfileView(dogId){
 			color:'black',
 			height:'auto',
 			textAlign:'left',
-			left:47,
+			left:36,
 			bottom:16,
 			opacity:0.6,
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		dogProfileView.add(dogProfileLikeMeLabel);
 		
