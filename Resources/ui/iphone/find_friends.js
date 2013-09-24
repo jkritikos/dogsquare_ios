@@ -183,7 +183,7 @@ var findFriendsTableView = Titanium.UI.createTableView({
 	minRowHeight:60,
 	width:290,
 	backgroundColor:'transparent',
-	top:133,
+	top:90,
 	bottom:0
 });
 viewFindFriends.add(findFriendsTableView);
@@ -209,16 +209,6 @@ for(j=0;j<people.length;j++){
 	}
 }
 
-var contactsEmailStringList = '';
-//convert the array into a string 
-for(l=0;l<contactsEmailObj.length;l++){
-	if(contactsEmailObj.length - 1 == l){
-		contactsEmailStringList += '\'' + contactsEmailObj[l] + '\'';
-	}else{
-		contactsEmailStringList += '\'' + contactsEmailObj[l] + '\',';
-	}
-	
-}
 //find user info via email from the server - to check if he owns the app 
 doSearchUserByEmail(contactsEmailObj);
 
@@ -444,7 +434,7 @@ function handleFindFriendsTabs(e){
 		findFriendsTabContactsSelection.show();
 		findFriendsTabDogsquareSelection.hide();
 		
-		doSearchUserByEmail(contactsEmailStringList);
+		doSearchUserByEmail(contactsEmailObj);
 		
 		findFriendsTableView.show();
 		findFriendsFacebookView.hide();
@@ -533,7 +523,7 @@ function doSearchUserByEmail(cEmail){
 	var emailList = escape(JSON.stringify(cEmail));
 	
 	xhr.onerror = function(e){
-	
+		
 	};
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
@@ -583,8 +573,8 @@ function handlefriendsTableViewRows(e){
 		Ti.include('ui/iphone/profile_other.js');
 		
 		var userId = e.row.children[2].userId;
-		var profileOtherView = buildProfileOtherView(userId);
 		var nameUser = e.row.children[1].text;
+		var profileOtherView = buildProfileOtherView(userId, nameUser);
 		
 		var profileOtherWindow = Ti.UI.createWindow({
 			backgroundColor:'white',

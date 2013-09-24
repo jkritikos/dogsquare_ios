@@ -169,10 +169,11 @@ viewProfile.add(profileOpacityBarBottom);
 //Activity bar
 var profileActivityBar = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
-	top:310,
+	top:307,
 	width:320,
 	height:33,
-	toggle:false
+	toggle:false,
+	zIndex:6
 });
 
 var profileActivityLabel = Titanium.UI.createLabel({ 
@@ -193,8 +194,9 @@ profileActivityBar.addEventListener('click', handleActivityButton);
 var profileTableViewBackground = Titanium.UI.createView({ 
 	backgroundColor:'d2d2d2',
 	width:'100%',
-	height:69,
-	top:347
+	height:74,
+	top:339,
+	zIndex:6
 });
 viewProfile.add(profileTableViewBackground);
 
@@ -204,7 +206,7 @@ var profileTableView = Titanium.UI.createTableView({
 	width:320,
 	data:populateProfileTableView(),
 	backgroundColor:'d2d2d2',
-	top:0,
+	top:3,
 	bottom:0
 });
 profileTableViewBackground.add(profileTableView);
@@ -278,14 +280,14 @@ function handleRunBackButton() {
 function handleActivityButton(e){
 	var toggle = e.source.toggle;
 	if(toggle){
-		profileActivityBar.animate({top:310, duration:500});
+		profileActivityBar.animate({top:307, duration:500});
 		profileTableViewBackground.height = 69;
-		profileTableViewBackground.animate({top:347, duration:470});
+		profileTableViewBackground.animate({top:339, duration:470});
 		e.source.toggle = false;
 	}else{
 		profileActivityBar.animate({top:187, duration:500});
 		profileTableViewBackground.height = 196;
-		profileTableViewBackground.animate({top:220, duration:470});
+		profileTableViewBackground.animate({top:220, duration:460});
 		e.source.toggle = true;
 	}
 }
@@ -380,11 +382,9 @@ function populateProfileTableView(){
 		//activity label
 		var activityLabel = Ti.UI.createLabel({
 			text:'No activity yet',
-			top:10,
 			textAlign:'left',
 			width:'auto',
 			height:'auto',
-			left:88,
 			opacity:0.6,
 			color:'black',
 			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}

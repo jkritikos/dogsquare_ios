@@ -9,6 +9,7 @@ var profileOtherDogTableView = null;
 var profileOtherView = null;
 var profileOtherWalkWithButtonLabel = null;
 var profileOtherWalkWithButton = null;
+var profileOtherChatButton = null;
 
 var TAB_FOLLOWERS = 1;
 var TAB_FOLLOWING = 2;
@@ -17,7 +18,7 @@ var PROFILE_OTHER_WIN = 2;
 
 var profileOtherUserId = null;
 
-function buildProfileOtherView(uId) {
+function buildProfileOtherView(uId, name) {
 	Ti.API.info('buildProfileOtherView() called for user_id '+uId);
 	
 	profileOtherUserId = uId;
@@ -151,13 +152,16 @@ function buildProfileOtherView(uId) {
 		profileOtherFollowButton.addEventListener('click', handleProfileOtherFollowButton);
 		
 		//chat button
-		var profileOtherChatButton = Ti.UI.createButton({
+		profileOtherChatButton = Ti.UI.createButton({
 		    backgroundImage: IMAGE_PATH+'profile_other/Chat_icon.png',
 		    width:45,
 		    height:43,
-		    top:320
+		    top:320,
+		    userId:uId,
+		    mName:name
 		});
 		profileOtherView.add(profileOtherChatButton);
+		profileOtherChatButton.addEventListener('click', handleProfileOtherChatButton);
 		
 		//chat button label
 		var profileOtherChatButtonLabel = Ti.UI.createLabel({
@@ -502,6 +506,9 @@ function getOnlineOtherUser(uId){
 		var jsonData = JSON.parse(this.responseText);
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			profileOtherChatButton.mutual = jsonData.data.mutual_follower;
+			
 			//Hide progress view
 			progressView.hide();
 			updateProfileOther(jsonData.data.user);
@@ -546,4 +553,23 @@ function updateProfileOther(userObj){
 		profileOtherFollowButton.toggle = false;
 	}
  	
+}
+
+function handleProfileOtherChatButton(e){
+	if(e.source.mutual){
+		
+	Ti.include('ui/iphone/inbox_new.js');
+	
+	var userId = e.source.userId;
+	var name = e.source.mName;
+	
+	updateInboxNewView(userId, name);
+	
+	openWindows.push(inboxNewWindow);
+	navController.open(inboxNewWindow);	
+		
+	}else{
+		alert('You are not mutual followers');
+	}
+	
 }

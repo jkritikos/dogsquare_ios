@@ -231,8 +231,24 @@ function handleNewContactsTableRows(e){
 	
 	inboxNewSendToTextField.value = e.row.children[1].text;
 	inboxNewContactsTableView.data = [];
+}
+
+function updateInboxNewView(userId, name){
+	inboxNewSendToTextField.focus();
+	inboxNewContactsTableView.hide();
+	inboxNewChatTableView.show();
 	
+	toUserId = userId;
 	
+	var messages = getInboxMessagesByUserId(toUserId);
+	
+	if(messages.length != 0){
+		populateInboxNewChatTableView(messages, toUserId);
+	}
+	
+	inboxNewSendToTextArea.focus();
+	inboxNewSendToTextField.value = name;
+	inboxNewContactsTableView.data = [];
 }
 
 function handleSendToTextFieldChange(e){
@@ -274,8 +290,8 @@ function handleInboxNewSendButton(){
 		inboxNewChatTableView.scrollToIndex(inboxNewChatTableView.data[0].rows.length - 1);
 	}
 	
+	inboxNewSendToTextArea.blur();
 	inboxNewSendToTextField.blur();
-	inboxNewSendToTextField.value = '';
 }
 
 function populateInboxNewChatTableView(mObj, userId){
@@ -380,6 +396,7 @@ function appendRowInboxNewTableView(date, message){
 	//appended message row
 	var messageRow = Ti.UI.createTableViewRow({
 		className:'messageRow',
+		selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		height:'auto',
 		width:'100%',
 		backgroundColor:'transparent',
