@@ -122,7 +122,7 @@ function populateInboxViewTableView(mObj, userId){
 			top:12,
 			left:90,
 			width:140,
-			height:54,
+			height:Titanium.UI.SIZE,
 			borderWidth:1,
 			borderColor:UI_BACKGROUND_COLOR,
 			borderRadius:5
@@ -131,6 +131,8 @@ function populateInboxViewTableView(mObj, userId){
 		//sender message label
 		var senderInboxViewMessageLabel = Titanium.UI.createLabel({ 
 			text:mObj[i].message,
+			top:10,
+			bottom:10,
 			color:'black',
 			height:'auto',
 			width:119,

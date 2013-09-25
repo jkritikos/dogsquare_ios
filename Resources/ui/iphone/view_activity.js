@@ -254,7 +254,7 @@ function buildViewActivityView(aId){
 		
 		//background for comments
 		viewActivityCommentsBackgroundView = Ti.UI.createView({
-			top:385,
+			top:374,
 			height:429,
 			width:'100%',
 			backgroundColor:UI_BACKGROUND_COLOR,
@@ -266,8 +266,9 @@ function buildViewActivityView(aId){
 			backgroundImage:IMAGE_PATH+'common/comment_field.png',
 			top:0,
 			width:320,
-			height:33,
+			height:44,
 			toggle:false,
+			zIndex:3,
 			button:'bar'
 		});
 		viewActivityCommentsBackgroundView.add(viewActivityCommentsButton);
@@ -287,11 +288,11 @@ function buildViewActivityView(aId){
 		var viewActivityCommentsTitleLabel = Titanium.UI.createLabel({ 
 			text:'Comments',
 			color:'white',
-			top:10,
+			top:15,
 			height:20,
 			textAlign:'center',
 			left:18,
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		viewActivityCommentsButton.add(viewActivityCommentsTitleLabel);
 		
@@ -311,7 +312,7 @@ function buildViewActivityView(aId){
 			minRowHeight:47,
 			width:320,
 			backgroundColor:'e7e7e7',
-			top:31
+			top:41
 		});
 		viewActivityCommentsBackgroundView.add(viewActivityCommentsTableView);
 		viewActivityView.add(viewActivityCommentsBackgroundView);
@@ -422,7 +423,7 @@ function populateViewActivityCommentsTableView(comObj){
 	var tableRows = [];
 	
 	var addCommentRow = Ti.UI.createTableViewRow({
-		height:53,
+		height:43,
 		className:'addComment',
 		backgroundColor:UI_MENU_BACKGROUND_COLOR,
 		selectedBackgroundColor:'#1c2027',
@@ -530,15 +531,14 @@ function handleViewActivityCommentButton(e){
 	
 	if(toggle){
 		openWindows[openWindows.length - 1].setRightNavButton(null);
-		viewActivityCommentsBackgroundView.animate({top:385, duration:500});
-		viewActivityCommentsBackgroundView.animate({height:426, duration:500});
+		viewActivityCommentsBackgroundView.animate({top:374, duration:500});
 		viewActivityCommentsTextArea.blur();
 		viewActivityCommentsTextArea.hide();
 		viewActivityCommentsTableView.show();
 		e.source.toggle = false;
 	}else if(!toggle){
 		openWindows[openWindows.length - 1].setRightNavButton(null);
-		viewActivityCommentsBackgroundView.animate({top:-10, duration:500});
+		viewActivityCommentsBackgroundView.animate({top:-11, duration:500});
 		viewActivityCommentsTextArea.blur();
 		viewActivityCommentsTextArea.hide();
 		viewActivityCommentsTableView.show();
@@ -550,7 +550,7 @@ function handleViewActivityCommentTableRows(e){
 	var row = e.row.rowId;
 	
 	if(row == ADD_COMMENT){
-		viewActivityCommentsBackgroundView.animate({top:-10, duration:300});
+		viewActivityCommentsBackgroundView.animate({top:-11, duration:300});
 		viewActivityCommentsButton.toggle = true;
 		openWindows[openWindows.length - 1].setRightNavButton(viewActivitySaveCommentButton);
 		

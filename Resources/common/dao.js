@@ -503,6 +503,30 @@ function saveActivity(dogs){
 	return activityId;
 }
 
+//Saves activities to the local db
+function saveActivities(activities){
+	var now = new Date().getTime();
+	
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	if(activities != null){
+		for(var i=0; i < activities.length; i++){
+			var start_date = activities[i].Activity.start_date; 
+			var start_time = activities[i].Activity.start_time;
+			Ti.API.info('start_date: '+start_date +'start_time: '+start_time);
+			
+			db.execute('insert into activities (start_date,start_time,type_id) values (?,?,1)',start_date, start_time);
+			var activityId = db.lastInsertRowId;
+			
+			db.execute('insert into activity_dogs (activity_id, dog_id) values (?,?)', activityId ,activities[i].Activity.dog_id);
+		}
+	}
+	
+	db.close();
+	
+	Ti.API.info('saveActivities() complete');
+}
+
 //Sets the server activity id for the specified local id
 function updateActivityRemoteId(localId, remoteId){
 	var db = Ti.Database.install('dog.sqlite', 'db');

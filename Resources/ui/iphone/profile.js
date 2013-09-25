@@ -293,7 +293,7 @@ function handleActivityButton(e){
 	}else{
 		profileActivityBar.animate({top:218, duration:500});
 		profileTableViewBackground.animate({top:248, duration:500});
-		profileTableView.animate({height:155, duration:500});
+		profileTableView.animate({height:155, duration:100});
 		e.source.toggle = true;
 	}
 }

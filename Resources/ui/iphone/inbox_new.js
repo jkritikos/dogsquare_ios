@@ -27,6 +27,41 @@ var inboxNewSendToBackgroundView = Ti.UI.createView({
     height:38
 });
 
+var inboxNewSendToChosenBackgroundView = Ti.UI.createView({
+    backgroundColor:'1c2027',
+    left:40,
+    width:Titanium.UI.SIZE,
+    height:25,
+    borderColor:'white',
+    borderRadius:10,
+    borderWidth:1
+});
+
+var inboxNewSendToChosenLabel = Ti.UI.createLabel({
+    right:10,
+	left:10,
+	color:'white',
+	height:25,
+	width:'auto',
+	textAlign:'left',
+	font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
+});
+inboxNewSendToChosenBackgroundView.add(inboxNewSendToChosenLabel);
+
+var inboxNewSendToEraseIcon = Titanium.UI.createButton({
+	backgroundImage:IMAGE_PATH+'common/erase_icon.png',
+	right:5,
+	width:16,
+	height:18
+});
+inboxNewSendToBackgroundView.add(inboxNewSendToEraseIcon);
+inboxNewSendToEraseIcon.addEventListener('click', handleSendToEraseButton);
+
+inboxNewSendToBackgroundView.add(inboxNewSendToChosenBackgroundView);
+inboxNewSendToChosenBackgroundView.hide();
+
+inboxNewSendToBackgroundView.add(inboxNewSendToChosenBackgroundView);
+
 var inboxNewSendToLabel = Titanium.UI.createLabel({ 
 	text:'To:',
 	left:10,
@@ -89,7 +124,7 @@ inboxNewWindow.add(inboxNewSendToBackgroundView);
 
 inboxNewBackButton.addEventListener("click", function() {
     navController.close(inboxNewWindow);
-    inboxNewSendToTextField.blur();
+    inboxNewSendToTextArea.blur();
 });
 
 //inbox new sepparator
@@ -218,8 +253,13 @@ function getMutualFollowers(){
 
 function handleNewContactsTableRows(e){
 	inboxNewSendToTextField.focus();
+	inboxNewSendToTextField.hide();
+	inboxNewSendToTextField.value = '';
+	
 	inboxNewContactsTableView.hide();
 	inboxNewChatTableView.show();
+	
+	inboxNewSendToChosenBackgroundView.show();
 	
 	toUserId = e.row.user_id;
 	
@@ -229,14 +269,18 @@ function handleNewContactsTableRows(e){
 		populateInboxNewChatTableView(messages, toUserId);
 	}
 	
-	inboxNewSendToTextField.value = e.row.children[1].text;
+	inboxNewSendToChosenLabel.text = e.row.children[1].text;
 	inboxNewContactsTableView.data = [];
 }
 
 function updateInboxNewView(userId, name){
 	inboxNewSendToTextField.focus();
+	//inboxNewSendToTextField.hide();
+	
 	inboxNewContactsTableView.hide();
 	inboxNewChatTableView.show();
+	
+	inboxNewSendToChosenBackgroundView.show();
 	
 	toUserId = userId;
 	
@@ -247,7 +291,7 @@ function updateInboxNewView(userId, name){
 	}
 	
 	inboxNewSendToTextArea.focus();
-	inboxNewSendToTextField.value = name;
+	inboxNewSendToChosenLabel.text = name;
 	inboxNewContactsTableView.data = [];
 }
 
@@ -465,4 +509,16 @@ function appendRowInboxNewTableView(date, message){
 	
 	inboxNewChatTableView.appendRow(messageRow);
 	inboxNewChatTableView.scrollToIndex(inboxNewChatTableView.data[0].rows.length - 1);
+}
+
+function handleSendToEraseButton(){
+	inboxNewSendToTextField.show();
+	inboxNewSendToTextField.focus();
+	
+	inboxNewContactsTableView.show();
+	inboxNewChatTableView.hide();
+	
+	inboxNewSendToChosenBackgroundView.hide();
+	
+	inboxNewContactsTableView.data = [];
 }

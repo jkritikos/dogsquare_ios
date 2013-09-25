@@ -260,6 +260,8 @@ function checkLoginCredentials(lObj){
 			
 			cleanDB();
 			
+			saveActivities(jsonData.data.activities);
+			
 			var dogArray = [];
 			var dogObj = {};
 			
