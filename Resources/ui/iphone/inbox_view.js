@@ -217,7 +217,9 @@ function handleInboxViewSendButton(){
 	var message = inboxViewChatField.value;
 	var view = VIEW_INBOX_VIEW;
 	
-	sendMessageToUser(toId, toName, message, view);
+	if(message != '') {
+		sendMessageToUser(toId, toName, message, view);
+	}
 	
 	inboxViewChatField.blur();
 	inboxViewChatField.value = '';

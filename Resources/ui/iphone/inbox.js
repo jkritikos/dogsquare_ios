@@ -201,6 +201,7 @@ function setMessagesIntoRead(list){
 
 function handleInboxTableViewRows(e){
 	var userId = e.row.user_id;
+	var name = e.row.children[2].text;
 	
 	var messages = getInboxMessagesByUserId(userId);
 	
@@ -211,7 +212,7 @@ function handleInboxTableViewRows(e){
 		backgroundColor:UI_BACKGROUND_COLOR,
 		barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR,
-		title:'Chat'
+		title:name
 	});
 	
 	//back button

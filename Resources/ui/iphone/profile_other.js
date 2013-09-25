@@ -228,17 +228,18 @@ function buildProfileOtherView(uId, name) {
 		
 		//dogs bar
 		profileOtherDogBar = Ti.UI.createButton({
-			backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
-			bottom:0,
+			backgroundImage:IMAGE_PATH+'common/comment_field.png',
+			bottom:-2,
 			width:320,
 			height:33,
+			zIndex:3,
 			toggle:false
 		});
 		
 		var profileOtherDogBarLabel = Titanium.UI.createLabel({ 
 			text:'Dogs',
 			color:'white',
-			top:13,
+			top:10,
 			height:20,
 			textAlign:'center',
 			left:15,
@@ -262,7 +263,7 @@ function buildProfileOtherView(uId, name) {
 			minRowHeight:51,
 			width:320,
 			backgroundColor:UI_BACKGROUND_COLOR,
-			top:3,
+			top:10,
 			bottom:0
 		});
 		profileOtherDogTableViewBackground.add(profileOtherDogTableView);
@@ -318,12 +319,13 @@ function sendWalkRequest(){
 function handleDogBarButton(e){
 	var toggle = e.source.toggle;
 	if(toggle){
-		profileOtherDogBar.animate({bottom:0, duration:500});
+		profileOtherDogBar.animate({bottom:-2, duration:500});
 		profileOtherDogTableViewBackground.animate({top:416, duration:500});
 		e.source.toggle = false;
 	}else{
-		profileOtherDogBar.animate({bottom:192, duration:500});
-		profileOtherDogTableViewBackground.animate({top:224, duration:500});
+		profileOtherDogBar.animate({bottom:162, duration:500});
+		profileOtherDogTableViewBackground.animate({top:245, duration:500});
+		viewActivityCommentsBackgroundView.animate({height:172, duration:500});
 		e.source.toggle = true;
 	}
 }

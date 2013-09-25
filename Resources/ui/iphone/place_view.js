@@ -16,6 +16,9 @@ var checkinPlaceSaveCommentButton = null;
 var annotations = [];
 var addPlaceComObject = {};
 
+var ADD_COMMENT = 1;
+var COMMENT_ROW = 2;
+
 function buildCheckinPlaceView(view, placeId){
 	if(checkinPlaceView == null){
 		checkinPlaceView = Ti.UI.createView({
@@ -156,7 +159,7 @@ function buildCheckinPlaceView(view, placeId){
 		
 		//button to show all comments
 		checkinPlaceCommentsButton = Ti.UI.createButton({ 
-			backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
+			backgroundImage:IMAGE_PATH+'common/comment_field.png',
 			top:0,
 			width:320,
 			height:33,
@@ -165,7 +168,7 @@ function buildCheckinPlaceView(view, placeId){
 		});
 		checkinPlaceCommentsBackgroundView.add(checkinPlaceCommentsButton);
 		//event listener for button
-		checkinPlaceCommentsButton.addEventListener('click', handleCommentButtons);
+		checkinPlaceCommentsButton.addEventListener('click', handlePlaceCommentButton);
 		
 		// save button
 		checkinPlaceSaveCommentButton = Ti.UI.createButton({
@@ -176,24 +179,11 @@ function buildCheckinPlaceView(view, placeId){
 		});
 		checkinPlaceSaveCommentButton.addEventListener('click', handlePlaceCommentSaveButton);
 		
-		//plus buttton to create a new comment
-		var checkinPlacePlusButton = Ti.UI.createButton({ 
-			backgroundImage:IMAGE_PATH+'checkin_place/add_icon.png',
-			bottom:4,
-			right:26,
-			width:12,
-			height:12,
-			button:'plus'
-		});
-		checkinPlaceCommentsButton.add(checkinPlacePlusButton);
-		//event listener for plus button
-		checkinPlacePlusButton.addEventListener('click', handleCommentButtons);
-		
 		//comments title label
 		var checkinPlaceCommentsTitleLabel = Titanium.UI.createLabel({ 
 			text:'Comments',
 			color:'white',
-			top:13,
+			top:10,
 			height:20,
 			textAlign:'center',
 			left:18,
@@ -217,11 +207,11 @@ function buildCheckinPlaceView(view, placeId){
 			minRowHeight:47,
 			width:320,
 			backgroundColor:'e7e7e7',
-			top:36,
-			bottom:0,
-			allowsSelection:false
+			top:31,
+			bottom:0
 		});
 		checkinPlaceCommentsBackgroundView.add(checkinPlaceCommentsTableView);
+		checkinPlaceCommentsTableView.addEventListener('click', handlePlaceViewCommentTableRows);
 		
 		//remove empty rows
 		checkinPlaceCommentsTableView.footerView = Ti.UI.createView({
@@ -238,6 +228,34 @@ function buildCheckinPlaceView(view, placeId){
 function populateCheckinPlaceCommentsTableView(comObj){
 	var tableRows = [];
 	
+	var addCommentRow = Ti.UI.createTableViewRow({
+		height:54,
+		className:'addComment',
+		backgroundColor:UI_MENU_BACKGROUND_COLOR,
+		selectedBackgroundColor:'#1c2027',
+		rowId:ADD_COMMENT
+	});
+	
+	//plus image inside button UI
+	var addCommentPlusImage = Ti.UI.createImageView({ 
+		image:IMAGE_PATH+'menu_right/add_dog_icon.png',
+		left:30
+	});
+	
+	//label inside button UI
+	var addCommentLabel = Titanium.UI.createLabel({ 
+		text:'Add a comment',
+		color:'bab9ba',
+		height:27,
+		width:125,
+		textAlign:'left',
+		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	
+	addCommentRow.add(addCommentLabel);
+	addCommentRow.add(addCommentPlusImage);
+	tableRows.push(addCommentRow);
+	
 	if(comObj.length > 0){
 		for(i=0;i<comObj.length;i++){
 			//comment row
@@ -246,7 +264,8 @@ function populateCheckinPlaceCommentsTableView(comObj){
 				height:'auto',
 				width:'100%',
 				backgroundColor:'transparent',
-				selectedBackgroundColor:'transparent'
+				selectedBackgroundColor:'transparent',
+				rowId:COMMENT_ROW
 			});
 			
 			//comment label
@@ -311,29 +330,35 @@ function populateCheckinPlaceCommentsTableView(comObj){
 	checkinPlaceCommentsTableView.setData(tableRows);
 }
 
-//handle comments button and plus button
-function handleCommentButtons(e){
+//handle comments button
+function handlePlaceCommentButton(e){
 	var toggle = e.source.toggle;
 	var button = e.source.button;
 	
-	if(toggle && button != 'plus'){
-		openWindows[1].setRightNavButton(null);
-		checkinPlaceCommentsBackgroundView.animate({top:332, duration:600});
+	if(toggle){
+		openWindows[openWindows.length - 1].setRightNavButton(null);
+		checkinPlaceCommentsBackgroundView.animate({top:332, duration:500});
 		checkinPlaceCommentsTextArea.blur();
 		checkinPlaceCommentsTextArea.hide();
 		checkinPlaceCommentsTableView.show();
 		e.source.toggle = false;
-	}else if(!toggle && button != 'plus'){
-		openWindows[1].setRightNavButton(null);
-		checkinPlaceCommentsBackgroundView.animate({top:-13, duration:600});
+	}else if(!toggle){
+		openWindows[openWindows.length - 1].setRightNavButton(null);
+		checkinPlaceCommentsBackgroundView.animate({top:-10, duration:500});
 		checkinPlaceCommentsTextArea.blur();
 		checkinPlaceCommentsTextArea.hide();
 		checkinPlaceCommentsTableView.show();
 		e.source.toggle = true;
-	}else if(button == 'plus'){
-		checkinPlaceCommentsBackgroundView.animate({top:-13, duration:200});
+	}
+}
+
+function handlePlaceViewCommentTableRows(e){
+	var row = e.row.rowId;
+	
+	if(row == ADD_COMMENT){
+		checkinPlaceCommentsBackgroundView.animate({top:-10, duration:200});
 		checkinPlaceCommentsButton.toggle = true;
-		openWindows[1].setRightNavButton(checkinPlaceSaveCommentButton);
+		openWindows[openWindows.length - 1].setRightNavButton(checkinPlaceSaveCommentButton);
 		
 		
 		checkinPlaceCommentsTextArea.focus();

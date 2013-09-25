@@ -11,6 +11,9 @@ var viewActivityLikesNumberLabel = null;
 var viewActivityTableView = null;
 var viewActivityMap = null;
 
+var ADD_COMMENT = 1;
+var COMMENT_ROW = 2;
+
 var viewActivityView = null;
 
 var viewActivityAnnotationStart = null;
@@ -251,7 +254,7 @@ function buildViewActivityView(aId){
 		
 		//background for comments
 		viewActivityCommentsBackgroundView = Ti.UI.createView({
-			top:384,
+			top:385,
 			height:429,
 			width:'100%',
 			backgroundColor:UI_BACKGROUND_COLOR,
@@ -260,7 +263,7 @@ function buildViewActivityView(aId){
 		
 		//button to show all comments
 		viewActivityCommentsButton = Ti.UI.createButton({ 
-			backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
+			backgroundImage:IMAGE_PATH+'common/comment_field.png',
 			top:0,
 			width:320,
 			height:33,
@@ -269,7 +272,7 @@ function buildViewActivityView(aId){
 		});
 		viewActivityCommentsBackgroundView.add(viewActivityCommentsButton);
 		//event listener for button
-		viewActivityCommentsButton.addEventListener('click', handleViewActivityCommentButtons);
+		viewActivityCommentsButton.addEventListener('click', handleViewActivityCommentButton);
 		
 		// save button
 		viewActivitySaveCommentButton = Ti.UI.createButton({
@@ -280,24 +283,11 @@ function buildViewActivityView(aId){
 		});
 		viewActivitySaveCommentButton.addEventListener('click', handleActivityCommentSaveButton);
 		
-		//plus buttton to create a new comment
-		var viewActivityPlusButton = Ti.UI.createButton({ 
-			backgroundImage:IMAGE_PATH+'checkin_place/add_icon.png',
-			bottom:4,
-			right:26,
-			width:12,
-			height:12,
-			button:'plus'
-		});
-		viewActivityCommentsButton.add(viewActivityPlusButton);
-		//event listener for plus button
-		viewActivityPlusButton.addEventListener('click', handleViewActivityCommentButtons);
-		
 		//comments title label
 		var viewActivityCommentsTitleLabel = Titanium.UI.createLabel({ 
 			text:'Comments',
 			color:'white',
-			top:13,
+			top:10,
 			height:20,
 			textAlign:'center',
 			left:18,
@@ -321,12 +311,11 @@ function buildViewActivityView(aId){
 			minRowHeight:47,
 			width:320,
 			backgroundColor:'e7e7e7',
-			top:36,
-			bottom:0,
-			allowsSelection:false
+			top:31
 		});
 		viewActivityCommentsBackgroundView.add(viewActivityCommentsTableView);
 		viewActivityView.add(viewActivityCommentsBackgroundView);
+		viewActivityCommentsTableView.addEventListener('click', handleViewActivityCommentTableRows);
 		
 		//remove empty rows
 		viewActivityCommentsTableView.footerView = Ti.UI.createView({
@@ -430,6 +419,34 @@ function populateViewActivityDogsTableView(dogObj){
 function populateViewActivityCommentsTableView(comObj){
 	var tableRows = [];
 	
+	var addCommentRow = Ti.UI.createTableViewRow({
+		height:53,
+		className:'addComment',
+		backgroundColor:UI_MENU_BACKGROUND_COLOR,
+		selectedBackgroundColor:'#1c2027',
+		rowId:ADD_COMMENT
+	});
+	
+	//plus image inside button UI
+	var addCommentPlusImage = Ti.UI.createImageView({ 
+		image:IMAGE_PATH+'menu_right/add_dog_icon.png',
+		left:30
+	});
+	
+	//label inside button UI
+	var addCommentLabel = Titanium.UI.createLabel({ 
+		text:'Add a comment',
+		color:'bab9ba',
+		height:27,
+		width:125,
+		textAlign:'left',
+		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	
+	addCommentRow.add(addCommentLabel);
+	addCommentRow.add(addCommentPlusImage);
+	tableRows.push(addCommentRow);
+	
 	if(comObj.length > 0){
 		for(i=0;i<comObj.length;i++){
 			//comment row
@@ -438,7 +455,8 @@ function populateViewActivityCommentsTableView(comObj){
 				height:'auto',
 				width:'100%',
 				backgroundColor:'transparent',
-				selectedBackgroundColor:'transparent'
+				selectedBackgroundColor:'transparent',
+				rowId:COMMENT_ROW
 			});
 			
 			//comment label
@@ -504,28 +522,35 @@ function populateViewActivityCommentsTableView(comObj){
 }
 
 //handle comments button and plus button
-function handleViewActivityCommentButtons(e){
+function handleViewActivityCommentButton(e){
 	var toggle = e.source.toggle;
 	var button = e.source.button;
 	
-	if(toggle && button != 'plus'){
-		openWindows[0].setRightNavButton(null);
-		viewActivityCommentsBackgroundView.animate({top:384, duration:500});
+	if(toggle){
+		openWindows[openWindows.length - 1].setRightNavButton(null);
+		viewActivityCommentsBackgroundView.animate({top:385, duration:500});
+		viewActivityCommentsBackgroundView.animate({height:426, duration:500});
 		viewActivityCommentsTextArea.blur();
 		viewActivityCommentsTextArea.hide();
 		viewActivityCommentsTableView.show();
 		e.source.toggle = false;
-	}else if(!toggle && button != 'plus'){
-		openWindows[0].setRightNavButton(null);
-		viewActivityCommentsBackgroundView.animate({top:-13, duration:500});
+	}else if(!toggle){
+		openWindows[openWindows.length - 1].setRightNavButton(null);
+		viewActivityCommentsBackgroundView.animate({top:-10, duration:500});
 		viewActivityCommentsTextArea.blur();
 		viewActivityCommentsTextArea.hide();
 		viewActivityCommentsTableView.show();
 		e.source.toggle = true;
-	}else if(button == 'plus'){
-		viewActivityCommentsBackgroundView.animate({top:-13, duration:300});
+	}
+}
+
+function handleViewActivityCommentTableRows(e){
+	var row = e.row.rowId;
+	
+	if(row == ADD_COMMENT){
+		viewActivityCommentsBackgroundView.animate({top:-10, duration:300});
 		viewActivityCommentsButton.toggle = true;
-		openWindows[0].setRightNavButton(viewActivitySaveCommentButton);
+		openWindows[openWindows.length - 1].setRightNavButton(viewActivitySaveCommentButton);
 		
 		viewActivityCommentsTextArea.focus();
 		viewActivityCommentsTableView.hide();

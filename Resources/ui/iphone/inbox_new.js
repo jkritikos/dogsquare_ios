@@ -285,7 +285,10 @@ function handleInboxNewSendButton(){
 	var message = inboxNewSendToTextArea.value;
 	var view = VIEW_INBOX_NEW;
 	
-	sendMessageToUser(toId, toName, message, view);
+	if(message != '') {
+		sendMessageToUser(toId, toName, message, view);
+	}
+	
 	if(inboxNewChatTableView.data.length != 0){
 		inboxNewChatTableView.scrollToIndex(inboxNewChatTableView.data[0].rows.length - 1);
 	}

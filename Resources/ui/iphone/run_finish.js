@@ -230,7 +230,7 @@ function buildRunFinishView(obj){
 	
 	//background for comments
 	runFinishCommentsBackgroundView = Ti.UI.createView({
-		top:383,
+		top:385,
 		height:429,
 		width:'100%',
 		backgroundColor:UI_BACKGROUND_COLOR,
@@ -240,7 +240,7 @@ function buildRunFinishView(obj){
 	
 	//button to show all comments
 	runFinishCommentsButton = Ti.UI.createButton({ 
-		backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
+		backgroundImage:IMAGE_PATH+'common/comment_field.png',
 		top:0,
 		width:320,
 		height:33,
@@ -254,7 +254,7 @@ function buildRunFinishView(obj){
 	//plus buttton to create a new comment
 	var runFinishPlusButton = Ti.UI.createButton({ 
 		backgroundImage:IMAGE_PATH+'checkin_place/add_icon.png',
-		bottom:4,
+		bottom:7,
 		right:26,
 		width:12,
 		height:12,
@@ -268,7 +268,7 @@ function buildRunFinishView(obj){
 	var runFinishCommentsTitleLabel = Titanium.UI.createLabel({ 
 		text:'Comments',
 		color:'white',
-		top:13,
+		top:10,
 		height:20,
 		textAlign:'center',
 		left:18,
@@ -465,19 +465,19 @@ function handleCommentButtons(e){
 	var button = e.source.button;
 	
 	if(toggle && button != 'plus'){
-		runFinishCommentsBackgroundView.animate({top:383, duration:600});
+		runFinishCommentsBackgroundView.animate({top:385, duration:600});
 		runfinishCommentsTextArea.blur();
 		runfinishCommentsTextArea.hide();
 		runFinishCommentsTableView.show();
 		e.source.toggle = false;
 	}else if(!toggle && button != 'plus'){
-		runFinishCommentsBackgroundView.animate({top:-13, duration:600});
+		runFinishCommentsBackgroundView.animate({top:-10, duration:600});
 		runfinishCommentsTextArea.blur();
 		runfinishCommentsTextArea.hide();
 		runFinishCommentsTableView.show();
 		e.source.toggle = true;
 	}else if(button == 'plus'){
-		runFinishCommentsBackgroundView.animate({top:-13, duration:200});
+		runFinishCommentsBackgroundView.animate({top:-10, duration:200});
 		runFinishCommentsButton.toggle = true;
 		
 		runfinishCommentsTextArea.focus();

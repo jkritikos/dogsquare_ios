@@ -168,18 +168,18 @@ viewProfile.add(profileOpacityBarBottom);
 
 //Activity bar
 var profileActivityBar = Ti.UI.createButton({
-	backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
+	backgroundImage:IMAGE_PATH+'common/comment_field.png',
 	top:307,
 	width:320,
 	height:33,
 	toggle:false,
-	zIndex:6
+	zIndex:7
 });
 
 var profileActivityLabel = Titanium.UI.createLabel({ 
 	text:'Activity',
 	color:'white',
-	top:13,
+	top:10,
 	height:20,
 	textAlign:'center',
 	left:29,
@@ -194,8 +194,8 @@ profileActivityBar.addEventListener('click', handleActivityButton);
 var profileTableViewBackground = Titanium.UI.createView({ 
 	backgroundColor:'d2d2d2',
 	width:'100%',
-	height:74,
-	top:339,
+	height:175,
+	top:331,
 	zIndex:6
 });
 viewProfile.add(profileTableViewBackground);
@@ -206,11 +206,17 @@ var profileTableView = Titanium.UI.createTableView({
 	width:320,
 	data:populateProfileTableView(),
 	backgroundColor:'d2d2d2',
-	top:3,
+	top:10,
 	bottom:0
 });
 profileTableViewBackground.add(profileTableView);
 profileTableView.addEventListener('click', handleProfileActivityRows);
+
+//remove empty rows
+profileTableView.footerView = Ti.UI.createView({
+    height: 1,
+    backgroundColor: 'transparent'
+});
 
 var runWindow = null;
 
@@ -281,13 +287,13 @@ function handleActivityButton(e){
 	var toggle = e.source.toggle;
 	if(toggle){
 		profileActivityBar.animate({top:307, duration:500});
-		profileTableViewBackground.height = 69;
-		profileTableViewBackground.animate({top:339, duration:470});
+		profileTableViewBackground.animate({top:331, duration:500});
+		profileTableViewBackground.animate({height:88, duration:500});
 		e.source.toggle = false;
 	}else{
-		profileActivityBar.animate({top:187, duration:500});
-		profileTableViewBackground.height = 196;
-		profileTableViewBackground.animate({top:220, duration:460});
+		profileActivityBar.animate({top:218, duration:500});
+		profileTableViewBackground.animate({top:243, duration:500});
+		profileTableViewBackground.animate({height:176, duration:500});
 		e.source.toggle = true;
 	}
 }
@@ -319,7 +325,7 @@ function populateProfileTableView(){
 				activityId:userActivities[i].activity_id
 			});
 			
-			var rowActivityImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + dogPhoto);
+			var rowActivityImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
 			var rowActivityImageBlob = rowActivityImageFile.toBlob();
 			var rowActivityImageBlobCropped = rowActivityImageBlob.imageAsThumbnail(54,0,27);
 			var rowActivityImage = Titanium.UI.createImageView({

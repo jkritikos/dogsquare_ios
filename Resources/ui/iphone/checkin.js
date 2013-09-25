@@ -19,7 +19,8 @@ checkinView.add(checkinMap);
 
 //checkin title yellow bar
 var checkinTitleBar = Ti.UI.createButton({ 
-	backgroundImage:IMAGE_PATH+'profile/Activitybar.png',
+	backgroundImage:IMAGE_PATH+'common/comment_field.png',
+	zIndex:3,
 	top:226,
 	width:320,
 	height:33,
@@ -30,7 +31,7 @@ var checkinTitleBar = Ti.UI.createButton({
 var checkinBarTitleLabel = Titanium.UI.createLabel({ 
 	text:'Nearby places',
 	color:'white',
-	top:13,
+	top:10,
 	height:20,
 	textAlign:'center',
 	left:18,
@@ -85,7 +86,7 @@ var checkinPlacesTableViewBackground = Titanium.UI.createView({
 	backgroundColor:UI_BACKGROUND_COLOR,
 	width:'100%',
 	bottom:0,
-	top:259
+	top:253
 });
 checkinView.add(checkinPlacesTableViewBackground);
 
@@ -95,7 +96,7 @@ var checkinPlacesTableView = Titanium.UI.createTableView({
 	width:320,
 	data:populatecheckinPlacesTableView(),
 	backgroundColor:UI_BACKGROUND_COLOR,
-	top:4,
+	top:7,
 	bottom:0
 });
 
@@ -228,11 +229,11 @@ function handleNearbyPlacesButton(e){
 	var toggle = e.source.toggle;
 	if(toggle){
 		checkinTitleBar.animate({top:226, duration:500});
-		checkinPlacesTableViewBackground.animate({top:259, duration:500});
+		checkinPlacesTableViewBackground.animate({top:253, duration:500});
 		e.source.toggle = false;
 	}else{
 		checkinTitleBar.animate({top:102, duration:500});
-		checkinPlacesTableViewBackground.animate({top:135, duration:500});
+		checkinPlacesTableViewBackground.animate({top:129, duration:500});
 		e.source.toggle = true;
 	}
 }

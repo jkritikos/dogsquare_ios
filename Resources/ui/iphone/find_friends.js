@@ -228,16 +228,10 @@ function populateFindFriendsContactsTableView(uData){
 			button:'invite'
 		});
 		
-		//friend's profile image
-		var friendImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-		var friendImageBlob = friendImageFile.toBlob();
-		var friendImageBlobCropped = friendImageBlob.imageAsThumbnail(60,0,30);
+		
 		var rowFriendImage = Titanium.UI.createImageView({
-			image:friendImageBlobCropped,
+			image:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:3,
-			borderRadius:30,
-			borderWidth:2,
-			borderColor:'#f9bf30',
 			type:FRIENDS_TYPE_ROW,
 			button:'invite'
 		});
