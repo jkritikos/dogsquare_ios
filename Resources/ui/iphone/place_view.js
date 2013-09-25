@@ -66,7 +66,7 @@ function buildCheckinPlaceView(view, placeId){
 		checkinPlaceTitleLabel = Ti.UI.createLabel({
 			top:240,
 			textAlign:'left',
-			width:100,
+			width:280,
 			height:21,
 			left:16,
 			color:'black',
@@ -79,7 +79,7 @@ function buildCheckinPlaceView(view, placeId){
 		checkinPlaceDescriptionLabel = Ti.UI.createLabel({
 			top:257,
 			textAlign:'left',
-			width:100,
+			width:180,
 			height:16,
 			left:17,
 			color:'black',

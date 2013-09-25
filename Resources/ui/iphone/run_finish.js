@@ -82,7 +82,7 @@ function buildRunFinishView(obj){
 		text:obj.distance,
 		height:21,
 		textAlign:'right',
-		left:32,
+		left:25,
 		top:10,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -115,7 +115,7 @@ function buildRunFinishView(obj){
 		text:obj.pace,
 		height:21,
 		textAlign:'right',
-		left:130,
+		left:132,
 		top:10,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -313,7 +313,9 @@ function populateRunFinishTableView(o){
 	var data = getActivity(o.activity_id); 
 	var tableRows = [];
 	
-	for(i=0; i<data.dogs.length; i++){	 
+	for(i=0; i<data.dogs.length; i++){
+		Ti.API.info('Populating dogfuel row for dog '+data.dogs[i].dog_id);
+			 
 		//row
 		var row = Ti.UI.createTableViewRow({ 
 			className:'runFinishRow',
@@ -321,15 +323,11 @@ function populateRunFinishTableView(o){
 			backgroundColor:UI_BACKGROUND_COLOR,
 			selectedBackgroundColor:'transparent'
 		});
-		//dog image 
-		var dogImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-		var dogImageBlob = dogImageFile.toBlob();
-		var dogImageBlobCropped = dogImageBlob.imageAsThumbnail(50,0,25);
 		
 		var rowDogImage = Titanium.UI.createImageView({ 
-			image:dogImageBlobCropped,
+			image:API+'photo_dog?dog_id='+data.dogs[i].dog_id,
 			left:14,
-			borderRadius:25,
+			borderRadius:30,
 			borderWidth:2,
 			borderColor:'#f9bf30'
 		});
@@ -353,7 +351,7 @@ function populateRunFinishTableView(o){
 			right:105
 		});
 		
-		row.add(rowBoneImage);
+		//row.add(rowBoneImage);
 		
 		//bone fill image
 		var boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'run_finish/bone_icon_fill.png');
@@ -365,7 +363,7 @@ function populateRunFinishTableView(o){
 			zIndex:2
 		}); 
 		
-		row.add(rowBoneFillImage);
+		//row.add(rowBoneFillImage);
 		
 		//mood label
 		var rowMoodLabel = Titanium.UI.createLabel({ 

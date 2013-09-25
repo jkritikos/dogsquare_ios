@@ -138,8 +138,8 @@ function buildMapView(windowMode){
 	mapCheckInButton = Ti.UI.createButton({
 		backgroundImage:IMAGE_PATH+'map/pin_checkIn.png',
 		bottom:0,
-		width:70,
-		height:70,
+		width:67,
+		height:67,
 		zIndex:2
 	});
 	
@@ -148,8 +148,8 @@ function buildMapView(windowMode){
 	//cancel button for map filters
 	mapFilterCancelButton = Ti.UI.createButton({
 		backgroundImage:IMAGE_PATH+'common/Done_button.png',
-	    width:58,
-	    height:29
+	    width:54,
+	    height:34
 	});
 	
 	mapFilterCancelButton.addEventListener('click', handleCloseFilterViewButton);

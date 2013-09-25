@@ -215,8 +215,8 @@ addDogFieldMattingHintTextLabel.addEventListener('click', addDogHandlePicker);
 //picker done button
 var addDogPickerDoneButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'common/Done_button.png',
-    width:58,
-    height:29
+    width:54,
+    height:34
 });
 addDogPickerDoneButton.addEventListener("click", handlePickerDoneButton);
 

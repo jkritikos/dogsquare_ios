@@ -180,8 +180,8 @@ for(i=0;i<addPlaceCategories.length;i++){
 //done button for picker
 var addPlacePickerDoneButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'common/Done_button.png',
-    width:58,
-    height:29
+    width:54,
+    height:34
 });
 addPlacePickerDoneButton.addEventListener("click", handlePickerDoneButton);
 

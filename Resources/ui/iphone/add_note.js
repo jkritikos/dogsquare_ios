@@ -204,8 +204,8 @@ addNoteWindow.add(addNoteDatePicker);
 
 var addNotePickerDoneButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'common/Done_button.png',
-    width:58,
-    height:29
+    width:54,
+    height:34
 });
 addNoteDatePicker.addEventListener('change', handleDatePickerChange);
 

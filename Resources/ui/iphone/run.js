@@ -331,8 +331,8 @@ function handleEndRunButton(){
 		//done button & event listener
 		var runFinishDoneButton = Ti.UI.createButton({
 		    backgroundImage: IMAGE_PATH+'common/Done_button.png',
-		    width:58,
-		    height:29
+		    width:54,
+		    height:34
 		});
 		
 		runFinishWindow.setRightNavButton(runFinishDoneButton);
