@@ -342,6 +342,7 @@ function handlePlaceCommentButton(e){
 		checkinPlaceCommentsTextArea.hide();
 		checkinPlaceCommentsTableView.show();
 		e.source.toggle = false;
+
 	}else if(!toggle){
 		openWindows[openWindows.length - 1].setRightNavButton(null);
 		checkinPlaceCommentsBackgroundView.animate({top:-10, duration:500});
@@ -359,7 +360,6 @@ function handlePlaceViewCommentTableRows(e){
 		checkinPlaceCommentsBackgroundView.animate({top:-10, duration:200});
 		checkinPlaceCommentsButton.toggle = true;
 		openWindows[openWindows.length - 1].setRightNavButton(checkinPlaceSaveCommentButton);
-		
 		
 		checkinPlaceCommentsTextArea.focus();
 		checkinPlaceCommentsTableView.hide();
