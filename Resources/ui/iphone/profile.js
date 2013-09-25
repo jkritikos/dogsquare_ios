@@ -206,7 +206,8 @@ var profileTableView = Titanium.UI.createTableView({
 	width:320,
 	data:populateProfileTableView(),
 	backgroundColor:'d2d2d2',
-	top:13
+	top:13,
+	height:66
 });
 profileTableViewBackground.add(profileTableView);
 profileTableView.addEventListener('click', handleProfileActivityRows);

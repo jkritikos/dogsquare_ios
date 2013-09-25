@@ -320,6 +320,7 @@ function createLeftMenuRow(menuItem){
 		className:'LEFT_MENU',
 		backgroundColor:UI_MENU_BACKGROUND_COLOR,
 		selectedBackgroundColor:'#1c2027',
+		selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		menuItem:menuItem
 	});
 		

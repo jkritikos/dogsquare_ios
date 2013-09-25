@@ -102,7 +102,8 @@ function populateInboxViewTableView(mObj, userId){
 			height:'auto',
 			width:'100%',
 			backgroundColor:'transparent',
-			selectedBackgroundColor:'transparent'
+			selectedBackgroundColor:'transparent',
+			selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 		});
 		
 		var rowMessageProfileImage = Titanium.UI.createImageView({
