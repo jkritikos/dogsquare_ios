@@ -3,6 +3,11 @@ var runfinishCommentsTextArea = null;
 var runFinishCommentsTableView = null;
 var runFinishCommentsButton = null;
 
+var runFinishSaveCommentButton = null;
+
+var ADD_COMMENT = 1;
+var COMMENT_ROW = 2;
+
 function buildRunFinishView(obj){
 
 	//run finish View
@@ -230,7 +235,7 @@ function buildRunFinishView(obj){
 	
 	//background for comments
 	runFinishCommentsBackgroundView = Ti.UI.createView({
-		top:385,
+		top:375,
 		height:429,
 		width:'100%',
 		backgroundColor:UI_BACKGROUND_COLOR,
@@ -243,36 +248,31 @@ function buildRunFinishView(obj){
 		backgroundImage:IMAGE_PATH+'common/comment_field.png',
 		top:0,
 		width:320,
-		height:33,
+		height:44,
 		toggle:false,
 		button:'bar'
 	});
 	runFinishCommentsBackgroundView.add(runFinishCommentsButton);
 	//event listener for button
-	runFinishCommentsButton.addEventListener('click', handleCommentButtons);
+	runFinishCommentsButton.addEventListener('click', handleRunFinishCommentButton);
 	
-	//plus buttton to create a new comment
-	var runFinishPlusButton = Ti.UI.createButton({ 
-		backgroundImage:IMAGE_PATH+'checkin_place/add_icon.png',
-		bottom:7,
-		right:26,
-		width:12,
-		height:12,
-		button:'plus'
+	// save button
+	runFinishSaveCommentButton = Ti.UI.createButton({
+		backgroundImage:IMAGE_PATH+'common/save_button.png',
+	    width:54,
+	    height:34
 	});
-	runFinishCommentsButton.add(runFinishPlusButton);
-	//event listener for plus button
-	runFinishPlusButton.addEventListener('click', handleCommentButtons);
+	runFinishSaveCommentButton.addEventListener('click', handleRunFinishCommentSaveButton);
 	
 	//comments title label
 	var runFinishCommentsTitleLabel = Titanium.UI.createLabel({ 
 		text:'Comments',
 		color:'white',
-		top:10,
+		top:15,
 		height:20,
 		textAlign:'center',
 		left:18,
-		font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	runFinishCommentsButton.add(runFinishCommentsTitleLabel);
 	
@@ -293,11 +293,11 @@ function buildRunFinishView(obj){
 		width:320,
 		data:populateRunFinishCommentsTableView(),
 		backgroundColor:'e7e7e7',
-		top:36,
-		bottom:0,
-		allowsSelection:false
+		top:41,
+		bottom:0
 	});
 	runFinishCommentsBackgroundView.add(runFinishCommentsTableView);
+	runFinishCommentsTableView.addEventListener('click', handleRunFinishCommentTableRows);
 	
 	//remove empty rows
 	runFinishCommentsTableView.footerView = Ti.UI.createView({
@@ -412,6 +412,34 @@ function populateRunFinishCommentsTableView(){
 	
 	var tableRows = [];
 	
+	var addCommentRow = Ti.UI.createTableViewRow({
+		height:43,
+		className:'addComment',
+		backgroundColor:UI_MENU_BACKGROUND_COLOR,
+		selectedBackgroundColor:'#1c2027',
+		rowId:ADD_COMMENT
+	});
+	
+	//plus image inside button UI
+	var addCommentPlusImage = Ti.UI.createImageView({ 
+		image:IMAGE_PATH+'menu_right/add_dog_icon.png',
+		left:30
+	});
+	
+	//label inside button UI
+	var addCommentLabel = Titanium.UI.createLabel({ 
+		text:'Add a comment',
+		color:'bab9ba',
+		height:27,
+		width:125,
+		textAlign:'left',
+		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	
+	addCommentRow.add(addCommentLabel);
+	addCommentRow.add(addCommentPlusImage);
+	tableRows.push(addCommentRow);
+	
 	for(i=0;i<=5;i++){
 		
 		//comment row
@@ -420,7 +448,8 @@ function populateRunFinishCommentsTableView(){
 			height:'auto',
 			width:'100%',
 			backgroundColor:'transparent',
-			selectedBackgroundColor:'transparent'
+			selectedBackgroundColor:'transparent',
+			rowId:COMMENT_ROW
 		});
 		
 		//comment label
@@ -459,25 +488,34 @@ function populateRunFinishCommentsTableView(){
 	return tableRows;
 }
 
-//handle comments button and plus button
-function handleCommentButtons(e){
+//handle comments button
+function handleRunFinishCommentButton(e){
 	var toggle = e.source.toggle;
 	var button = e.source.button;
 	
-	if(toggle && button != 'plus'){
-		runFinishCommentsBackgroundView.animate({top:385, duration:600});
+	if(toggle){
+		openWindows[openWindows.length - 1].setRightNavButton(null);
+		runFinishCommentsBackgroundView.animate({top:375, duration:600});
 		runfinishCommentsTextArea.blur();
 		runfinishCommentsTextArea.hide();
 		runFinishCommentsTableView.show();
 		e.source.toggle = false;
-	}else if(!toggle && button != 'plus'){
-		runFinishCommentsBackgroundView.animate({top:-10, duration:600});
+	}else if(!toggle){
+		openWindows[openWindows.length - 1].setRightNavButton(null);
+		runFinishCommentsBackgroundView.animate({top:-12, duration:600});
 		runfinishCommentsTextArea.blur();
 		runfinishCommentsTextArea.hide();
 		runFinishCommentsTableView.show();
 		e.source.toggle = true;
-	}else if(button == 'plus'){
-		runFinishCommentsBackgroundView.animate({top:-10, duration:200});
+	}
+}
+
+function handleRunFinishCommentTableRows(e){
+	var row = e.row.rowId;
+	
+	if(row == ADD_COMMENT){
+		runFinishCommentsBackgroundView.animate({top:-12, duration:200});
+		openWindows[openWindows.length - 1].setRightNavButton(runFinishSaveCommentButton);
 		runFinishCommentsButton.toggle = true;
 		
 		runfinishCommentsTextArea.focus();
@@ -485,4 +523,10 @@ function handleCommentButtons(e){
 		runfinishCommentsTextArea.show();
 	}
 	
+}
+
+function handleRunFinishCommentSaveButton(e){
+	if(runfinishCommentsTextArea.value != ''){
+		
+	}
 }

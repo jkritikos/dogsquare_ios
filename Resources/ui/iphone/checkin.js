@@ -23,7 +23,7 @@ var checkinTitleBar = Ti.UI.createButton({
 	zIndex:3,
 	top:226,
 	width:320,
-	height:33,
+	height:44,
 	toggle:false
 });
 
@@ -31,11 +31,11 @@ var checkinTitleBar = Ti.UI.createButton({
 var checkinBarTitleLabel = Titanium.UI.createLabel({ 
 	text:'Nearby places',
 	color:'white',
-	top:10,
+	top:15,
 	height:20,
 	textAlign:'center',
 	left:18,
-	font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+	font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
 checkinTitleBar.add(checkinBarTitleLabel);
 checkinView.add(checkinTitleBar);
@@ -96,7 +96,7 @@ var checkinPlacesTableView = Titanium.UI.createTableView({
 	width:320,
 	data:populatecheckinPlacesTableView(),
 	backgroundColor:UI_BACKGROUND_COLOR,
-	top:7,
+	top:18,
 	bottom:0
 });
 

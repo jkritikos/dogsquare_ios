@@ -162,8 +162,9 @@ function buildCheckinPlaceView(view, placeId){
 			backgroundImage:IMAGE_PATH+'common/comment_field.png',
 			top:0,
 			width:320,
-			height:33,
+			height:44,
 			toggle:false,
+			zIndex:3,
 			button:'bar'
 		});
 		checkinPlaceCommentsBackgroundView.add(checkinPlaceCommentsButton);
@@ -183,11 +184,11 @@ function buildCheckinPlaceView(view, placeId){
 		var checkinPlaceCommentsTitleLabel = Titanium.UI.createLabel({ 
 			text:'Comments',
 			color:'white',
-			top:10,
+			top:15,
 			height:20,
 			textAlign:'center',
 			left:18,
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		checkinPlaceCommentsButton.add(checkinPlaceCommentsTitleLabel);
 		
@@ -207,7 +208,7 @@ function buildCheckinPlaceView(view, placeId){
 			minRowHeight:47,
 			width:320,
 			backgroundColor:'e7e7e7',
-			top:31,
+			top:41,
 			bottom:0
 		});
 		checkinPlaceCommentsBackgroundView.add(checkinPlaceCommentsTableView);
@@ -229,7 +230,7 @@ function populateCheckinPlaceCommentsTableView(comObj){
 	var tableRows = [];
 	
 	var addCommentRow = Ti.UI.createTableViewRow({
-		height:54,
+		height:43,
 		className:'addComment',
 		backgroundColor:UI_MENU_BACKGROUND_COLOR,
 		selectedBackgroundColor:'#1c2027',
@@ -345,7 +346,7 @@ function handlePlaceCommentButton(e){
 
 	}else if(!toggle){
 		openWindows[openWindows.length - 1].setRightNavButton(null);
-		checkinPlaceCommentsBackgroundView.animate({top:-10, duration:500});
+		checkinPlaceCommentsBackgroundView.animate({top:-11, duration:500});
 		checkinPlaceCommentsTextArea.blur();
 		checkinPlaceCommentsTextArea.hide();
 		checkinPlaceCommentsTableView.show();
@@ -357,7 +358,7 @@ function handlePlaceViewCommentTableRows(e){
 	var row = e.row.rowId;
 	
 	if(row == ADD_COMMENT){
-		checkinPlaceCommentsBackgroundView.animate({top:-10, duration:200});
+		checkinPlaceCommentsBackgroundView.animate({top:-11, duration:200});
 		checkinPlaceCommentsButton.toggle = true;
 		openWindows[openWindows.length - 1].setRightNavButton(checkinPlaceSaveCommentButton);
 		

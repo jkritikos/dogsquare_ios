@@ -171,7 +171,7 @@ var profileActivityBar = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'common/comment_field.png',
 	top:307,
 	width:320,
-	height:33,
+	height:44,
 	toggle:false,
 	zIndex:7
 });
@@ -179,11 +179,11 @@ var profileActivityBar = Ti.UI.createButton({
 var profileActivityLabel = Titanium.UI.createLabel({ 
 	text:'Activity',
 	color:'white',
-	top:10,
+	top:15,
 	height:20,
 	textAlign:'center',
 	left:29,
-	font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
+	font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
 profileActivityBar.add(profileActivityLabel);
 
@@ -194,8 +194,8 @@ profileActivityBar.addEventListener('click', handleActivityButton);
 var profileTableViewBackground = Titanium.UI.createView({ 
 	backgroundColor:'d2d2d2',
 	width:'100%',
-	height:175,
-	top:331,
+	height:170,
+	top:337,
 	zIndex:6
 });
 viewProfile.add(profileTableViewBackground);
@@ -206,8 +206,7 @@ var profileTableView = Titanium.UI.createTableView({
 	width:320,
 	data:populateProfileTableView(),
 	backgroundColor:'d2d2d2',
-	top:10,
-	bottom:0
+	top:13
 });
 profileTableViewBackground.add(profileTableView);
 profileTableView.addEventListener('click', handleProfileActivityRows);
@@ -287,13 +286,13 @@ function handleActivityButton(e){
 	var toggle = e.source.toggle;
 	if(toggle){
 		profileActivityBar.animate({top:307, duration:500});
-		profileTableViewBackground.animate({top:331, duration:500});
-		profileTableViewBackground.animate({height:88, duration:500});
+		profileTableViewBackground.animate({top:337, duration:500});
+		profileTableView.animate({height:66, duration:500});
 		e.source.toggle = false;
 	}else{
 		profileActivityBar.animate({top:218, duration:500});
-		profileTableViewBackground.animate({top:243, duration:500});
-		profileTableViewBackground.animate({height:176, duration:500});
+		profileTableViewBackground.animate({top:248, duration:500});
+		profileTableView.animate({height:155, duration:500});
 		e.source.toggle = true;
 	}
 }
