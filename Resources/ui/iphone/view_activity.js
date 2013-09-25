@@ -128,7 +128,7 @@ function buildViewActivityView(aId){
 		viewActivityAvgPaceNumberLabel = Titanium.UI.createLabel({
 			height:21,
 			textAlign:'right',
-			right:206,
+			right:207,
 			top:10,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
@@ -812,6 +812,11 @@ function updateActivityCoordinates(coordsObj){
 		};
 		
 		viewActivityMap.setLocation(viewActivityRegion);
+		
+		//TMP DEBUG
+		for(var i=0; i < coordsObj.length; i++){
+			Ti.API.info('-- viewActivity coordinates for route: lat '+coordsObj[i].latitude+' lon '+coordsObj[i].longitude);
+		}
 		
 		//route object
 		var route = {

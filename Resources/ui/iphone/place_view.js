@@ -506,6 +506,7 @@ function getOnlinePlace(pId){
 //update checkin place UI
 function updateCheckinPlace(placeObj){
 	
+	Ti.API.info('place_view.js shows '+placeObj.name+' at latitude '+placeObj.latitude+' and longitude '+placeObj.longitude);
 	//update map and put annotation
 	checkinPlaceMapAnnotation.latitude = placeObj.latitude;
 	checkinPlaceMapAnnotation.longitude = placeObj.longitude;

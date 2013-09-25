@@ -248,11 +248,18 @@ genderPicker[1]=Ti.UI.createPickerRow({title:'Female', id:2});
 var dogBreedPicker = [];
 var addDogViewBreeds = getDogBreeds();
 
+//Ti.API.info('------ add dog breeds:  '+addDogViewBreeds.length);
 for(i=0;i<addDogViewBreeds.length;i++){
+	
+	//Ti.API.info('------ breed '+addDogViewBreeds[i].name);
+	
 	var name = addDogViewBreeds[i].name;
 	var id = addDogViewBreeds[i].id;
 	
-	dogBreedPicker[i]=Ti.UI.createPickerRow({title:name, id:id});
+	if(!isStringNullOrEmpty(name)){
+		dogBreedPicker[i]=Ti.UI.createPickerRow({title:name, id:id});
+	}
+	
 }
 
 var mattingPicker = [];

@@ -23,6 +23,9 @@ var runFinishWindow = null;
 //Cronometer
 var horas = 0, minutos = 0, segundos = 0, total_seconds = 0;
 var cronometerInterval = null;
+var timestampCurrent = 0;
+var timestampPrevious = 0;
+var tick = 0;
 
 function buildRunView(){
 	//Reset cronometer
@@ -273,7 +276,7 @@ function handleStartRunButton(){
 		runningMode = false;
 		
 		Titanium.Geolocation.removeEventListener('location',trackLocation);
-		Ti.API.info('Tracking location OFF - collected '+runningPathCoordinates.length+' coordinates');
+		Ti.API.info('Tracking location PAUSED - collected '+runningPathCoordinates.length+' coordinates');
 		
 		//Enable window sliding
 		window.setPanningMode("FullViewPanning");
@@ -286,10 +289,15 @@ function handleEndRunButton(){
 	
 	
 	if(runningMode){
+		//Clear cronometer
 		runningMode = false;
 		clearInterval(cronometerInterval);
+		//Clear location tracking
+		Titanium.Geolocation.removeEventListener('location',trackLocation);
+		Ti.API.info('Tracking location ENDS - collected '+runningPathCoordinates.length+' coordinates');
 		
-		var dogfuelEarned = calculateDogfuel(runningPathCoordinates);
+		
+		var dogfuelEarned = calculateDogfuel(runObject.activity_id);
 		
 		//Update our activity object
 		endActivity(runObject);
@@ -372,17 +380,28 @@ function trackLocation(){
 		
 		//only use accurate coordinates
 		if(e.coords.accuracy <= 15){
+			tick++;
+			
+			if(tick == 1){
+				timestampCurrent = new Date().getTime();
+				timestampPrevious = new Date().getTime();
+			} else {
+				timestampPrevious = timestampCurrent;
+				timestampCurrent = new Date().getTime();
+			}
+			
+			var timestampDiff = timestampCurrent - timestampPrevious;
 			
 			//Get weather once we get the 1st accurate set of coordinates
 			if(!runObject.temperature){
 				weather.getWeather(e.coords.latitude, e.coords.longitude);	
 			}
 			
-			//Save coordinates
-			saveActivityCoordinates(runObject.activity_id, e.coords.latitude, e.coords.longitude);
-			
 			var tmpDistance = calculateDistance(coordinates);
 			runObject.distance = tmpDistance;
+			
+			//Save coordinates
+			saveActivityCoordinates(runObject.activity_id, e.coords.latitude, e.coords.longitude, timestampCurrent, timestampDiff, tmpDistance);
 			
 			runningPathCoordinates.push(coordinates);
 			

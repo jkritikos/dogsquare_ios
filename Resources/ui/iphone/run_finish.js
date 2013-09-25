@@ -76,8 +76,8 @@ function buildRunFinishView(obj){
 	var runFinishDistanceNumberLabel = Titanium.UI.createLabel({
 		text:obj.distance,
 		height:21,
-		textAlign:'center',
-		left:36,
+		textAlign:'right',
+		left:32,
 		top:10,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -110,7 +110,7 @@ function buildRunFinishView(obj){
 		text:obj.pace,
 		height:21,
 		textAlign:'right',
-		left:127,
+		left:130,
 		top:10,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
