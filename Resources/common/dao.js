@@ -1,6 +1,6 @@
 var SERVER = '';
 
-var PRODUCTION_MODE = false;
+var PRODUCTION_MODE = true;
 
 if(!PRODUCTION_MODE){
 	//UrbanAirship.key='QcPHp0gxT3-3yj5Y9aLDpA';

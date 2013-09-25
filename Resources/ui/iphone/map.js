@@ -22,7 +22,38 @@ var mapSearchCategoriesTableView = null;
 var mapCheckInButton = null;
 var mapview = null;
 
+//Map coordinates
+var mapLatitude = null;
+var mapLongitude = null;
+
 function buildMapView(windowMode){
+	
+	Titanium.Geolocation.getCurrentPosition(function(e){
+	//Ti.Geolocation.addEventListener('location', function(e) {
+		if (e.error) {
+			Ti.API.error('map.js : geo - position' + e.error); 
+			return;
+		 } 
+		 
+		 mapLatitude = e.coords.latitude; 
+		 mapLongitude = e.coords.longitude; 
+		 var accuracy = e.coords.accuracy; 
+		 var timestamp = e.coords.timestamp;
+		 
+		 Ti.API.info('Got position lat '+mapLatitude+' lon '+mapLongitude+' with accuracy '+accuracy);
+		 
+		 //map region object
+		var mapRegion = {
+			latitude: mapLatitude,
+			longitude: mapLongitude,
+			animate:true,
+			latitudeDelta:0.001,
+			longitudeDelta:0.001
+		};
+			
+		mapview.setLocation(mapRegion);
+	});
+	
 	viewMapTargetMode = windowMode;
 	CURRENT_VIEW = VIEW_MAP;
 	
@@ -156,10 +187,13 @@ function buildMapView(windowMode){
 	});
 	 
 	mapview = Titanium.Map.createView({
+		width:'100%',
+		top:0,
 	    mapType: Titanium.Map.STANDARD_TYPE,
-	    region: {latitude:42.30,longitude:-71.18,latitudeDelta:0.03, longitudeDelta:0.1},
 	    animate:true,
-	    regionFit:true
+	    regionFit:true,
+	    userLocation:false,
+	    visible:true
 	});
 	
 	viewMap.add(mapview);
