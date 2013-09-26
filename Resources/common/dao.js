@@ -505,20 +505,28 @@ function saveActivity(dogs){
 
 //Saves activities to the local db
 function saveActivities(activities){
-	var now = new Date().getTime();
-	
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
 	if(activities != null){
 		for(var i=0; i < activities.length; i++){
-			var start_date = activities[i].Activity.start_date; 
-			var start_time = activities[i].Activity.start_time;
+			var start_date = activities[i].Activity.start_date * 1000; 
+			var start_time = activities[i].Activity.start_time * 1000;
+			var id = activities[i].Activity.id;
+			
+			
 			Ti.API.info('start_date: '+start_date +'start_time: '+start_time);
+			var row = db.execute('select id from activities where activity_id = ? ', id);
 			
-			db.execute('insert into activities (start_date,start_time,type_id) values (?,?,1)',start_date, start_time);
-			var activityId = db.lastInsertRowId;
-			
-			db.execute('insert into activity_dogs (activity_id, dog_id) values (?,?)', activityId ,activities[i].Activity.dog_id);
+			if(row.field(0) == null){
+				db.execute('insert into activities (activity_id, start_date, start_time, type_id) values (?,?,?,1)', id, start_date, start_time);
+				var activityId = db.lastInsertRowId;
+				
+				db.execute('insert into activity_dogs (activity_id, dog_id) values (?,?)', activityId ,activities[i].Activity.dog_id);
+				Ti.API.info('activity_id: '+activityId +'dog_id: '+activities[i].Activity.dog_id);
+			}else{
+				db.execute('insert into activity_dogs (activity_id, dog_id) values (?,?)', row.field(0) ,activities[i].Activity.dog_id);
+				Ti.API.info('activity_id: '+row.field(0) +'dog_id: '+activities[i].Activity.dog_id);
+			}
 		}
 	}
 	

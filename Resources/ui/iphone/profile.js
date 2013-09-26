@@ -325,12 +325,9 @@ function populateProfileTableView(){
 				activityId:userActivities[i].activity_id
 			});
 			
-			var rowActivityImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-			var rowActivityImageBlob = rowActivityImageFile.toBlob();
-			var rowActivityImageBlobCropped = rowActivityImageBlob.imageAsThumbnail(54,0,27);
 			var rowActivityImage = Titanium.UI.createImageView({
-				image:rowActivityImageBlobCropped,
-				left:25,
+				image:API+'photo_dog?dog_id='+userActivities[i].dogs[0].dog_id,
+				left:15,
 				borderRadius:27,
 				borderWidth:3,
 				borderColor:'f5a92c'
