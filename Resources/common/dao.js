@@ -729,6 +729,7 @@ function calculateDogfuel(activityId){
 	}
 	
 	Ti.API.info(' *** totalWalkDistance '+totalWalkDistance+' Km, totalPlaytime '+totalPlaytime+' ms');
+	alert(' *** totalWalkDistance '+totalWalkDistance+' Km, totalPlaytime '+totalPlaytime+' ms');
 	
 	return null;
 }

@@ -47,8 +47,8 @@ function buildMapView(windowMode){
 			latitude: mapLatitude,
 			longitude: mapLongitude,
 			animate:true,
-			latitudeDelta:0.001,
-			longitudeDelta:0.001
+			latitudeDelta:0.003,
+			longitudeDelta:0.003
 		};
 			
 		mapview.setLocation(mapRegion);
@@ -104,7 +104,7 @@ function buildMapView(windowMode){
 	mapSearchCategoriesBackground = Titanium.UI.createView({
 		backgroundColor:UI_BACKGROUND_COLOR,
 		width:320,
-		height:IPHONE5 ? 514 : 416,
+		height:'100%',
 		opacity:0,
 		zIndex:3
 	});
@@ -198,7 +198,7 @@ function buildMapView(windowMode){
 	    mapType: Titanium.Map.STANDARD_TYPE,
 	    animate:true,
 	    regionFit:true,
-	    userLocation:false,
+	    userLocation:true,
 	    visible:true
 	});
 	

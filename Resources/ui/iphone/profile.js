@@ -316,8 +316,8 @@ function populateProfileTableView(activities){
 			var rowActivityImage = Titanium.UI.createImageView({
 				image:IMAGE_PATH+'common/default_dog_photo.png',
 				left:15,
-				borderRadius:27,
-				borderWidth:3,
+				borderRadius:30,
+				borderWidth:2,
 				borderColor:'f5a92c'
 			});	
 			

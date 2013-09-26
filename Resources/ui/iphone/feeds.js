@@ -114,38 +114,44 @@ function populateFeedsTableView(data) {
 		var rowNotificationProfileImage = Titanium.UI.createImageView({
 			image:REMOTE_USER_IMAGES+data[i].Feed.user_from_thumb,
 			left:2,
-			width:54,
-			height:54,
-			borderRadius:27,
-			borderWidth:3,
+			borderRadius:30,
+			borderWidth:2,
 			borderColor:'f5a92c'
 		});
+		
+		//Wrapper view with vertical layout for the text in each row
+		var notificationWrapperView = Ti.UI.createView({
+			layout:'vertical'
+		});
+		
 		//notification label
 		var rowNotificationLabel = Titanium.UI.createLabel({ 
 			text:notificationText,
-			color:'black',
-			height:'auto',
-			width:180,
+			color:'#605353',
 			textAlign:'left',
-			left:65,
-			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
+			width:'auto',
+			height:'auto',
+			left:70,
+			top:10,
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		//date label
 		var rowDateLabel = Titanium.UI.createLabel({ 
 			text:relativeTime(data[i].Feed.created),
-			color:'black',
-			height:18,
+			color:'#938787',
+			textAlign:'left',
 			width:'auto',
-			textAlign:'right',
-			right:9,
-			bottom:4,
-			font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
+			height:'auto',
+			left:70,
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
+		notificationWrapperView.add(rowNotificationLabel);
+		notificationWrapperView.add(rowDateLabel);
+		
 		notificationRow.add(rowNotificationProfileImage);
-		notificationRow.add(rowNotificationLabel);
-		notificationRow.add(rowDateLabel);
+		notificationRow.add(notificationWrapperView);
 		
 		tableRows.push(notificationRow);
 	}
