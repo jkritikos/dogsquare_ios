@@ -204,13 +204,14 @@ function buildDogProfileView(dogId){
 		dogProfileView.add(dogProfileBoneImage);
 		
 		//Filled bone image
-		var boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'dog_profile/bone_colours.png');
-		var boneFillImageBlob = boneFillImage.toBlob();
-		var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:90});
+		//var boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'dog_profile/bone_colours.png');
+		//var boneFillImageBlob = boneFillImage.toBlob();
+		//var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:70});
 		var dogProfileBoneImageColor = Ti.UI.createImageView({ 
-			image:boneFillImageBlobCropped,
+			image:IMAGE_PATH+'dog_profile/bone_colours.png',
 			bottom:44,
-			left:143
+			left:143,
+			zIndex:2
 		});
 		
 		dogProfileView.add(dogProfileBoneImageColor);

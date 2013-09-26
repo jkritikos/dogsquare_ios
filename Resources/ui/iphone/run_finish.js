@@ -347,23 +347,20 @@ function populateRunFinishTableView(o){
 		
 		//bone image
 		var rowBoneImage = Ti.UI.createImageView({ 
-			image:IMAGE_PATH+'run_finish/bone_icon.png',
+			image:IMAGE_PATH+'run_finish/bone_grey.png',
 			right:105
 		});
 		
-		//row.add(rowBoneImage);
-		
+		row.add(rowBoneImage);
+	
 		//bone fill image
-		var boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'run_finish/bone_icon_fill.png');
-		var boneFillImageBlob = boneFillImage.toBlob();
-		var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:10});
 		var rowBoneFillImage = Ti.UI.createImageView({ 
-			image:boneFillImageBlobCropped,
+			image:IMAGE_PATH+'run_finish/bone_colours.png',
 			right:105,
 			zIndex:2
 		}); 
 		
-		//row.add(rowBoneFillImage);
+		row.add(rowBoneFillImage);
 		
 		//mood label
 		var rowMoodLabel = Titanium.UI.createLabel({ 

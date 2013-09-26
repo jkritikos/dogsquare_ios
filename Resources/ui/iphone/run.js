@@ -203,6 +203,8 @@ function handleMapButton(){
 	runMapWindow.setLeftNavButton(runMapBackButton);
 	
 	runMapBackButton.addEventListener("click", function() {
+		//TODO isws edw thelei openWindows[openWindows.length-1]
+		navController.getWindow().setTitleControl();
 	    navController.close(runMapWindow);
 	});
 	

@@ -376,11 +376,8 @@ function populateViewActivityDogsTableView(dogObj){
 		row.add(rowBoneImage);
 		
 		//Filled bone image
-		var boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'run_finish/bone_colours.png');
-		var boneFillImageBlob = boneFillImage.toBlob();
-		var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:110});
 		var rowBoneFillImage = Ti.UI.createImageView({ 
-			image:boneFillImageBlobCropped,
+			image:IMAGE_PATH+'run_finish/bone_colours.png',
 			right:10,
 			top:20,
 			zIndex:2
