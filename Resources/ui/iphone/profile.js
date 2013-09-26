@@ -83,7 +83,6 @@ profileTransparentFollowerView.add(profileOpacityBarLabel1);
 
 //number of followers label on the opacity bar
 var profileOpacityBarNumberLabel1 = Ti.UI.createLabel({
-	text:userObject.followers,
 	color:'black',
 	textAlign:'center',
 	width:'auto',
@@ -110,7 +109,6 @@ profileTransparentFollowingView.add(profileOpacityBarLabel2);
 //number of following label on the opacity bar
 Ti.API.info('Creating profile view - using object = '+JSON.stringify(userObject));
 var profileOpacityBarNumberLabel2 = Ti.UI.createLabel({
-	text:userObject.following,
 	color:'black',
 	textAlign:'center',
 	width:'auto',
@@ -204,7 +202,6 @@ viewProfile.add(profileTableViewBackground);
 var profileTableView = Titanium.UI.createTableView({
 	minRowHeight:71,
 	width:320,
-	data:populateProfileTableView(),
 	backgroundColor:'d2d2d2',
 	top:13,
 	height:66
@@ -217,6 +214,8 @@ profileTableView.footerView = Ti.UI.createView({
     height: 1,
     backgroundColor: 'transparent'
 });
+
+getOnlineUser();
 
 var runWindow = null;
 
@@ -298,23 +297,12 @@ function handleActivityButton(e){
 	}
 }
 
-function populateProfileTableView(){
-	var userActivities = getActivities();
+function populateProfileTableView(activities){
 	var tableRows = [];
 	
-	if(userActivities.length > 0){
+	if(activities.length > 0){
 		
-		for(var i=0; i < userActivities.length; i++){
-			
-			var dogNames = '';
-			var dogPhoto = '';
-			var dogInfo = userActivities[i].dogs;
-			for(var z=0; z < dogInfo.length; z++){
-				dogNames += dogInfo[z].name + ', ';
-				dogPhoto = dogInfo[z].photo;
-			}
-			
-			dogNames = dogNames.substr(0, dogNames.length-2);
+		for(var i=0; i < activities.length; i++){
 			
 			var activityRow = Ti.UI.createTableViewRow({
 				className:'activityRow',
@@ -322,16 +310,18 @@ function populateProfileTableView(){
 				width:'100%',
 				backgroundColor:'white',
 				selectedBackgroundColor:'transparent',
-				activityId:userActivities[i].activity_id
+				activityId:activities[i].Activity.id
 			});
 			
 			var rowActivityImage = Titanium.UI.createImageView({
-				image:API+'photo_dog?dog_id='+userActivities[i].dogs[0].dog_id,
+				image:IMAGE_PATH+'common/default_dog_photo.png',
 				left:15,
 				borderRadius:27,
 				borderWidth:3,
 				borderColor:'f5a92c'
 			});	
+			
+			rowActivityImage.image = REMOTE_DOG_IMAGES + activities[i].Activity.thumb;
 			
 			//Wrapper view with vertical layout for the text in each row
 			var activityWrapperView = Ti.UI.createView({
@@ -340,7 +330,7 @@ function populateProfileTableView(){
 			
 			//activity label
 			var activityLabel = Ti.UI.createLabel({
-				text:'Gone for a walk with '+dogNames,
+				text:'Gone for a walk with '+activities[i].Activity.dogs,
 				top:10,
 				textAlign:'left',
 				width:'auto',
@@ -352,7 +342,7 @@ function populateProfileTableView(){
 			
 			//time label
 			var timeLabel = Ti.UI.createLabel({
-				text:relativeTime(userActivities[i].start_time),
+				text:relativeTime(activities[i].Activity.created * 1000),
 				//bottom:18,
 				textAlign:'left',
 				width:'auto',
@@ -398,7 +388,7 @@ function populateProfileTableView(){
 		tableRows.push(activityRow);
 	}
 
-	return tableRows;
+	profileTableView.setData(tableRows);
 }
 
 function handleProfileActivityRows(e){
@@ -470,4 +460,59 @@ function handleFollowersFolowingTab(e){
 	
 	openWindows.push(listUsersWindow);
 	navController.open(listUsersWindow);
+}
+
+//get other user info by id from server
+function getOnlineUser(){
+	Ti.API.info('getOnlineOtherUser() called for user_id='+ userObject.userId); 	
+	//progress view
+	var progressView = new ProgressView({window:viewProfile});
+	progressView.show({
+		text:"Loading..."
+	});
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		navController.getWindow().setTitle('');
+	};
+	
+	xhr.onload = function(e){
+			
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			//Hide progress view
+			progressView.hide();
+			
+			populateProfileTableView(jsonData.data.activities);
+			
+			profileOpacityBarNumberLabel1.text = jsonData.data.user.followers;
+			profileOpacityBarNumberLabel2.text = jsonData.data.user.following;
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+		} else {
+			//Show the error message we got back from the server
+			progressView.change({
+		        error:true,
+		        text:getErrorMessage(jsonData.data.response)
+		    });
+		    
+			//and hide it after a while		    
+		    setTimeout(function() {
+			    progressView.hide();
+			}, ERROR_MSG_REMOVE_TIMEOUT);
+		}
+		
+	};
+	xhr.open('GET',API+'getUser');
+	xhr.send({
+		user_id:userObject.userId
+	});
 }

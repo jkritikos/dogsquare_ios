@@ -23,7 +23,7 @@ var ProgressView = function(dictionary) {
             left:0,
             width:"100%",
             height:"100%",
-            zIndex:3
+            zIndex:10
         });
         
         _viewBackgroundBackActivityIndicator = Ti.UI.createView({
@@ -31,7 +31,7 @@ var ProgressView = function(dictionary) {
             opacity:1.0,
             width:100,
             height:100,
-            zIndex:3
+            zIndex:10
         });
         _viewFullBackgroundActivityIndicator.add(_viewBackgroundBackActivityIndicator);
         
@@ -41,7 +41,7 @@ var ProgressView = function(dictionary) {
             opacity:0.9,
             width:100,
             height:100,
-            zIndex:3
+            zIndex:10
         });
         _viewBackgroundBackActivityIndicator.add(_viewBackgroundActivityIndicator);
         
@@ -53,14 +53,14 @@ var ProgressView = function(dictionary) {
             left:0,
             right:0,
             bottom:0,
-            zIndex:3
+            zIndex:10
         });
         _viewBackgroundBackActivityIndicator.add(_viewActivityIndicator);
         
         _imageViewStatus = Ti.UI.createImageView({
             width:28,
             height:28,
-            zIndex:3
+            zIndex:10
         });
         
         _activityIndicator = Ti.UI.createActivityIndicator({
@@ -76,7 +76,7 @@ var ProgressView = function(dictionary) {
             right:10,
             bottom:10,
             height:16,
-            zIndex:3
+            zIndex:10
         });
         
         _activityIndicator.show();
