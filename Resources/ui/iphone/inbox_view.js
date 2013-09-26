@@ -219,13 +219,17 @@ function handleInboxViewSendButton(){
 	var toName = inboxViewToName;
 	var message = inboxViewChatField.value;
 	var view = VIEW_INBOX_VIEW;
+	inboxViewChatField.blur();
+	inboxViewChatField.value = '';
 	
 	if(message != '') {
 		sendMessageToUser(toId, toName, message, view);
 	}
 	
-	inboxViewChatField.blur();
-	inboxViewChatField.value = '';
+	if(inboxViewTableView.data.length != 0){
+		inboxViewTableView.scrollToIndex(inboxViewTableView.data[0].rows.length - 1);
+	}
+	
 }
 
 function appendRowInboxViewTableView(date, message){

@@ -307,7 +307,7 @@ function updateInboxNewView(userId, name){
 	if(messages.length != 0){
 		populateInboxNewChatTableView(messages, toUserId);
 	}
-	
+	inboxNewSendToEraseIcon.show();
 	inboxNewSendToChosenLabel.text = name;
 }
 
@@ -349,11 +349,8 @@ function handleInboxNewSendButton(){
 		sendMessageToUser(toId, toName, message, view);
 	}
 	
-	if(inboxNewChatTableView.data.length != 0){
-		inboxNewChatTableView.scrollToIndex(inboxNewChatTableView.data[0].rows.length - 1);
-	}
-	
-	inboxNewSendToTextField.blur();
+	inboxNewChatField.blur();
+	inboxNewChatField.value = '';
 }
 
 function populateInboxNewChatTableView(mObj, userId){
@@ -370,7 +367,8 @@ function populateInboxNewChatTableView(mObj, userId){
 			height:'auto',
 			width:'100%',
 			backgroundColor:'transparent',
-			selectedBackgroundColor:'transparent'
+			selectedBackgroundColor:'transparent',
+			selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 		});
 		
 		var rowMessageProfileImage = Titanium.UI.createImageView({

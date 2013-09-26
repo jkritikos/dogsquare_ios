@@ -560,15 +560,15 @@ function updateProfileOther(userObj){
 function handleProfileOtherChatButton(e){
 	if(e.source.mutual){
 		
-	Ti.include('ui/iphone/inbox_new.js');
-	
-	var userId = e.source.userId;
-	var name = e.source.mName;
-	
-	updateInboxNewView(userId, name);
-	
-	openWindows.push(inboxNewWindow);
-	navController.open(inboxNewWindow);	
+		Ti.include('ui/iphone/inbox_new.js');
+		
+		var userId = e.source.userId;
+		var name = e.source.mName;
+		
+		updateInboxNewView(userId, name);
+		
+		openWindows.push(inboxNewWindow);
+		navController.open(inboxNewWindow);	
 		
 	}else{
 		alert('You are not mutual followers');

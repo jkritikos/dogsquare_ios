@@ -647,9 +647,8 @@ function handleLeftSearchResultRows(e){
 		navController.getWindow().setTitle(userObject.name);
 	}else if (type == 'user'){
 		Ti.include('ui/iphone/profile_other.js');
-		
-		var profileOtherView = buildProfileOtherView(userId);
 		var nameUser = e.row.children[1].text;
+		var profileOtherView = buildProfileOtherView(userId, nameUser);
 		
 		navController.getWindow().add(profileOtherView);
 		navController.getWindow().setTitle(nameUser);
