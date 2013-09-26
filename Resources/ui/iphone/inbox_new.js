@@ -108,7 +108,7 @@ var inboxNewContactsTableView = Titanium.UI.createTableView({
 	width:320,
 	backgroundColor:'transparent',
 	top:39,
-	bottom:0
+	bottom:48
 });
 inboxNewContactsTableView.addEventListener('click', handleNewContactsTableRows);
 inboxNewWindow.add(inboxNewContactsTableView);
@@ -122,7 +122,7 @@ inboxNewContactsTableView.footerView = Ti.UI.createView({
 
 var inboxNewChatTableView = Titanium.UI.createTableView({
 	minRowHeight:60,
-	height:329,
+	height:IPHONE5 ? 417 : 329,
 	width:320,
 	backgroundColor:'transparent',
 	separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
@@ -272,7 +272,7 @@ function handleNewContactsTableRows(e){
 	inboxNewSendToEraseIcon.show();
 	inboxNewChatField.focus();
 	inboxNewWindow.animate({bottom:215, duration:300});
-	inboxNewContactsTableView.animate({height:114, duration:200});
+	inboxNewContactsTableView.animate({height:IPHONE5 ? 202 : 114, duration:200});
 	inboxNewSendToTextField.hide();
 	inboxNewSendToTextField.value = '';
 	
@@ -326,13 +326,13 @@ function handleSendToTextFieldChange(e){
 }
 
 function handleSendToTextFieldBlur(e){
-	inboxNewChatTableView.height = 377;
-	inboxNewContactsTableView.height = 377;
+	inboxNewChatTableView.height = IPHONE5 ? 417 : 377;
+	inboxNewContactsTableView.height = IPHONE5 ? 417 : 377;
 }
 
 function handleSendToTextFieldFocus(e){
-	inboxNewChatTableView.height = 117;
-	inboxNewContactsTableView.height = 117;
+	inboxNewChatTableView.height = IPHONE5 ? 249 : 117;
+	inboxNewContactsTableView.height = IPHONE5 ? 249 : 117;
 	
 	if(inboxNewChatTableView.data.length != 0){
 		inboxNewChatTableView.scrollToIndex(inboxNewChatTableView.data[0].rows.length - 1);
@@ -552,13 +552,13 @@ function handleInboxNewChatTextFieldBlur(){
 		inboxNewChatFieldLabel.hide();
 	}
 	inboxNewWindow.animate({bottom:0, duration:200});
-	inboxNewContactsTableView.animate({height:329, duration:200});
-	inboxNewChatTableView.animate({height:329, duration:200});
+	inboxNewContactsTableView.animate({height:IPHONE5 ? 417 : 329, duration:200});
+	inboxNewChatTableView.animate({height:IPHONE5 ? 417 : 329, duration:200});
 }
 
 //handle focus on chat text field
 function handleInboxNewChatTextFieldFocus(){
 	inboxNewWindow.animate({bottom:215, duration:300});
-	inboxNewContactsTableView.animate({height:115, duration:200});
-	inboxNewChatTableView.animate({height:115, duration:200});
+	inboxNewContactsTableView.animate({height:IPHONE5 ? 202 : 115, duration:200});
+	inboxNewChatTableView.animate({height:IPHONE5 ? 202 : 115, duration:200});
 }

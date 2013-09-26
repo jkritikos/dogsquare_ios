@@ -104,7 +104,7 @@ function buildMapView(windowMode){
 	mapSearchCategoriesBackground = Titanium.UI.createView({
 		backgroundColor:UI_BACKGROUND_COLOR,
 		width:320,
-		height:416,
+		height:IPHONE5 ? 514 : 416,
 		opacity:0,
 		zIndex:3
 	});
@@ -119,6 +119,12 @@ function buildMapView(windowMode){
 	
 	mapSearchCategoriesTableView.addEventListener('scroll', handleMapSearchCategoriesScroll);
 	mapSearchCategoriesTableView.addEventListener('click', handleMapSearchCategoriesRows);
+	
+	//inbox table view footer
+	mapSearchCategoriesTableView.footerView = Ti.UI.createView({
+	    height: 1,
+	    backgroundColor: 'transparent'
+	});
 	
 	var mapSearchFilterData = [];
 	mapSearchFilterData.push(createMapFilterRow(FILTER_PARK));
@@ -302,6 +308,7 @@ function handleCloseFilterViewButton(){
 }
 
 function handleMapSearchCategoriesRows(){
+	navController.getWindow().setRightNavButton(rightBtn);
 	mapSearchTxtfield.blur();
 	mapSearchCategoriesBackground.animate({opacity:0, duration:400});
 }

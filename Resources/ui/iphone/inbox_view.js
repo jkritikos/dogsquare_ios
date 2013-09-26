@@ -23,7 +23,7 @@ function buildViewInboxView(messages){
 			width:302,
 			backgroundColor:UI_BACKGROUND_COLOR,
 			separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
-			height:354
+			height:IPHONE5 ? 451 : 354
 		});
 		viewInboxView.add(inboxViewTableView);
 		
@@ -205,13 +205,13 @@ function handleChatTextFieldBlur(){
 		inboxViewChatFieldLabel.hide();
 	}
 	viewInboxView.animate({bottom:0, duration:200});
-	inboxViewTableView.animate({height:354, duration:200});
+	inboxViewTableView.animate({height:IPHONE5 ? 451 : 354, duration:200});
 }
 
 //handle focus on chat text field
 function handleChatTextFieldFocus(){
 	viewInboxView.animate({bottom:215, duration:300});
-	inboxViewTableView.animate({height:140, duration:200});
+	inboxViewTableView.animate({height:IPHONE5 ? 236 : 140, duration:200});
 }
 
 function handleInboxViewSendButton(){

@@ -178,7 +178,7 @@ function buildDogProfileView(dogId){
 			height:'auto',
 			textAlign:'left',
 			left:35,
-			bottom:58,
+			bottom:IPHONE5 ? 114 : 58,
 			opacity:0.6,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
@@ -190,7 +190,7 @@ function buildDogProfileView(dogId){
 			height:'auto',
 			textAlign:'left',
 			left:91,
-			bottom:58,
+			bottom:IPHONE5 ? 114 : 58,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		dogProfileView.add(dogProfileMoodPercentLabel);
@@ -198,7 +198,7 @@ function buildDogProfileView(dogId){
 		//Empty bone image
 		var dogProfileBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'dog_profile/bone_grey.png',
-			bottom:44,
+			bottom:IPHONE5 ? 96 : 44,
 			right:30
 		});
 		dogProfileView.add(dogProfileBoneImage);
@@ -209,7 +209,7 @@ function buildDogProfileView(dogId){
 		//var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:70});
 		var dogProfileBoneImageColor = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'dog_profile/bone_colours.png',
-			bottom:44,
+			bottom:IPHONE5 ? 96 : 44,
 			left:143,
 			zIndex:2
 		});
@@ -218,7 +218,7 @@ function buildDogProfileView(dogId){
 		
 		//Heart image for likes
 		dogProfileHeartImage = Ti.UI.createImageView({ 
-			bottom:5,
+			bottom:IPHONE5 ? 55 : 5,
 			right:77,
 			dogId:dogId
 		});
@@ -231,7 +231,7 @@ function buildDogProfileView(dogId){
 			height:'auto',
 			textAlign:'left',
 			left:36,
-			bottom:16,
+			bottom:IPHONE5 ? 64 : 16,
 			opacity:0.6,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});

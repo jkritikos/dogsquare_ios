@@ -112,7 +112,7 @@ function buildRegisterWindow(){
 	var registerTxtFieldWidth = 192;
 	
 	registerFormScrollBackground = Ti.UI.createScrollView({
-		top:192,
+		top:IPHONE5 ? 221 : 192,
 		width:192,
 		height:140
 	});

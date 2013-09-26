@@ -34,7 +34,7 @@ addPlaceBackButton.addEventListener("click", function() {
 var addPlaceMap = Titanium.Map.createView({ 
 	width:'100%',
 	top:0,
-	height:161,
+	height:IPHONE5 ? 248 : 161,
     mapType:Titanium.Map.STANDARD_TYPE,
     animate:true,
     regionFit:true,
@@ -46,7 +46,7 @@ addPlaceWindow.add(addPlaceMap);
 //photo area button
 var addPlacePhotoAreaButton = Ti.UI.createButton({ 
 	backgroundImage:IMAGE_PATH+'add_place/photo_area.png',
-	top:158,
+	top:IPHONE5 ? 246 : 158,
 	height:138,
 	width:320
 });

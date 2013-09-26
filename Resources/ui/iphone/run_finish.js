@@ -437,7 +437,7 @@ function populateRunFinishCommentsTableView(){
 	addCommentRow.add(addCommentPlusImage);
 	tableRows.push(addCommentRow);
 	
-	for(i=0;i<=5;i++){
+	for(i=0;i<0;i++){
 		
 		//comment row
 		var commentRow = Ti.UI.createTableViewRow({

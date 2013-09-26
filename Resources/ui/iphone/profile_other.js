@@ -156,7 +156,7 @@ function buildProfileOtherView(uId, name) {
 		    backgroundImage: IMAGE_PATH+'profile_other/Chat_icon.png',
 		    width:45,
 		    height:43,
-		    top:320,
+		    top:IPHONE5 ? 360 : 320,
 		    userId:uId,
 		    mName:name
 		});
@@ -169,7 +169,7 @@ function buildProfileOtherView(uId, name) {
 			color:'black',
 			opacity:0.6,
 			textAlign:'center',
-			top:364,
+			top:IPHONE5 ? 408 : 364,
 			width:88,
 			height:18,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
@@ -181,7 +181,7 @@ function buildProfileOtherView(uId, name) {
 		    backgroundImage: IMAGE_PATH+'profile_other/Walk_with_icon.png',
 		    width:45,
 		    height:43,
-		    top:320,
+		    top:IPHONE5 ? 360 : 320,
 		    left:42
 		});
 		profileOtherView.add(profileOtherWalkWithButton);
@@ -194,7 +194,7 @@ function buildProfileOtherView(uId, name) {
 			color:'black',
 			opacity:0.6,
 			textAlign:'left',
-			top:364,
+			top:IPHONE5 ? 408 : 364,
 			width:88,
 			height:18,
 			left:21,
@@ -207,7 +207,7 @@ function buildProfileOtherView(uId, name) {
 		    backgroundImage: IMAGE_PATH+'profile_other/Gallery_icon.png',
 		    width:45,
 		    height:43,
-		    top:320,
+		    top:IPHONE5 ? 360 : 320,
 		    right:42
 		});
 		profileOtherView.add(profileOtherGalleryButton);
@@ -218,7 +218,7 @@ function buildProfileOtherView(uId, name) {
 			color:'black',
 			opacity:0.6,
 			textAlign:'center',
-			top:364,
+			top:IPHONE5 ? 408 : 364,
 			width:88,
 			height:18,
 			right:21,
@@ -253,8 +253,8 @@ function buildProfileOtherView(uId, name) {
 		profileOtherDogTableViewBackground = Titanium.UI.createView({ 
 			backgroundColor:UI_BACKGROUND_COLOR,
 			width:'100%',
-			height:192,
-			top:416
+			height:IPHONE5 ? 259 : 192,
+			top:IPHONE5 ? 490 : 416
 		});
 		profileOtherView.add(profileOtherDogTableViewBackground);
 		
@@ -264,7 +264,7 @@ function buildProfileOtherView(uId, name) {
 			width:320,
 			backgroundColor:UI_BACKGROUND_COLOR,
 			top:16,
-			height:155
+			height:IPHONE5 ? 242 : 155
 		});
 		profileOtherDogTableViewBackground.add(profileOtherDogTableView);
 		profileOtherDogTableView.addEventListener('click', handleProfileOtherDogTableViewRows);
@@ -320,12 +320,11 @@ function handleDogBarButton(e){
 	var toggle = e.source.toggle;
 	if(toggle){
 		profileOtherDogBar.animate({bottom:-3, duration:500});
-		profileOtherDogTableViewBackground.animate({top:416, duration:500});
+		profileOtherDogTableViewBackground.animate({top:IPHONE5 ? 478 : 416, duration:500});
 		e.source.toggle = false;
 	}else{
-		profileOtherDogBar.animate({bottom:155, duration:500});
+		profileOtherDogBar.animate({bottom:IPHONE5 ? 243 : 155, duration:500});
 		profileOtherDogTableViewBackground.animate({top:245, duration:500});
-		profileOtherDogTableViewBackground.animate({height:172, duration:500});
 		e.source.toggle = true;
 	}
 }

@@ -192,7 +192,7 @@ profileActivityBar.addEventListener('click', handleActivityButton);
 var profileTableViewBackground = Titanium.UI.createView({ 
 	backgroundColor:'d2d2d2',
 	width:'100%',
-	height:170,
+	height:IPHONE5 ? 256 : 170,
 	top:337,
 	zIndex:6
 });
@@ -204,7 +204,7 @@ var profileTableView = Titanium.UI.createTableView({
 	width:320,
 	backgroundColor:'d2d2d2',
 	top:13,
-	height:66
+	height:IPHONE5 ? 154 : 66
 });
 profileTableViewBackground.add(profileTableView);
 profileTableView.addEventListener('click', handleProfileActivityRows);
@@ -287,12 +287,12 @@ function handleActivityButton(e){
 	if(toggle){
 		profileActivityBar.animate({top:307, duration:500});
 		profileTableViewBackground.animate({top:337, duration:500});
-		profileTableView.animate({height:66, duration:500});
+		profileTableView.animate({height:IPHONE5 ? 154 : 66, duration:500});
 		e.source.toggle = false;
 	}else{
 		profileActivityBar.animate({top:218, duration:500});
 		profileTableViewBackground.animate({top:248, duration:500});
-		profileTableView.animate({height:155, duration:100});
+		profileTableView.animate({height:IPHONE5 ? 243 : 155, duration:100});
 		e.source.toggle = true;
 	}
 }

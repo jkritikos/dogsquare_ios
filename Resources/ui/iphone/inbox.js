@@ -124,6 +124,7 @@ function getUnreadInboxMessages(){
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
 			var messagesList = [];
+			alert(jsonData.data.messages)
 			
 			for(i=0;i<jsonData.data.messages.length;i++){
 				messagesList.push(jsonData.data.messages[i].UserInbox.id);

@@ -18,6 +18,12 @@ if(!PRODUCTION_MODE){
 	SERVER = 'http://dogsquare.veladia.com/';
 }
 
+var IPHONE5 = false;
+
+if(Ti.Platform.displayCaps.platformHeight == 568){
+	IPHONE5 = true;	
+}
+
 //Server properties
 var API = SERVER + 'api/';
 var REMOTE_USER_IMAGES = SERVER+'uploaded_files/users/';
