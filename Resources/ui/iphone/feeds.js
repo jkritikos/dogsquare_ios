@@ -139,7 +139,7 @@ function populateFeedsTableView(data) {
 		//date label
 		var rowDateLabel = Titanium.UI.createLabel({ 
 			text:relativeTime(data[i].Feed.created),
-			color:'#605353',
+			color:'#938787',
 			textAlign:'left',
 			width:'auto',
 			height:'auto',

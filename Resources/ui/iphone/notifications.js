@@ -129,7 +129,7 @@ function populateNotificationsTableView(data) {
 		//date label
 		var rowDateLabel = Titanium.UI.createLabel({ 
 			text:notificationTime,
-			color:'black',
+			color:'#938787',
 			textAlign:'left',
 			width:'auto',
 			height:'auto',

@@ -4,13 +4,14 @@ var initialWindow = Ti.UI.createWindow({
 
 var initialWindowBackground = Ti.UI.createView({
 	height:163,
-	top:170,
+	top:150,
 	width:215,
 	left:319
 });
 
 initialWindowBackground.animate({left:52,duration:800});
 
+/*
 var closeButton = Ti.UI.createButton({
 	title:'close',
 	top:0
@@ -24,6 +25,7 @@ closeButton.addEventListener('click', function(){
 	});
 	
 });
+*/
 
 var registerButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'intro_login/Register_button.png',

@@ -591,7 +591,7 @@ function handlePhotoSelection(){
 }
 	
 function handleCameraSelection(){
-	Titanium.Media.takePicture({
+	Titanium.Media.showCamera({
 		success:function(event){
 			var image = event.media;
 			
