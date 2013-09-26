@@ -12,6 +12,14 @@ var TYPE_FOLLOW_BUTTON = 2;
 
 var FIND_FRIENDS_WIN = 1;
 
+Ti.Contacts.requestAuthorization(function(e){
+    if (e.success) {
+       
+    } else {
+       alert('PLEASE ENABLE CONTACTS ACCESS');
+    }
+});	
+
 //temporary variable to store data from server
 var localDataForContacts = null;
 
