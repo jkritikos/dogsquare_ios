@@ -804,15 +804,15 @@ function updateActivityCoordinates(coordsObj){
 			latitude: coordsObj[0].latitude,
 			longitude: coordsObj[0].longitude,
 			animate:true,
-			latitudeDelta:0.001,
-			longitudeDelta:0.001
+			latitudeDelta:0.004,
+			longitudeDelta:0.004
 		};
 		
 		viewActivityMap.setLocation(viewActivityRegion);
 		
 		//TMP DEBUG
 		for(var i=0; i < coordsObj.length; i++){
-			Ti.API.info('-- viewActivity coordinates for route: lat '+coordsObj[i].latitude+' lon '+coordsObj[i].longitude);
+			//Ti.API.info('-- viewActivity coordinates for route: lat '+coordsObj[i].latitude+' lon '+coordsObj[i].longitude);
 		}
 		
 		//route object

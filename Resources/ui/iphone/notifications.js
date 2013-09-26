@@ -85,6 +85,7 @@ function populateNotificationsTableView(data) {
 	for(i=0; i< data.length; i++){
 		//build text
 		var notificationText = data[i].name + ' ' + getNotificationMessage(data[i].type_id);
+		var notificationTime = relativeTime(data[i].created);
 		
 		//notification row
 		var notificationRow = Ti.UI.createTableViewRow({
@@ -99,41 +100,48 @@ function populateNotificationsTableView(data) {
 			fromUserName:data[i].name
 		});
 		
+		//Wrapper view with vertical layout for the text in each row
+		var notificationWrapperView = Ti.UI.createView({
+			layout:'vertical'
+		});
+		
 		//profile image
 		var rowNotificationProfileImage = Titanium.UI.createImageView({
 			image:REMOTE_USER_IMAGES+data[i].thumb,
 			left:2,
-			width:54,
-			height:54,
-			borderRadius:27,
-			borderWidth:3,
+			borderRadius:30,
+			borderWidth:2,
 			borderColor:'f5a92c'
 		});
+		
 		//notification label
 		var rowNotificationLabel = Titanium.UI.createLabel({ 
 			text:notificationText,
-			color:'black',
-			height:'auto',
-			width:180,
+			color:'#605353',
+			top:15,
 			textAlign:'left',
-			left:65,
-			font:{fontSize:11, fontWeight:'regular', fontFamily:'Open Sans'}
+			width:'auto',
+			height:'auto',
+			left:70,
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		//date label
 		var rowDateLabel = Titanium.UI.createLabel({ 
-			text:'Sept 7',
+			text:notificationTime,
 			color:'black',
-			height:18,
+			textAlign:'left',
 			width:'auto',
-			textAlign:'right',
-			right:9,
-			font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
+			height:'auto',
+			left:70,
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
+		notificationWrapperView.add(rowNotificationLabel);
+		notificationWrapperView.add(rowDateLabel);
+		
 		notificationRow.add(rowNotificationProfileImage);
-		notificationRow.add(rowNotificationLabel);
-		notificationRow.add(rowDateLabel);
+		notificationRow.add(notificationWrapperView);
 		
 		tableRows.push(notificationRow);
 	}
