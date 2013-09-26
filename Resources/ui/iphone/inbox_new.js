@@ -56,6 +56,7 @@ var inboxNewSendToEraseIcon = Titanium.UI.createButton({
 });
 inboxNewSendToBackgroundView.add(inboxNewSendToEraseIcon);
 inboxNewSendToEraseIcon.addEventListener('click', handleSendToEraseButton);
+inboxNewSendToEraseIcon.hide();
 
 inboxNewSendToBackgroundView.add(inboxNewSendToChosenBackgroundView);
 inboxNewSendToChosenBackgroundView.hide();
@@ -74,45 +75,9 @@ var inboxNewSendToLabel = Titanium.UI.createLabel({
 
 inboxNewSendToBackgroundView.add(inboxNewSendToLabel);
 
-//flexible space for toolbar
-var inboxNewFlexSpace = Titanium.UI.createButton({
-    systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
-});
-
-var inboxNewSendToTextArea = Titanium.UI.createTextArea({ 
-	height:31, 
-	backgroundColor:'white',
-	width:239, 
-	font:{fontSize:13}, 
-	color:'black', 
-	borderColor:'transparent',
-	borderWidth:5,
-	borderRadius:5,
-	paddingLeft:10, 
-	left:7 
-});
-inboxNewSendToTextArea.addEventListener('focus', handleSendToTextFieldFocus);
-inboxNewSendToTextArea.addEventListener('blur', handleSendToTextFieldBlur);
-
-var inboxNewSendMessageSendButton = Titanium.UI.createButton({  
-	title:'send',
-	width:55, 
-	height:32,
-	left:7, 
-    style:Titanium.UI.iPhone.SystemButtonStyle.DONE 
-}); 
-
-inboxNewSendMessageSendButton.addEventListener('click', handleInboxNewSendButton);
-
-var inboxNewSendMessageToolbar = Ti.UI.iOS.createToolbar({
-	 items:[inboxNewSendToTextArea, inboxNewFlexSpace, inboxNewSendMessageSendButton],
-	 barColor:'#999'
- });
-
 var inboxNewSendToTextField = Ti.UI.createTextField({
 	width:238,
-	height:38,
-	keyboardToolbar:inboxNewSendMessageToolbar, 
+	height:38, 
 	font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 });
 inboxNewSendToTextField.addEventListener('change', handleSendToTextFieldChange);
@@ -124,7 +89,8 @@ inboxNewWindow.add(inboxNewSendToBackgroundView);
 
 inboxNewBackButton.addEventListener("click", function() {
     navController.close(inboxNewWindow);
-    inboxNewSendToTextArea.blur();
+    inboxNewSendToTextField.blur();
+    inboxNewChatField.blur();
 });
 
 //inbox new sepparator
@@ -156,7 +122,7 @@ inboxNewContactsTableView.footerView = Ti.UI.createView({
 
 var inboxNewChatTableView = Titanium.UI.createTableView({
 	minRowHeight:60,
-	height:117,
+	height:329,
 	width:320,
 	backgroundColor:'transparent',
 	separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
@@ -170,6 +136,57 @@ inboxNewChatTableView.footerView = Ti.UI.createView({
     height: 10,
     backgroundColor: 'transparent'
 });
+
+//sepparator for the textfield from the messages view
+var inboxNewSepparator = Titanium.UI.createView({
+	backgroundColor:UI_COLOR,
+	height:1,
+	left:10,
+	right:16,
+	bottom:47
+});
+inboxNewWindow.add(inboxNewSepparator);
+
+//chat text field
+inboxNewChatField = Ti.UI.createTextField({
+	width:252,
+	height:24,
+	bottom:15,
+	left:10,
+	backgroundColor:'white',
+	borderWidth:1,
+	borderRadius:3,
+	borderColor:'c5c5c5'
+});
+inboxNewWindow.add(inboxNewChatField);
+
+inboxNewChatField.addEventListener('change', handleInboxNewChatTextFieldChange);
+inboxNewChatField.addEventListener('focus', handleInboxNewChatTextFieldFocus);
+inboxNewChatField.addEventListener('blur', handleInboxNewChatTextFieldBlur);
+
+//chat text field label
+inboxNewChatFieldLabel = Ti.UI.createLabel({
+	text:'Send a message',
+	color:'999999',
+	textAlign:'left',
+	left:10,
+	opacity:0.7,
+	width:100,
+	height:30,
+	font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
+});
+inboxNewChatField.add(inboxNewChatFieldLabel);
+
+//send button
+var inboxNewSendButton = Titanium.UI.createButton({
+	backgroundImage:IMAGE_PATH+'inbox_view/send_icon.png',
+	right:16,
+	bottom:14,
+	width:30,
+	height:28,
+});
+inboxNewSendButton.addEventListener('click', handleInboxNewSendButton);
+inboxNewWindow.add(inboxNewSendButton);
 
 function populateInboxNewContactsTableView(mObject){
 	
@@ -195,7 +212,7 @@ function populateInboxNewContactsTableView(mObject){
 		
 		var rowNameLabel = Titanium.UI.createLabel({
 			text:mObject[i].name,
-			color:'#ab7b04',
+			color:'#605353',
 			left:72,
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
@@ -252,7 +269,10 @@ function getMutualFollowers(){
 }
 
 function handleNewContactsTableRows(e){
-	inboxNewSendToTextField.focus();
+	inboxNewSendToEraseIcon.show();
+	inboxNewChatField.focus();
+	inboxNewWindow.animate({bottom:215, duration:300});
+	inboxNewContactsTableView.animate({height:114, duration:200});
 	inboxNewSendToTextField.hide();
 	inboxNewSendToTextField.value = '';
 	
@@ -270,12 +290,10 @@ function handleNewContactsTableRows(e){
 	}
 	
 	inboxNewSendToChosenLabel.text = e.row.children[1].text;
-	inboxNewContactsTableView.data = [];
 }
 
 function updateInboxNewView(userId, name){
-	inboxNewSendToTextField.focus();
-	//inboxNewSendToTextField.hide();
+	inboxNewChatField.focus();
 	
 	inboxNewContactsTableView.hide();
 	inboxNewChatTableView.show();
@@ -290,9 +308,7 @@ function updateInboxNewView(userId, name){
 		populateInboxNewChatTableView(messages, toUserId);
 	}
 	
-	inboxNewSendToTextArea.focus();
 	inboxNewSendToChosenLabel.text = name;
-	inboxNewContactsTableView.data = [];
 }
 
 function handleSendToTextFieldChange(e){
@@ -326,7 +342,7 @@ function handleSendToTextFieldFocus(e){
 function handleInboxNewSendButton(){
 	var toId = toUserId;
 	var toName = inboxNewSendToTextField.value;
-	var message = inboxNewSendToTextArea.value;
+	var message = inboxNewChatField.value;
 	var view = VIEW_INBOX_NEW;
 	
 	if(message != '') {
@@ -337,7 +353,6 @@ function handleInboxNewSendButton(){
 		inboxNewChatTableView.scrollToIndex(inboxNewChatTableView.data[0].rows.length - 1);
 	}
 	
-	inboxNewSendToTextArea.blur();
 	inboxNewSendToTextField.blur();
 }
 
@@ -512,6 +527,7 @@ function appendRowInboxNewTableView(date, message){
 }
 
 function handleSendToEraseButton(){
+	inboxNewSendToEraseIcon.hide();
 	inboxNewSendToTextField.show();
 	inboxNewSendToTextField.focus();
 	
@@ -519,6 +535,32 @@ function handleSendToEraseButton(){
 	inboxNewChatTableView.hide();
 	
 	inboxNewSendToChosenBackgroundView.hide();
-	
-	inboxNewContactsTableView.data = [];
+}
+
+//handle change on chat text field
+function handleInboxNewChatTextFieldChange(){
+	if(inboxNewChatField.value != ''){
+		inboxNewChatFieldLabel.hide();
+	}else {
+		inboxNewChatFieldLabel.show();
+	}
+}
+
+//handle blur on chat text field
+function handleInboxNewChatTextFieldBlur(){
+	if(inboxNewChatField.value == ''){
+		inboxNewChatFieldLabel.show();
+	}else {
+		inboxNewChatFieldLabel.hide();
+	}
+	inboxNewWindow.animate({bottom:0, duration:200});
+	inboxNewContactsTableView.animate({height:329, duration:200});
+	inboxNewChatTableView.animate({height:329, duration:200});
+}
+
+//handle focus on chat text field
+function handleInboxNewChatTextFieldFocus(){
+	inboxNewWindow.animate({bottom:215, duration:300});
+	inboxNewContactsTableView.animate({height:115, duration:200});
+	inboxNewChatTableView.animate({height:115, duration:200});
 }
