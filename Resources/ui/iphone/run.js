@@ -350,6 +350,9 @@ function handleEndRunButton(){
 			navController.close(openWindows[runWindowIndex], {animated:false});
 		});
 		
+		//clear run object
+		runObject = {};
+		
 		openWindows.push(runFinishWindow);
 		navController.open(runFinishWindow);
 		

@@ -82,7 +82,7 @@ function buildRunFinishView(obj){
 		text:obj.distance,
 		height:21,
 		textAlign:'right',
-		left:25,
+		left:21,
 		top:10,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -115,7 +115,7 @@ function buildRunFinishView(obj){
 		text:obj.pace,
 		height:21,
 		textAlign:'right',
-		left:132,
+		left:131,
 		top:10,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -319,7 +319,7 @@ function populateRunFinishTableView(o){
 		//row
 		var row = Ti.UI.createTableViewRow({ 
 			className:'runFinishRow',
-			height:65,
+			height:79,
 			backgroundColor:UI_BACKGROUND_COLOR,
 			selectedBackgroundColor:'transparent'
 		});
@@ -348,7 +348,8 @@ function populateRunFinishTableView(o){
 		//bone image
 		var rowBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_grey.png',
-			right:105
+			right:10,
+			top:20
 		});
 		
 		row.add(rowBoneImage);
@@ -356,7 +357,8 @@ function populateRunFinishTableView(o){
 		//bone fill image
 		var rowBoneFillImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_colours.png',
-			right:105,
+			right:10,
+			top:20,
 			zIndex:2
 		}); 
 		
@@ -368,10 +370,10 @@ function populateRunFinishTableView(o){
 			color:'black',
 			height:15,
 			textAlign:'center',
-			right:120,
-			bottom:10,
+			right:40,
+			bottom:20,
 			opacity:0.3,
-			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		row.add(rowMoodLabel);
 		
@@ -381,9 +383,9 @@ function populateRunFinishTableView(o){
 			color:'999900',
 			height:15,
 			textAlign:'center',
-			right:97,
-			bottom:10,
-			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
+			right:12,
+			bottom:20,
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		row.add(rowMoodPercentLabel);
 		

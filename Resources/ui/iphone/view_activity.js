@@ -360,7 +360,7 @@ function populateViewActivityDogsTableView(dogObj){
 			height:65,
 			textAlign:'center',
 			left:91,
-			//opacity:0.7,
+			opacity:0.7,
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		row.add(rowDogNameLabel);

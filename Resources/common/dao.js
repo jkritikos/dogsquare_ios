@@ -716,10 +716,45 @@ function getActivityDetails(id){
 
 //Calculates the dogfuel earned by the specified activity
 function calculateDogfuel(activityId){
+	Ti.API.info('calculateDogfuel() called for activity '+activityId);
+	
+	//10 meters
+	var PLAYTIME_THRESHOLD = 0.01;
 	var coordinateData = getActivityCoordinates(activityId);
+	var previousRowDistance = 0;
+	var currentRowDistance = 0;
+	
+	var totalWalkDistance = 0;
+	var totalPlaytime = 0;
 	for(var i=0; i < coordinateData.length; i++){
-		Ti.API.info(' *** Checkpoint: lat: '+coordinateData[i].lat+' lon '+coordinateData[i].lon+ ' distance '+coordinateData[i].distance+' in '+coordinateData[i].dt+' ms');
+		
+		//Distance from previous row
+		if(i > 0){
+			previousRowDistance = coordinateData[i-1].distance;
+		} else {
+			previousRowDistance = 0;
+		}
+		
+		currentRowDistance = coordinateData[i].distance - previousRowDistance;
+		var currentDistanceFormated = parseFloat(currentRowDistance.toFixed(2));
+		
+		if(coordinateData[i].distance != null){
+			if(currentDistanceFormated > PLAYTIME_THRESHOLD){
+				Ti.API.info('      *** '+currentDistanceFormated+' is > than '+PLAYTIME_THRESHOLD+' - so, counting this row as WALK');
+				totalWalkDistance += currentDistanceFormated;	
+			} else {
+				Ti.API.info('      *** '+currentDistanceFormated+' is <= than '+PLAYTIME_THRESHOLD+' - so, counting this row as PLAY');
+				totalPlaytime += coordinateData[i].dt;
+			}
+		} else {
+			Ti.API.info(' *** Null distance for row '+i);
+		}
+		
+		
+		Ti.API.info(' *** Checkpoint: lat: '+coordinateData[i].lat+' lon '+coordinateData[i].lon+ ' total distance '+coordinateData[i].distance+' - Did '+currentDistanceFormated+' in '+coordinateData[i].dt+' ms');
 	}
+	
+	Ti.API.info(' *** totalWalkDistance '+totalWalkDistance+' Km, totalPlaytime '+totalPlaytime+' ms');
 	
 	return null;
 }
