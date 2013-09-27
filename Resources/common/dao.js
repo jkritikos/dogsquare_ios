@@ -164,13 +164,14 @@ function hello(){
 var weather = ( function() {
     var api = {};
     api.getWeather = function(la, lo) {
-    	//alert('weather for lat '+la +' lon '+lo);
+    	alert('weather for lat '+la +' lon '+lo);
     	Ti.Yahoo.yql('select * from yahoo.maps.findLocation where q="' + la + ',' + lo + '" and gflags="R"', function(e) {
-        	var url = 'http://weather.yahooapis.com/forecastrss?w=' + e.data.ResultSet.Results.woeid + '&u=c';
+    		Ti.API.info('DATA: '+JSON.stringify(e.data));
+        	var url = 'http://weather.yahooapis.com/forecastrss?w=' + e.data.json.ResultSet.Results.woeid + '&u=c';
         	var xhr = Ti.Network.createHTTPClient({});
         	
         	xhr.onload = function() {
-           
+           		Ti.API.info('Weather: '+this.responseXML);
         		var weather = this.responseXML.documentElement;
         		
         		var currentTemp = weather.getElementsByTagName('yweather:condition').item(0).getAttribute("temp");

@@ -400,6 +400,7 @@ function trackLocation(){
 			//Get weather once we get the 1st accurate set of coordinates
 			if(!runObject.temperature){
 				weather.getWeather(e.coords.latitude, e.coords.longitude);	
+				
 			}
 			
 			var tmpDistance = calculateDistance(coordinates);
