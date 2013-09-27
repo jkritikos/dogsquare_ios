@@ -46,29 +46,36 @@ function doGetFeeds(){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in doGetFeeds() '+e);
 	};
 	
 	xhr.onload = function(e){
 		Ti.API.info('doGetFeeds() got back from server '+this.responseText);
 		var jsonData = JSON.parse(this.responseText);
 		
-		var followers = jsonData.data.count_followers;
-		var inbox = jsonData.data.count_inbox;
-		var notifications = jsonData.data.count_notifications;
-		
-		updateLeftMenuCounts(followers, inbox, notifications);
-		
-		//Update UI
-		populateFeedsTableView(jsonData.data.feed);
-		
 		//Hide progress view
 		progressView.hide();
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+		
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+			//Update UI
+			populateFeedsTableView(jsonData.data.feed);
+		} else {
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		}
 	};
 	
 	xhr.open('GET',API+'getFeed');
 	xhr.send({
-		user_id:currentUser.userId
+		user_id:currentUser.userId,
+		token:currentUser.token
 	});
 }
 

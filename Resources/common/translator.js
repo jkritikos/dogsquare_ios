@@ -6,6 +6,7 @@ var ERROR_DOG_CREATION = -5;
 var ERROR_DOG_PHOTO_UPLOAD = -6;
 var ERROR_USER_ALREADY_FOLLOWING = -7;
 var ERROR_USER_NOT_FOLLOWING = -8;
+var ERROR_REQUEST_UNAUTHORISED = -100;
 
 //Notification types
 var NOTIFICATION_NEW_FOLLOWER = 1;
@@ -74,6 +75,8 @@ function getErrorMessage(code){
 	
 	if(code == ERROR_EMAIL_TAKEN){
 		msg = 'Email already in use.';
+	} else if(code == ERROR_REQUEST_UNAUTHORISED){
+		msg = 'Invalid username/password.';
 	}
 	
 	return msg;

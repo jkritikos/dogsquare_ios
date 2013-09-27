@@ -8,6 +8,8 @@ var loginWindow = null;
 var loginObject = {};
 
 function buildLoginWindow(){
+	Titanium.UI.iPhone.showStatusBar();
+	
 	loginWindow = Ti.UI.createWindow({
 		title:'Login',
 		backgroundColor:UI_BACKGROUND_COLOR
@@ -225,7 +227,7 @@ function checkLoginCredentials(lObj){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in checkLoginCredentials() '+e);
 	};
 	
 	xhr.onload = function(e){
@@ -240,8 +242,6 @@ function checkLoginCredentials(lObj){
 		        success:true
 		    });
 		    
-		    
-		    
 		    var userObj = {};
 			
 			userObj.userId = jsonData.data.user.id;
@@ -253,6 +253,7 @@ function checkLoginCredentials(lObj){
 			userObj.gender = jsonData.data.user.gender;
 			userObj.followers = jsonData.data.user.followers;
 			userObj.following = jsonData.data.user.following;
+			userObj.token = jsonData.data.token;
 			
 			//Save user data & update UI
 			saveUserObject(userObj);
@@ -325,4 +326,9 @@ function closeLoginWindow(){
 		window.remove(initialWindow);
 		leftTableView.fireEvent('click', {menuItem:MENU_PROFILE});
 	});
+}
+
+//Opens a modal login window for post-login unauthorised requests
+function showLoginPopup(){
+	//TODO implement this	
 }

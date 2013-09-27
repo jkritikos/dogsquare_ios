@@ -33,6 +33,8 @@ var registerGenderNumber = GENDER_MALE;
 var signupUserObject = {};
 
 function buildRegisterWindow(){
+	Titanium.UI.iPhone.showStatusBar();
+	
 	registerWindow = Ti.UI.createWindow({
 		backButtonTitle:'back',
 		title:'register',

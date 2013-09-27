@@ -142,6 +142,10 @@ function saveUserObject(obj){
 		userObject.userId = obj.userId;
 	}
 	
+	if(obj.token){
+		userObject.token = obj.token;
+	}
+	
 	Ti.App.Properties.setObject('user', userObject);
 }
 
