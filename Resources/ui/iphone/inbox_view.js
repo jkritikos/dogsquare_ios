@@ -46,8 +46,8 @@ function buildViewInboxView(messages){
 		//chat text field
 		inboxViewChatField = Ti.UI.createTextField({
 			width:252,
-			height:24,
-			bottom:15,
+			height:30,
+			bottom:9,
 			left:10,
 			backgroundColor:'white',
 			borderWidth:1,
@@ -69,7 +69,7 @@ function buildViewInboxView(messages){
 			opacity:0.7,
 			width:100,
 			height:30,
-			font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		inboxViewChatField.add(inboxViewChatFieldLabel);
 		
@@ -77,7 +77,7 @@ function buildViewInboxView(messages){
 		var inboxViewSendButton = Titanium.UI.createButton({
 			backgroundImage:IMAGE_PATH+'inbox_view/send_icon.png',
 			right:16,
-			bottom:14,
+			bottom:10,
 			width:30,
 			height:28,
 		});
@@ -157,6 +157,7 @@ function populateInboxViewTableView(mObj, userId){
 		
 		if(mObj[i].my_message == 0) {
 			if(!otherThumbCreated) {
+				rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
 				rowMessageProfileImage.image = API+'photo?user_id=' + userId;
 				rowMessageProfileImage.left = 4;
 				
@@ -172,6 +173,7 @@ function populateInboxViewTableView(mObj, userId){
 			senderInboxViewMessageBox.backgroundColor = UI_COLOR;
 			
 			if(!userThumbCreated) {
+				rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
 				rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId;
 				rowMessageProfileImage.right = 4;
 				
@@ -257,7 +259,7 @@ function appendRowInboxViewTableView(date, message){
 		top:12,
 		right:90,
 		width:140,
-		height:54,
+		height:Titanium.UI.SIZE,
 		borderWidth:1,
 		borderColor:UI_BACKGROUND_COLOR,
 		borderRadius:5
@@ -266,6 +268,8 @@ function appendRowInboxViewTableView(date, message){
 	//sender message label
 	var senderInboxViewMessageLabel = Titanium.UI.createLabel({ 
 		text:message,
+		top:10,
+		bottom:10,
 		color:'black',
 		height:'auto',
 		width:119,

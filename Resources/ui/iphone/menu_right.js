@@ -100,6 +100,7 @@ function populateRightMenu(dogObject){
 		
 		var rowDogImage = Titanium.UI.createImageView({
 			image:REMOTE_DOG_IMAGES + dogObject[i].thumb_path,
+			defaultImage:IMAGE_PATH+'common/default_dog_photo.png',
 			left:58,
 			top:13,
 			borderRadius:30,
@@ -107,7 +108,6 @@ function populateRightMenu(dogObject){
 			borderColor:'454950',
 			type:RIGHT_MENU_TYPE_ROW
 		});
-		Ti.API.info(REMOTE_DOG_IMAGES + dogObject[i].thumb_path);
 		
 		//dog name label inside the dog row - right menu row
 		var rowDogNameLabel = Titanium.UI.createLabel({ 

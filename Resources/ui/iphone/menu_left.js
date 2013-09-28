@@ -215,6 +215,13 @@ leftTableView.addEventListener("click", function(e){
 			navController.getWindow().add(viewNotifications);
 			navController.getWindow().setTitle('Notifications');
 			break;
+		case MENU_BADGES:
+			navController.getWindow().setTitleControl();
+			Ti.include('ui/iphone/badges.js');
+			buildBadgesView();
+			navController.getWindow().add(viewBadges);
+			navController.getWindow().setTitle('Badges');
+			break;
 	}
 	
 	if(window.isAnyViewOpen()){
@@ -268,6 +275,7 @@ function createLeftMenu(){
 	
 	//Load the rounded thumbnail image
 	if(userObject.thumb_path){
+		menuProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
 		menuProfileImage.image = REMOTE_USER_IMAGES + userObject.thumb_path;
 	}
 	
@@ -465,6 +473,7 @@ function populateSearchResultsTableView(uObj, pObj){
 		
 		var userRowThumbImage = Titanium.UI.createImageView({
 			image:REMOTE_USER_IMAGES + uObj[i].User.thumb,
+			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:4,
 			top:4,
 			borderRadius:30,

@@ -108,6 +108,7 @@ function populateNotificationsTableView(data) {
 		//profile image
 		var rowNotificationProfileImage = Titanium.UI.createImageView({
 			image:REMOTE_USER_IMAGES+data[i].thumb,
+			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:2,
 			borderRadius:30,
 			borderWidth:2,
@@ -150,38 +151,54 @@ function populateNotificationsTableView(data) {
 }
 
 function handleNotificationsTableView(e){
-	Ti.include('ui/iphone/profile_other.js');
-		
+	var notType = e.row.notification_type;	
 	var userId = e.row.fromUserId;
-	var profileOtherView = buildProfileOtherView(userId);
 	var name = e.row.fromUserName;
 	var notificationId = e.row.id;
 	
 	setNotificationToRead(notificationId);
 	
-	var profileOtherWindow = Ti.UI.createWindow({
+	var notificationRowWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
 		barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR,
-		title:name
+		barColor:UI_COLOR
 	});
 	
 	//back button & event listener
-	var profileOtherBackButton = Ti.UI.createButton({
+	var notificationRowBackButton = Ti.UI.createButton({
 	    backgroundImage: IMAGE_PATH+'common/back_button.png',
 	    width:48,
 	    height:33
 	});
 	
-	profileOtherWindow.setLeftNavButton(profileOtherBackButton);
-	profileOtherBackButton.addEventListener("click", function() {
-	    navController.close(profileOtherWindow);
+	notificationRowWindow.setLeftNavButton(notificationRowBackButton);
+	notificationRowBackButton.addEventListener("click", function() {
+	    navController.close(notificationRowWindow);
 	});
 	
-	profileOtherWindow.add(profileOtherView);
+	if(notType == NOTIFICATION_COMMENT_ACTIVITY || notType == NOTIFICATION_LIKE_ACTIVITY){
+		
+		Ti.include('ui/iphone/view_activity.js');
 	
-	openWindows.push(profileOtherWindow);
-	navController.open(profileOtherWindow);
+		var viewActivityView = buildViewActivityView(userId);
+		
+		notificationRowWindow.add(viewActivityView);
+		notificationRowWindow.setTitle('Activity');
+		
+		openWindows.push(notificationRowWindow);
+		navController.open(notificationRowWindow);
+	}else if(notType == NOTIFICATION_NEW_FOLLOWER || notType == NOTIFICATION_WALK_REQUEST){
+		
+		Ti.include('ui/iphone/profile_other.js');
+		
+		var profileOtherView = buildProfileOtherView(userId);
+		
+		notificationRowWindow.add(profileOtherView);
+		notificationRowWindow.setTitle(name);
+		
+		openWindows.push(notificationRowWindow);
+		navController.open(notificationRowWindow);
+	}
 }
 
 

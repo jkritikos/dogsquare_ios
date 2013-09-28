@@ -538,6 +538,10 @@ function handlePlaceCommentSaveButton(e){
 		addPlaceComObject.place_id = e.source.placeId;
 		//save place comment
 		doSavePlaceCommentOnline(addPlaceComObject);
+		
+		checkinPlaceCommentsTextArea.blur();
+		checkinPlaceCommentsTextArea.hide();
+		checkinPlaceCommentsTableView.show();
 	}
 }
 
@@ -561,13 +565,16 @@ function doSavePlaceCommentOnline(comObj){
 			
 			comObj.comment_id = jsonData.data.comment_id;
 			
+			var date = jsonData.data.date;
+			var message = comObj.comment;
+			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
 			
-			alert('place comment successfully added');
+			appendCommentPlaceTableView(date, message);
 		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -578,4 +585,52 @@ function doSavePlaceCommentOnline(comObj){
 		comment:comObj.comment,
 		place_id:comObj.place_id,
 	});
+}
+
+function appendCommentPlaceTableView(date, message){
+	//comment row
+	var commentRow = Ti.UI.createTableViewRow({
+		className:'commentRow',
+		height:'auto',
+		width:'100%',
+		backgroundColor:'transparent',
+		selectedBackgroundColor:'transparent',
+		rowId:COMMENT_ROW
+	});
+	
+	//comment label
+	var commentLabel = Ti.UI.createLabel({
+		text:message,
+		top:8,
+		textAlign:'left',
+		width:292,
+		bottom:24,
+		height:'auto',
+		left:14,
+		opacity:0.6,
+		color:'black',
+		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	
+	var dateCreated = new Date(date * 1000);
+	
+	//comment time
+	var timeLabel = Ti.UI.createLabel({
+		text:relativeTime(dateCreated),
+		bottom:10,
+		textAlign:'left',
+		width:180,
+		height:15,
+		left:16,
+		opacity:0.4,
+		color:'black',
+		font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	
+	commentRow.add(commentLabel);
+	commentRow.add(timeLabel);
+	
+	//viewActivityCommentsTableView.appendRow(commentRow);
+	checkinPlaceCommentsTableView.insertRowBefore(1, commentRow);
+	checkinPlaceCommentsTableView.scrollToIndex(checkinPlaceCommentsTableView.data[0].rows.length - 1);
 }

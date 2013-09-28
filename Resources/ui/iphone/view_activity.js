@@ -646,50 +646,17 @@ function handleActivityCommentSaveButton(e){
 	if(viewActivityCommentsTextArea.value != ''){
 		viewActivityComObject.comment = viewActivityCommentsTextArea.value;
 		viewActivityComObject.activity_id = e.source.activityId;
+		
+		var view = VIEW_ACTIVITY_NEW;
+		
 		//save place comment
-		doSaveActivityCommentOnline(viewActivityComObject);
+		doSaveActivityCommentOnline(viewActivityComObject, view);
+		
+		viewActivityCommentsTextArea.blur();
+		viewActivityCommentsTextArea.hide();
+		viewActivityCommentsTableView.show();
 	}
 }
-
-//Server call for saving activity comments
-function doSaveActivityCommentOnline(comObj){
-	Ti.API.info('doSaveActivityCommentOnline() called with commentObject='+comObj); 	
-	
-	var xhr = Ti.Network.createHTTPClient();
-	xhr.setTimeout(NETWORK_TIMEOUT);
-	
-	xhr.onerror = function(e){
-	
-	};
-	
-	xhr.onload = function(e){
-		Ti.API.info('doSaveActivityCommentOnline() got back from server '+this.responseText); 	
-		var jsonData = JSON.parse(this.responseText);
-		
-		if(jsonData.data.response == NETWORK_RESPONSE_OK){
-			Ti.API.info('doSaveActivityCommentOnline() got back comment id from server '+jsonData.data.comment_id);
-			
-			comObj.comment_id = jsonData.data.comment_id;
-			
-			var followers = jsonData.data.count_followers;
-			var inbox = jsonData.data.count_inbox;
-			var notifications = jsonData.data.count_notifications;
-			
-			updateLeftMenuCounts(followers, inbox, notifications);
-			
-			alert('activity comment successfully added');
-		} else {
-			alert(getErrorMessage(jsonData.response));
-		}
-	};
-	xhr.open('POST',API+'addActivityComment');
-	xhr.send({
-		user_id:userObject.userId,
-		comment:comObj.comment,
-		activity_id:comObj.activity_id,
-	});
-}
-
 
 function getActivityOnline(aId){
 	
@@ -862,4 +829,52 @@ function handleActivityLikesButton(e){
 	
 	openWindows.push(listUsersWindow);
 	navController.open(listUsersWindow);
+}
+
+function appendCommentActivityTableView(date, message){
+	//comment row
+	var commentRow = Ti.UI.createTableViewRow({
+		className:'commentRow',
+		height:'auto',
+		width:'100%',
+		backgroundColor:'transparent',
+		selectedBackgroundColor:'transparent',
+		rowId:COMMENT_ROW
+	});
+	
+	//comment label
+	var commentLabel = Ti.UI.createLabel({
+		text:message,
+		top:8,
+		textAlign:'left',
+		width:292,
+		bottom:24,
+		height:'auto',
+		left:14,
+		opacity:0.6,
+		color:'black',
+		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	
+	var dateCreated = new Date(date * 1000);
+	
+	//comment time
+	var timeLabel = Ti.UI.createLabel({
+		text:relativeTime(dateCreated),
+		bottom:10,
+		textAlign:'left',
+		width:180,
+		height:15,
+		left:16,
+		opacity:0.4,
+		color:'black',
+		font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	
+	commentRow.add(commentLabel);
+	commentRow.add(timeLabel);
+	
+	//viewActivityCommentsTableView.appendRow(commentRow);
+	viewActivityCommentsTableView.insertRowBefore(1, commentRow);
+	viewActivityCommentsTableView.scrollToIndex(viewActivityCommentsTableView.data[0].rows.length - 1);
 }

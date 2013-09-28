@@ -86,7 +86,7 @@ function populateFeedsTableView(data) {
 	
 	for(i=0; i< data.length; i++){
 		//build text
-		var notificationText = getFeedMessage(data[i]);
+		var feedText = getFeedMessage(data[i]);
 		
 		var id = null;
 		var type = null;
@@ -105,8 +105,8 @@ function populateFeedsTableView(data) {
 			var name = data[i].Feed.target_dog_name;
 		}
 		
-		//notification row
-		var notificationRow = Ti.UI.createTableViewRow({
+		//feed row
+		var feedRow = Ti.UI.createTableViewRow({
 			className:'notificationRow',
 			height:71,
 			width:'100%',
@@ -118,8 +118,9 @@ function populateFeedsTableView(data) {
 		});
 		
 		//profile image
-		var rowNotificationProfileImage = Titanium.UI.createImageView({
+		var rowFeedProfileImage = Titanium.UI.createImageView({
 			image:REMOTE_USER_IMAGES+data[i].Feed.user_from_thumb,
+			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:2,
 			borderRadius:30,
 			borderWidth:2,
@@ -127,13 +128,13 @@ function populateFeedsTableView(data) {
 		});
 		
 		//Wrapper view with vertical layout for the text in each row
-		var notificationWrapperView = Ti.UI.createView({
+		var feedWrapperView = Ti.UI.createView({
 			layout:'vertical'
 		});
 		
 		//notification label
-		var rowNotificationLabel = Titanium.UI.createLabel({ 
-			text:notificationText,
+		var rowFeedLabel = Titanium.UI.createLabel({ 
+			text:feedText,
 			color:'#605353',
 			textAlign:'left',
 			width:'auto',
@@ -154,13 +155,13 @@ function populateFeedsTableView(data) {
 			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
-		notificationWrapperView.add(rowNotificationLabel);
-		notificationWrapperView.add(rowDateLabel);
+		feedWrapperView.add(rowFeedLabel);
+		feedWrapperView.add(rowDateLabel);
 		
-		notificationRow.add(rowNotificationProfileImage);
-		notificationRow.add(notificationWrapperView);
+		feedRow.add(rowFeedProfileImage);
+		feedRow.add(feedWrapperView);
 		
-		tableRows.push(notificationRow);
+		tableRows.push(feedRow);
 	}
 	
 	feedsTableView.setData(tableRows);

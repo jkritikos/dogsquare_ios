@@ -12,6 +12,8 @@ var TYPE_FOLLOW_BUTTON = 2;
 
 var FIND_FRIENDS_WIN = 1;
 
+var progressView = new ProgressView({window:viewFindFriends});
+
 Ti.Contacts.requestAuthorization(function(e){
     if (e.success) {
        
@@ -200,6 +202,13 @@ findFriendsTableView.addEventListener('click', handlefriendsTableViewRows);
 //get all contacts from iphone
 var people = Titanium.Contacts.getAllPeople();
 
+function sortByFullName(a, b) {
+    var x = JSON.stringify(a.fullName).toUpperCase();
+    var y = JSON.stringify(b.fullName).toUpperCase(); 
+    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+};
+people.sort(sortByFullName);
+
 //remove empty rows
 findFriendsTableView.footerView = Ti.UI.createView({
     height: 1,
@@ -222,6 +231,7 @@ doSearchUserByEmail(contactsEmailObj);
 
 //populate contacts table view
 function populateFindFriendsContactsTableView(uData){
+	
 	var tableRows = [];
 	//populate each row with the people in the contacts
 	for(i=0;i<people.length;i++){	
@@ -250,9 +260,10 @@ function populateFindFriendsContactsTableView(uData){
 			text:people[i].fullName,
 			color:'black',
 			height:22,
-			textAlign:'center',
+			textAlign:'left',
 			opacity:0.6,
 			left:72,
+			width:116,
 			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'},
 			type:FRIENDS_TYPE_ROW,
 			button:'invite'
@@ -319,6 +330,14 @@ function populateFindFriendsContactsTableView(uData){
 		
 		tableRows.push(row);
 	}
+	
+	//Show success
+	progressView.change({
+        success:true
+    });
+    
+    //Hide message and close register window
+	progressView.hide();
 	findFriendsTableView.setData(tableRows);
 	Ti.API.info('contacts table View has been populated');
 }
@@ -338,11 +357,9 @@ function populateFindFriendsDogsquareTableView(uObj){
 		});
 		
 		//friend's profile name
-		var friendImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-		var friendImageBlob = friendImageFile.toBlob();
-		var friendImageBlobCropped = friendImageBlob.imageAsThumbnail(60,0,30);
 		var rowFriendImage = Titanium.UI.createImageView({
-			image:friendImageBlobCropped,
+			image:API+'photo?user_id='+uObj[i].User.id,
+			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:3,
 			borderRadius:30,
 			borderWidth:2,
@@ -356,8 +373,9 @@ function populateFindFriendsDogsquareTableView(uObj){
 			text:uObj[i].User.name,
 			color:'black',
 			height:22,
-			textAlign:'center',
+			textAlign:'left',
 			opacity:0.6,
+			width:116,
 			left:72,
 			font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'},
 			type:FRIENDS_TYPE_ROW
@@ -518,6 +536,11 @@ function getOnlineUser(n){
 //get info if contact has the app or not or has been followed by the user
 function doSearchUserByEmail(cEmail){
 	Ti.API.info('doSearchUserByEmail() with emails: '+cEmail);
+	
+	//progress view
+	progressView.show({
+		text:"Loading..."
+	});
 	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);

@@ -345,6 +345,7 @@ function populateProfileOtherDogTableView(dogsObj){
 			
 			var rowDogImage = Titanium.UI.createImageView({
 				image:REMOTE_DOG_IMAGES + dogsObj[i].Dog.thumb,
+				defaultImage:IMAGE_PATH+'common/default_dog_photo.png',
 				left:15,
 				top:6,
 				borderRadius:30,

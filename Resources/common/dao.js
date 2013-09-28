@@ -559,6 +559,8 @@ function saveActivityOnline(id){
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			var activity_id = jsonData.data.activity_id;
 			
+			Ti.App.fireEvent('activity', {activityId:activity_id});
+			
 			//Update local activity with its remote id
 			if(activity_id != null){
 				updateActivityRemoteId(id, activity_id);
@@ -594,6 +596,8 @@ function endActivity(obj){
 	
 	saveActivityOnline(obj.activity_id);
 }
+
+
 
 //Returns a list of all the user activities
 function getActivities(){
@@ -693,6 +697,53 @@ function getActivityDetails(id){
 	return info;
 }
 
+//Server call for saving activity comments
+function doSaveActivityCommentOnline(comObj, view){
+	Ti.API.info('doSaveActivityCommentOnline() called with commentObject='+comObj); 	
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+	
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('doSaveActivityCommentOnline() got back from server '+this.responseText); 	
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			Ti.API.info('doSaveActivityCommentOnline() got back comment id from server '+jsonData.data.comment_id);
+			
+			comObj.comment_id = jsonData.data.comment_id;
+			
+			var date = jsonData.data.date;
+			var message = comObj.comment;
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+			if(view == VIEW_ACTIVITY_NEW){
+				appendCommentActivityTableView(date, message);
+			}else if(view == VIEW_RUN_FINISH){
+				appendCommentFinishTableView(date, message);
+			}
+			
+		} else {
+			alert(getErrorMessage(jsonData.response));
+		}
+	};
+	xhr.open('POST',API+'addActivityComment');
+	xhr.send({
+		user_id:userObject.userId,
+		comment:comObj.comment,
+		activity_id:comObj.activity_id,
+	});
+}
+
 //Calculates the dogfuel earned by the specified activity
 function calculateDogfuel(activityId){
 	Ti.API.info('calculateDogfuel() called for activity '+activityId);
@@ -789,7 +840,7 @@ function getInboxMessages(){
 	
 	var messagesRows = [];
 	
-	var rows = db.execute('select i.remote_user_id, i.remote_user_name, i.date, i.message from inbox i where i.date = (select max(i2.date) from inbox i2 where i.remote_user_id = i2.remote_user_id)');
+	var rows = db.execute('select i.remote_user_id, i.remote_user_name, i.date, i.message , i.my_message from inbox i where i.date = (select max(i2.date) from inbox i2 where i.remote_user_id = i2.remote_user_id)');
 	var i=0;
 	while (rows.isValidRow())
 	{
@@ -798,12 +849,14 @@ function getInboxMessages(){
 	  var name = rows.field(1);
 	  var date = rows.field(2);
 	  var message = rows.field(3);
+	  var my_message = rows.field(4);
 	  
 	  var obj = {
 			user_id:user_id,
 			name:name,
 			date:date,
 			message:message,
+			my_message:my_message
 		};
 	
 		messagesRows.push(obj);

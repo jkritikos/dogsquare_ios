@@ -48,6 +48,7 @@ function populateInboxTableView(mObj) {
 		
 		var rowMessageProfileImage = Titanium.UI.createImageView({
 			image:API+'photo?user_id='+mObj[i].user_id,
+			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:2,
 			borderRadius:30,
 			borderWidth:2,
@@ -124,7 +125,6 @@ function getUnreadInboxMessages(){
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
 			var messagesList = [];
-			alert(jsonData.data.messages)
 			
 			for(i=0;i<jsonData.data.messages.length;i++){
 				messagesList.push(jsonData.data.messages[i].UserInbox.id);
@@ -146,6 +146,7 @@ function getUnreadInboxMessages(){
 			}
 			
 			var messages = getInboxMessages();
+			
 			populateInboxTableView(messages);
 			
 			var followers = jsonData.data.count_followers;

@@ -314,14 +314,13 @@ function populateProfileTableView(activities){
 			});
 			
 			var rowActivityImage = Titanium.UI.createImageView({
-				image:IMAGE_PATH+'common/default_dog_photo.png',
+				image:REMOTE_DOG_IMAGES + activities[i].Activity.thumb,
+				defaultImage:IMAGE_PATH+'common/default_dog_photo.png',
 				left:15,
 				borderRadius:30,
 				borderWidth:2,
 				borderColor:'f5a92c'
 			});	
-			
-			rowActivityImage.image = REMOTE_DOG_IMAGES + activities[i].Activity.thumb;
 			
 			//Wrapper view with vertical layout for the text in each row
 			var activityWrapperView = Ti.UI.createView({

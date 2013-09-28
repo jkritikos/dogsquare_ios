@@ -150,8 +150,8 @@ inboxNewWindow.add(inboxNewSepparator);
 //chat text field
 inboxNewChatField = Ti.UI.createTextField({
 	width:252,
-	height:24,
-	bottom:15,
+	height:30,
+	bottom:9,
 	left:10,
 	backgroundColor:'white',
 	borderWidth:1,
@@ -173,7 +173,7 @@ inboxNewChatFieldLabel = Ti.UI.createLabel({
 	opacity:0.7,
 	width:100,
 	height:30,
-	font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
+	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
 inboxNewChatField.add(inboxNewChatFieldLabel);
 
@@ -181,7 +181,7 @@ inboxNewChatField.add(inboxNewChatFieldLabel);
 var inboxNewSendButton = Titanium.UI.createButton({
 	backgroundImage:IMAGE_PATH+'inbox_view/send_icon.png',
 	right:16,
-	bottom:14,
+	bottom:10,
 	width:30,
 	height:28,
 });
@@ -204,6 +204,7 @@ function populateInboxNewContactsTableView(mObject){
 		
 		var rowMutualFriendImage = Titanium.UI.createImageView({
 			image:REMOTE_USER_IMAGES + mObject[i].thumb,
+			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:3,
 			borderRadius:30,
 			borderWidth:2,
@@ -387,7 +388,7 @@ function populateInboxNewChatTableView(mObj, userId){
 			top:12,
 			left:90,
 			width:140,
-			height:54,
+			height:Titanium.UI.SIZE,
 			borderWidth:1,
 			borderColor:UI_BACKGROUND_COLOR,
 			borderRadius:5
@@ -396,6 +397,8 @@ function populateInboxNewChatTableView(mObj, userId){
 		//sender message label
 		var senderInboxViewMessageLabel = Titanium.UI.createLabel({ 
 			text:mObj[i].message,
+			top:10,
+			bottom:10,
 			color:'black',
 			height:'auto',
 			width:119,
@@ -478,7 +481,7 @@ function appendRowInboxNewTableView(date, message){
 		top:12,
 		right:90,
 		width:140,
-		height:54,
+		height:Titanium.UI.SIZE,
 		borderWidth:1,
 		borderColor:UI_BACKGROUND_COLOR,
 		borderRadius:5
@@ -487,6 +490,8 @@ function appendRowInboxNewTableView(date, message){
 	//sender message label
 	var senderInboxViewMessageLabel = Titanium.UI.createLabel({ 
 		text:message,
+		top:10,
+		bottom:10,
 		color:'black',
 		height:'auto',
 		width:119,
@@ -510,6 +515,7 @@ function appendRowInboxNewTableView(date, message){
 	});
 	
 	if(!inboxNewUserThumbCreated) {
+		rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png',
 		rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId;
 		
 		inboxNewOtherThumbCreated = false;
