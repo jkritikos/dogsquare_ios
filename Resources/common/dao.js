@@ -94,6 +94,100 @@ var NETWORK_TIMEOUT = 20000;
 var NETWORK_RESPONSE_OK = 1;
 var NETWORK_RESPONSE_ERROR = -1;
 
+//Badges
+var BADGE_TOTAL = 17;
+
+function getBadgeDetails(id){
+	var badge = {};
+	
+	if(id == 1){
+		badge = {
+			title:'Puppy',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 2){
+		badge = {
+			title:'Lazy',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 3){
+		badge = {
+			title:'Olympian',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 4){
+		badge = {
+			title:'Superfamily',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 5){
+		badge = {
+			title:'Athletic',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 6){
+		badge = {
+			title:'Crossfit',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 7){
+		badge = {
+			title:'Thank You',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 8){
+		badge = {
+			title:'Mayor',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 9){
+		badge = {
+			title:'Workie',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 10){
+		badge = {
+			title:'Swimmie',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 11){
+		badge = {
+			title:'VIP',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 12){
+		badge = {
+			title:'Cruelty',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 13){
+		badge = {
+			title:'Godfather',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 14){
+		badge = {
+			title:'Rookie',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 15){
+		badge = {
+			title:'Superstar',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 16){
+		badge = {
+			title:'Healthy Dog',
+			description:'Lorem ipsum blah blab'
+		};
+	} else if(id == 17){
+		badge = {
+			title:'101 Dalmatians',
+			description:'Lorem ipsum blah blab'
+		};
+	}
+}
+
 //Updates the global user object - only keys in obj are updated
 function saveUserObject(obj){
 	Ti.API.info('saveUserObject '+JSON.stringify(obj));
