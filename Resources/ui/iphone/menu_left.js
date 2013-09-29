@@ -217,9 +217,9 @@ leftTableView.addEventListener("click", function(e){
 			break;
 		case MENU_BADGES:
 			navController.getWindow().setTitleControl();
-			Ti.include('ui/iphone/badges.js');
-			buildBadgesView();
-			navController.getWindow().add(viewBadges);
+			Ti.include('ui/iphone/badge_list.js');
+			buildBadgeListView();
+			navController.getWindow().add(viewBadgeList);
 			navController.getWindow().setTitle('Badges');
 			break;
 	}

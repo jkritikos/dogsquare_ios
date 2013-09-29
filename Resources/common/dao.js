@@ -103,89 +103,108 @@ function getBadgeDetails(id){
 	if(id == 1){
 		badge = {
 			title:'Puppy',
+			title_left:22,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 2){
 		badge = {
 			title:'Lazy',
+			title_left:93,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 3){
 		badge = {
 			title:'Olympian',
+			title_left:146,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 4){
 		badge = {
 			title:'Superfamily',
+			title_left:207,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 5){
 		badge = {
 			title:'Athletic',
+			title_left:22,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 6){
 		badge = {
 			title:'Crossfit',
+			title_left:85,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 7){
 		badge = {
 			title:'Thank You',
+			title_left:146,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 8){
 		badge = {
 			title:'Mayor',
+			title_left:218,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 9){
 		badge = {
 			title:'Workie',
+			title_left:23,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 10){
 		badge = {
 			title:'Swimmie',
+			title_left:83,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 11){
 		badge = {
 			title:'VIP',
+			title_left:161,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 12){
 		badge = {
 			title:'Cruelty',
+			title_left:217,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 13){
 		badge = {
 			title:'Godfather',
+			title_left:16,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 14){
 		badge = {
 			title:'Rookie',
+			title_left:88,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 15){
 		badge = {
 			title:'Superstar',
+			title_left:146,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 16){
 		badge = {
 			title:'Healthy Dog',
+			title_left:207,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 17){
 		badge = {
 			title:'101 Dalmatians',
+			title_left:6,
 			description:'Lorem ipsum blah blab'
 		};
 	}
+	
+	return badge;
 }
 
 //Updates the global user object - only keys in obj are updated
