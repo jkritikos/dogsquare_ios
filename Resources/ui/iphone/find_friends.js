@@ -14,9 +14,13 @@ var FIND_FRIENDS_WIN = 1;
 
 var progressView = new ProgressView({window:viewFindFriends});
 
+var people = [];
+
 Ti.Contacts.requestAuthorization(function(e){
     if (e.success) {
-       
+       //get all contacts from iphone
+		people = Titanium.Contacts.getAllPeople();
+		people.sort(sortByFullName);
     } else {
        alert('PLEASE ENABLE CONTACTS ACCESS');
     }
@@ -199,15 +203,11 @@ var findFriendsTableView = Titanium.UI.createTableView({
 viewFindFriends.add(findFriendsTableView);
 findFriendsTableView.addEventListener('click', handlefriendsTableViewRows);
 
-//get all contacts from iphone
-var people = Titanium.Contacts.getAllPeople();
-
 function sortByFullName(a, b) {
     var x = JSON.stringify(a.fullName).toUpperCase();
     var y = JSON.stringify(b.fullName).toUpperCase(); 
     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 };
-people.sort(sortByFullName);
 
 //remove empty rows
 findFriendsTableView.footerView = Ti.UI.createView({
@@ -216,18 +216,21 @@ findFriendsTableView.footerView = Ti.UI.createView({
 });
 
 var contactsEmailObj = [];
-//push every email from work or from home
-for(j=0;j<people.length;j++){	
-	
-	if(people[j].email.home != null){
-		contactsEmailObj[j] = people[j].email.home[0];
-	}else if(people[j].email.work != null){
-		contactsEmailObj[j] = people[j].email.work[0];
-	}
-}
 
-//find user info via email from the server - to check if he owns the app 
-doSearchUserByEmail(contactsEmailObj);
+//push every email from work or from home
+if(people.length != 0){
+	for(j=0;j<people.length;j++){	
+		
+		if(people[j].email.home != null){
+			contactsEmailObj[j] = people[j].email.home[0];
+		}else if(people[j].email.work != null){
+			contactsEmailObj[j] = people[j].email.work[0];
+		}
+	}
+	
+	//find user info via email from the server - to check if he owns the app 
+	doSearchUserByEmail(contactsEmailObj);
+}
 
 //populate contacts table view
 function populateFindFriendsContactsTableView(uData){

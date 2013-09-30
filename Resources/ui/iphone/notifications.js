@@ -54,8 +54,27 @@ function doGetNotifications(){
 	xhr.onload = function(e){
 		Ti.API.info('doGetNotifications() got back from server '+this.responseText);
 		var jsonData = JSON.parse(this.responseText);
-		//Hide progress view
-		progressView.hide();
+		
+		var notificationsList = [];
+		
+		for(i=0;i<jsonData.data.notifications.length;i++){
+			notificationsList.push(jsonData.data.notifications[i].id);
+			
+			saveNotification(jsonData.data.notifications[i]);
+		}
+		
+		if(notificationsList != 0){
+			setOnlineNotificationsToRead(notificationsList);
+		}
+		
+		var notificationsObj = getNotifications();
+		
+		//Update UI
+		if(notificationsObj.length > 0){
+			populateNotificationsTableView(notificationsObj);	
+		}else{
+			notificationsTableView.data = [];
+		}
 		
 		var followers = jsonData.data.count_followers;
 		var inbox = jsonData.data.count_inbox;
@@ -63,12 +82,8 @@ function doGetNotifications(){
 		
 		updateLeftMenuCounts(followers, inbox, notifications);
 		
-		//Update UI
-		if(jsonData.data.notifications.length > 0){
-			populateNotificationsTableView(jsonData.data.notifications);	
-		}else{
-			notificationsTableView.data = [];
-		}
+		//Hide progress view
+		progressView.hide();
 	};
 	
 	xhr.open('GET',API+'getNotifications');
@@ -124,7 +139,7 @@ function populateNotificationsTableView(data) {
 			width:'auto',
 			height:'auto',
 			left:70,
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:13, fontWeight:data[i].read == 0 ? 'bold' : 'regular', fontFamily:'Open Sans'}
 		});
 		
 		//date label
@@ -201,10 +216,9 @@ function handleNotificationsTableView(e){
 	}
 }
 
-
-function setNotificationToRead(notifId){
+function setOnlineNotificationsToRead(list){
 	
-	Ti.API.info('setNotificationToRead() already read, notification: '+ notifId);
+	Ti.API.info('setOnlineNotificationsToRead() reads notifications: '+ list);
 	
 	var list = JSON.stringify(list);
 	
@@ -216,7 +230,7 @@ function setNotificationToRead(notifId){
 	};
 	
 	xhr.onload = function(e) {
-		Ti.API.info('setNotificationToRead() got back from server : '+ this.responseText);
+		Ti.API.info('setOnlineNotificationsToRead() got back from server : '+ this.responseText);
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
@@ -232,9 +246,9 @@ function setNotificationToRead(notifId){
 		}
 		
 	};
-	xhr.open('POST',API+'setNotificationRead');
+	xhr.open('POST',API+'setNotificationsRead');
 	xhr.send({
 		user_id:userObject.userId,
-		notification:notifId
+		list:list
 	});
 }

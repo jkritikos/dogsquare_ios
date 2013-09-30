@@ -63,6 +63,7 @@ function buildLoginWindow(){
 		width:192,
 		height:29,
 		top:1,
+		keyboardType:Ti.UI.KEYBOARD_EMAIL,
 		returnKeyType: Ti.UI.RETURNKEY_NEXT,
 		field:1
 	});

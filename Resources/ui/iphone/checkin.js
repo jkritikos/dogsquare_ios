@@ -104,11 +104,12 @@ checkinView.add(checkinPlacesTableViewBackground);
 var checkinPlacesTableView = Titanium.UI.createTableView({
 	minRowHeight:51,
 	width:320,
-	data:populatecheckinPlacesTableView(),
 	backgroundColor:UI_BACKGROUND_COLOR,
 	top:18,
 	bottom:0
 });
+
+getNearbyPlaces();
 
 //remove empty rows
 checkinPlacesTableView.footerView = Ti.UI.createView({
@@ -119,14 +120,12 @@ checkinPlacesTableView.footerView = Ti.UI.createView({
 checkinPlacesTableViewBackground.add(checkinPlacesTableView);
 checkinPlacesTableView.addEventListener('click', handleCheckinPlacesTableViewRow);
 
-function populatecheckinPlacesTableView(){
-	var tableRows = [];
-	var placeArray = ['Pet City', 'Pet and Bath', 'Pet Vet'];
-	var placeArrayId = ['6', '7', '8'];
-	var descriptionArray = ['Pet Shop', 'Grooming Services', 'Veterinary Clinic'];
-	var distanceArray = ['0,5km', '1km', '1km'];
+function populatecheckinPlacesTableView(places){
 	
-	for(i=0;i<=2;i++){
+	var tableRows = [];
+	var descriptionArray = ['Pet Shop', 'Grooming Services', 'Veterinary Clinic'];
+	
+	for(i=0;i<places.length;i++){
 		
 		//places row
 		var placeRow = Ti.UI.createTableViewRow({
@@ -135,13 +134,10 @@ function populatecheckinPlacesTableView(){
 			width:'100%',
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',
-			placeId:placeArrayId[i]
+			placeId:places[i].id
 		});
 		
 		//place image
-		//var rowPlaceImageFile = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg");
-		//var rowPlaceImageBlob = rowPlaceImageFile.toBlob();
-		//var rowPlaceImageBlobCropped = rowPlaceImageBlob.imageAsThumbnail(42,0,21);
 		var rowPlaceImage = Titanium.UI.createImageView({
 			image:REMOTE_USER_IMAGES + userObject.thumb_path,
 			left:10,
@@ -153,41 +149,41 @@ function populatecheckinPlacesTableView(){
 		
 		//place title label for row
 		var rowPlaceTitleLabel = Titanium.UI.createLabel({ 
-			text:placeArray[i],
+			text:places[i].name,
 			color:'black',
 			height:16,
-			top:14,
+			top:10,
 			width:'auto',
 			textAlign:'left',
 			opacity:0.8,
 			left:87,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		//place description label for row
 		var rowPlaceDescriptionLabel = Titanium.UI.createLabel({ 
-			text:descriptionArray[i],
+			text:places[i].category,
 			color:'black',
 			height:14,
-			top:27,
+			top:28,
 			width:'auto',
 			textAlign:'left',
-			opacity:0.5,
+			opacity:0.7,
 			left:87,
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		//place distance label for row
 		var rowPlaceDistanceLabel = Titanium.UI.createLabel({ 
-			text:distanceArray[i],
+			text:places[i].distance,
 			color:'black',
 			height:14,
-			top:39,
+			top:45,
 			width:'auto',
 			textAlign:'left',
 			opacity:0.5,
 			left:87,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		placeRow.add(rowPlaceTitleLabel);
@@ -198,7 +194,7 @@ function populatecheckinPlacesTableView(){
 		tableRows.push(placeRow);
 	}
 	
-	return tableRows;
+	checkinPlacesTableView.setData(tableRows);
 }
 
 function handleCheckinPlacesTableViewRow(e){
@@ -246,4 +242,50 @@ function handleNearbyPlacesButton(e){
 		checkinPlacesTableViewBackground.animate({top:129, duration:500});
 		e.source.toggle = true;
 	}
+}
+
+//get all nearby places according to latitude and longitude
+function getNearbyPlaces(){
+	Ti.API.info('getNearbyPlaces() called for latitude:' + userObject.lat + 'and longitude:'+ userObject.lon);
+	
+	//progress view
+	var progressView = new ProgressView({window:checkinView});
+	progressView.show({
+		text:"Loading..."
+	});
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in getNearbyPlaces() '+e);
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('getNearbyPlaces() got back from server '+this.responseText);
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+			populatecheckinPlacesTableView(jsonData.data.places);
+			
+			//Hide progress view
+			progressView.hide();
+		} else {
+			alert(getErrorMessage(jsonData.data.response));
+		}
+	};
+	
+	xhr.open('GET',API+'getPlaces');
+	xhr.send({
+		user_id:userObject.userId,
+		lat:userObject.lat,
+		lon:userObject.lon
+	});
 }

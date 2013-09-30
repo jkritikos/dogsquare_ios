@@ -954,6 +954,68 @@ function getActivityCoordinates(activityId){
 	return data;
 }
 
+//Stores a notification object to local
+function saveNotification(obj){
+	
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	Ti.API.info('saveNotification() called');
+	db.execute('insert into notifications (user_from_id, user_from_name, type_id, read, activity_id, date, user_from_thumb) values (?,?,?,0,?,?,?)',obj.user_from, obj.name, obj.type_id, obj.activity_id, obj.created, obj.thumb);
+	db.close();
+	
+	Ti.API.info('saveNotification() saved notification locally');
+}
+
+//sets notification to read
+function setNotificationToRead(notId){
+	
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	Ti.API.info('setNotificationToRead() called');
+	db.execute('update notifications set read = 1 where id = ?', notId);
+	db.close();
+	
+	Ti.API.info('setNotificationToRead() changed notification id:'+ notId +' to read: 1');
+}
+
+//get all local notifications
+function getNotifications(){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	var notificationRows = [];
+	
+	var rows = db.execute('select id, user_from_id, user_from_name, type_id, read, activity_id, date, user_from_thumb from notifications order by date desc');
+	var i=0;
+	while (rows.isValidRow())
+	{
+		
+	  var id = rows.field(0);	
+	  var user_from = rows.field(1);
+	  var name = rows.field(2);
+	  var type_id = rows.field(3);
+	  var read = rows.field(4);
+	  var activity_id = rows.field(5);
+	  var created = rows.field(6);
+	  var thumb = rows.field(7);
+	  
+	  var obj = {
+	  		id:id,
+			user_from:user_from,
+			name:name,
+			type_id:type_id,
+			read:read,
+			activity_id:activity_id,
+			created:created,
+			thumb:thumb
+		};
+	
+		notificationRows.push(obj);
+		rows.next();
+	}
+	rows.close();
+	db.close();
+	
+	return notificationRows;
+}
+
 //Stores a message object to our local inbox
 function saveInboxMessage(obj){
 	var db = Ti.Database.install('dog.sqlite', 'db');
@@ -1183,6 +1245,7 @@ function cleanDB(){
 	db.execute('delete from INBOX');
 	db.execute('delete from DOG_BREEDS');
 	db.execute('delete from MUTUAL_FOLLOWERS');
+	db.execute('delete from NOTIFICATIONS');
 	
 	db.close();
 	Ti.API.info('cleanDB() ends');
@@ -1202,6 +1265,7 @@ function createDB(){
 	db.execute('create table if not exists DOG_BREEDS (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"origin\" varchar(256), \"weight_from\" integer, \"weight_to\" integer, \"kennel_club\" varchar(256), \"active\" integer)');
 	db.execute('create table if not exists MUTUAL_FOLLOWERS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_id\" integer, \"name\" varchar(256),\"thumb\" varchar(128))');
 	db.execute('create table if not exists PLACE_CATEGORIES (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"active\" integer)');
+	db.execute('create table if not exists NOTIFICATIONS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from_id\" integer, \"user_from_name\" varchar(256), \"type_id\" integer, \"read\" integer, \"activity_id\" integer, \"date\" real, \"user_from_thumb\" varchar(128))');
 	//db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from\" integer, \"user_to\" integer, \"date\" real, \"message\" text)');
 	
 	db.close();

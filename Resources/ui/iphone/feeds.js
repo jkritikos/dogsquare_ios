@@ -188,6 +188,7 @@ function handleFeedsTableViewRows(e){
 	feedsRowWindow.setLeftNavButton(feedsRowBackButton);
 	feedsRowBackButton.addEventListener("click", function() {
 	    navController.close(feedsRowWindow);
+	    navController.getWindow().setTitle('Feed');
 	});
 	
 	
@@ -202,7 +203,7 @@ function handleFeedsTableViewRows(e){
 		
 		openWindows.push(feedsRowWindow);
 		navController.open(feedsRowWindow);
-	}else if(feedType == FEED_NEW_DOG){
+	}else if(feedType == FEED_NEW_DOG || feedType == FEED_FRIEND_LIKE_DOG){
 		
 		Ti.include('ui/iphone/dog_profile.js');
 		
