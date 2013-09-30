@@ -105,7 +105,7 @@ function buildMapView(windowMode){
 	
 	mapSearchContainer.add(mapSearchTxtfield);
 	
-	if(CURRENT_VIEW == VIEW_MAP){
+	if(viewMapTargetMode == TARGET_MODE_REUSE){
 		navController.getWindow().setTitleControl(mapSearchContainer);
 	}
 	
@@ -169,7 +169,7 @@ function buildMapView(windowMode){
 	mapFilterCancelButton.addEventListener('click', handleCloseFilterViewButton);
 	
 	mapCheckInButton.addEventListener('click', function(){
-		navController.getWindow().setTitleControl();
+		
 		
 		Ti.include('ui/iphone/checkin.js');
 		
@@ -180,6 +180,8 @@ function buildMapView(windowMode){
 			barColor:UI_COLOR,
 			title:'Check in'
 		});
+		
+		checkinWindow.setTitle('Check in');
 		
 		//back button
 		var checkinBackButton = Ti.UI.createButton({
@@ -192,7 +194,15 @@ function buildMapView(windowMode){
 		
 		checkinBackButton.addEventListener("click", function() {
 		    navController.close(checkinWindow);
-		    navController.getWindow().setTitleControl(mapSearchContainer);
+		    
+		    if(viewMapTargetMode == TARGET_MODE_REUSE){
+		    	Ti.API.info('Back from checkin.js - target mode is REUSE');
+		    	navController.getWindow().setTitleControl(mapSearchContainer);
+		    } else {
+		    	Ti.API.info('Back from checkin.js - target mode is NEW WIN');
+		    	openWindows[openWindows.length-1].setTitleControl(mapSearchContainer);
+		    }
+		    
 		});
 		
 		checkinWindow.add(checkinView);

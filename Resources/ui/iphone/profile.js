@@ -244,11 +244,14 @@ profileStartButton.addEventListener('click', function(){
 });
 
 profileMapButton.addEventListener('click', function(){
+	Ti.include('ui/iphone/map.js');
+	buildMapView(TARGET_MODE_NEW_WINDOW);
+	
 	var profileMapWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
 		barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR,
-		title:'Map'
+		barColor:UI_COLOR
+		//title:'Map'
 	});
 	
 	//map back button
@@ -264,9 +267,6 @@ profileMapButton.addEventListener('click', function(){
 		navController.getWindow().setTitleControl();
 	    navController.close(profileMapWindow);
 	});
-	
-	Ti.include('ui/iphone/map.js');
-	buildMapView(TARGET_MODE_NEW_WINDOW);
 	
 	profileMapWindow.setTitleControl(mapSearchContainer);
 	profileMapWindow.add(viewMap);
