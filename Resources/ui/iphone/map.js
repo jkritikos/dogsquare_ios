@@ -202,7 +202,6 @@ function buildMapView(windowMode){
 		    	Ti.API.info('Back from checkin.js - target mode is NEW WIN');
 		    	openWindows[openWindows.length-1].setTitleControl(mapSearchContainer);
 		    }
-		    
 		});
 		
 		checkinWindow.add(checkinView);

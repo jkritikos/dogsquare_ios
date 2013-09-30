@@ -268,8 +268,8 @@ function validatePlaceForm(){
 	
 	addPlaceObject.name = addPlaceTxtFieldName.value;
 	addPlaceObject.category_id = addPlaceCategoryLabel.id;
-	addPlaceObject.longitude = 23.717422;
-	addPlaceObject.latitude = 37.970257;
+	addPlaceObject.longitude = userObject.lon;
+	addPlaceObject.latitude = userObject.lat;
 	
 	return true;
 }
@@ -295,36 +295,37 @@ function handlePlacePhotoSelection(){
 			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
 			jpgcompressor.setCompressSize(200000);
 			jpgcompressor.setWorstCompressQuality(0.40);
-			var resizedImage = jpgcompressor.scale(image, 1024, 768);
-			var compressedImage = jpgcompressor.compress(resizedImage);
+			
+			var compressedImage = jpgcompressor.compress(image);
+			
+			//Create thumbnail
+			var imageThumbnail = image.imageAsThumbnail(60,0,30);
 			
 			addPlaceObject.photo = compressedImage;
+			addPlaceObject.thumb = imageThumbnail;
 			
 			var uniquePlaceFilename = new Date().getTime() + '.jpg';
 			addPlaceObject.photo_filename = uniquePlaceFilename;
 			
-			// create new file name and remove old
-			var filename = Titanium.Filesystem.applicationDataDirectory + uniquePlaceFilename;
-			var tmpImage = Titanium.Filesystem.getFile(filename);
-			tmpImage.write(compressedImage);
-			Ti.API.info('saved image to '+filename);
+			
 		},
 		cancel:function(){
 	
 		},
 		error:function(error){
-		}
+		},
+		allowEditing:true
 	});
 }
 
+//Validates the add place form and submits to the server
 function handleAddPlaceSaveButton(){
 	if(validatePlaceForm()){
-		Ti.API.info('note form is valid');
+		Ti.API.info('Add place form is valid');
 		doSavePlaceOnline(addPlaceObject);
 	}else{
-		Ti.API.info('note form is not valid');
+		Ti.API.info('Add place form is not valid');
 	}
-
 }
 
 //Server call for saving places
@@ -335,7 +336,7 @@ function doSavePlaceOnline(pObj){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in doSavePlaceOnline() '+e);
 	};
 	
 	xhr.onload = function(e){
@@ -363,6 +364,7 @@ function doSavePlaceOnline(pObj){
 	xhr.send({
 		user_id:userObject.userId,
 		photo:pObj.photo,
+		thumb:pObj.thumb,
 		name:pObj.name,
 		latitude:pObj.latitude,
 		longitude:pObj.longitude,
