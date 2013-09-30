@@ -467,7 +467,7 @@ function followUser(uId, button, win){
 
 //Sends a message to a remote user and stores it locally upon server callback
 function sendMessageToUser(id, name, message, view){
-	Ti.API.info('sendMessageToUser() called. Sender: '+userObject.userId+' message: '+message);
+	Ti.API.info('sendMessageToUser() called. Sender id: '+userObject.userId+' sender name '+name+' message: '+message);
 	
 	var date = new Date().getTime();
 	
@@ -957,6 +957,7 @@ function getActivityCoordinates(activityId){
 //Stores a message object to our local inbox
 function saveInboxMessage(obj){
 	var db = Ti.Database.install('dog.sqlite', 'db');
+	Ti.API.info('saveInboxMessage() called with remote_user_name '+obj.user_from_name);
 	db.execute('insert into inbox (remote_user_id, remote_user_name, my_message, read, date, message) values (?,?,?,?,?,?)',obj.user_from_id, obj.user_from_name, obj.my_message, obj.read, obj.created, obj.message);
 	db.close();
 	

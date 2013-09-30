@@ -342,7 +342,8 @@ function handleSendToTextFieldFocus(e){
 
 function handleInboxNewSendButton(){
 	var toId = toUserId;
-	var toName = inboxNewSendToTextField.value;
+	//var toName = inboxNewSendToTextField.value;
+	var toName = inboxNewSendToChosenLabel.text;
 	var message = inboxNewChatField.value;
 	var view = VIEW_INBOX_NEW;
 	
