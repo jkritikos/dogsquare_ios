@@ -397,7 +397,7 @@ function trackLocation(){
 			var timestampDiff = timestampCurrent - timestampPrevious;
 			
 			//Get weather once we get the 1st accurate set of coordinates
-			if(!runObject.temperature){
+			if(tick == 1){
 				weather.getWeather(e.coords.latitude, e.coords.longitude);	
 				
 			}
@@ -442,7 +442,7 @@ function calculateDistance(newCoordinates){
 		var d = R * c;
 		
 		runningDistanceKm += parseFloat(d);
-		runningDistanceKmLabelValue = runningDistanceKm.toFixed(2);
+		runningDistanceKmLabelValue = runningDistanceKm.toFixed(3);
 		runDistanceValueLabel.text = runningDistanceKmLabelValue;
 		
 		var hourInSeconds = 3600;

@@ -289,22 +289,27 @@ function hello(){
 var weather = ( function() {
     var api = {};
     api.getWeather = function(la, lo) {
-    	alert('weather for lat '+la +' lon '+lo);
+    	//alert('weather for lat '+la +' lon '+lo);
     	Ti.Yahoo.yql('select * from yahoo.maps.findLocation where q="' + la + ',' + lo + '" and gflags="R"', function(e) {
-    		Ti.API.info('DATA: '+JSON.stringify(e.data));
-        	var url = 'http://weather.yahooapis.com/forecastrss?w=' + e.data.json.ResultSet.Results.woeid + '&u=c';
-        	var xhr = Ti.Network.createHTTPClient({});
-        	
-        	xhr.onload = function() {
-           		Ti.API.info('Weather: '+this.responseXML);
-        		var weather = this.responseXML.documentElement;
-        		
-        		var currentTemp = weather.getElementsByTagName('yweather:condition').item(0).getAttribute("temp");
-        		runObject.temperature = currentTemp;
-        	};
-        	
-        	xhr.open('GET', url);
-        	xhr.send();
+    		
+    		if(e.data != null && e.data.json != null && e.data.json.ResultSet != null &&  e.data.json.ResultSet.Results != null && e.data.json.ResultSet.Results.woeid != null){
+    			Ti.API.info('DATA: '+JSON.stringify(e.data));
+	        	var url = 'http://weather.yahooapis.com/forecastrss?w=' + e.data.json.ResultSet.Results.woeid + '&u=c';
+	        	var xhr = Ti.Network.createHTTPClient({});
+	        	
+	        	xhr.onload = function() {
+	           		Ti.API.info('Weather: '+this.responseXML);
+	        		var weather = this.responseXML.documentElement;
+	        		
+	        		var currentTemp = weather.getElementsByTagName('yweather:condition').item(0).getAttribute("temp");
+	        		runObject.temperature = currentTemp;
+	        	};
+	        	
+	        	xhr.open('GET', url);
+	        	xhr.send();
+    		} else {
+    			Ti.API.error('Unable to get weather info for lat '+la+' and lon '+lo);	
+    		}
     	});
     };
     return api;
@@ -870,13 +875,15 @@ function calculateDogfuel(activityId){
 	Ti.API.info('calculateDogfuel() called for activity '+activityId);
 	
 	//10 meters
-	var PLAYTIME_THRESHOLD = 0.001;
+	var PLAYTIME_THRESHOLD = 0.002;
 	var coordinateData = getActivityCoordinates(activityId);
 	var previousRowDistance = 0;
 	var currentRowDistance = 0;
 	
 	var totalWalkDistance = 0;
 	var totalPlaytime = 0;
+	
+	var debug = '';
 	for(var i=0; i < coordinateData.length; i++){
 		
 		//Distance from previous row
@@ -892,19 +899,21 @@ function calculateDogfuel(activityId){
 		if(coordinateData[i].distance != null){
 			if(currentDistanceFormated > PLAYTIME_THRESHOLD){
 				Ti.API.info('      *** '+currentDistanceFormated+' is > than '+PLAYTIME_THRESHOLD+' - so, counting this row as WALK');
+				debug += '      *** '+currentDistanceFormated+' is > than '+PLAYTIME_THRESHOLD+' - so, counting this row as WALK';
 				totalWalkDistance += currentDistanceFormated;	
 			} else {
 				Ti.API.info('      *** '+currentDistanceFormated+' is <= than '+PLAYTIME_THRESHOLD+' - so, counting this row as PLAY');
+				debug += '      *** '+currentDistanceFormated+' is <= than '+PLAYTIME_THRESHOLD+' - so, counting this row as PLAY';
 				totalPlaytime += coordinateData[i].dt;
 			}
 		} else {
 			Ti.API.info(' *** Null distance for row '+i);
 		}
 		
-		
 		Ti.API.info(' *** Checkpoint: lat: '+coordinateData[i].lat+' lon '+coordinateData[i].lon+ ' total distance '+coordinateData[i].distance+' - Did '+currentDistanceFormated+' in '+coordinateData[i].dt+' ms');
 	}
 	
+	alert(debug);
 	Ti.API.info(' *** totalWalkDistance '+totalWalkDistance+' Km, totalPlaytime '+totalPlaytime+' ms');
 	alert(' *** totalWalkDistance '+totalWalkDistance+' Km, totalPlaytime '+totalPlaytime+' ms');
 	
