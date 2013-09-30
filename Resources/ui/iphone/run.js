@@ -288,7 +288,6 @@ function handleEndRunButton(){
 	//Enable window sliding
 	window.setPanningMode("FullViewPanning");
 	
-	
 	if(runningMode){
 		//Clear cronometer
 		runningMode = false;

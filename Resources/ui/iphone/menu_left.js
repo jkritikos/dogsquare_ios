@@ -122,6 +122,8 @@ leftmenuSearchBackgroundView.hide();
 
 //Remove previous views, navbar elements etc.
 function restoreWindowState(){
+	window.setPanningMode("FullViewPanning");
+	
 	//Remove previous view?
 	if(CURRENT_VIEW == VIEW_NOTIFICATIONS){
 		navController.getWindow().remove(viewNotifications);

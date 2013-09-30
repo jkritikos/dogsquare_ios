@@ -14,6 +14,7 @@ navController.getWindow().rightNavButton = newMessageRightNavButton;
 
 //inbox table view
 var inboxTableView = Titanium.UI.createTableView({
+	editable:true,
 	minRowHeight:71,
 	width:293,
 	backgroundColor:UI_BACKGROUND_COLOR,
@@ -33,6 +34,9 @@ inboxTableView.footerView = Ti.UI.createView({
 
 //populate table view
 function populateInboxTableView(mObj) {
+	//Disable window sliding
+	window.setPanningMode("NoPanning");
+			
 	var tableRows = [];
 	
 	for(i=0;i<mObj.length;i++){
