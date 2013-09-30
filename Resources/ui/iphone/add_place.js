@@ -43,6 +43,17 @@ var addPlaceMap = Titanium.Map.createView({
 });
 addPlaceWindow.add(addPlaceMap);
 
+//set place map region object
+var addPlaceMapRegion = {
+	latitude: userObject.lat,
+	longitude: userObject.lon,
+	animate:true,
+	latitudeDelta:0.003,
+	longitudeDelta:0.003
+};
+	
+addPlaceMap.setLocation(checkinMapRegion);
+
 //photo area button
 var addPlacePhotoAreaButton = Ti.UI.createButton({ 
 	backgroundImage:IMAGE_PATH+'add_place/photo_area.png',

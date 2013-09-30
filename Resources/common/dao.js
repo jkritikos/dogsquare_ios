@@ -259,6 +259,14 @@ function saveUserObject(obj){
 		userObject.token = obj.token;
 	}
 	
+	if(obj.lat){
+		userObject.lat = obj.lat;
+	}
+	
+	if(obj.lon){
+		userObject.lon = obj.lon;
+	}
+	
 	Ti.App.Properties.setObject('user', userObject);
 }
 
@@ -862,7 +870,7 @@ function calculateDogfuel(activityId){
 	Ti.API.info('calculateDogfuel() called for activity '+activityId);
 	
 	//10 meters
-	var PLAYTIME_THRESHOLD = 0.01;
+	var PLAYTIME_THRESHOLD = 0.001;
 	var coordinateData = getActivityCoordinates(activityId);
 	var previousRowDistance = 0;
 	var currentRowDistance = 0;
@@ -879,7 +887,7 @@ function calculateDogfuel(activityId){
 		}
 		
 		currentRowDistance = coordinateData[i].distance - previousRowDistance;
-		var currentDistanceFormated = parseFloat(currentRowDistance.toFixed(2));
+		var currentDistanceFormated = parseFloat(currentRowDistance.toFixed(3));
 		
 		if(coordinateData[i].distance != null){
 			if(currentDistanceFormated > PLAYTIME_THRESHOLD){

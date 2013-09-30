@@ -1,4 +1,3 @@
-
 //checkin view
 var checkinView = Ti.UI.createView({
 	backgroundColor:UI_BACKGROUND_COLOR
@@ -16,6 +15,17 @@ var checkinMap = Titanium.Map.createView({
     visible:true
 });
 checkinView.add(checkinMap);
+
+//set checkin map region object
+var checkinMapRegion = {
+	latitude: userObject.lat,
+	longitude: userObject.lon,
+	animate:true,
+	latitudeDelta:0.003,
+	longitudeDelta:0.003
+};
+	
+checkinMap.setLocation(checkinMapRegion);
 
 //checkin title yellow bar
 var checkinTitleBar = Ti.UI.createButton({ 

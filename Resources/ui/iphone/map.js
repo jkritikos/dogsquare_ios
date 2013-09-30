@@ -33,16 +33,24 @@ function buildMapView(windowMode){
 		if (e.error) {
 			Ti.API.error('map.js : geo - position' + e.error); 
 			return;
-		 } 
+		} 
 		 
-		 mapLatitude = e.coords.latitude; 
-		 mapLongitude = e.coords.longitude; 
-		 var accuracy = e.coords.accuracy; 
-		 var timestamp = e.coords.timestamp;
+		mapLatitude = e.coords.latitude; 
+		mapLongitude = e.coords.longitude; 
+		var accuracy = e.coords.accuracy; 
+		var timestamp = e.coords.timestamp;
+		
+		var locationObject = {
+			lat:e.coords.latitude,
+			lon:e.coords.longitude
+		};
+		
+		//Persist our location for use in other views
+		saveUserObject(locationObject); 
 		 
-		 Ti.API.info('Got position lat '+mapLatitude+' lon '+mapLongitude+' with accuracy '+accuracy);
+		Ti.API.info('Got position lat '+mapLatitude+' lon '+mapLongitude+' with accuracy '+accuracy);
 		 
-		 //map region object
+		//map region object
 		var mapRegion = {
 			latitude: mapLatitude,
 			longitude: mapLongitude,
