@@ -18,11 +18,22 @@ if(!PRODUCTION_MODE){
 	SERVER = 'http://dogsquare.veladia.com/';
 }
 
+//Determine iPhone5
 var IPHONE5 = false;
-
 if(Ti.Platform.displayCaps.platformHeight == 568){
 	IPHONE5 = true;	
 }
+
+//Language constants
+var LANGUAGE_ENGLISH = 1;
+
+//Server constants
+var NETWORK_TIMEOUT = 20000;
+var NETWORK_RESPONSE_OK = 1;
+var NETWORK_RESPONSE_ERROR = -1;
+
+//Badges
+var BADGE_TOTAL = 17;
 
 //Server properties
 var API = SERVER + 'api/';
@@ -86,17 +97,7 @@ fb.addEventListener('login', function(e) {
 	}	
 });
 
-//Language constants
-var LANGUAGE_ENGLISH = 1;
-
-//Server constants
-var NETWORK_TIMEOUT = 20000;
-var NETWORK_RESPONSE_OK = 1;
-var NETWORK_RESPONSE_ERROR = -1;
-
-//Badges
-var BADGE_TOTAL = 17;
-
+//Returns the properties for the specified badge object
 function getBadgeDetails(id){
 	var badge = {};
 	

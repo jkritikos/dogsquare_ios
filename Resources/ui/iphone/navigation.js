@@ -92,6 +92,13 @@ function createCenterNavWindow(){
 		window : win
 	});
 	
+	//If we have a persisted user, load the profile view
+	if(userObject.userId){
+		Ti.include('profile.js');
+		navController.getWindow().add(viewProfile);
+		navController.getWindow().setTitle(userObject.name);
+	}
+	
 	return navController;
 }
 
