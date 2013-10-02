@@ -54,6 +54,7 @@ var VIEW_INBOX_NEW = 15;
 var VIEW_ACTIVITY_NEW = 16;
 var VIEW_RUN_FINISH = 17;
 var VIEW_BADGES = 18;
+var VIEW_GALLERY = 19;
 //our current view
 var CURRENT_VIEW = null;
 

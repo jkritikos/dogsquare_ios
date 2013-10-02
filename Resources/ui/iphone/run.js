@@ -326,6 +326,7 @@ function handleEndRunButton(){
 		runFinishWindow.setLeftNavButton(runFinishBackButton);
 		runFinishBackButton.addEventListener("click", function() {
 		    navController.close(runFinishWindow);
+		    getOnlineUser();
 		});
 		
 		//done button & event listener
@@ -338,6 +339,7 @@ function handleEndRunButton(){
 		runFinishWindow.setRightNavButton(runFinishDoneButton);
 		runFinishDoneButton.addEventListener("click", function() {
 		    navController.close(runFinishWindow);
+		    getOnlineUser();
 		});
 		
 		runFinishWindow.add(runFinishView);

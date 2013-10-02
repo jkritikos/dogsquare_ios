@@ -91,6 +91,7 @@ inboxNewBackButton.addEventListener("click", function() {
     navController.close(inboxNewWindow);
     inboxNewSendToTextField.blur();
     inboxNewChatField.blur();
+    getUnreadInboxMessages();
 });
 
 //inbox new sepparator

@@ -189,6 +189,7 @@ function handleNotificationsTableView(e){
 	notificationRowWindow.setLeftNavButton(notificationRowBackButton);
 	notificationRowBackButton.addEventListener("click", function() {
 	    navController.close(notificationRowWindow);
+	    doGetNotifications();
 	});
 	
 	if(notType == NOTIFICATION_COMMENT_ACTIVITY || notType == NOTIFICATION_LIKE_ACTIVITY){

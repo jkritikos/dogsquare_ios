@@ -178,6 +178,7 @@ leftTableView.addEventListener("click", function(e){
 		case MENU_GALLERY:
 			navController.getWindow().setTitleControl();
 			Ti.include('ui/iphone/gallery.js');
+			buildGalleryView();
 			navController.getWindow().add(viewGallery);
 			navController.getWindow().setTitle('Gallery');
 			break;

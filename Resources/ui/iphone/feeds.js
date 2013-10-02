@@ -189,6 +189,7 @@ function handleFeedsTableViewRows(e){
 	feedsRowBackButton.addEventListener("click", function() {
 	    navController.close(feedsRowWindow);
 	    navController.getWindow().setTitle('Feed');
+	    doGetFeeds();
 	});
 	
 	

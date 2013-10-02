@@ -437,7 +437,55 @@ function handlePhotoSelection(){
 
 //handle camera selection
 function handleCameraSelection(){
+	Titanium.Media.showCamera({
+		success:function(event){
+			var image = event.media;
+			
+			//Jpeg compression module
+			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
+			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setWorstCompressQuality(0.40);
+			
+			var compressedImage = jpgcompressor.compress(image);
+			
+			//Create thumbnail
+			var imageThumbnail = image.imageAsThumbnail(60,0,30);
+			
+			addDogObject.photo = compressedImage;
+			addDogObject.thumb = imageThumbnail;
+			
+			var timestamp = new Date().getTime();
+			var uniqueDogFilename = timestamp + '.jpg';
+			var uniqueDogFilenameThumb = 'thumb_' + timestamp + '.jpg';
+			
+			addDogObject.photo_filename = uniqueDogFilename;
+			addDogObject.thumb_filename = uniqueDogFilenameThumb;
+			
+			//save images on the local filesystem
+			var filename = Titanium.Filesystem.applicationDataDirectory + uniqueDogFilename;
+			var filenameThumb = Titanium.Filesystem.applicationDataDirectory + uniqueDogFilenameThumb;
+			
+			var tmpImage = Titanium.Filesystem.getFile(filename);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
+			tmpImage.write(compressedImage);
+			
+			tmpImage = Titanium.Filesystem.getFile(filenameThumb);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
+			tmpImage.write(imageThumbnail);
+			
+			Ti.API.info('saved image to '+filename);
+		},
+		cancel:function(){
 	
+		},
+		error:function(error){
+		},
+		allowEditing:true
+	});
 }	
 
 function handleAddDogTextFieldFocus(){

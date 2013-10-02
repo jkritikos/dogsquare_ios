@@ -463,7 +463,7 @@ function handleFollowersFolowingTab(e){
 
 //get other user info by id from server
 function getOnlineUser(){
-	Ti.API.info('getOnlineOtherUser() called for user_id='+ userObject.userId); 	
+	Ti.API.info('getOnlineUser() called'); 	
 	//progress view
 	var progressView = new ProgressView({window:viewProfile});
 	progressView.show({
@@ -478,7 +478,7 @@ function getOnlineUser(){
 	};
 	
 	xhr.onload = function(e){
-			
+		Ti.API.info('getOnlineUser() got back from server '+this.responseText); 		
 		var jsonData = JSON.parse(this.responseText);
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){

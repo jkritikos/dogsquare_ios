@@ -43,7 +43,7 @@ function populateBadgeList(badges){
 			id:badges[i].id
 		});
 		viewBadgeScroll.add(badgeImage);
-		badgeImage.addEventListener('click',handlBadgeButton);
+		badgeImage.addEventListener('click',handleBadgeButton);
 		
 		var badgeTitleLabel = Titanium.UI.createLabel({
 			text:badgeObj.title,
@@ -103,7 +103,7 @@ function getBadgesOnline(){
 }
 
 
-function handlBadgeButton(e){
+function handleBadgeButton(e){
 	
 	var title = e.source.winTitle;
 	var id = e.source.id;
