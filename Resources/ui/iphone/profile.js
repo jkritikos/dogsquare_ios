@@ -6,7 +6,7 @@ var TAB_FOLLOWERS = 1;
 var TAB_FOLLOWING = 2;
 
 var profileImageView = Titanium.UI.createImageView({
-	image:REMOTE_USER_IMAGES + userObject.image_path,
+	image:getUserPhoto(userObject.image_path),
 	top:0,
 	height:320,
 	width:320,
@@ -474,12 +474,14 @@ function getOnlineUser(){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
+		Ti.API.error('getOnlineUser() got back error '+e);
 		navController.getWindow().setTitle('');
 	};
 	
 	xhr.onload = function(e){
 		Ti.API.info('getOnlineUser() got back from server '+this.responseText); 		
 		var jsonData = JSON.parse(this.responseText);
+		Ti.API.info('getOnlineUser() got back from server '+this.responseText);
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			

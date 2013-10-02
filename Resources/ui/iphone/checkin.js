@@ -139,7 +139,7 @@ function populatecheckinPlacesTableView(places){
 		
 		//place image
 		var rowPlaceImage = Titanium.UI.createImageView({
-			image:REMOTE_USER_IMAGES + userObject.thumb_path,
+			image:getUserPhoto(userObject.thumb_path),
 			left:10,
 			top:5,
 			borderRadius:27,

@@ -47,5 +47,8 @@ loginButton.addEventListener('click', function(){
 	
 	var loginWindow = buildLoginWindow(false);
 	initialWindow.add(loginWindow);
+	
+	//Mark current view as open
+	CURRENT_VIEW = VIEW_LOGIN;
 	loginWindow.open();
 });

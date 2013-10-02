@@ -37,7 +37,7 @@ function populateListUsersTableView(uData){
 		});
 		
 		var rowUserImage = Titanium.UI.createImageView({
-			image:REMOTE_USER_IMAGES + uData.users[i].User.thumb,
+			image:getUserPhoto(uData.users[i].User.thumb),
 			left:3,
 			borderRadius:30,
 			borderWidth:2,

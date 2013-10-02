@@ -204,7 +204,7 @@ function populateInboxNewContactsTableView(mObject){
 		});
 		
 		var rowMutualFriendImage = Titanium.UI.createImageView({
-			image:REMOTE_USER_IMAGES + mObject[i].thumb,
+			image:getUserPhoto(mObject[i].thumb),
 			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:3,
 			borderRadius:30,

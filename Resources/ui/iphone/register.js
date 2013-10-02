@@ -482,7 +482,7 @@ function doSignup(uObj){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in doSignup() '+e);
 	};
 	
 	xhr.onload = function(e){
@@ -501,6 +501,7 @@ function doSignup(uObj){
 			uObj.userId = jsonData.data.user_id;
 			uObj.thumb_path = jsonData.data.thumb;
 			uObj.image_path = jsonData.data.photo;
+			uObj.token = jsonData.data.token;
 			
 			//Save data & update UI
 			saveUserObject(uObj);

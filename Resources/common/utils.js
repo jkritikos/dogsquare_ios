@@ -23,6 +23,22 @@ function isValidEmail(email){
     }
 }
 
+//Returns the appropriate path for the specified user photo
+function getUserPhoto(path){
+	var photo = null;
+	
+	if(path != null){
+		if(path.substring(0,4) == 'http'){
+			photo = path;
+		} else {
+			photo = REMOTE_USER_IMAGES+path;
+		}
+	}
+	
+	Ti.API.info('getUserPhoto() called with '+path+' and returns '+photo);
+	return photo;
+}
+
 //int range validator
 function isWithinRange(input, min, max){
 	if(input >= min && input <= max){

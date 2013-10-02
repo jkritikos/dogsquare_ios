@@ -237,7 +237,7 @@ function updateLeftMenu(obj){
 	Ti.API.info('updating left menu for user '+obj.name +' with '+obj.followers+' followers. Thumb path is '+obj.thumb_path);
 	
 	//photo
-	leftTableView.data[0].rows[0].children[0].image = REMOTE_USER_IMAGES + obj.thumb_path;
+	leftTableView.data[0].rows[0].children[0].image = getUserPhoto(obj.thumb_path);
 	//name
 	leftTableView.data[0].rows[0].children[2].text = obj.name;
 	//followers
@@ -279,7 +279,7 @@ function createLeftMenu(){
 	//Load the rounded thumbnail image
 	if(userObject.thumb_path){
 		menuProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
-		menuProfileImage.image = REMOTE_USER_IMAGES + userObject.thumb_path;
+		menuProfileImage.image = getUserPhoto(userObject.thumb_path);
 	}
 	
 	var usernameLabel = Titanium.UI.createLabel({
@@ -475,7 +475,7 @@ function populateSearchResultsTableView(uObj, pObj){
 		});
 		
 		var userRowThumbImage = Titanium.UI.createImageView({
-			image:REMOTE_USER_IMAGES + uObj[i].User.thumb,
+			image:getUserPhoto(uObj[i].User.thumb),
 			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:4,
 			top:4,

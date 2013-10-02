@@ -545,7 +545,7 @@ function getOnlineOtherUser(uId){
 function updateProfileOther(userObj){
 	profileOtherFollowersNumberLabel.text = userObj.followers;
 	profileOtherFollowingNumberLabel.text = userObj.following;
-	profileOtherPhotoImage.image = REMOTE_USER_IMAGES + userObj.photo;
+	profileOtherPhotoImage.image = getUserPhoto(userObj.photo);
 	
 	if(userObj.followed != null) {
 		profileOtherFollowButton.backgroundImage = IMAGE_PATH+'profile_other/Unfollow_button.png';
