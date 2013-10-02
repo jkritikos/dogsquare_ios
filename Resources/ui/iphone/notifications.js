@@ -122,7 +122,7 @@ function populateNotificationsTableView(data) {
 		
 		//profile image
 		var rowNotificationProfileImage = Titanium.UI.createImageView({
-			image:REMOTE_USER_IMAGES+data[i].thumb,
+			image:getUserPhoto(data[i].thumb),
 			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:2,
 			borderRadius:30,

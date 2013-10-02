@@ -119,7 +119,7 @@ function populateFeedsTableView(data) {
 		
 		//profile image
 		var rowFeedProfileImage = Titanium.UI.createImageView({
-			image:REMOTE_USER_IMAGES+data[i].Feed.user_from_thumb,
+			image:getUserPhoto(data[i].Feed.user_from_thumb),
 			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:2,
 			borderRadius:30,

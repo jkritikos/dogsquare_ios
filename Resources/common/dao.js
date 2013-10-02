@@ -54,6 +54,8 @@ var VIEW_INBOX_NEW = 15;
 var VIEW_ACTIVITY_NEW = 16;
 var VIEW_RUN_FINISH = 17;
 var VIEW_BADGES = 18;
+var VIEW_LOGIN = 19;
+
 //our current view
 var CURRENT_VIEW = null;
 
@@ -64,6 +66,7 @@ var REMOTE_DOG_IMAGES = SERVER+'uploaded_files/dogs/';
 var REMOTE_PLACE_IMAGES = SERVER+'uploaded_files/places/';
 
 //Facebook connectivity (Titanium 3.1 and up)
+var FB_DOG_PWD = 1234;
 var FB_APP_ID = '509577672446427';
 var FB_API_KEY = '667843a07b0ab0bd71aaa4c91c5ec2af';
 var FB_READ_PERMISSIONS = ['read_stream'];
@@ -97,12 +100,37 @@ fb.addEventListener('login', function(e) {
     			var gender = jsonFBData.gender ? jsonFBData.gender : null; 
     			var age = jsonFBData.age ? jsonFBData.age : null;
     			var fbId = jsonFBData.id;
-    			var email = jsonFBData.email ? jsonFBData.email : null;
+    			var email = jsonFBData.email ? jsonFBData.email : fbId+'@facebook.com';
     			
     			Ti.API.info('FB callback: name '+fbName+' gender '+gender+' age '+age+' fbId '+fbId+' email '+email);
     			
     			if(CURRENT_VIEW == VIEW_SIGNUP){
     				Ti.API.info('FB Login from registration view');
+
+    				//Prepare a signup object from the FB data
+    				var signupObject = {
+    					name:fbName,
+    					followers:0,
+    					following:0,
+    					password:FB_DOG_PWD,
+    					facebook_id:fbId,
+    					age:age,
+    					gender:gender,
+    					email:email
+    				};
+    				
+    				doSignup(signupObject);	
+    			} else if(CURRENT_VIEW == VIEW_LOGIN){
+    				Ti.API.info('FB Login from login view');
+    				
+    				var loginObject = {
+    					email:'',
+    					password:'',
+    					facebook_id:fbId,
+    					f:FB_DOG_PWD
+    				};
+    				
+    				checkLoginCredentials(loginObject);
     			}
     			
     		} else if (e.error) {

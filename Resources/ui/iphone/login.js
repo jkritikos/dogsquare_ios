@@ -158,7 +158,7 @@ function buildLoginWindow(isPopup){
 	loginWindow.add(loginButton);
 	loginButton.addEventListener('click', handleLoginButton);
 	
-	//login button
+	//Facebook login button
 	var facebookButton = Ti.UI.createButton({
 		backgroundImage:IMAGE_PATH+'login/Facebook_login.png',
 		width:237,
@@ -166,6 +166,10 @@ function buildLoginWindow(isPopup){
 		top:298
 	});
 	loginWindow.add(facebookButton);
+	
+	facebookButton.addEventListener('click', function(){
+		fb.authorize();
+	});
 	
 	return loginWindow;
 }
@@ -212,8 +216,7 @@ function handleLoginButton(){
 		loginObject.email = loginFieldEmail.value;
 		
 		checkLoginCredentials(loginObject);
-	}
-	
+	}	
 }
 
 //Server call for signup
@@ -314,10 +317,13 @@ function checkLoginCredentials(lObj){
 		    
 		}
 	};
+	
 	xhr.open('POST',API+'login');
 	xhr.send({
 		password:lObj.password,
-		email:lObj.email
+		email:lObj.email,
+		facebook_id:lObj.facebook_id,
+		f:lObj.f
 	});
 }
 
