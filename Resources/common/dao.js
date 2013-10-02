@@ -1027,6 +1027,16 @@ function saveInboxMessage(obj){
 	Ti.API.info('saveInboxMessage() saved message locally');
 }
 
+//sets inbox messages to read in local
+function setMessagesToRead(list){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	Ti.API.info('setMessagesToRead() called');
+	db.execute('update inbox set read = 1 where id in (' + list + ') and read = 0');
+	db.close();
+	
+	Ti.API.info('setMessagesToRead() changed messages with id:'+ list +' to read: 1');
+}
+
 //Returns all messages from our inbox
 //TODO order by id and group by remote_user_id - get latest message of each user
 function getInboxMessages(){
@@ -1034,7 +1044,7 @@ function getInboxMessages(){
 	
 	var messagesRows = [];
 	
-	var rows = db.execute('select i.remote_user_id, i.remote_user_name, i.date, i.message , i.my_message from inbox i where i.date = (select max(i2.date) from inbox i2 where i.remote_user_id = i2.remote_user_id)');
+	var rows = db.execute('select i.remote_user_id, i.remote_user_name, i.date, i.message , i.my_message, i.read from inbox i where i.date = (select max(i2.date) from inbox i2 where i.remote_user_id = i2.remote_user_id)');
 	var i=0;
 	while (rows.isValidRow())
 	{
@@ -1044,13 +1054,15 @@ function getInboxMessages(){
 	  var date = rows.field(2);
 	  var message = rows.field(3);
 	  var my_message = rows.field(4);
+	  var read = rows.field(5);
 	  
 	  var obj = {
 			user_id:user_id,
 			name:name,
 			date:date,
 			message:message,
-			my_message:my_message
+			my_message:my_message,
+			read:read
 		};
 	
 		messagesRows.push(obj);
@@ -1068,7 +1080,7 @@ function getInboxMessagesByUserId(userId){
 	
 	var messagesRows = [];
 	
-	var rows = db.execute('select date, my_message, message, remote_user_name from inbox where remote_user_id = ? order by date asc', userId);
+	var rows = db.execute('select date, my_message, message, remote_user_name, id, read from inbox where remote_user_id = ? order by date asc', userId);
 	
 	while (rows.isValidRow())
 	{
@@ -1077,12 +1089,16 @@ function getInboxMessagesByUserId(userId){
 	  var my_message = rows.field(1);
 	  var message = rows.field(2);
 	  var name = rows.field(3);
+	  var id = rows.field(4);
+	  var read = rows.field(5);
 	  
 	  var obj = {
+	  		id:id,
 			date:date,
 			my_message:my_message,
 			message:message,
-			name:name
+			name:name,
+			read:read
 		};
 	
 		messagesRows.push(obj);

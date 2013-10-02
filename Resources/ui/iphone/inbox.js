@@ -62,13 +62,14 @@ function populateInboxTableView(mObj) {
 		//message label
 		var rowMessageLabel = Titanium.UI.createLabel({ 
 			text:mObj[i].message,
-			color:'gray',
+			color:'black',
+			opacity:mObj[i].read == 1 ? 0.5 : 1,
 			bottom:18,
 			height:18,
 			width:133,
 			textAlign:'left',
 			left:75,
-			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:mObj[i].read == 1 ? 'regular' : 'semibold', fontFamily:'Open Sans'}
 		});
 		
 		//name label
@@ -80,7 +81,7 @@ function populateInboxTableView(mObj) {
 			width:'auto',
 			textAlign:'left',
 			left:75,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		//date label
@@ -145,7 +146,7 @@ function getUnreadInboxMessages(){
 			}
 			
 			if(messagesList != 0){
-				setMessagesIntoRead(messagesList);
+				setOnlineMessagesIntoRead(messagesList);
 			}
 			
 			var messages = getInboxMessages();
@@ -168,8 +169,8 @@ function getUnreadInboxMessages(){
 	});
 }
 
-function setMessagesIntoRead(list){
-	Ti.API.info('setMessagesIntoRead() read: '+ list);
+function setOnlineMessagesIntoRead(list){
+	Ti.API.info('setOnlineMessagesIntoRead() read: '+ list);
 	
 	var list = JSON.stringify(list);
 	
@@ -181,7 +182,7 @@ function setMessagesIntoRead(list){
 	};
 	
 	xhr.onload = function(e) {
-		Ti.API.info('setMessagesIntoRead() got back from server : '+ this.responseText);
+		Ti.API.info('setOnlineMessagesIntoRead() got back from server : '+ this.responseText);
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
@@ -205,10 +206,20 @@ function setMessagesIntoRead(list){
 }
 
 function handleInboxTableViewRows(e){
+	
+	var list = [];
+	
 	var userId = e.row.user_id;
 	var name = e.row.children[2].text;
 	
 	var messages = getInboxMessagesByUserId(userId);
+	
+	for(i=0;i<messages.length;i++){
+		list.push(messages[i].id);
+		var localMessagesList = list.join();
+	}
+	
+	setMessagesToRead(localMessagesList);
 	
 	Ti.include('ui/iphone/inbox_view.js');
 	
@@ -231,6 +242,7 @@ function handleInboxTableViewRows(e){
 	
 	inboxViewBackButton.addEventListener("click", function() {
 	    navController.close(inboxViewWindow);
+	    getUnreadInboxMessages();
 	});
 	
 	var viewInboxView = buildViewInboxView(messages);
