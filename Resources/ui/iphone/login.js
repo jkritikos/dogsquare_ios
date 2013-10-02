@@ -1,13 +1,15 @@
-
+//UI components
 var loginFieldEmail = null;
 var loginFieldEmailHintTextLabel = null;
 var loginFieldPassword = null;
 var loginFieldPasswordHintTextLabel = null;
 var loginWindow = null;
+var loginWindowPopupMode = null;
 
 var loginObject = {};
 
-function buildLoginWindow(){
+function buildLoginWindow(isPopup){
+	loginWindowPopupMode = isPopup;
 	Titanium.UI.iPhone.showStatusBar();
 	
 	loginWindow = Ti.UI.createWindow({
@@ -20,19 +22,22 @@ function buildLoginWindow(){
 		top:0
 	});
 	
-	//back button
-	var loginBackButton = Ti.UI.createButton({
-	    backgroundImage: IMAGE_PATH+'common/back_button.png',
-	    width:48,
-	    height:33,
-	    left:6
-	});
-	loginNavBar.add(loginBackButton);
-	
-	loginBackButton.addEventListener("click", function() {
-	   	loginWindow.close();
-	   	initialWindow.remove(loginWindow);
-	});
+	//Back button only when not in popup mode
+	if(!isPopup){
+		var loginBackButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'common/back_button.png',
+		    width:48,
+		    height:33,
+		    left:6
+		});
+		
+		loginNavBar.add(loginBackButton);
+		
+		loginBackButton.addEventListener("click", function() {
+		   	loginWindow.close();
+		   	initialWindow.remove(loginWindow);
+		});
+	}
 	
 	var loginNavBarLabel = Ti.UI.createLabel({
 		text:'Login',
@@ -41,7 +46,6 @@ function buildLoginWindow(){
 	});
 	
 	loginNavBar.add(loginNavBarLabel);
-	
 	loginWindow.add(loginNavBar);
 	
 	//Form background
@@ -70,7 +74,6 @@ function buildLoginWindow(){
 	
 	loginFieldEmail.addEventListener('change', handleLoginTextFieldChange);
 	loginFieldEmail.addEventListener('blur', handleLoginTextFieldBlur);
-
 	
 	//Event listener for the email textfield
 	loginFieldEmail.addEventListener('return', function() {
@@ -166,7 +169,6 @@ function buildLoginWindow(){
 	
 	return loginWindow;
 }
-
 
 //handle textfield when not focused
 function handleLoginTextFieldBlur(e){
@@ -321,15 +323,19 @@ function checkLoginCredentials(lObj){
 
 //Closes the login window
 function closeLoginWindow(){
-	
-	initialWindow.animate({opacity:0, duration:100}, function(){
+	if(!loginWindowPopupMode){
+		initialWindow.animate({opacity:0, duration:100}, function(){
+			loginWindow.close();
+			window.remove(initialWindow);
+			leftTableView.fireEvent('click', {menuItem:MENU_PROFILE});
+		});
+	} else {
 		loginWindow.close();
-		window.remove(initialWindow);
-		leftTableView.fireEvent('click', {menuItem:MENU_PROFILE});
-	});
+	}
 }
 
 //Opens a modal login window for post-login unauthorised requests
 function showLoginPopup(){
-	//TODO implement this	
+	var loginPopup = buildLoginWindow(true);
+	loginPopup.open({modal:true,navBarHidden:true});
 }

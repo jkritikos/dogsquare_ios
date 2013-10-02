@@ -11,29 +11,6 @@ var UI_FONT_LEFTMENU = {fontSize:15, fontWeight:'regular', fontFamily:'Open Sans
 var IMAGE_PATH = 'images/iphone/';
 //End UI properties
 
-//Various views
-var currentDogView = null;
-var VIEW_SIGNUP = 1;
-var VIEW_NOTIFICATIONS = 2;
-var VIEW_PROFILE = 3;
-var VIEW_FEED = 4;
-var VIEW_MAP = 5;
-var VIEW_GALLERY = 6;
-var VIEW_INBOX = 7;
-var VIEW_BADGES = 8;
-var VIEW_PASSPORT = 9;
-var VIEW_FIND_FRIENDS = 10;
-var VIEW_SETTINGS = 11;
-var VIEW_PLACE_VIEW = 12;
-var CHECKIN_PLACE_VIEW = 13;
-var VIEW_INBOX_VIEW = 14;
-var VIEW_INBOX_NEW = 15;
-var VIEW_ACTIVITY_NEW = 16;
-var VIEW_RUN_FINISH = 17;
-var VIEW_BADGES = 18;
-
-var CURRENT_VIEW = null;
-
 //Hack for reusing views within current or new window
 var TARGET_MODE_REUSE = 1;
 var TARGET_MODE_NEW_WINDOW = 2;

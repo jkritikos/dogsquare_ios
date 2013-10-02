@@ -203,7 +203,7 @@ function handleFeedsTableViewRows(e){
 		
 		openWindows.push(feedsRowWindow);
 		navController.open(feedsRowWindow);
-	}else if(feedType == FEED_NEW_DOG || feedType == FEED_FRIEND_LIKE_DOG){
+	} else if(feedType == FEED_NEW_DOG || feedType == FEED_FRIEND_LIKE_DOG){
 		
 		Ti.include('ui/iphone/dog_profile.js');
 		
@@ -214,7 +214,7 @@ function handleFeedsTableViewRows(e){
 		
 		openWindows.push(feedsRowWindow);
 		navController.open(feedsRowWindow);
-	}else if(feedType == FEED_FRIEND_NEW_FOLLOWER){
+	} else if(feedType == FEED_FRIEND_NEW_FOLLOWER){
 		
 		Ti.include('ui/iphone/profile_other.js');
 		
@@ -226,6 +226,4 @@ function handleFeedsTableViewRows(e){
 		openWindows.push(feedsRowWindow);
 		navController.open(feedsRowWindow);
 	}
-	
-	
 }

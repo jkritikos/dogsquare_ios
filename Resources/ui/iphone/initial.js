@@ -11,22 +11,6 @@ var initialWindowBackground = Ti.UI.createView({
 
 initialWindowBackground.animate({left:52,duration:800});
 
-/*
-var closeButton = Ti.UI.createButton({
-	title:'close',
-	top:0
-});
-			
-initialWindowBackground.add(closeButton);
-			
-closeButton.addEventListener('click', function(){
-	initialWindow.animate({opacity:0, duration:250}, function(){
-		window.remove(initialWindow);
-	});
-	
-});
-*/
-
 var registerButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'intro_login/Register_button.png',
 	width:175,
@@ -44,7 +28,7 @@ registerButton.addEventListener('click', function(){
 	initialWindow.add(w);
 	
 	//Mark current view as open
-	currentDogView = VIEW_SIGNUP;
+	CURRENT_VIEW = VIEW_SIGNUP;
 	w.open();
 	
 });
@@ -61,10 +45,7 @@ initialWindow.add(initialWindowBackground);
 
 loginButton.addEventListener('click', function(){
 	
-	Ti.include('ui/iphone/login.js');
-	var loginWindow = buildLoginWindow();
-	
+	var loginWindow = buildLoginWindow(false);
 	initialWindow.add(loginWindow);
-	
 	loginWindow.open();
 });

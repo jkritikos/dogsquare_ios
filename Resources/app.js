@@ -15,6 +15,7 @@ var userObject = getUserObject();
 //Create the database
 createDB();
 
+Ti.include('ui/iphone/login.js');
 Ti.include('common/utils.js');
 Ti.include('common/translator.js');
 //Progress view component

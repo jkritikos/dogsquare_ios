@@ -1,6 +1,6 @@
 var SERVER = '';
 
-var PRODUCTION_MODE = true;
+var PRODUCTION_MODE = false;
 
 if(!PRODUCTION_MODE){
 	//UrbanAirship.key='QcPHp0gxT3-3yj5Y9aLDpA';
@@ -34,6 +34,28 @@ var NETWORK_RESPONSE_ERROR = -1;
 
 //Badges
 var BADGE_TOTAL = 17;
+
+//Various views
+var VIEW_SIGNUP = 1;
+var VIEW_NOTIFICATIONS = 2;
+var VIEW_PROFILE = 3;
+var VIEW_FEED = 4;
+var VIEW_MAP = 5;
+var VIEW_GALLERY = 6;
+var VIEW_INBOX = 7;
+var VIEW_BADGES = 8;
+var VIEW_PASSPORT = 9;
+var VIEW_FIND_FRIENDS = 10;
+var VIEW_SETTINGS = 11;
+var VIEW_PLACE_VIEW = 12;
+var CHECKIN_PLACE_VIEW = 13;
+var VIEW_INBOX_VIEW = 14;
+var VIEW_INBOX_NEW = 15;
+var VIEW_ACTIVITY_NEW = 16;
+var VIEW_RUN_FINISH = 17;
+var VIEW_BADGES = 18;
+//our current view
+var CURRENT_VIEW = null;
 
 //Server properties
 var API = SERVER + 'api/';
@@ -79,8 +101,8 @@ fb.addEventListener('login', function(e) {
     			
     			Ti.API.info('FB callback: name '+fbName+' gender '+gender+' age '+age+' fbId '+fbId+' email '+email);
     			
-    			if(currentDogView == VIEW_SIGNUP){
-    				
+    			if(CURRENT_VIEW == VIEW_SIGNUP){
+    				Ti.API.info('FB Login from registration view');
     			}
     			
     		} else if (e.error) {
