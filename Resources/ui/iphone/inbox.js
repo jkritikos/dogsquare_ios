@@ -64,7 +64,7 @@ function populateInboxTableView(mObj) {
 			text:mObj[i].message,
 			color:'black',
 			opacity:mObj[i].read == 1 ? 0.5 : 1,
-			bottom:18,
+			bottom:27,
 			height:18,
 			width:133,
 			textAlign:'left',
@@ -76,7 +76,7 @@ function populateInboxTableView(mObj) {
 		var rowNameLabel = Titanium.UI.createLabel({ 
 			text:mObj[i].name,
 			color:'black',
-			top:18,
+			top:12,
 			height:18,
 			width:'auto',
 			textAlign:'left',
@@ -88,10 +88,11 @@ function populateInboxTableView(mObj) {
 		var rowDateLabel = Titanium.UI.createLabel({ 
 			text:relativeTime(mObj[i].date),
 			color:'black',
+			top:50,
 			height:18,
 			width:'auto',
-			textAlign:'center',
-			right:9,
+			textAlign:'left',
+			left:75,
 			font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		

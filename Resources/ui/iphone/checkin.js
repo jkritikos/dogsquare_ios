@@ -123,73 +123,98 @@ checkinPlacesTableView.addEventListener('click', handleCheckinPlacesTableViewRow
 function populatecheckinPlacesTableView(places){
 	
 	var tableRows = [];
-	var descriptionArray = ['Pet Shop', 'Grooming Services', 'Veterinary Clinic'];
 	
-	for(i=0;i<places.length;i++){
-		
-		//places row
+	if(places.length > 0){
+	
+		for(i=0;i<places.length;i++){
+			
+			//places row
+			var placeRow = Ti.UI.createTableViewRow({
+				className:'placeRow',
+				height:71,
+				width:'100%',
+				backgroundColor:'white',
+				selectedBackgroundColor:'transparent',
+				placeId:places[i].id
+			});
+			
+			//place image
+			var rowPlaceImage = Titanium.UI.createImageView({
+				image:getUserPhoto(userObject.thumb_path),
+				left:10,
+				top:5,
+				borderRadius:27,
+				borderWidth:3,
+				borderColor:'f5a92c'
+			});
+			
+			//place title label for row
+			var rowPlaceTitleLabel = Titanium.UI.createLabel({ 
+				text:places[i].name,
+				color:'black',
+				height:16,
+				top:10,
+				width:'auto',
+				textAlign:'left',
+				opacity:0.8,
+				left:87,
+				font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+			});
+			
+			//place description label for row
+			var rowPlaceDescriptionLabel = Titanium.UI.createLabel({ 
+				text:places[i].category,
+				color:'black',
+				height:14,
+				top:28,
+				width:'auto',
+				textAlign:'left',
+				opacity:0.7,
+				left:87,
+				font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+			});
+			
+			//place distance label for row
+			var rowPlaceDistanceLabel = Titanium.UI.createLabel({ 
+				text:places[i].distance,
+				color:'black',
+				height:14,
+				top:45,
+				width:'auto',
+				textAlign:'left',
+				opacity:0.5,
+				left:87,
+				font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
+			});
+			
+			placeRow.add(rowPlaceTitleLabel);
+			placeRow.add(rowPlaceDescriptionLabel);
+			placeRow.add(rowPlaceDistanceLabel);
+			placeRow.add(rowPlaceImage);
+			
+			tableRows.push(placeRow);
+		}
+	}else {
 		var placeRow = Ti.UI.createTableViewRow({
 			className:'placeRow',
 			height:71,
 			width:'100%',
 			backgroundColor:'white',
-			selectedBackgroundColor:'transparent',
-			placeId:places[i].id
+			selectedBackgroundColor:'transparent'
 		});
 		
-		//place image
-		var rowPlaceImage = Titanium.UI.createImageView({
-			image:getUserPhoto(userObject.thumb_path),
-			left:10,
-			top:5,
-			borderRadius:27,
-			borderWidth:3,
-			borderColor:'f5a92c'
-		});
-		
-		//place title label for row
-		var rowPlaceTitleLabel = Titanium.UI.createLabel({ 
-			text:places[i].name,
-			color:'black',
-			height:16,
-			top:10,
-			width:'auto',
+		//place label
+		var placeLabel = Ti.UI.createLabel({
+			text:'No nearby places found',
 			textAlign:'left',
-			opacity:0.8,
-			left:87,
-			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
-		});
-		
-		//place description label for row
-		var rowPlaceDescriptionLabel = Titanium.UI.createLabel({ 
-			text:places[i].category,
-			color:'black',
-			height:14,
-			top:28,
 			width:'auto',
-			textAlign:'left',
-			opacity:0.7,
-			left:87,
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
-		});
-		
-		//place distance label for row
-		var rowPlaceDistanceLabel = Titanium.UI.createLabel({ 
-			text:places[i].distance,
+			height:'auto',
+			opacity:0.6,
 			color:'black',
-			height:14,
-			top:45,
-			width:'auto',
-			textAlign:'left',
-			opacity:0.5,
-			left:87,
 			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
-		placeRow.add(rowPlaceTitleLabel);
-		placeRow.add(rowPlaceDescriptionLabel);
-		placeRow.add(rowPlaceDistanceLabel);
-		placeRow.add(rowPlaceImage);
+		placeRow.add(placeLabel);
 		
 		tableRows.push(placeRow);
 	}

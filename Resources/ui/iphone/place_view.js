@@ -132,9 +132,11 @@ function buildCheckinPlaceView(view, placeId){
 				backgroundImage:IMAGE_PATH+'checkin_place/check_in_btn.png',
 				width:179,
 				height:51,
-				left:14
+				left:14,
+				place_id:placeId
 			});
 			checkinPlaceButtonBarView.add(checkinPlaceButton);
+			checkinPlaceButton.addEventListener('click', handleCheckinPlaceButton);
 		}
 		
 		//heart image
@@ -633,4 +635,44 @@ function appendCommentPlaceTableView(date, message){
 	//viewActivityCommentsTableView.appendRow(commentRow);
 	checkinPlaceCommentsTableView.insertRowBefore(1, commentRow);
 	checkinPlaceCommentsTableView.scrollToIndex(checkinPlaceCommentsTableView.data[0].rows.length - 1);
+}
+
+function handleCheckinPlaceButton(e){
+	var placeId = e.source.place_id;
+	
+	checkinPlaceOnline(placeId);
+}
+
+//save place checkin to online database
+function checkinPlaceOnline(placeId){
+	Ti.API.info('checkinPlaceOnline() called for place:' + placeId);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in checkinPlaceOnline() '+e);
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('checkinPlaceOnline() got back from server '+this.responseText);
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+		} else {
+			alert(getErrorMessage(jsonData.data.response));
+		}
+	};
+	
+	xhr.open('POST',API+'checkin');
+	xhr.send({
+		user_id:userObject.userId,
+		place_id:placeId
+	});
 }

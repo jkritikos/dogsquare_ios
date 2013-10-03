@@ -2,7 +2,7 @@
 var viewGallery = null;
 var viewGalleryScroll = null;
 var fullscreenImage = null;
-var galleryCloseButton = null;
+var galleryDoneButton = null;
 var galleryCameraButton = null;
 var galleryPhotoDialog = null;
 var galleryFullscreenBackground = null;
@@ -10,6 +10,11 @@ var galleryFullscreenBackground = null;
 var galleryImageObj = {};
 
 var imagesArray = [];
+
+var ADD_PHOTO = 1;
+var GET_PHOTOS = 2;
+
+var progressView = new ProgressView({window:viewGallery});
 
 function buildGalleryView(){
 	CURRENT_VIEW = VIEW_GALLERY;
@@ -39,12 +44,12 @@ function buildGalleryView(){
 		fullscreenImage = Ti.UI.createImageView();
 		galleryFullscreenBackground.add(fullscreenImage);
 		
-		galleryCloseButton = Titanium.UI.createButton({
-			width:20,
-			height:20,
-			title:'close'
+		galleryDoneButton = Titanium.UI.createButton({
+			backgroundImage:IMAGE_PATH+'common/Done_button.png',
+		    width:54,
+		    height:34
 		});
-		galleryCloseButton.addEventListener('click', handleGalleryCloseButton);
+		galleryDoneButton.addEventListener('click', handleGalleryDoneButton);
 		
 		galleryCameraButton = Titanium.UI.createButton({
 			backgroundImage:IMAGE_PATH+'gallery/add_photo_icon.png',
@@ -63,7 +68,7 @@ function buildGalleryView(){
 		//photo dialog event listener
 		galleryPhotoDialog.addEventListener('click', handleGalleryPhotoDialog);
 	}
-	getUserPhotosOnline();
+	getUserPhotosOnline(GET_PHOTOS);
 }
 
 function populateGallery(photos){
@@ -76,6 +81,7 @@ function populateGallery(photos){
 		
 		var thumbImage = Titanium.UI.createImageView({
 			image:REMOTE_USER_IMAGES + photos[i].thumb,
+			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			borderWidth:2,
 			borderRadius:30,
 			borderColor:'#f9bf30',
@@ -102,14 +108,14 @@ function populateGallery(photos){
 }
 
 //get all photos from server
-function getUserPhotosOnline(){
+function getUserPhotosOnline(method){
 	Ti.API.info('getUserPhotosOnline() called for current user'); 	
 	
-	//progress view
-	var progressView = new ProgressView({window:viewGallery});
-	progressView.show({
-		text:"Loading..."
-	});
+	if(method == GET_PHOTOS){
+		progressView.show({
+			text:"Loading..."
+		});
+	}
 	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
@@ -124,6 +130,12 @@ function getUserPhotosOnline(){
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			populateGallery(jsonData.data.photos);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 			
 			//Hide progress view
 			progressView.hide();
@@ -141,6 +153,10 @@ function getUserPhotosOnline(){
 function savePhotoOnline(){
 	Ti.API.info('savePhotoOnline() called for current user'); 	
 	
+	progressView.show({
+		text:"Uploading..."
+	});
+	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
@@ -154,7 +170,13 @@ function savePhotoOnline(){
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			imagesArray = [];
-			getUserPhotosOnline();
+			getUserPhotosOnline(ADD_PHOTO);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
 			
 		} else {
 			alert(getErrorMessage(jsonData.response));
@@ -173,12 +195,12 @@ function handleThumbImageButton(e){
 	var id = e.source.id;
 	fullscreenImage.image = REMOTE_USER_IMAGES + imagesArray[id];
 	
-	navController.getWindow().setRightNavButton(galleryCloseButton);
+	navController.getWindow().setRightNavButton(galleryDoneButton);
 	
 	galleryFullscreenBackground.animate({top:0,duration:500});
 }
 
-function handleGalleryCloseButton(){
+function handleGalleryDoneButton(){
 	navController.getWindow().setRightNavButton(galleryCameraButton);
 	galleryFullscreenBackground.animate({top:415,duration:500});
 }
