@@ -32,15 +32,15 @@ function buildFeedsView(){
 }
 
 function doGetFeeds(){
-	Ti.API.info('doGetFeeds() called');
+	var currentUser = getUserObject();
+	
+	Ti.API.info('doGetFeeds() called for user '+currentUser.userId+' with token '+currentUser.token);
 	
 	//progress view
 	var progressView = new ProgressView({window:viewFeeds});
 	progressView.show({
 		text:"Loading..."
 	});
-	
-	var currentUser = getUserObject();
 	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
@@ -66,7 +66,7 @@ function doGetFeeds(){
 			
 			//Update UI
 			populateFeedsTableView(jsonData.data.feed);
-		} else {
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
 			Ti.API.error('Unauthorised request - need to login again');
 			showLoginPopup();
 		}

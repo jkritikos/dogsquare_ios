@@ -35,7 +35,6 @@ function getUserPhoto(path){
 		}
 	}
 	
-	Ti.API.info('getUserPhoto() called with '+path+' and returns '+photo);
 	return photo;
 }
 

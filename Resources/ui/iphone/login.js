@@ -168,6 +168,9 @@ function buildLoginWindow(isPopup){
 	loginWindow.add(facebookButton);
 	
 	facebookButton.addEventListener('click', function(){
+		CURRENT_VIEW = VIEW_LOGIN;
+		Ti.API.info('Facebook login button clicked from login view');
+		
 		fb.authorize();
 	});
 	
@@ -342,6 +345,10 @@ function closeLoginWindow(){
 
 //Opens a modal login window for post-login unauthorised requests
 function showLoginPopup(){
+	if(fb.loggedIn){
+		fb.logout();	
+	}
+		
 	var loginPopup = buildLoginWindow(true);
 	loginPopup.open({modal:true,navBarHidden:true});
 }
