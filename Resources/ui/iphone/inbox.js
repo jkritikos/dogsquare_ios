@@ -121,7 +121,7 @@ function getUnreadInboxMessages(){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in getUnreadInboxMessages() '+e);
 	};
 	
 	xhr.onload = function(e) {
@@ -138,12 +138,11 @@ function getUnreadInboxMessages(){
 				
 				if(jsonData.data.messages[i].UserInbox.user_from_id == userObject.userId){
 					jsonData.data.messages[i].UserInbox.my_message = 1;
-				}else{
+				} else{
 					jsonData.data.messages[i].UserInbox.my_message = 0;
 				}
 				
 				saveInboxMessage(jsonData.data.messages[i].UserInbox);
-				
 			}
 			
 			if(messagesList != 0){
@@ -159,14 +158,19 @@ function getUnreadInboxMessages(){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-		}else{
+			
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
 			alert(getErrorMessage(jsonData.response));
 		}
 		
 	};
 	xhr.open('GET',API+'getMessages');
 	xhr.send({
-		user_id:userObject.userId
+		user_id:userObject.userId,
+		token:userObject.token
 	});
 }
 
@@ -179,7 +183,7 @@ function setOnlineMessagesIntoRead(list){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in setOnlineMessagesIntoRead() '+e);
 	};
 	
 	xhr.onload = function(e) {
@@ -194,7 +198,10 @@ function setOnlineMessagesIntoRead(list){
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
 			
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
 			alert(getErrorMessage(jsonData.response));
 		}
 		
@@ -202,7 +209,8 @@ function setOnlineMessagesIntoRead(list){
 	xhr.open('POST',API+'setMessagesRead');
 	xhr.send({
 		user_id:userObject.userId,
-		list:list
+		list:list,
+		token:userObject.token
 	});
 }
 

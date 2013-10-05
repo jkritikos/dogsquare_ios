@@ -48,47 +48,54 @@ function doGetNotifications(){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in doGetNotifications() '+e);
 	};
 	
 	xhr.onload = function(e){
 		Ti.API.info('doGetNotifications() got back from server '+this.responseText);
 		var jsonData = JSON.parse(this.responseText);
 		
-		var notificationsList = [];
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 		
-		for(i=0;i<jsonData.data.notifications.length;i++){
-			notificationsList.push(jsonData.data.notifications[i].id);
+			var notificationsList = [];
 			
-			saveNotification(jsonData.data.notifications[i]);
+			for(i=0;i<jsonData.data.notifications.length;i++){
+				notificationsList.push(jsonData.data.notifications[i].id);
+				
+				saveNotification(jsonData.data.notifications[i]);
+			}
+			
+			if(notificationsList != 0){
+				setOnlineNotificationsToRead(notificationsList);
+			}
+			
+			var notificationsObj = getNotifications();
+			
+			//Update UI
+			if(notificationsObj.length > 0){
+				populateNotificationsTableView(notificationsObj);	
+			}else{
+				notificationsTableView.data = [];
+			}
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+			//Hide progress view
+			progressView.hide();
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		}
-		
-		if(notificationsList != 0){
-			setOnlineNotificationsToRead(notificationsList);
-		}
-		
-		var notificationsObj = getNotifications();
-		
-		//Update UI
-		if(notificationsObj.length > 0){
-			populateNotificationsTableView(notificationsObj);	
-		}else{
-			notificationsTableView.data = [];
-		}
-		
-		var followers = jsonData.data.count_followers;
-		var inbox = jsonData.data.count_inbox;
-		var notifications = jsonData.data.count_notifications;
-		
-		updateLeftMenuCounts(followers, inbox, notifications);
-		
-		//Hide progress view
-		progressView.hide();
 	};
 	
 	xhr.open('GET',API+'getNotifications');
 	xhr.send({
-		user_id:currentUser.userId
+		user_id:currentUser.userId,
+		token:currentUser.token
 	});
 }
 
@@ -227,7 +234,7 @@ function setOnlineNotificationsToRead(list){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in setOnlineNotificationsToRead() '+e);
 	};
 	
 	xhr.onload = function(e) {
@@ -242,14 +249,18 @@ function setOnlineNotificationsToRead(list){
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
 			
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
 			alert(getErrorMessage(jsonData.response));
 		}
-		
 	};
+	
 	xhr.open('POST',API+'setNotificationsRead');
 	xhr.send({
 		user_id:userObject.userId,
-		list:list
+		list:list,
+		token:userObject.token
 	});
 }

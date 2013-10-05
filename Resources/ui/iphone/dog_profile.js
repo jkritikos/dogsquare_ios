@@ -266,8 +266,9 @@ function likeDog(dId){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in likeDog() '+e);
 	};
+	
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
 		
@@ -280,7 +281,10 @@ function likeDog(dId){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-		}else{
+		} else if (jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
 			alert(getErrorMessage(jsonData.response));
 		}
 		
@@ -288,7 +292,8 @@ function likeDog(dId){
 	xhr.open('POST',API+'likeDog');
 	xhr.send({
 		user_id:userObject.userId,
-		dog_id:dId
+		dog_id:dId,
+		token:userObject.token
 	});
 }
 
@@ -300,8 +305,9 @@ function unlikeDog(dId){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in unlikeDog() '+e);
 	};
+	
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
 		
@@ -314,7 +320,11 @@ function unlikeDog(dId){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-		}else{
+			
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
 			alert(getErrorMessage(jsonData.response));
 		}
 		
@@ -322,7 +332,8 @@ function unlikeDog(dId){
 	xhr.open('POST',API+'unlikeDog');
 	xhr.send({
 		user_id:userObject.userId,
-		dog_id:dId
+		dog_id:dId,
+		token:userObject.token
 	});
 }
 
@@ -340,6 +351,7 @@ function getOnlineDog(dId){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
+		Ti.API.error('Error in getOnlineDog() '+e);
 		navController.getWindow().setTitle('');
 	};
 	
@@ -361,6 +373,9 @@ function getOnlineDog(dId){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		} else {
 			//Show the error message we got back from the server
 			progressView.change({
@@ -378,7 +393,8 @@ function getOnlineDog(dId){
 	xhr.open('GET',API+'getDog');
 	xhr.send({
 		user_id:userObject.userId,
-		dog_id:dId
+		dog_id:dId,
+		token:userObject.token
 	});
 }
 
@@ -390,8 +406,9 @@ function getDogLikedUsersOnline(dId){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in getDogLikedUsersOnline() '+e);
 	};
+	
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
 		
@@ -404,14 +421,18 @@ function getDogLikedUsersOnline(dId){
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
 			
-		}else{
+		} else if (jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
 			alert(getErrorMessage(jsonData.data.response));
 		}
 	};
 	xhr.open('GET',API+'getDogLikedUsers');
 	xhr.send({
 		user_id:userObject.userId,
-		dog_id:dId
+		dog_id:dId,
+		token:userObject.token
 	});
 }
 

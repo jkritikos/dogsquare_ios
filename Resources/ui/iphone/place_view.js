@@ -392,8 +392,9 @@ function likePlace(pId){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in likePlace() '+e);
 	};
+	
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
 		
@@ -406,7 +407,10 @@ function likePlace(pId){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
 			alert(getErrorMessage(jsonData.response));
 		}
 		
@@ -414,7 +418,8 @@ function likePlace(pId){
 	xhr.open('POST',API+'likePlace');
 	xhr.send({
 		user_id:userObject.userId,
-		place_id:pId
+		place_id:pId,
+		token:userObject.token
 	});
 }
 
@@ -426,8 +431,9 @@ function unlikePlace(pId){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in unlikePlace() '+e);
 	};
+	
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
 		
@@ -440,7 +446,10 @@ function unlikePlace(pId){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
 			alert(getErrorMessage(jsonData.response));
 		}
 		
@@ -448,7 +457,8 @@ function unlikePlace(pId){
 	xhr.open('POST',API+'unlikePlace');
 	xhr.send({
 		user_id:userObject.userId,
-		place_id:pId
+		place_id:pId,
+		token:userObject.token
 	});
 }
 
@@ -485,6 +495,9 @@ function getOnlinePlace(pId){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		} else {
 			//Show the error message we got back from the server
 			progressView.change({
@@ -502,7 +515,8 @@ function getOnlinePlace(pId){
 	xhr.open('GET',API+'getPlace');
 	xhr.send({
 		user_id:userObject.userId,
-		place_id:pId
+		place_id:pId,
+		token:userObject.token
 	});
 }
 
@@ -665,6 +679,9 @@ function checkinPlaceOnline(placeId){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		} else {
 			alert(getErrorMessage(jsonData.data.response));
 		}
@@ -673,6 +690,7 @@ function checkinPlaceOnline(placeId){
 	xhr.open('POST',API+'checkin');
 	xhr.send({
 		user_id:userObject.userId,
-		place_id:placeId
+		place_id:placeId,
+		token:userObject.token
 	});
 }

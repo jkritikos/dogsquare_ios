@@ -479,8 +479,7 @@ function getOnlineUser(){
 		navController.getWindow().setTitle('');
 	};
 	
-	xhr.onload = function(e){
-		Ti.API.info('getOnlineUser() got back from server '+this.responseText); 		
+	xhr.onload = function(e){	
 		var jsonData = JSON.parse(this.responseText);
 		Ti.API.info('getOnlineUser() got back from server '+this.responseText);
 		
@@ -499,6 +498,9 @@ function getOnlineUser(){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		} else {
 			//Show the error message we got back from the server
 			progressView.change({
@@ -515,6 +517,7 @@ function getOnlineUser(){
 	};
 	xhr.open('GET',API+'getUser');
 	xhr.send({
-		user_id:userObject.userId
+		user_id:userObject.userId,
+		token:userObject.token
 	});
 }

@@ -581,8 +581,9 @@ function likeActivity(aId){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in likeActivity() '+e);
 	};
+	
 	xhr.onload = function(e) {
 		Ti.API.info('likeActivity() got back from server '+this.responseText);
 		
@@ -597,7 +598,10 @@ function likeActivity(aId){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
 			alert(getErrorMessage(jsonData.response));
 		}
 		
@@ -605,7 +609,8 @@ function likeActivity(aId){
 	xhr.open('POST',API+'likeActivity');
 	xhr.send({
 		user_id:userObject.userId,
-		activity_id:aId
+		activity_id:aId,
+		token:userObject.token
 	});
 }
 
@@ -616,8 +621,9 @@ function unlikeActivity(aId){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in unlikeActivity() '+e);
 	};
+	
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
 		
@@ -630,7 +636,10 @@ function unlikeActivity(aId){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
 			alert(getErrorMessage(jsonData.response));
 		}
 		
@@ -638,7 +647,8 @@ function unlikeActivity(aId){
 	xhr.open('POST',API+'unlikeActivity');
 	xhr.send({
 		user_id:userObject.userId,
-		activity_id:aId
+		activity_id:aId,
+		token:userObject.token
 	});
 }
 
@@ -688,7 +698,10 @@ function getActivityOnline(aId){
 			
 			//Hide progress view
 			progressView.hide();
-		} else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else {
 			//Show the error message we got back from the server
 			progressView.change({
 		        error:true,
@@ -705,7 +718,8 @@ function getActivityOnline(aId){
 	xhr.open('GET',API+'getActivity');
 	xhr.send({
 		user_id:userObject.userId,
-		activity_id:aId
+		activity_id:aId,
+		token:userObject.token
 	});
 }
 
@@ -716,8 +730,9 @@ function getActivityLikedUsersOnline(aId){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in getActivityLikedUsersOnline() '+e);
 	};
+	
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
 		
@@ -730,14 +745,18 @@ function getActivityLikedUsersOnline(aId){
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
 			
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
 			alert(getErrorMessage(jsonData.data.response));
 		}
 	};
 	xhr.open('GET',API+'getActivityLikedUsers');
 	xhr.send({
 		user_id:userObject.userId,
-		activity_id:aId
+		activity_id:aId,
+		token:userObject.token
 	});
 }
 

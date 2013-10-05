@@ -613,7 +613,7 @@ function getLeftMenuOnlineUser(n){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in getLeftMenuOnlineUser() '+e);
 	};
 	
 	xhr.onload = function(e) {
@@ -630,15 +630,20 @@ function getLeftMenuOnlineUser(n){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
 			alert(getErrorMessage(jsonData.response));
 		}
 		
 	};
+	
 	xhr.open('GET',API+'search');
 	xhr.send({
 		user_id:userObject.userId,
-		name:n
+		name:n,
+		token:userObject.token
 	});
 }
 

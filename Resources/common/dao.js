@@ -527,7 +527,7 @@ function sendMessageToUser(id, name, message, view){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-		Ti.API.error('Error in sendMessageToUser()');
+		Ti.API.error('Error in sendMessageToUser() '+e);
 	};
 	
 	xhr.onload = function(e){
@@ -554,6 +554,9 @@ function sendMessageToUser(id, name, message, view){
 			}else if(view == VIEW_INBOX_NEW){
 				appendRowInboxNewTableView(date, message);
 			}
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		}
 	};
 	
@@ -562,7 +565,8 @@ function sendMessageToUser(id, name, message, view){
 	xhr.send({
 		user_id:userObject.userId,
 		target_id:id,
-		message:message
+		message:message,
+		token:userObject.token
 	});
 }
 

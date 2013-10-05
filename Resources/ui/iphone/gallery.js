@@ -121,7 +121,7 @@ function getUserPhotosOnline(method){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in getUserPhotosOnline() '+e);
 	};
 	
 	xhr.onload = function(e){
@@ -139,13 +139,17 @@ function getUserPhotosOnline(method){
 			
 			//Hide progress view
 			progressView.hide();
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
 	};
 	xhr.open('GET',API+'getPhotos');
 	xhr.send({
-		user_id:userObject.userId
+		user_id:userObject.userId,
+		token:userObject.token
 	});
 }
 
