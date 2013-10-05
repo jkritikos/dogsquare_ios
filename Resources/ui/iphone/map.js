@@ -324,8 +324,97 @@ function handleCloseFilterViewButton(){
 	mapSearchTxtfield.blur();
 }
 
-function handleMapSearchCategoriesRows(){
+function handleMapSearchCategoriesRows(e){
+	var filter = e.row.filter;
+	getPlacesByFilterOnline(filter);
+	
 	navController.getWindow().setRightNavButton(rightBtn);
 	mapSearchTxtfield.blur();
 	mapSearchCategoriesBackground.animate({opacity:0, duration:400});
+}
+
+//get places by filter 
+function getPlacesByFilterOnline(catId){
+	var currentUser = getUserObject();
+	Ti.API.info('getPlacesByFilterOnline() called for user '+currentUser.userId+' with token '+currentUser.token);
+	
+	var dogBreeds = [];
+	
+	if(catId == FILTER_SAME_BREED) {
+		var dogs  = getDogs();
+		
+		for(i=0;i<dogs.length;i++){
+			dogBreeds.push(dogs[i].breed_id);
+		}
+	}
+	
+	var dogBreeds = JSON.stringify(dogBreeds);
+	
+	//progress view
+	var progressView = new ProgressView({window:viewMap});
+	progressView.show({
+		text:"Loading..."
+	});
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in getPlacesByFilterOnline() '+e);
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('getPlacesByFilterOnline() got back from server '+this.responseText);
+		var jsonData = JSON.parse(this.responseText);
+		
+		//Hide progress view
+		progressView.hide();
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+		
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+			updateMapWithAnnotations(jsonData.data.places);
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		}
+	};
+	
+	xhr.open('GET',API+'getPlaces');
+	xhr.send({
+		user_id:currentUser.userId,
+		lat:mapLatitude,
+		lon:mapLongitude,
+		category_id:catId,
+		breed_list:dogBreeds
+	});
+}
+
+function updateMapWithAnnotations(places){
+	//start point annotation
+	
+	var annotationArray = [];
+	
+	if(places.length != 0 && places != null){
+		for(i=0;i<places.length;i++){
+			var mapAnnotations = Titanium.Map.createAnnotation({
+				latitude:places[i].lat,
+				longitude:places[i].lon,
+				title:places[i].name,
+				animate:true,
+				image:IMAGE_PATH+'run_finish/pin.png'
+			});
+			
+			annotationArray.push(mapAnnotations);
+		}
+		
+		mapview.setAnnotations(annotationArray);
+	}else{
+		mapview.annotations = [];
+	}
 }

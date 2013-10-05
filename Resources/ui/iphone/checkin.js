@@ -217,6 +217,7 @@ function populatecheckinPlacesTableView(places){
 		placeRow.add(placeLabel);
 		
 		tableRows.push(placeRow);
+		checkinPlacesTableView.allowsSelection = false;
 	}
 	
 	checkinPlacesTableView.setData(tableRows);
@@ -273,6 +274,10 @@ function handleNearbyPlacesButton(e){
 function getNearbyPlaces(){
 	Ti.API.info('getNearbyPlaces() called for latitude:' + userObject.lat + 'and longitude:'+ userObject.lon);
 	
+	var dogBreeds = [];
+	
+	var dogBreeds = JSON.stringify(dogBreeds);
+	
 	//progress view
 	var progressView = new ProgressView({window:checkinView});
 	progressView.show({
@@ -311,6 +316,7 @@ function getNearbyPlaces(){
 	xhr.send({
 		user_id:userObject.userId,
 		lat:userObject.lat,
-		lon:userObject.lon
+		lon:userObject.lon,
+		breed_list:dogBreeds
 	});
 }

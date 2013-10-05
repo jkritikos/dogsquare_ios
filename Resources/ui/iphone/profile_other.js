@@ -394,6 +394,7 @@ function populateProfileOtherDogTableView(dogsObj){
 		dogRow.add(dogLabel);
 		
 		tableRows.push(dogRow);
+		profileOtherDogTableView.allowsSelection = false;
 	}
 	profileOtherDogTableView.setData(tableRows);
 }

@@ -394,14 +394,15 @@ function getDogs(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	var dogRows = [];
 	
-	var rows = db.execute('select dog_id, name, photo, thumb from dogs ');
+	var rows = db.execute('select dog_id, name, photo, thumb, breed_id from dogs ');
 	while (rows.isValidRow()) {
 
 	  	var obj = {
 	  		dog_id:rows.field(0),
 			name:rows.field(1),
 			photo:rows.field(2),
-			thumb_path:rows.field(3)
+			thumb_path:rows.field(3),
+			breed_id:rows.field(4)
 		};
 		
 	  	dogRows.push(obj);	

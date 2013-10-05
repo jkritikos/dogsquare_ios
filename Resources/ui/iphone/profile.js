@@ -385,6 +385,7 @@ function populateProfileTableView(activities){
 		activityRow.add(activityLabel);
 		
 		tableRows.push(activityRow);
+		profileTableView.allowsSelection = false;
 	}
 
 	profileTableView.setData(tableRows);

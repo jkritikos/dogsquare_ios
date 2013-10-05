@@ -1,7 +1,7 @@
 //UI components
 var ADD_DOG = 8;
-var TYPE_CHECKBOX = 1;
-var RIGHT_MENU_TYPE_ROW = 2;
+var TYPE_SELECT_ROW = 1;
+var TYPE_IMAGE = 2;
 
 //Right window
 var winRight = Ti.UI.createWindow();
@@ -87,7 +87,7 @@ function populateRightMenu(dogObject){
 			backgroundColor:'1c2027',
 			selectionStyle:0,
 			active:false,
-			type:RIGHT_MENU_TYPE_ROW,
+			type:TYPE_SELECT_ROW,
 			dogId:dogObject[i].dog_id
 		});
 		
@@ -106,7 +106,7 @@ function populateRightMenu(dogObject){
 			borderRadius:30,
 			borderWidth:2,
 			borderColor:'454950',
-			type:RIGHT_MENU_TYPE_ROW
+			type:TYPE_IMAGE
 		});
 		
 		//dog name label inside the dog row - right menu row
@@ -119,7 +119,7 @@ function populateRightMenu(dogObject){
 			left:134,
 			top:14,
 			font:{fontSize:24, fontWeight:'semibold', fontFamily:'Open Sans'},
-			type:RIGHT_MENU_TYPE_ROW
+			type:TYPE_SELECT_ROW
 		});
 		
 		//dog mood label inside the dog row - right menu row
@@ -132,7 +132,7 @@ function populateRightMenu(dogObject){
 			left:136,
 			top:50,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'},
-			type:RIGHT_MENU_TYPE_ROW
+			type:TYPE_SELECT_ROW
 		});
 		
 		//dog percent label inside the dog row - right menu row
@@ -145,7 +145,7 @@ function populateRightMenu(dogObject){
 			left:184,
 			top:50,
 			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
-			type:RIGHT_MENU_TYPE_ROW
+			type:TYPE_SELECT_ROW
 		});
 		
 		//grey bone image inside the dog row - right menu row
@@ -153,7 +153,7 @@ function populateRightMenu(dogObject){
 			image:IMAGE_PATH+'menu_right/bone_grey.png',
 			left:239,
 			top:50,
-			type:RIGHT_MENU_TYPE_ROW
+			type:TYPE_SELECT_ROW
 		});
 		
 		//grey bone image inside the dog row - right menu row
@@ -161,7 +161,7 @@ function populateRightMenu(dogObject){
 			image:IMAGE_PATH+'menu_right/bone_colours.png',
 			left:239,
 			top:50,
-			type:RIGHT_MENU_TYPE_ROW,
+			type:TYPE_SELECT_ROW,
 			zIndex:2
 		});
 		
@@ -172,14 +172,13 @@ function populateRightMenu(dogObject){
 			right:34,
 			width: 23,
 			height:23,
-			type:TYPE_CHECKBOX
+			type:TYPE_SELECT_ROW
 		});
-		rowCheckBox.addEventListener('click', handleCheckBoxInteraction);
 		
 		//check image inside the dog row - right menu row
 		var rowCheckImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'menu_right/check_mark.png',
-			type:TYPE_CHECKBOX
+			type:TYPE_SELECT_ROW
 		});
 		rowCheckImage.hide();
 		
@@ -198,24 +197,43 @@ function populateRightMenu(dogObject){
 	rightTableView.setData(rightMenuData);
 }
 
-//handle all rows and show dog profile - also handle add dog
 function handleTableViewRows(e){
+	var rowCheckImage = e.row.children[0].children[0];
+	var rowDogNameLabel = e.row.children[4];
+	var rowDogPercentLabel = e.row.children[2];
+	var rowDogImage = e.row.children[5];
 	
-	if(e.source.type == RIGHT_MENU_TYPE_ROW) {
-		closeOpenWindows();
-		navController.getWindow().setTitleControl();
-		
-		var dogId = e.row.dogId;
-		
-		Ti.include('ui/iphone/dog_profile.js');
-		var dogProfileView = buildDogProfileView(dogId);
-		
-		navController.getWindow().add(dogProfileView);
-		
-		if(window.isAnyViewOpen()){
-			window.toggleRightView();
-		}
-	}else if(e.row.rowId == ADD_DOG){
+	if(e.row.rowId != ADD_DOG) {
+		if(e.source.type == TYPE_SELECT_ROW && e.row.active) {
+			rowCheckImage.hide();
+			rowDogNameLabel.color = 'ab7b04';
+			rowDogPercentLabel.color = 'ab7b04';
+			rowDogImage.borderColor = '454950';
+			e.row.backgroundColor = '1c2027';
+			e.row.active = false;
+		}else if(e.source.type == TYPE_SELECT_ROW && !(e.row.active)){ 
+			rowCheckImage.show();
+			rowDogNameLabel.color = 'f9bf30';
+			rowDogPercentLabel.color = 'f9bf30';
+			rowDogImage.borderColor = 'f9bf30';
+			e.row.backgroundColor = UI_MENU_BACKGROUND_COLOR;
+			e.row.active = true;
+		} else if(e.source.type == TYPE_IMAGE) {
+			closeOpenWindows();
+			navController.getWindow().setTitleControl();
+			
+			var dogId = e.row.dogId;
+			
+			Ti.include('ui/iphone/dog_profile.js');
+			var dogProfileView = buildDogProfileView(dogId);
+			
+			navController.getWindow().add(dogProfileView);
+			
+			if(window.isAnyViewOpen()){
+				window.toggleRightView();
+			}
+		}	
+	}else {
 		closeOpenWindows();
 		navController.getWindow().setTitleControl();
 		
@@ -226,32 +244,6 @@ function handleTableViewRows(e){
 		if(window.isAnyViewOpen()){
 			window.toggleRightView();
 		}
-	}
-}
-
-
-function handleCheckBoxInteraction(e){
-	var rowCheckImage = e.row.children[0].children[0];
-	var rowDogNameLabel = e.row.children[4];
-	var rowDogPercentLabel = e.row.children[2];
-	var rowDogImage = e.row.children[5];
-	
-	if(e.row.rowId != ADD_DOG) {
-		if(e.source.type == TYPE_CHECKBOX && e.row.active) {
-			rowCheckImage.hide();
-			rowDogNameLabel.color = 'ab7b04';
-			rowDogPercentLabel.color = 'ab7b04';
-			rowDogImage.borderColor = '454950';
-			e.row.backgroundColor = '1c2027';
-			e.row.active = false;
-		}else if(e.source.type == TYPE_CHECKBOX && !(e.row.active)){ 
-			rowCheckImage.show();
-			rowDogNameLabel.color = 'f9bf30';
-			rowDogPercentLabel.color = 'f9bf30';
-			rowDogImage.borderColor = 'f9bf30';
-			e.row.backgroundColor = UI_MENU_BACKGROUND_COLOR;
-			e.row.active = true;
-		}	
 	}
 }
 
