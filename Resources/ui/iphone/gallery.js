@@ -16,7 +16,7 @@ var GET_PHOTOS = 2;
 
 var progressView = new ProgressView({window:viewGallery});
 
-function buildGalleryView(){
+function buildGalleryView(user_id){
 	CURRENT_VIEW = VIEW_GALLERY;
 	
 	if(viewGallery == null){
@@ -56,7 +56,11 @@ function buildGalleryView(){
 			width:32,
 			height:31
 		});
-		navController.getWindow().setRightNavButton(galleryCameraButton);
+		
+		if(user_id == userObject.userId){
+			navController.getWindow().setRightNavButton(galleryCameraButton);
+		}
+		
 		galleryCameraButton.addEventListener('click', handleGalleryCameraButton);
 		
 		//photo dialog
@@ -68,7 +72,7 @@ function buildGalleryView(){
 		//photo dialog event listener
 		galleryPhotoDialog.addEventListener('click', handleGalleryPhotoDialog);
 	}
-	getUserPhotosOnline(GET_PHOTOS);
+	getUserPhotosOnline(GET_PHOTOS, user_id);
 }
 
 function populateGallery(photos){
@@ -108,7 +112,7 @@ function populateGallery(photos){
 }
 
 //get all photos from server
-function getUserPhotosOnline(method){
+function getUserPhotosOnline(method , userId){
 	Ti.API.info('getUserPhotosOnline() called for current user'); 	
 	
 	if(method == GET_PHOTOS){
@@ -149,6 +153,7 @@ function getUserPhotosOnline(method){
 	xhr.open('GET',API+'getPhotos');
 	xhr.send({
 		user_id:userObject.userId,
+		target_id:userId,
 		token:userObject.token
 	});
 }

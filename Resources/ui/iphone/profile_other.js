@@ -1,18 +1,21 @@
 //UI components
 var profileOtherDogBar = null;
-var profileOtherDogTableViewBackground = null;
+var profileOtherActivityTableViewBackground = null;
 var profileOtherFollowersNumberLabel = null;
 var profileOtherFollowingNumberLabel = null;
 var profileOtherPhotoImage = null;
 var profileOtherFollowButton = null;
-var profileOtherDogTableView = null;
+var profileOtherActivityTableView = null;
 var profileOtherView = null;
 var profileOtherWalkWithButtonLabel = null;
 var profileOtherWalkWithButton = null;
 var profileOtherChatButton = null;
 
+var onlineDogs = [];
+
 var TAB_FOLLOWERS = 1;
 var TAB_FOLLOWING = 2;
+var TAB_BADGES = 3;
 
 var PROFILE_OTHER_WIN = 2;
 
@@ -62,7 +65,7 @@ function buildProfileOtherView(uId, name) {
 		
 		var profileOtherTransparentFollowerView = Titanium.UI.createView({ 
 			backgroundColor:'transparent',
-			width:159,
+			width:106,
 			left:0,
 			height:36,
 			opacity:0.8,
@@ -72,13 +75,48 @@ function buildProfileOtherView(uId, name) {
 		
 		var profileOtherTransparentFollowingView = Titanium.UI.createView({ 
 			backgroundColor:'transparent',
-			width:160,
-			right:0,
+			width:106,
+			left:107,
 			height:36,
 			opacity:0.8,
 			tab:TAB_FOLLOWING
 		});
 		profileOtherTransparentFollowingView.addEventListener('click', handleProfileOtherFollowersFolowingTab);
+		
+		var profileOtherTransparentBadgesView = Titanium.UI.createView({ 
+			backgroundColor:'transparent',
+			width:106,
+			right:0,
+			height:36,
+			opacity:0.8
+		});
+		
+		//badges label on the opacity bar
+		var profileOtherBadgesLabel = Ti.UI.createLabel({
+			text:'badges',
+			color:'black',
+			textAlign:'center',
+			width:'auto',
+			height:15,
+			bottom:3,
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'},
+			tab:TAB_FOLLOWERS
+		});
+		profileOtherTransparentBadgesView.add(profileOtherBadgesLabel);
+		
+		//number of badges label on the opacity bar
+		var profileOtherBadgesNumberLabel = Ti.UI.createLabel({
+			text:'3',
+			color:'black',
+			textAlign:'center',
+			width:'auto',
+			height:22,
+			top:1,
+			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'},
+			tab:TAB_FOLLOWERS
+		});
+		profileOtherTransparentBadgesView.add(profileOtherBadgesNumberLabel);
+		profileOtherOpacityBar.add(profileOtherTransparentBadgesView);
 		
 		//followers label on the opacity bar
 		var profileOtherFollowersLabel = Ti.UI.createLabel({
@@ -132,13 +170,20 @@ function buildProfileOtherView(uId, name) {
 		profileOtherTransparentFollowingView.add(profileOtherFollowingNumberLabel);
 		profileOtherOpacityBar.add(profileOtherTransparentFollowingView);
 		
-		//opacity bar sepparator
-		var profileOtherOpacityBarSepparator = Titanium.UI.createView({ 
-			backgroundColor:'959796',
-			width:1,
-			height:34
-		});
-		profileOtherOpacityBar.add(profileOtherOpacityBarSepparator);
+		var leftOpacityBarSepparator = 106;
+		
+		for(i=0;i<=1;i++){
+			//opacity bar sepparator
+			var profileOtherOpacityBarSepparator = Titanium.UI.createView({ 
+				backgroundColor:'959796',
+				width:1,
+				left:leftOpacityBarSepparator,
+				height:34
+			});
+			profileOtherOpacityBar.add(profileOtherOpacityBarSepparator);
+			leftOpacityBarSepparator += 107;
+		}
+		
 		profileOtherView.add(profileOtherOpacityBar);
 		
 		profileOtherFollowButton = Ti.UI.createButton({
@@ -151,38 +196,13 @@ function buildProfileOtherView(uId, name) {
 		profileOtherView.add(profileOtherFollowButton);
 		profileOtherFollowButton.addEventListener('click', handleProfileOtherFollowButton);
 		
-		//chat button
-		profileOtherChatButton = Ti.UI.createButton({
-		    backgroundImage: IMAGE_PATH+'profile_other/Chat_icon.png',
-		    width:45,
-		    height:43,
-		    top:IPHONE5 ? 360 : 320,
-		    userId:uId,
-		    mName:name
-		});
-		profileOtherView.add(profileOtherChatButton);
-		profileOtherChatButton.addEventListener('click', handleProfileOtherChatButton);
-		
-		//chat button label
-		var profileOtherChatButtonLabel = Ti.UI.createLabel({
-			text:'Chat with me',
-			color:'black',
-			opacity:0.6,
-			textAlign:'center',
-			top:IPHONE5 ? 408 : 364,
-			width:88,
-			height:18,
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
-		});
-		profileOtherView.add(profileOtherChatButtonLabel);
-		
 		//walk with me button
 		profileOtherWalkWithButton = Ti.UI.createButton({
 		    backgroundImage: IMAGE_PATH+'profile_other/Walk_with_icon.png',
 		    width:45,
 		    height:43,
 		    top:IPHONE5 ? 360 : 320,
-		    left:42
+		    left:30
 		});
 		profileOtherView.add(profileOtherWalkWithButton);
 		
@@ -197,10 +217,37 @@ function buildProfileOtherView(uId, name) {
 			top:IPHONE5 ? 408 : 364,
 			width:88,
 			height:18,
-			left:21,
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+			left:17,
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		profileOtherView.add(profileOtherWalkWithButtonLabel);
+		
+		//chat button
+		profileOtherChatButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'profile_other/Chat_icon.png',
+		    width:45,
+		    height:43,
+		    top:IPHONE5 ? 360 : 320,
+		    userId:uId,
+		    left:102,
+		    mName:name
+		});
+		profileOtherView.add(profileOtherChatButton);
+		profileOtherChatButton.addEventListener('click', handleProfileOtherChatButton);
+		
+		//chat button label
+		var profileOtherChatButtonLabel = Ti.UI.createLabel({
+			text:'Chat',
+			color:'black',
+			opacity:0.6,
+			textAlign:'center',
+			top:IPHONE5 ? 408 : 364,
+			width:'auto',
+			height:18,
+			left:112,
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		profileOtherView.add(profileOtherChatButtonLabel);
 		
 		//gallery button
 		var profileOtherGalleryButton = Ti.UI.createButton({
@@ -208,9 +255,11 @@ function buildProfileOtherView(uId, name) {
 		    width:45,
 		    height:43,
 		    top:IPHONE5 ? 360 : 320,
-		    right:42
+		    right:102,
+		    userId:uId
 		});
 		profileOtherView.add(profileOtherGalleryButton);
+		profileOtherGalleryButton.addEventListener('click', handleProfileOtherGalleryButton);
 		
 		//gallery button label
 		var profileOtherGalleryButtonLabel = Ti.UI.createLabel({
@@ -219,12 +268,38 @@ function buildProfileOtherView(uId, name) {
 			opacity:0.6,
 			textAlign:'center',
 			top:IPHONE5 ? 408 : 364,
-			width:88,
+			width:'auto',
 			height:18,
-			right:21,
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+			right:105,
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		profileOtherView.add(profileOtherGalleryButtonLabel);
+		
+		//dogs button
+		var profileOtherDogsButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'profile_other/Chat_icon.png',
+		    width:45,
+		    height:43,
+		    right:30,
+		    top:IPHONE5 ? 360 : 320,
+		    userId:uId
+		});
+		profileOtherView.add(profileOtherDogsButton);
+		profileOtherDogsButton.addEventListener('click', handleProfileOtherDogsButton);
+		
+		//dogs button label
+		var profileOtherDogsButtonLabel = Ti.UI.createLabel({
+			text:'Dogs',
+			color:'black',
+			opacity:0.6,
+			textAlign:'center',
+			top:IPHONE5 ? 408 : 364,
+			width:'auto',
+			right:37,
+			height:18,
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		profileOtherView.add(profileOtherDogsButtonLabel);
 		
 		//dogs bar
 		profileOtherDogBar = Ti.UI.createButton({
@@ -237,7 +312,7 @@ function buildProfileOtherView(uId, name) {
 		});
 		
 		var profileOtherDogBarLabel = Titanium.UI.createLabel({ 
-			text:'Dogs',
+			text:'Activity',
 			color:'white',
 			top:15,
 			height:20,
@@ -250,27 +325,27 @@ function buildProfileOtherView(uId, name) {
 		profileOtherDogBar.addEventListener('click', handleDogBarButton);
 		
 		//background of the table view
-		profileOtherDogTableViewBackground = Titanium.UI.createView({ 
+		profileOtherActivityTableViewBackground = Titanium.UI.createView({ 
 			backgroundColor:UI_BACKGROUND_COLOR,
 			width:'100%',
 			height:IPHONE5 ? 259 : 192,
 			top:IPHONE5 ? 490 : 416
 		});
-		profileOtherView.add(profileOtherDogTableViewBackground);
+		profileOtherView.add(profileOtherActivityTableViewBackground);
 		
 		//profile other tableView
-		profileOtherDogTableView = Titanium.UI.createTableView({
+		profileOtherActivityTableView = Titanium.UI.createTableView({
 			minRowHeight:51,
 			width:320,
 			backgroundColor:UI_BACKGROUND_COLOR,
 			top:16,
 			height:IPHONE5 ? 242 : 155
 		});
-		profileOtherDogTableViewBackground.add(profileOtherDogTableView);
-		profileOtherDogTableView.addEventListener('click', handleProfileOtherDogTableViewRows);
+		profileOtherActivityTableViewBackground.add(profileOtherActivityTableView);
+		profileOtherActivityTableView.addEventListener('click', handleProfileOtherActivityTableViewRows);
 		
 		//remove empty rows
-		profileOtherDogTableView.footerView = Ti.UI.createView({
+		profileOtherActivityTableView.footerView = Ti.UI.createView({
 		    height: 1,
 		    backgroundColor: 'transparent'
 		});
@@ -320,69 +395,90 @@ function handleDogBarButton(e){
 	var toggle = e.source.toggle;
 	if(toggle){
 		profileOtherDogBar.animate({bottom:-3, duration:500});
-		profileOtherDogTableViewBackground.animate({top:IPHONE5 ? 478 : 416, duration:500});
+		profileOtherActivityTableViewBackground.animate({top:IPHONE5 ? 478 : 416, duration:500});
 		e.source.toggle = false;
 	}else{
 		profileOtherDogBar.animate({bottom:IPHONE5 ? 243 : 155, duration:500});
-		profileOtherDogTableViewBackground.animate({top:245, duration:500});
+		profileOtherActivityTableViewBackground.animate({top:245, duration:500});
 		e.source.toggle = true;
 	}
 }
 
-function populateProfileOtherDogTableView(dogsObj){
+function populateProfileOtherActivityTableView(activities){
 	var tableRows = [];
-	if(dogsObj.length > 0){
-		for(i=0;i<dogsObj.length;i++){
+	
+	if(activities.length > 0){
+		
+		for(var i=0; i < activities.length; i++){
 			
-			var dogRow = Ti.UI.createTableViewRow({
-				className:'dogRow',
-				height:73,
+			var activityRow = Ti.UI.createTableViewRow({
+				className:'activityRow',
+				height:71,
 				width:'100%',
 				backgroundColor:'white',
 				selectedBackgroundColor:'transparent',
-				dogId:dogsObj[i].Dog.id
+				activityId:activities[i].Activity.id
 			});
 			
-			var rowDogImage = Titanium.UI.createImageView({
-				image:REMOTE_DOG_IMAGES + dogsObj[i].Dog.thumb,
+			var rowActivityImage = Titanium.UI.createImageView({
+				image:REMOTE_DOG_IMAGES + activities[i].Activity.thumb,
 				defaultImage:IMAGE_PATH+'common/default_dog_photo.png',
 				left:15,
-				top:6,
 				borderRadius:30,
 				borderWidth:2,
-				borderColor:'f9bf30'
+				borderColor:'f5a92c'
 			});	
 			
-			//dog name label
-			var dogNameLabel = Ti.UI.createLabel({
-				text:dogsObj[i].Dog.name,
-				top:25,
+			//Wrapper view with vertical layout for the text in each row
+			var activityWrapperView = Ti.UI.createView({
+				layout:'vertical'
+			});
+			
+			//activity label
+			var activityLabel = Ti.UI.createLabel({
+				text:'Gone for a walk with '+activities[i].Activity.dogs,
+				top:10,
 				textAlign:'left',
 				width:'auto',
 				height:'auto',
-				left:100,
-				opacity:0.6,
-				color:'black',
-				font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+				left:88,
+				color:'#605353',
+				font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 			});
 			
-			dogRow.add(rowDogImage);
-			dogRow.add(dogNameLabel);
+			//time label
+			var timeLabel = Ti.UI.createLabel({
+				text:relativeTime(activities[i].Activity.created * 1000),
+				//bottom:18,
+				textAlign:'left',
+				width:'auto',
+				height:'auto',
+				left:88,
+				color:'#938787',
+				font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			});
 			
-			tableRows.push(dogRow);
+			activityWrapperView.add(activityLabel);
+			activityWrapperView.add(timeLabel);
+			
+			activityRow.add(rowActivityImage);
+			activityRow.add(activityWrapperView);
+			
+			tableRows.push(activityRow);
 		}
-	}else {
-		var dogRow = Ti.UI.createTableViewRow({
-			className:'dogRow',
-			height:73,
+		
+	} else {
+		var activityRow = Ti.UI.createTableViewRow({
+			className:'activityRow',
+			height:51,
 			width:'100%',
-			backgroundColor:'white',
+			backgroundColor:'e7e7e7',
 			selectedBackgroundColor:'transparent'
 		});
 		
-		//dog label
-		var dogLabel = Ti.UI.createLabel({
-			text:'User has no dogs',
+		//activity label
+		var activityLabel = Ti.UI.createLabel({
+			text:'No activity yet',
 			textAlign:'left',
 			width:'auto',
 			height:'auto',
@@ -391,12 +487,13 @@ function populateProfileOtherDogTableView(dogsObj){
 			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
-		dogRow.add(dogLabel);
+		activityRow.add(activityLabel);
 		
-		tableRows.push(dogRow);
-		profileOtherDogTableView.allowsSelection = false;
+		tableRows.push(activityRow);
+		profileOtherActivityTableView.allowsSelection = false;
 	}
-	profileOtherDogTableView.setData(tableRows);
+
+	profileOtherActivityTableView.setData(tableRows);
 }
 
 //handle follow button
@@ -418,74 +515,35 @@ function handleProfileOtherFollowButton(e){
 	}
 }
 
-function handleProfileOtherFollowersFolowingTab(e){
+function handleProfileOtherActivityTableViewRows(e){
+	var activityId = e.row.activityId;
+	Ti.include('ui/iphone/view_activity.js');
 	
-	Ti.include('ui/iphone/list_users.js');
+	var viewActivityView = buildViewActivityView(activityId);
 	
-	var listUsersView = buildListUsersView();
-	
-	
-	var listUsersWindow = Ti.UI.createWindow({
+	var viewActivityWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
 		barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR
+		barColor:UI_COLOR,
+		title:'Activity'
 	});
-	
-	if(e.source.tab == TAB_FOLLOWERS){
-		listUsersWindow.setTitle('Followers');
-		getFollowers(profileOtherUserId);
-	}else if(e.source.tab == TAB_FOLLOWING){
-		listUsersWindow.setTitle('Following');
-		getFollowing(profileOtherUserId);
-	}
 	
 	//back button & event listener
-	var listUsersBackButton = Ti.UI.createButton({
+	var viewActivityBackButton = Ti.UI.createButton({
 	    backgroundImage: IMAGE_PATH+'common/back_button.png',
 	    width:48,
 	    height:33
 	});
 	
-	listUsersWindow.setLeftNavButton(listUsersBackButton);
-	listUsersBackButton.addEventListener("click", function() {
-	    navController.close(listUsersWindow);
+	viewActivityWindow.setLeftNavButton(viewActivityBackButton);
+	viewActivityBackButton.addEventListener("click", function() {
+	    navController.close(viewActivityWindow);
 	});
 	
-	listUsersWindow.add(listUsersView);
+	viewActivityWindow.add(viewActivityView);
 	
-	openWindows.push(listUsersWindow);
-	navController.open(listUsersWindow);
-}
-
-function handleProfileOtherDogTableViewRows(e){
-	var dogId = e.row.dogId;
-	
-	Ti.include('ui/iphone/dog_profile.js');
-	var dogProfileView = buildDogProfileView(dogId);
-	
-	var dogProfileWindow = Ti.UI.createWindow({
-		backgroundColor:UI_BACKGROUND_COLOR,
-		barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR,
-		title:e.row.children[1].text
-	});
-	
-	//back button
-	var dogProfileBackButton = Ti.UI.createButton({
-	    backgroundImage: IMAGE_PATH+'common/back_button.png',
-	    width:48,
-	    height:33
-	});
-	
-	dogProfileWindow.setLeftNavButton(dogProfileBackButton);
-	
-	dogProfileBackButton.addEventListener("click", function() {
-	    navController.close(dogProfileWindow);
-	});	
-	
-	dogProfileWindow.add(dogProfileView);
-	openWindows.push(dogProfileWindow);
-	navController.open(dogProfileWindow);
+	openWindows.push(viewActivityWindow);
+	navController.open(viewActivityWindow);
 }
 
 //get other user info by id from server
@@ -515,7 +573,9 @@ function getOnlineOtherUser(uId){
 			//Hide progress view
 			progressView.hide();
 			updateProfileOther(jsonData.data.user);
-			populateProfileOtherDogTableView(jsonData.data.dogs);
+			populateProfileOtherActivityTableView(jsonData.data.activities);
+			
+			onlineDogs = jsonData.data.dogs;
 			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;
@@ -558,6 +618,76 @@ function updateProfileOther(userObj){
  	
 }
 
+function handleProfileOtherFollowersFolowingTab(e){
+	
+	Ti.include('ui/iphone/list_users.js');
+	
+	var listUsersView = buildListUsersView();
+	
+	var listUsersWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR
+	});
+	
+	if(e.source.tab == TAB_FOLLOWERS){
+		listUsersWindow.setTitle('Followers');
+		getFollowers(profileOtherUserId);
+	}else if(e.source.tab == TAB_FOLLOWING){
+		listUsersWindow.setTitle('Following');
+		getFollowing(profileOtherUserId);
+	}
+	
+	//back button & event listener
+	var listUsersBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	listUsersWindow.setLeftNavButton(listUsersBackButton);
+	listUsersBackButton.addEventListener("click", function() {
+	    navController.close(listUsersWindow);
+	});
+	
+	listUsersWindow.add(listUsersView);
+	
+	openWindows.push(listUsersWindow);
+	navController.open(listUsersWindow);
+}
+
+function handleProfileOtherDogsButton(e){
+	
+	Ti.include('ui/iphone/list_users.js');
+	
+	var listUsersView = buildListUsersView();
+	populateListUsersTableView(onlineDogs);
+	
+	var listUsersWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Dogs'
+	});
+	
+	//back button & event listener
+	var listUsersBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	listUsersWindow.setLeftNavButton(listUsersBackButton);
+	listUsersBackButton.addEventListener("click", function() {
+	    navController.close(listUsersWindow);
+	});
+	
+	listUsersWindow.add(listUsersView);
+	
+	openWindows.push(listUsersWindow);
+	navController.open(listUsersWindow);
+}
+
 function handleProfileOtherChatButton(e){
 	if(e.source.mutual){
 		
@@ -566,13 +696,71 @@ function handleProfileOtherChatButton(e){
 		var userId = e.source.userId;
 		var name = e.source.mName;
 		
+		//inbox new window
+		var inboxNewWindow = Ti.UI.createWindow({
+			backgroundColor:UI_BACKGROUND_COLOR,
+			barImage:IMAGE_PATH+'common/bar.png',
+			barColor:UI_COLOR,
+			title:'New Message'
+		});
+		
+		//back button
+		var inboxNewBackButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'common/back_button.png',
+		    width:48,
+		    height:33
+		});
+		
+		inboxNewWindow.setLeftNavButton(inboxNewBackButton);
+		
+		inboxNewBackButton.addEventListener("click", function() {
+		    navController.close(inboxNewWindow);
+		    inboxNewSendToTextField.blur();
+		    inboxNewChatField.blur();
+		});
+		
+		buildViewInboxNew();
 		updateInboxNewView(userId, name);
 		
+		inboxNewWindow.add(inboxNewView);
+		
 		openWindows.push(inboxNewWindow);
-		navController.open(inboxNewWindow);	
+		navController.open(inboxNewWindow);
 		
 	}else{
 		alert('You are not mutual followers');
 	}
 	
+}
+
+function handleProfileOtherGalleryButton(e){
+	Ti.include('ui/iphone/gallery.js');
+	
+	var userId = e.source.userId;
+	
+	buildGalleryView(userId);
+	
+	var galleryWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Gallery'
+	});
+	
+	//back button & event listener
+	var galleryBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	galleryWindow.setLeftNavButton(galleryBackButton);
+	galleryBackButton.addEventListener("click", function() {
+	    navController.close(galleryWindow);
+	});
+	
+	galleryWindow.add(viewGallery);
+	
+	openWindows.push(galleryWindow);
+	navController.open(galleryWindow);
 }

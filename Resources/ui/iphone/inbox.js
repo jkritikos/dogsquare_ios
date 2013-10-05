@@ -107,13 +107,6 @@ function populateInboxTableView(mObj) {
 	inboxTableView.setData(tableRows);
 }
 
-function handleNewMessage(){
-	Ti.include('ui/iphone/inbox_new.js');
-	
-	openWindows.push(inboxNewWindow);
-	navController.open(inboxNewWindow);
-}
-
 function getUnreadInboxMessages(){
 	Ti.API.info('getUnreadInboxMessages() called for user='+ userObject.userId);
 	
@@ -212,6 +205,41 @@ function setOnlineMessagesIntoRead(list){
 		list:list,
 		token:userObject.token
 	});
+}
+
+function handleNewMessage(){
+	Ti.include('ui/iphone/inbox_new.js');
+	
+	//inbox new window
+	var inboxNewWindow = Ti.UI.createWindow({
+		backgroundColor:UI_BACKGROUND_COLOR,
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'New Message'
+	});
+	
+	//back button
+	var inboxNewBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	inboxNewWindow.setLeftNavButton(inboxNewBackButton);
+	
+	inboxNewBackButton.addEventListener("click", function() {
+	    navController.close(inboxNewWindow);
+	    inboxNewSendToTextField.blur();
+	    inboxNewChatField.blur();
+	    getUnreadInboxMessages();
+	});
+	
+	buildViewInboxNew();
+	
+	inboxNewWindow.add(inboxNewView);
+	
+	openWindows.push(inboxNewWindow);
+	navController.open(inboxNewWindow);
 }
 
 function handleInboxTableViewRows(e){

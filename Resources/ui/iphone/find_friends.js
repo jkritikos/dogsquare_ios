@@ -356,6 +356,7 @@ function populateFindFriendsDogsquareTableView(uObj){
 			height:73,
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',
+			selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 			type:FRIENDS_TYPE_ROW
 		});
 		

@@ -369,8 +369,7 @@ function populateViewActivityDogsTableView(dogObj){
 		var rowBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_grey.png',
 			right:10,
-			top:20,
-			type:RIGHT_MENU_TYPE_ROW
+			top:20
 		});
 		
 		row.add(rowBoneImage);

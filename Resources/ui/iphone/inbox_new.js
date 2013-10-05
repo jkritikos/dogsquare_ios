@@ -1,193 +1,187 @@
-//inbox new window
-var inboxNewWindow = Ti.UI.createWindow({
-	backgroundColor:UI_BACKGROUND_COLOR,
-	barImage:IMAGE_PATH+'common/bar.png',
-	barColor:UI_COLOR,
-	title:'New Message'
-});
-
-//back button
-var inboxNewBackButton = Ti.UI.createButton({
-    backgroundImage: IMAGE_PATH+'common/back_button.png',
-    width:48,
-    height:33
-});
-
-inboxNewWindow.setLeftNavButton(inboxNewBackButton);
+var inboxNewView = null;
+var inboxNewSendToChosenBackgroundView = null;
+var inboxNewSendToChosenLabel = null;
+var inboxNewSendToEraseIcon = null;
+var inboxNewSendToTextField = null;
+var inboxNewContactsTableView = null;
+var inboxNewChatTableView = null;
+var inboxNewChatField = null;
+var inboxNewChatFieldLabel = null;
 
 var toUserId = null;
 var inboxNewOtherThumbCreated = false;
 var inboxNewUserThumbCreated = false;
 
-//inbox new send to background
-var inboxNewSendToBackgroundView = Ti.UI.createView({
-    backgroundColor: 'white',
-    top:0,
-    width:'100%',
-    height:38
-});
-
-var inboxNewSendToChosenBackgroundView = Ti.UI.createView({
-    backgroundColor:'1c2027',
-    left:40,
-    width:Titanium.UI.SIZE,
-    height:25,
-    borderColor:'white',
-    borderRadius:10,
-    borderWidth:1
-});
-
-var inboxNewSendToChosenLabel = Ti.UI.createLabel({
-    right:10,
-	left:10,
-	color:'white',
-	height:25,
-	width:'auto',
-	textAlign:'left',
-	font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
-});
-inboxNewSendToChosenBackgroundView.add(inboxNewSendToChosenLabel);
-
-var inboxNewSendToEraseIcon = Titanium.UI.createButton({
-	backgroundImage:IMAGE_PATH+'common/erase_icon.png',
-	right:5,
-	width:16,
-	height:18
-});
-inboxNewSendToBackgroundView.add(inboxNewSendToEraseIcon);
-inboxNewSendToEraseIcon.addEventListener('click', handleSendToEraseButton);
-inboxNewSendToEraseIcon.hide();
-
-inboxNewSendToBackgroundView.add(inboxNewSendToChosenBackgroundView);
-inboxNewSendToChosenBackgroundView.hide();
-
-inboxNewSendToBackgroundView.add(inboxNewSendToChosenBackgroundView);
-
-var inboxNewSendToLabel = Titanium.UI.createLabel({ 
-	text:'To:',
-	left:10,
-	color:'666666',
-	height:25,
-	width:23,
-	textAlign:'left',
-	font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
-});
-
-inboxNewSendToBackgroundView.add(inboxNewSendToLabel);
-
-var inboxNewSendToTextField = Ti.UI.createTextField({
-	width:238,
-	height:38, 
-	font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
-});
-inboxNewSendToTextField.addEventListener('change', handleSendToTextFieldChange);
-inboxNewSendToTextField.addEventListener('focus', handleSendToTextFieldFocus);
-inboxNewSendToTextField.addEventListener('blur', handleSendToTextFieldBlur);
-
-inboxNewSendToBackgroundView.add(inboxNewSendToTextField);
-inboxNewWindow.add(inboxNewSendToBackgroundView);
-
-inboxNewBackButton.addEventListener("click", function() {
-    navController.close(inboxNewWindow);
-    inboxNewSendToTextField.blur();
-    inboxNewChatField.blur();
-    getUnreadInboxMessages();
-});
-
-//inbox new sepparator
-var inboxNewSendToSepparator = Ti.UI.createView({
-    backgroundColor: 'black',
-    top:38,
-    width:'100%',
-    opacity:0.5,
-    height:1
-});
-inboxNewWindow.add(inboxNewSendToSepparator);
-
-var inboxNewContactsTableView = Titanium.UI.createTableView({
-	minRowHeight:60,
-	width:320,
-	backgroundColor:'transparent',
-	top:39,
-	bottom:48
-});
-inboxNewContactsTableView.addEventListener('click', handleNewContactsTableRows);
-inboxNewWindow.add(inboxNewContactsTableView);
-getMutualFollowers();
-
-//remove empty rows
-inboxNewContactsTableView.footerView = Ti.UI.createView({
-    height: 1,
-    backgroundColor: 'transparent'
-});
-
-var inboxNewChatTableView = Titanium.UI.createTableView({
-	minRowHeight:60,
-	height:IPHONE5 ? 417 : 329,
-	width:320,
-	backgroundColor:'transparent',
-	separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
-	top:39
-});
-inboxNewWindow.add(inboxNewChatTableView);
-inboxNewChatTableView.hide();
-
-//remove empty rows
-inboxNewChatTableView.footerView = Ti.UI.createView({
-    height: 10,
-    backgroundColor: 'transparent'
-});
-
-//sepparator for the textfield from the messages view
-var inboxNewSepparator = Titanium.UI.createView({
-	backgroundColor:UI_COLOR,
-	height:1,
-	left:10,
-	right:16,
-	bottom:47
-});
-inboxNewWindow.add(inboxNewSepparator);
-
-//chat text field
-inboxNewChatField = Ti.UI.createTextField({
-	width:252,
-	height:30,
-	bottom:9,
-	left:10,
-	backgroundColor:'white',
-	borderWidth:1,
-	borderRadius:3,
-	borderColor:'c5c5c5'
-});
-inboxNewWindow.add(inboxNewChatField);
-
-inboxNewChatField.addEventListener('change', handleInboxNewChatTextFieldChange);
-inboxNewChatField.addEventListener('focus', handleInboxNewChatTextFieldFocus);
-inboxNewChatField.addEventListener('blur', handleInboxNewChatTextFieldBlur);
-
-//chat text field label
-inboxNewChatFieldLabel = Ti.UI.createLabel({
-	text:'Send a message',
-	color:'999999',
-	textAlign:'left',
-	left:10,
-	opacity:0.7,
-	width:100,
-	height:30,
-	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
-});
-inboxNewChatField.add(inboxNewChatFieldLabel);
-
-//send button
-var inboxNewSendButton = Titanium.UI.createButton({
-	backgroundImage:IMAGE_PATH+'inbox_view/send_icon.png',
-	right:16,
-	bottom:10,
-	width:30,
-	height:28,
-});
-inboxNewSendButton.addEventListener('click', handleInboxNewSendButton);
-inboxNewWindow.add(inboxNewSendButton);
+function buildViewInboxNew(){
+	if(inboxNewView == null){
+		inboxNewView = Ti.UI.createWindow({
+			backgroundColor:UI_BACKGROUND_COLOR
+		});
+		
+		//inbox new send to background
+		var inboxNewSendToBackgroundView = Ti.UI.createView({
+		    backgroundColor: 'white',
+		    top:0,
+		    width:'100%',
+		    height:38
+		});
+		
+		inboxNewSendToChosenBackgroundView = Ti.UI.createView({
+		    backgroundColor:'1c2027',
+		    left:40,
+		    width:Titanium.UI.SIZE,
+		    height:25,
+		    borderColor:'white',
+		    borderRadius:10,
+		    borderWidth:1
+		});
+		
+		inboxNewSendToChosenLabel = Ti.UI.createLabel({
+		    right:10,
+			left:10,
+			color:'white',
+			height:25,
+			width:'auto',
+			textAlign:'left',
+			font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
+		});
+		inboxNewSendToChosenBackgroundView.add(inboxNewSendToChosenLabel);
+		
+		inboxNewSendToEraseIcon = Titanium.UI.createButton({
+			backgroundImage:IMAGE_PATH+'common/erase_icon.png',
+			right:5,
+			width:16,
+			height:18
+		});
+		inboxNewSendToBackgroundView.add(inboxNewSendToEraseIcon);
+		inboxNewSendToEraseIcon.addEventListener('click', handleSendToEraseButton);
+		inboxNewSendToEraseIcon.hide();
+		
+		inboxNewSendToBackgroundView.add(inboxNewSendToChosenBackgroundView);
+		inboxNewSendToChosenBackgroundView.hide();
+		
+		inboxNewSendToBackgroundView.add(inboxNewSendToChosenBackgroundView);
+		
+		var inboxNewSendToLabel = Titanium.UI.createLabel({ 
+			text:'To:',
+			left:10,
+			color:'666666',
+			height:25,
+			width:23,
+			textAlign:'left',
+			font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
+		});
+		
+		inboxNewSendToBackgroundView.add(inboxNewSendToLabel);
+		
+		inboxNewSendToTextField = Ti.UI.createTextField({
+			width:238,
+			height:38, 
+			font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
+		});
+		inboxNewSendToTextField.addEventListener('change', handleSendToTextFieldChange);
+		inboxNewSendToTextField.addEventListener('focus', handleSendToTextFieldFocus);
+		inboxNewSendToTextField.addEventListener('blur', handleSendToTextFieldBlur);
+		
+		inboxNewSendToBackgroundView.add(inboxNewSendToTextField);
+		inboxNewView.add(inboxNewSendToBackgroundView);
+		
+		//inbox new sepparator
+		var inboxNewSendToSepparator = Ti.UI.createView({
+		    backgroundColor: 'black',
+		    top:38,
+		    width:'100%',
+		    opacity:0.5,
+		    height:1
+		});
+		inboxNewView.add(inboxNewSendToSepparator);
+		
+		inboxNewContactsTableView = Titanium.UI.createTableView({
+			minRowHeight:60,
+			width:320,
+			backgroundColor:'transparent',
+			top:39,
+			bottom:48
+		});
+		inboxNewContactsTableView.addEventListener('click', handleNewContactsTableRows);
+		inboxNewView.add(inboxNewContactsTableView);
+		getMutualFollowers();
+		
+		//remove empty rows
+		inboxNewContactsTableView.footerView = Ti.UI.createView({
+		    height: 1,
+		    backgroundColor: 'transparent'
+		});
+		
+		inboxNewChatTableView = Titanium.UI.createTableView({
+			minRowHeight:60,
+			height:IPHONE5 ? 417 : 329,
+			width:320,
+			backgroundColor:'transparent',
+			separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
+			top:39
+		});
+		inboxNewView.add(inboxNewChatTableView);
+		inboxNewChatTableView.hide();
+		
+		//remove empty rows
+		inboxNewChatTableView.footerView = Ti.UI.createView({
+		    height: 10,
+		    backgroundColor: 'transparent'
+		});
+		
+		//sepparator for the textfield from the messages view
+		var inboxNewSepparator = Titanium.UI.createView({
+			backgroundColor:UI_COLOR,
+			height:1,
+			left:10,
+			right:16,
+			bottom:47
+		});
+		inboxNewView.add(inboxNewSepparator);
+		
+		//chat text field
+		inboxNewChatField = Ti.UI.createTextField({
+			width:252,
+			height:30,
+			bottom:9,
+			left:10,
+			backgroundColor:'white',
+			borderWidth:1,
+			borderRadius:3,
+			borderColor:'c5c5c5'
+		});
+		inboxNewView.add(inboxNewChatField);
+		
+		inboxNewChatField.addEventListener('change', handleInboxNewChatTextFieldChange);
+		inboxNewChatField.addEventListener('focus', handleInboxNewChatTextFieldFocus);
+		inboxNewChatField.addEventListener('blur', handleInboxNewChatTextFieldBlur);
+		
+		//chat text field label
+		inboxNewChatFieldLabel = Ti.UI.createLabel({
+			text:'Send a message',
+			color:'999999',
+			textAlign:'left',
+			left:10,
+			opacity:0.7,
+			width:100,
+			height:30,
+			font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+		});
+		inboxNewChatField.add(inboxNewChatFieldLabel);
+		
+		//send button
+		var inboxNewSendButton = Titanium.UI.createButton({
+			backgroundImage:IMAGE_PATH+'inbox_view/send_icon.png',
+			right:16,
+			bottom:10,
+			width:30,
+			height:28,
+		});
+		inboxNewSendButton.addEventListener('click', handleInboxNewSendButton);
+		inboxNewView.add(inboxNewSendButton);
+	}
+}
 
 function populateInboxNewContactsTableView(mObject){
 	
@@ -273,7 +267,7 @@ function getMutualFollowers(){
 function handleNewContactsTableRows(e){
 	inboxNewSendToEraseIcon.show();
 	inboxNewChatField.focus();
-	inboxNewWindow.animate({bottom:215, duration:300});
+	inboxNewView.animate({bottom:215, duration:300});
 	inboxNewContactsTableView.animate({height:IPHONE5 ? 202 : 114, duration:200});
 	inboxNewSendToTextField.hide();
 	inboxNewSendToTextField.value = '';
@@ -296,6 +290,7 @@ function handleNewContactsTableRows(e){
 
 function updateInboxNewView(userId, name){
 	inboxNewChatField.focus();
+	inboxNewSendToTextField.hide();
 	
 	inboxNewContactsTableView.hide();
 	inboxNewChatTableView.show();
@@ -333,8 +328,8 @@ function handleSendToTextFieldBlur(e){
 }
 
 function handleSendToTextFieldFocus(e){
-	inboxNewChatTableView.height = IPHONE5 ? 249 : 117;
-	inboxNewContactsTableView.height = IPHONE5 ? 249 : 117;
+	inboxNewChatTableView.height = IPHONE5 ? 249 : 161;
+	inboxNewContactsTableView.height = IPHONE5 ? 249 : 161;
 	
 	if(inboxNewChatTableView.data.length != 0){
 		inboxNewChatTableView.scrollToIndex(inboxNewChatTableView.data[0].rows.length - 1);
@@ -559,14 +554,14 @@ function handleInboxNewChatTextFieldBlur(){
 	}else {
 		inboxNewChatFieldLabel.hide();
 	}
-	inboxNewWindow.animate({bottom:0, duration:200});
+	inboxNewView.animate({bottom:0, duration:200});
 	inboxNewContactsTableView.animate({height:IPHONE5 ? 417 : 329, duration:200});
 	inboxNewChatTableView.animate({height:IPHONE5 ? 417 : 329, duration:200});
 }
 
 //handle focus on chat text field
 function handleInboxNewChatTextFieldFocus(){
-	inboxNewWindow.animate({bottom:215, duration:300});
+	inboxNewView.animate({bottom:215, duration:300});
 	inboxNewContactsTableView.animate({height:IPHONE5 ? 202 : 115, duration:200});
 	inboxNewChatTableView.animate({height:IPHONE5 ? 202 : 115, duration:200});
 }
