@@ -488,8 +488,9 @@ function followUser(uId, button, win){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in followUser() '+e);
 	};
+	
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
 		
@@ -505,7 +506,10 @@ function followUser(uId, button, win){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
 		
@@ -513,7 +517,8 @@ function followUser(uId, button, win){
 	xhr.open('POST',API+'followUser');
 	xhr.send({
 		user_id:userObject.userId,
-		follow_user:uId
+		follow_user:uId,
+		token:userObject.token
 	});
 }
 
@@ -578,8 +583,9 @@ function unfollowUser(uId, button, win){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in unfollowUser() '+e);
 	};
+	
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
 		
@@ -595,7 +601,10 @@ function unfollowUser(uId, button, win){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
 		
@@ -603,7 +612,8 @@ function unfollowUser(uId, button, win){
 	xhr.open('POST',API+'unfollowUser');
 	xhr.send({
 		user_id:userObject.userId,
-		follow_user:uId
+		follow_user:uId,
+		token:userObject.token
 	});
 }
 
@@ -615,7 +625,7 @@ function getFollowers(uId){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in getFollowers() '+e);
 	};
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
@@ -628,14 +638,18 @@ function getFollowers(uId){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
 	};
 	xhr.open('GET',API+'getFollowers');
 	xhr.send({
 		user_id:userObject.userId,
-		target_id:uId
+		target_id:uId,
+		token:userObject.token
 	});
 }
 
@@ -648,8 +662,9 @@ function getFollowing(uId){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in getFollowing() '+e);
 	};
+	
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
 		
@@ -661,14 +676,19 @@ function getFollowing(uId){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
 	};
+	
 	xhr.open('GET',API+'getFollowing');
 	xhr.send({
 		user_id:userObject.userId,
-		target_id:uId
+		target_id:uId,
+		token:userObject.token
 	});
 }
 
@@ -887,7 +907,7 @@ function doSaveActivityCommentOnline(comObj, view){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in doSaveActivityCommentOnline() '+e);
 	};
 	
 	xhr.onload = function(e){
@@ -914,6 +934,9 @@ function doSaveActivityCommentOnline(comObj, view){
 				appendCommentFinishTableView(date, message);
 			}
 			
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -923,6 +946,7 @@ function doSaveActivityCommentOnline(comObj, view){
 		user_id:userObject.userId,
 		comment:comObj.comment,
 		activity_id:comObj.activity_id,
+		token:userObject.token
 	});
 }
 

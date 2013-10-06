@@ -228,7 +228,7 @@ function getMutualFollowers(){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in getMutualFollowers() '+e);
 	};
 	xhr.onload = function(e) {
 		Ti.API.info('getMutualFollowers() got back from server '+this.responseText);
@@ -251,7 +251,10 @@ function getMutualFollowers(){
 			}
 			
 			populateInboxNewContactsTableView(fArray);
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
 		
@@ -260,7 +263,8 @@ function getMutualFollowers(){
 	xhr.open('GET',API+'getMutualFollowers');
 	xhr.send({
 		user_id:userObject.userId,
-		target_id:userObject.userId
+		target_id:userObject.userId,
+		token:userObject.token
 	});
 }
 

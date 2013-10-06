@@ -490,7 +490,7 @@ function getOnlineUser(n){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in getOnlineUser() '+e);
 	};
 	
 	xhr.onload = function(e) {
@@ -515,7 +515,10 @@ function getOnlineUser(n){
 			//Hide message and close register window
 			progressView.hide();
 			
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else {
 			
 			//Show the error message we got back from the server
 			progressView.change({
@@ -532,7 +535,8 @@ function getOnlineUser(n){
 	xhr.open('GET',API+'searchUser');
 	xhr.send({
 		user_id:userObject.userId,
-		name:n
+		name:n,
+		token:userObject.token
 	});
 }
 
@@ -552,8 +556,9 @@ function doSearchUserByEmail(cEmail){
 	var emailList = escape(JSON.stringify(cEmail));
 	
 	xhr.onerror = function(e){
-		
+		Ti.API.error('Error in doSearchUserByEmail() '+e);
 	};
+	
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
 		
@@ -566,7 +571,10 @@ function doSearchUserByEmail(cEmail){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-		}else{
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
 		
@@ -574,7 +582,8 @@ function doSearchUserByEmail(cEmail){
 	xhr.open('GET',API+'areUsers');
 	xhr.send({
 		user_id:userObject.userId,
-		list:emailList
+		list:emailList,
+		token:userObject.token
 	});
 }
 

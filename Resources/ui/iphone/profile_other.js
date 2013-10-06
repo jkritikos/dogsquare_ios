@@ -379,6 +379,9 @@ function sendWalkRequest(){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		} else{
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -387,7 +390,8 @@ function sendWalkRequest(){
 	xhr.open('POST',API+'walkRequest');
 	xhr.send({
 		user_id:userObject.userId,
-		target_id:profileOtherUserId
+		target_id:profileOtherUserId,
+		token:userObject.token
 	});
 }
 
@@ -582,6 +586,9 @@ function getOnlineOtherUser(uId){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		} else {
 			//Show the error message we got back from the server
 			progressView.change({
@@ -599,7 +606,8 @@ function getOnlineOtherUser(uId){
 	xhr.open('GET',API+'getOtherUser');
 	xhr.send({
 		user_id:userObject.userId,
-		target_id:uId
+		target_id:uId,
+		token:userObject.token
 	});
 }
 

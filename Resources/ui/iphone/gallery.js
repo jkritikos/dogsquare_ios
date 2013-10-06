@@ -170,7 +170,7 @@ function savePhotoOnline(){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in savePhotoOnline() '+e);
 	};
 	
 	xhr.onload = function(e){
@@ -187,16 +187,21 @@ function savePhotoOnline(){
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
 			
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
 	};
+	
 	xhr.setRequestHeader("Content-Type", "multipart/form-data");
 	xhr.open('POST',API+'addPhoto');
 	xhr.send({
 		user_id:userObject.userId,
 		photo:galleryImageObj.photo,
-		thumb:galleryImageObj.thumb
+		thumb:galleryImageObj.thumb,
+		token:userObject.token
 	});
 }
 

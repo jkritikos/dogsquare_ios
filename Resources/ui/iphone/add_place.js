@@ -354,6 +354,9 @@ function doSavePlaceOnline(pObj){
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
 			alert('place successfully added');
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -368,6 +371,7 @@ function doSavePlaceOnline(pObj){
 		name:pObj.name,
 		latitude:pObj.latitude,
 		longitude:pObj.longitude,
-		category_id:pObj.category_id
+		category_id:pObj.category_id,
+		token:userObject.token
 	});
 }

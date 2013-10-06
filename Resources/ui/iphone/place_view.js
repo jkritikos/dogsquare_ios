@@ -569,7 +569,7 @@ function doSavePlaceCommentOnline(comObj){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in doSavePlaceCommentOnline() '+e);
 	};
 	
 	xhr.onload = function(e){
@@ -591,15 +591,20 @@ function doSavePlaceCommentOnline(comObj){
 			updateLeftMenuCounts(followers, inbox, notifications);
 			
 			appendCommentPlaceTableView(date, message);
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
 	};
+	
 	xhr.open('POST',API+'addPlaceComment');
 	xhr.send({
 		user_id:userObject.userId,
 		comment:comObj.comment,
 		place_id:comObj.place_id,
+		token:userObject.token
 	});
 }
 

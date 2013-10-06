@@ -547,7 +547,7 @@ function doSaveDogOnline(dObj){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-	
+		Ti.API.error('Error in doSaveDogOnline() '+e);
 	};
 	
 	xhr.onload = function(e){
@@ -574,6 +574,9 @@ function doSaveDogOnline(dObj){
 			var dogProfileView = buildDogProfileView(dObj.dog_id);
 		
 			navController.getWindow().add(dogProfileView);
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		} else {
 			alert(getErrorMessage(jsonData.response));
 		}
@@ -590,7 +593,8 @@ function doSaveDogOnline(dObj){
 		age:dObj.age,
 		breed_id:dObj.breed_id,
 		gender:dObj.gender,
-		mating:dObj.mating
+		mating:dObj.mating,
+		token:userObject.token
 	});
 }
 
