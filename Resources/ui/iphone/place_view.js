@@ -22,12 +22,12 @@ var COMMENT_ROW = 2;
 function buildCheckinPlaceView(view, placeId){
 	if(checkinPlaceView == null){
 		checkinPlaceView = Ti.UI.createView({
-			backgroundColor:UI_BACKGROUND_COLOR
+			backgroundColor:'white'
 		});
 		
 		checkinPlaceMapAnnotation = Ti.Map.createAnnotation({
 	        animate: true,
-	        pincolor: Ti.Map.ANNOTATION_GREEN
+	        image:IMAGE_PATH+'run_finish/pin.png'
 	   });
 		
 		//the map
@@ -45,9 +45,10 @@ function buildCheckinPlaceView(view, placeId){
 		
 		//photo image
 		checkinPlacePhotoImage = Ti.UI.createImageView({
-			width:'100%',
-			height:120,
-			top:120
+			width:320,
+			height:320,
+			top:120,
+			zIndex:1
 		});
 		checkinPlaceView.add(checkinPlacePhotoImage);
 		
@@ -58,44 +59,63 @@ function buildCheckinPlaceView(view, placeId){
 			width:54,
 			right:0,
 			backgroundColor:'black',
-			opacity:0.5
+			opacity:0.5,
+			zIndex:2
 		});
 		checkinPlaceView.add(checkinPlacePhotoView);
 		
-		//place title label
-		checkinPlaceTitleLabel = Ti.UI.createLabel({
-			top:240,
-			textAlign:'left',
-			width:280,
-			height:21,
-			left:16,
-			color:'black',
-			opacity:0.6,
-			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
+		//add photo icon
+		var checkinPlaceAddPhotoIcon = Ti.UI.createImageView({
+			image:IMAGE_PATH+'gallery/add_photo_icon.png',
+			right:10,
+			top:168,
+			zIndex:2
 		});
-		checkinPlaceView.add(checkinPlaceTitleLabel);
 		
-		//place description label
-		checkinPlaceDescriptionLabel = Ti.UI.createLabel({
-			top:257,
-			textAlign:'left',
-			width:180,
-			height:16,
-			left:17,
-			color:'black',
-			opacity:0.8,
-			font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
-		});
-		checkinPlaceView.add(checkinPlaceDescriptionLabel);
+		checkinPlaceView.add(checkinPlaceAddPhotoIcon);
+		
+		//Event handler for adding photos
+		checkinPlacePhotoView.addEventListener('click', handlePlaceShowPhotoOptions);
+		checkinPlaceAddPhotoIcon.addEventListener('click', handlePlaceShowPhotoOptions);
 		
 		//background bar for checkinPlace button
 		var checkinPlaceButtonBarView = Ti.UI.createView({
-			top:277,
-			height:55,
+			top:240,
+			height:92,
 			width:'100%',
-			backgroundColor:'white'
+			backgroundColor:'white',
+			zIndex:2
 		});
 		checkinPlaceView.add(checkinPlaceButtonBarView);
+		
+		//place title label
+		checkinPlaceTitleLabel = Ti.UI.createLabel({
+			top:0,
+			textAlign:'left',
+			width:280,
+			//height:21,
+			left:17,
+			color:'black',
+			opacity:0.6,
+			zIndex:2,
+			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		checkinPlaceButtonBarView.add(checkinPlaceTitleLabel);
+		
+		//place description label
+		checkinPlaceDescriptionLabel = Ti.UI.createLabel({
+			top:17,
+			textAlign:'left',
+			width:180,
+			//height:16,
+			left:17,
+			color:'black',
+			opacity:0.8,
+			zIndex:2,
+			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
+		});
+		
+		checkinPlaceButtonBarView.add(checkinPlaceDescriptionLabel);
 		
 		//change if it is the view place view
 		if(view == VIEW_PLACE_VIEW){
@@ -133,6 +153,7 @@ function buildCheckinPlaceView(view, placeId){
 				width:179,
 				height:51,
 				left:14,
+				top:36,
 				place_id:placeId
 			});
 			checkinPlaceButtonBarView.add(checkinPlaceButton);
@@ -143,6 +164,7 @@ function buildCheckinPlaceView(view, placeId){
 		checkinPlaceHeartImage = Ti.UI.createImageView({
 			image:IMAGE_PATH+'common/best_icon_default.png',
 			right:46,
+			top:38,
 			placeId:placeId,
 			toggle:false
 		});
@@ -154,7 +176,7 @@ function buildCheckinPlaceView(view, placeId){
 			top:332,
 			height:429,
 			width:'100%',
-			backgroundColor:UI_BACKGROUND_COLOR,
+			backgroundColor:'white',
 			zIndex:2
 		});
 		checkinPlaceView.add(checkinPlaceCommentsBackgroundView);
@@ -225,6 +247,113 @@ function buildCheckinPlaceView(view, placeId){
 	getOnlinePlace(placeId);
 	
 	return checkinPlaceView;
+}
+
+//photo dialog
+var checkinPlacePhotoDialog = Titanium.UI.createOptionDialog({
+	options:['Take Photo', 'Choose From Library', 'Cancel'],
+	cancel:2
+});
+
+//photo dialog event listener
+checkinPlacePhotoDialog.addEventListener('click',function(e){
+	if(e.index == 0){
+		//handleCameraSelection();
+	} else if(e.index == 1){
+		handleCheckinPlacePhotoSelection();
+	}
+});
+
+//Uploads the specified photo for the current place
+function uploadPlacePhoto(photoObject){
+	Ti.API.info('uploadPlacePhoto() called'); 	
+	
+	//progress view
+	var progressView = new ProgressView({window:checkinPlaceView});
+	progressView.show({
+		text:"Uploading..."
+	});
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in uploadPlacePhoto() '+e);
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('uploadPlacePhoto() got back from server '+this.responseText); 	
+		var jsonData = JSON.parse(this.responseText);
+		
+		//Update user object and close the signup window
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			//Show success
+			progressView.change({
+		        success:true
+		    });
+		    
+		    //Hide message and close register window
+			progressView.hide();
+		} else {
+			
+			//Show the error message we got back from the server
+			progressView.change({
+		        error:true,
+		        text:getErrorMessage(jsonData.data.response)
+		    });
+			//and hide it after a while		    
+		    setTimeout(function() {
+			    progressView.hide();
+			}, ERROR_MSG_REMOVE_TIMEOUT);
+		    
+		}
+	};
+	
+	xhr.setRequestHeader("Content-Type", "multipart/form-data");
+	xhr.open('POST',API+'addPlacePhoto');
+	xhr.send(photoObject);
+}
+
+//Selects and uploads a photo from the camera roll
+function handleCheckinPlacePhotoSelection(){
+	Titanium.Media.openPhotoGallery({	
+		
+		success:function(event){
+			var image = event.media;
+			
+			//Jpeg compression module
+			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
+			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setWorstCompressQuality(0.40);
+			
+			var compressedImage = jpgcompressor.compress(image);
+			
+			//Create thumbnail
+			var imageThumbnail = image.imageAsThumbnail(60,0,30);
+			
+			var placePhotoObject = {
+				photo:compressedImage,
+				thumb:imageThumbnail,
+				user_id:userObject.userId,
+				token:userObject.token,
+				place_id:checkinPlaceHeartImage.placeId
+			};
+			
+			uploadPlacePhoto(placePhotoObject);
+		},
+		cancel:function(){
+	
+		},
+		error:function(error){
+		},
+		allowEditing:true
+	});
+}
+
+//Display the photo options
+function handlePlaceShowPhotoOptions(){
+	checkinPlacePhotoDialog.show();
 }
 
 //populate comment rows

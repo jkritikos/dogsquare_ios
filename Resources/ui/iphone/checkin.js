@@ -81,7 +81,7 @@ checkinOpacityBar.addEventListener('click', function(e){
 
 //checkin opacity bar label
 var checkinOpacityBarLabel = Titanium.UI.createLabel({ 
-	text:'Add a new place   +',
+	text:'Add a new place / incident   +',
 	color:'black',
 	height:22,
 	textAlign:'left',
@@ -152,7 +152,7 @@ function populatecheckinPlacesTableView(places){
 			var rowPlaceTitleLabel = Titanium.UI.createLabel({ 
 				text:places[i].name,
 				color:'black',
-				height:16,
+				//height:16,
 				top:10,
 				width:'auto',
 				textAlign:'left',
@@ -165,7 +165,7 @@ function populatecheckinPlacesTableView(places){
 			var rowPlaceDescriptionLabel = Titanium.UI.createLabel({ 
 				text:places[i].category,
 				color:'black',
-				height:14,
+				//height:14,
 				top:28,
 				width:'auto',
 				textAlign:'left',
@@ -179,7 +179,7 @@ function populatecheckinPlacesTableView(places){
 				text:places[i].distance,
 				color:'black',
 				height:14,
-				top:45,
+				top:47,
 				width:'auto',
 				textAlign:'left',
 				opacity:0.5,

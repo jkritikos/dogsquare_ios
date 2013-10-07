@@ -330,7 +330,7 @@ function handleAddPlaceSaveButton(){
 
 //Server call for saving places
 function doSavePlaceOnline(pObj){
-	Ti.API.info('doSavePlaceOnline() called with userObject='+pObj); 	
+	Ti.API.info('doSavePlaceOnline() called with userObject='+JSON.stringify(userObject) + ' and place '+JSON.stringify(pObj)); 	
 	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
@@ -353,7 +353,42 @@ function doSavePlaceOnline(pObj){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
-			alert('place successfully added');
+			
+			//Open the place view
+			Ti.include('ui/iphone/place_view.js');
+			var placeCheckinView = buildCheckinPlaceView(CHECKIN_PLACE_VIEW, jsonData.data.place_id);
+			var placeCheckinWindow = Ti.UI.createWindow({
+				backgroundColor:'white',
+				barImage:IMAGE_PATH+'common/bar.png',
+				barColor:UI_COLOR,
+				title:pObj.name
+			});
+			
+			//back button & event listener
+			var placeCheckinBackButton = Ti.UI.createButton({
+			    backgroundImage: IMAGE_PATH+'common/back_button.png',
+			    width:48,
+			    height:33
+			});
+			
+			placeCheckinWindow.setLeftNavButton(placeCheckinBackButton);
+			placeCheckinBackButton.addEventListener("click", function() {
+			    navController.close(placeCheckinWindow);
+			});
+			
+			placeCheckinWindow.add(placeCheckinView);
+		
+			//remove checkin window from the navigation stack
+			placeCheckinWindow.addEventListener('focus', function(){
+				var checkinWindowIndex = openWindows.length-2;
+				navController.close(openWindows[checkinWindowIndex], {animated:false});
+			});
+			
+			openWindows.push(placeCheckinWindow);
+			navController.open(placeCheckinWindow);
+			//End open the place view
+			
+			
 		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
 			Ti.API.error('Unauthorised request - need to login again');
 			showLoginPopup();

@@ -548,7 +548,8 @@ function closeRegisterWindow(){
 		leftTableView.fireEvent('click', {menuItem:MENU_PROFILE});
 	});
 }
-	
+
+//Selects a photo from the camera roll
 function handlePhotoSelection(){
 	Titanium.Media.openPhotoGallery({	
 		
