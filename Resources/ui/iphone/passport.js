@@ -1,48 +1,48 @@
-//passport view
-var viewPassport = Ti.UI.createView({
-	backgroundColor:UI_BACKGROUND_COLOR
-});
-
-//creation of a button
-var addNoteButton = Ti.UI.createButton({
-	backgroundImage:IMAGE_PATH+'common/edit_icon.png',
-	title:'add',
-    width:24,
-    height:23
-});
-navController.getWindow().setRightNavButton(addNoteButton);
-//next button event listener
-addNoteButton.addEventListener("click", handleAddNoteButton);
-
-//passport table view
-var passportTableView = Titanium.UI.createTableView({
-	minRowHeight:71,
-	width:293,
-	backgroundColor:UI_BACKGROUND_COLOR,
-	separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
-	top:24,
-	bottom:0,
-	allowsSelection:false
-});
-viewPassport.add(passportTableView);
+var viewPassport = null;	
+var addNoteButton = null;
+var passportTableView = null;
 
 //data for the sections
 var data = [];
 var noteData = getNotes();
-
-//populate section
-populateTableViewSection(noteData);
-
-//handle next button
-function handleAddNoteButton() {
-	Ti.include('ui/iphone/add_note.js');
-	openWindows.push(addNoteWindow);
-    navController.open(addNoteWindow);
+	
+function buildPassportView(){	
+	if(viewPassport == null){
+		//passport view
+		viewPassport = Ti.UI.createView({
+			backgroundColor:UI_BACKGROUND_COLOR
+		});
+		
+		//creation of a button
+		addNoteButton = Ti.UI.createButton({
+			backgroundImage:IMAGE_PATH+'common/edit_icon.png',
+			title:'add',
+		    width:24,
+		    height:23
+		});
+		navController.getWindow().setRightNavButton(addNoteButton);
+		//next button event listener
+		addNoteButton.addEventListener("click", handleAddNoteButton);
+		
+		//passport table view
+		passportTableView = Titanium.UI.createTableView({
+			minRowHeight:71,
+			width:293,
+			backgroundColor:UI_BACKGROUND_COLOR,
+			top:24,
+			bottom:0
+		});
+		viewPassport.add(passportTableView);
+		passportTableView.addEventListener('click', handlePassportTableViewRows);
+		
+		//populate section
+		populateTableViewSection(noteData);
+	}
 }
 
 //populate section
 function populateTableViewSection(nData) {
-	
+	Ti.API.info('populating table view');
 	var tableRows = [];
 	var numberOfNotes = null;
 	
@@ -56,72 +56,74 @@ function populateTableViewSection(nData) {
 			numberOfNotes = 1;
 			previousMonth = month;
 			
-			var tableViewSection = Titanium.UI.createTableViewSection({
-				height:'auto',
-				backgroundColor:'transparent'
-			});
-			tableViewSection.footerView = Ti.UI.createView({height:30});
-			
-			var passportRow1 = Ti.UI.createTableViewRow({
-				className:'passportRow1',
-				height:'auto',
-				width:'100%',
-				backgroundColor:UI_BACKGROUND_COLOR,
-				selectedBackgroundColor:'transparent'
-			});
-			
-			//background
-			var passportRowBackground1 = Ti.UI.createView({
-				height:'auto',
-				width:'100%',
-				top:17,
-				bottom:2,
-				backgroundColor:'white'
-			});
-			passportRow1.add(passportRowBackground1);
-			
 			var rowDate = formatDate(date);
 			var monthName = getMonthName(date);
 			
 			var monthCategoryLabel = monthName + ' ' + date.getFullYear();
 			
+			var sectionHeader = Ti.UI.createView({
+				height:17,
+				backgroundColor:UI_BACKGROUND_COLOR
+			});
+			
 			//category date label
 			var rowCategoryDateLabel1 = Titanium.UI.createLabel({ 
 				text:monthCategoryLabel,
 				color:'black',
-				top:0,
 				height:14,
 				width:'auto',
 				textAlign:'left',
 				left:0,
 				font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
 			});
-			passportRow1.add(rowCategoryDateLabel1);
+			sectionHeader.add(rowCategoryDateLabel1);
 			
 			//category number label
 			var rowCategoryNumberLabel1 = Titanium.UI.createLabel({ 
 				text:numberOfNotes,
 				color:'black',
-				top:0,
 				textAlign:'right',
 				right:0,
 				font:{fontSize:11, fontWeight:'regular', fontFamily:'Open Sans'}
 			});
-			passportRow1.add(rowCategoryNumberLabel1);
+			sectionHeader.add(rowCategoryNumberLabel1);
+			
+			//date sepparator
+			var rowDateSepparator1 = Titanium.UI.createView({ 
+				width:'100%',
+				bottom:0,
+				height:1,
+				backgroundColor:UI_COLOR
+			});
+			sectionHeader.add(rowDateSepparator1);
+			
+			var tableViewSection = Titanium.UI.createTableViewSection({
+				height:'auto',
+				backgroundColor:'transparent'
+			});
+			tableViewSection.footerView = Ti.UI.createView({height:30});
+			tableViewSection.headerView = sectionHeader;
+			
+			var passportRow1 = Ti.UI.createTableViewRow({
+				className:'passportRow1',
+				height:'auto',
+				width:'100%',
+				selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+				backgroundColor:'white',
+				selectedBackgroundColor:'transparent'
+			});
 			
 			//title label
 			var rowTitleLabel1 = Titanium.UI.createLabel({ 
 				text:nData[i].title,
 				color:'black',
 				top:3,
-				height:22,
 				width:276,
 				textAlign:'left',
 				left:7,
 				font:{fontSize:20, fontWeight:'regular', fontFamily:'Open Sans'}
 			});
-			passportRowBackground1.add(rowTitleLabel1);
-			//testLabel.width = rowTitleLabel1.toImage().width
+			passportRow1.add(rowTitleLabel1);
 			
 			//description label
 			var rowDescriptionLabel1 = Titanium.UI.createLabel({ 
@@ -130,13 +132,13 @@ function populateTableViewSection(nData) {
 				height:'auto',
 				width:'auto',
 				textAlign:'left',
-				top:26,
+				top:35,
 				bottom:28,
 				left:7,
 				right:7,
 				font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 			});
-			passportRowBackground1.add(rowDescriptionLabel1);
+			passportRow1.add(rowDescriptionLabel1);
 			
 			//date label
 			var rowDateLabel1 = Titanium.UI.createLabel({ 
@@ -149,25 +151,7 @@ function populateTableViewSection(nData) {
 				left:7,
 				font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
 			});
-			passportRowBackground1.add(rowDateLabel1);
-			
-			//date sepparator
-			var rowDateSepparator1 = Titanium.UI.createView({ 
-				width:'100%',
-				top:14,
-				height:1,
-				backgroundColor:UI_COLOR
-			});
-			passportRow1.add(rowDateSepparator1);
-			
-			//row sepparator
-			var rowSepparator1 = Titanium.UI.createView({ 
-				width:'100%',
-				bottom:0,
-				height:2,
-				backgroundColor:UI_BACKGROUND_COLOR
-			});
-			passportRow1.add(rowSepparator1);
+			passportRow1.add(rowDateLabel1);
 			
 			tableViewSection.add(passportRow1);
 			data.push(tableViewSection);
@@ -190,7 +174,6 @@ function populateTableViewSection(nData) {
 				text:nData[i].title,
 				color:'black',
 				top:3,
-				height:22,
 				width:276,
 				textAlign:'left',
 				left:7,
@@ -204,7 +187,7 @@ function populateTableViewSection(nData) {
 				height:'auto',
 				width:'auto',
 				textAlign:'left',
-				top:26,
+				top:35,
 				bottom:28,
 				left:7,
 				right:7,
@@ -227,19 +210,10 @@ function populateTableViewSection(nData) {
 			});
 			passportRow.add(rowDateLabel);
 			
-			var rowSepparator = Titanium.UI.createView({ 
-				width:'100%',
-				bottom:0,
-				height:2,
-				backgroundColor:UI_BACKGROUND_COLOR
-			});
-			passportRow.add(rowSepparator);
-			
 			tableViewSection.add(passportRow);
 			///////////////////END OF NEXT ROW//////////////////
 		}
 		passportTableView.setData(data);
-		Ti.API.info('data set to tableview');
 	}
 }
 
@@ -251,4 +225,75 @@ function getMonthName(date){
     "July", "August", "September", "October", "November", "December" ];
 
 	return monthNames[month];
+}
+
+//handle next button
+function handlePassportTableViewRows(e) {
+	Ti.include('ui/iphone/add_note.js');
+	
+	buildAddNoteView();
+	
+	//add note window
+	var addNoteWindow = Ti.UI.createWindow({
+		backgroundColor:UI_BACKGROUND_COLOR,
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Add Note'
+	});
+	
+	//back button
+	var addNoteBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	addNoteWindow.setLeftNavButton(addNoteBackButton);
+	
+	addNoteBackButton.addEventListener("click", function() {
+	    navController.close(addNoteWindow);
+	});
+	
+	addNoteWindow.add(addNoteView);
+	
+	openWindows.push(addNoteWindow);
+    navController.open(addNoteWindow);
+}
+
+//handle next button
+function handleAddNoteButton() {
+	Ti.include('ui/iphone/add_note.js');
+	
+	buildAddNoteView();
+	
+	//add note window
+	var addNoteWindow = Ti.UI.createWindow({
+		backgroundColor:UI_BACKGROUND_COLOR,
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Add Note'
+	});
+	
+	//back button
+	var addNoteBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	addNoteWindow.setLeftNavButton(addNoteBackButton);
+	
+	addNoteBackButton.addEventListener("click", function() {
+	    navController.close(addNoteWindow);
+	});
+	
+	addNoteWindow.add(addNoteView);
+	
+	openWindows.push(addNoteWindow);
+	openWindows[openWindows.length - 1].setRightNavButton(addNoteSaveButton);
+    navController.open(addNoteWindow);
+}
+
+function clearPassportTable(){
+	passportTableView.data = [];
 }

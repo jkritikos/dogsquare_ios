@@ -193,6 +193,7 @@ leftTableView.addEventListener("click", function(e){
 		case MENU_PASSPORT:
 			navController.getWindow().setTitleControl();
 			Ti.include('ui/iphone/passport.js');
+			buildPassportView();
 			navController.getWindow().add(viewPassport);
 			navController.getWindow().setTitle('Passport');
 			break;
