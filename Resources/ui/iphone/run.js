@@ -313,7 +313,7 @@ function handleEndRunButton(){
 			backgroundColor:'white',
 			barImage:IMAGE_PATH+'common/bar.png',
 			barColor:UI_COLOR,
-			title:'Run overview'
+			title:'Activity details'
 		});
 		
 		//back button & event listener

@@ -196,12 +196,12 @@ function buildRunFinishView(obj){
 	
 	//Table view title label	
 	var runFinishTitleLabel = Titanium.UI.createLabel({ 
-		text:'Breed Energy Bar',
+		text:'Status',
 		color:'white',
 		height:25,
 		textAlign:'center',
 		left:18,
-		font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+		font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	runFinishTitleBar.add(runFinishTitleLabel);
 	
@@ -359,7 +359,7 @@ function populateRunFinishTableView(o){
 		//bone image
 		var rowBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_grey.png',
-			right:10,
+			right:14,
 			top:20
 		});
 		
@@ -368,7 +368,7 @@ function populateRunFinishTableView(o){
 		//bone fill image
 		var rowBoneFillImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_colours.png',
-			right:10,
+			right:14,
 			top:20,
 			zIndex:2
 		}); 
@@ -381,10 +381,10 @@ function populateRunFinishTableView(o){
 			color:'black',
 			height:15,
 			textAlign:'center',
-			right:40,
-			bottom:20,
+			right:52,
+			bottom:13,
 			opacity:0.3,
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		row.add(rowMoodLabel);
 		
@@ -394,9 +394,9 @@ function populateRunFinishTableView(o){
 			color:'999900',
 			height:15,
 			textAlign:'center',
-			right:12,
-			bottom:20,
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			right:24,
+			bottom:13,
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		row.add(rowMoodPercentLabel);
 		

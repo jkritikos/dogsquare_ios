@@ -156,7 +156,7 @@ var profileStartButton = Ti.UI.createButton({
 	top:243,
 	width:178,
 	height:52,
-	left:15,
+	left:12,
 	zIndex:5
 });
 
@@ -180,7 +180,7 @@ var profileActivityLabel = Titanium.UI.createLabel({
 	top:15,
 	height:20,
 	textAlign:'center',
-	left:29,
+	left:18,
 	font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 });
 profileActivityBar.add(profileActivityLabel);
@@ -224,7 +224,7 @@ profileStartButton.addEventListener('click', function(){
 		backgroundColor:UI_BACKGROUND_COLOR,
 		barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR,
-		title:'Run'
+		title:'Activity'
 	});
 	
 	//back button
@@ -401,7 +401,7 @@ function handleProfileActivityRows(e){
 		backgroundColor:'white',
 		barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR,
-		title:'Activity'
+		title:'Activity details'
 	});
 	
 	//back button & event listener

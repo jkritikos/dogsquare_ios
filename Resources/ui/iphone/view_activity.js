@@ -230,19 +230,19 @@ function buildViewActivityView(aId){
 		
 		//Table view title label	
 		var runFinishTitleLabel = Titanium.UI.createLabel({ 
-			text:'Breed Energy Bar',
+			text:'Status',
 			color:'white',
 			height:25,
 			textAlign:'center',
 			left:18,
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		viewActivityTitleBar.add(runFinishTitleLabel);
 		
 		//dogs table view
 		viewActivityTableView = Titanium.UI.createTableView({
 			minRowHeight:60,
-			width:299,
+			width:320,
 			backgroundColor:'transparent',
 			top:240,
 			bottom:39,
@@ -346,6 +346,7 @@ function populateViewActivityDogsTableView(dogObj){
 		
 		var rowDogImage = Titanium.UI.createImageView({ 
 			image:REMOTE_DOG_IMAGES + dogObj[i].Dog.thumb,
+			defaultImage:IMAGE_PATH+'common/default_dog_photo.png',
 			left:14,
 			borderRadius:30,
 			borderWidth:2,
@@ -368,7 +369,7 @@ function populateViewActivityDogsTableView(dogObj){
 		//bone image
 		var rowBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_grey.png',
-			right:10,
+			right:14,
 			top:20
 		});
 		
@@ -377,7 +378,7 @@ function populateViewActivityDogsTableView(dogObj){
 		//Filled bone image
 		var rowBoneFillImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_colours.png',
-			right:10,
+			right:14,
 			top:20,
 			zIndex:2
 		});
@@ -387,12 +388,13 @@ function populateViewActivityDogsTableView(dogObj){
 		//mood label
 		var rowMoodLabel = Titanium.UI.createLabel({ 
 			text:'Happy',
-			color:'#605353',
+			color:'black',
 			height:15,
 			textAlign:'center',
-			right:40,
-			bottom:20,
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			right:52,
+			bottom:13,
+			opacity:0.3,
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		row.add(rowMoodLabel);
 		
@@ -402,9 +404,9 @@ function populateViewActivityDogsTableView(dogObj){
 			color:'999900',
 			height:15,
 			textAlign:'center',
-			right:12,
-			bottom:20,
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			right:24,
+			bottom:13,
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		row.add(rowMoodPercentLabel);
 		

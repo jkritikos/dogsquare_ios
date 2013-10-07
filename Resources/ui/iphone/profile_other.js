@@ -201,7 +201,7 @@ function buildProfileOtherView(uId, name) {
 		    backgroundImage: IMAGE_PATH+'profile_other/Walk_with_icon.png',
 		    width:45,
 		    height:43,
-		    top:IPHONE5 ? 360 : 320,
+		    top:IPHONE5 ? 360 : 324,
 		    left:30
 		});
 		profileOtherView.add(profileOtherWalkWithButton);
@@ -210,14 +210,14 @@ function buildProfileOtherView(uId, name) {
 		
 		//walk with me button label
 		profileOtherWalkWithButtonLabel = Ti.UI.createLabel({
-			text:'Walk with me',
+			text:'Walk',
 			color:'black',
 			opacity:0.6,
-			textAlign:'left',
-			top:IPHONE5 ? 408 : 364,
+			textAlign:'center',
+			top:IPHONE5 ? 408 : 366,
 			width:88,
 			height:18,
-			left:17,
+			left:9,
 			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		profileOtherView.add(profileOtherWalkWithButtonLabel);
@@ -227,7 +227,7 @@ function buildProfileOtherView(uId, name) {
 		    backgroundImage: IMAGE_PATH+'profile_other/Chat_icon.png',
 		    width:45,
 		    height:43,
-		    top:IPHONE5 ? 360 : 320,
+		    top:IPHONE5 ? 360 : 324,
 		    userId:uId,
 		    left:102,
 		    mName:name
@@ -241,10 +241,10 @@ function buildProfileOtherView(uId, name) {
 			color:'black',
 			opacity:0.6,
 			textAlign:'center',
-			top:IPHONE5 ? 408 : 364,
+			top:IPHONE5 ? 408 : 366,
 			width:'auto',
 			height:18,
-			left:112,
+			left:111,
 			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		profileOtherView.add(profileOtherChatButtonLabel);
@@ -254,8 +254,8 @@ function buildProfileOtherView(uId, name) {
 		    backgroundImage: IMAGE_PATH+'profile_other/Gallery_icon.png',
 		    width:45,
 		    height:43,
-		    top:IPHONE5 ? 360 : 320,
-		    right:102,
+		    top:IPHONE5 ? 360 : 324,
+		    right:100,
 		    userId:uId
 		});
 		profileOtherView.add(profileOtherGalleryButton);
@@ -267,10 +267,10 @@ function buildProfileOtherView(uId, name) {
 			color:'black',
 			opacity:0.6,
 			textAlign:'center',
-			top:IPHONE5 ? 408 : 364,
+			top:IPHONE5 ? 408 : 366,
 			width:'auto',
 			height:18,
-			right:105,
+			right:103,
 			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		profileOtherView.add(profileOtherGalleryButtonLabel);
@@ -281,7 +281,7 @@ function buildProfileOtherView(uId, name) {
 		    width:45,
 		    height:43,
 		    right:30,
-		    top:IPHONE5 ? 360 : 320,
+		    top:IPHONE5 ? 360 : 324,
 		    userId:uId
 		});
 		profileOtherView.add(profileOtherDogsButton);
@@ -293,7 +293,7 @@ function buildProfileOtherView(uId, name) {
 			color:'black',
 			opacity:0.6,
 			textAlign:'center',
-			top:IPHONE5 ? 408 : 364,
+			top:IPHONE5 ? 408 : 366,
 			width:'auto',
 			right:37,
 			height:18,
