@@ -746,7 +746,7 @@ function handleProfileOtherGalleryButton(e){
 	
 	var userId = e.source.userId;
 	
-	buildGalleryView(userId);
+	buildGalleryView(userId, PHOTO_TYPE_USER);
 	
 	var galleryWindow = Ti.UI.createWindow({
 		backgroundColor:'white',

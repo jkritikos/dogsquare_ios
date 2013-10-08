@@ -13,6 +13,7 @@ var checkinPlaceMap = null;
 var checkinPlaceMapAnnotation = null;
 var checkinPlaceView = null;
 var checkinPlaceSaveCommentButton = null;
+var checkinPlaceId = null;
 var annotations = [];
 var addPlaceComObject = {};
 
@@ -20,6 +21,8 @@ var ADD_COMMENT = 1;
 var COMMENT_ROW = 2;
 
 function buildCheckinPlaceView(view, placeId){
+	checkinPlaceId = placeId;
+	
 	if(checkinPlaceView == null){
 		checkinPlaceView = Ti.UI.createView({
 			backgroundColor:'white'
@@ -51,6 +54,9 @@ function buildCheckinPlaceView(view, placeId){
 			zIndex:1
 		});
 		checkinPlaceView.add(checkinPlacePhotoImage);
+		
+		//Place photo event handler opens the gallery for this place
+		checkinPlacePhotoImage.addEventListener('click', handlePlaceGallery);
 		
 		//view to add photo
 		var checkinPlacePhotoView = Ti.UI.createView({
@@ -263,6 +269,37 @@ checkinPlacePhotoDialog.addEventListener('click',function(e){
 		handleCheckinPlacePhotoSelection();
 	}
 });
+
+//Opens the gallery for the current place
+function handlePlaceGallery(){
+	Ti.include('ui/iphone/gallery.js');
+	
+	buildGalleryView(checkinPlaceId, PHOTO_TYPE_PLACE);
+	
+	var galleryWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Gallery'
+	});
+	
+	//back button & event listener
+	var galleryBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	galleryWindow.setLeftNavButton(galleryBackButton);
+	galleryBackButton.addEventListener("click", function() {
+	    navController.close(galleryWindow);
+	});
+	
+	galleryWindow.add(viewGallery);
+	
+	openWindows.push(galleryWindow);
+	navController.open(galleryWindow);
+}
 
 //Uploads the specified photo for the current place
 function uploadPlacePhoto(photoObject){

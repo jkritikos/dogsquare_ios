@@ -81,7 +81,7 @@ checkinOpacityBar.addEventListener('click', function(e){
 
 //checkin opacity bar label
 var checkinOpacityBarLabel = Titanium.UI.createLabel({ 
-	text:'Add a new place / incident   +',
+	text:'+ Add a new place / incident',
 	color:'black',
 	height:22,
 	textAlign:'left',
