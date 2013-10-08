@@ -9,6 +9,7 @@ var addNoteDateLabel = null;
 var addNoteBellImage = null;
 var addNoteCheckImage = null;
 var addNoteCompletedBackground = null;
+var addNoteRemindBackground = null;
 var addNoteDateTimePicker = null;
 var addNotePickerDoneButton = null;
 
@@ -18,9 +19,24 @@ var selected = false;
 var PICKER_TIME = 0;
 var PICKER_DATE = 1;
 
+var ADD_NOTE = 2;
+var EDIT_NOTE = 3;
+
+//picker date defaults
+var pickerYear = '00';
+var pickerMonth = '00';
+var pickerDay = '00';
+var pickerHours = '00';
+var pickerMinutes = '00';
+var pickerSeconds = '00';
+
+var interactionType = ADD_NOTE;
+
 var noteObject = {};
 
 noteObject.remind_flag = 0;
+noteObject.completed = 0;
+noteObject.note_id = 0;
 
 function buildAddNoteView(){
 	if(addNoteView == null){
@@ -91,7 +107,6 @@ function buildAddNoteView(){
 			textAlign:'left',
 			opacity:0.7,
 			left:0,
-			width:80,
 			height:31,
 			font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
@@ -120,7 +135,6 @@ function buildAddNoteView(){
 			opacity:0.7,
 			left:7,
 			top:0,
-			width:120,
 			height:31,
 			font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
@@ -134,7 +148,7 @@ function buildAddNoteView(){
 			opacity:0.7,
 			left:7,
 			bottom:2,
-			width:320,
+			width:313,
 			height:31,
 			font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'},
 			type:PICKER_TIME
@@ -150,7 +164,7 @@ function buildAddNoteView(){
 			opacity:0.7,
 			left:7,
 			bottom:33,
-			width:320,
+			width:313,
 			height:31,
 			font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'},
 			type:PICKER_DATE
@@ -160,7 +174,7 @@ function buildAddNoteView(){
 		addNoteView.add(addNoteFormBackground);
 		
 		//remind background
-		var addNoteRemindBackground = Ti.UI.createView({
+		addNoteRemindBackground = Ti.UI.createView({
 			backgroundColor:UI_BACKGROUND_COLOR,
 			top:220,
 			width:105,
@@ -230,6 +244,7 @@ function buildAddNoteView(){
 		addNoteCompletedBackground.add(addNoteCheckBox);
 		
 		addNoteView.add(addNoteCompletedBackground);
+		addNoteCompletedBackground.hide();
 		addNoteCompletedBackground.addEventListener('click', handleAddNoteCompleted);
 		
 		addNoteDateTimePicker = Ti.UI.createPicker({
@@ -251,11 +266,11 @@ function handleAddNoteCompleted(e){
 
 	if(!selected){
 		addNoteCheckImage.show();
-		noteObject.completed_flag = 1;
+		noteObject.completed = 1;
 		selected = true;
 	}else{
 		addNoteCheckImage.hide();
-		noteObject.completed_flag = 0;
+		noteObject.completed = 0;
 		selected = false;
 	}
 }
@@ -315,34 +330,68 @@ function handleAddNoteDateTimeLabel(e){
 	var type = e.source.type;
 	
 	if(type == PICKER_DATE){
-		//Set up minimum dates
-		var today = new Date();
-		
-		var minDate = new Date();
-		minDate.setFullYear(today.getFullYear());
-		minDate.setMonth(today.getMonth());
-		minDate.setDate(today.getDate());
-		
-		var maxDate = new Date();
-		maxDate.setFullYear(2020);
-		maxDate.setMonth(11);
-		maxDate.setDate(31);
-		
-		var value = new Date();
-		value.setFullYear(today.getFullYear());
-		value.setMonth(today.getMonth());
-		value.setDate(today.getDate());
-		
+		if(interactionType == ADD_NOTE){
+			//Set up minimum and maximum dates
+			var today = new Date();
+			
+			var minDate = new Date();
+			minDate.setFullYear(today.getFullYear());
+			minDate.setMonth(today.getMonth());
+			minDate.setDate(today.getDate());
+			
+			var maxDate = new Date();
+			maxDate.setFullYear(2020);
+			maxDate.setMonth(11);
+			maxDate.setDate(31);
+			
+			var value = new Date();
+			value.setFullYear(today.getFullYear());
+			value.setMonth(today.getMonth());
+			value.setDate(today.getDate());
+			
+			addNoteDateTimePicker.value = value;
+		}
+		//show date 
 		addNoteDateTimePicker.type = Ti.UI.PICKER_TYPE_DATE;
 		addNoteDateTimePicker.minDate = minDate;
 		addNoteDateTimePicker.maxDate = maxDate;
-		addNoteDateTimePicker.value = value;
+		
+		
+		addNoteDateLabel.color = 'black';
+		addNoteDateLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		addNoteDateLabel.opacity = 1;
+		
+		var pickerDate = addNoteDateTimePicker.value;
+		
+		var date = formatDate(pickerDate);
+		
+		addNoteDateLabel.text = date;
+		
+		getDateData(pickerDate);
+		
 	}else if (type == PICKER_TIME){
+		//show time 
 		addNoteDateTimePicker.type = Ti.UI.PICKER_TYPE_TIME;
 		addNoteDateTimePicker.minDate = null;
 		addNoteDateTimePicker.maxDate = null;
+		
+		addNoteTimeLabel.color = 'black';
+		addNoteTimeLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		addNoteTimeLabel.opacity = 1;
+		
+		var pickerTime = addNoteDateTimePicker.value;
+		
+		var hours = pickerTime.getHours() < 10 ? '0'+pickerTime.getHours() : pickerTime.getHours();
+		var minutes = pickerTime.getMinutes() < 10 ? '0'+pickerTime.getMinutes() : pickerTime.getMinutes();
+		
+		var time = hours + " : " + minutes;
+		
+		addNoteTimeLabel.text = time;
+		
+		getTimeData(pickerTime);
 	}
-	
+	//create a date string with the current data
+	noteObject.date = pickerYear+'-'+pickerMonth+'-'+pickerDay+' '+pickerHours+':'+pickerMinutes+':'+pickerSeconds+' +0000';
 	addNoteTitleTextField.blur();
 	addNoteDescriptionTextArea.blur();
 	
@@ -364,6 +413,7 @@ function handleDatePickerChange(e) {
 	var pickerType = addNoteDateTimePicker.type;
 	
 	if(pickerType == PICKER_DATE){
+		//show date
 		addNoteDateLabel.color = 'black';
 		addNoteDateLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addNoteDateLabel.opacity = 1;
@@ -374,21 +424,27 @@ function handleDatePickerChange(e) {
 		
 		addNoteDateLabel.text = date;
 		noteObject.date = pickerDate;
+		
+		getDateData(pickerDate);	
 	}else if(pickerType == PICKER_TIME){
+		//show time
 		addNoteTimeLabel.color = 'black';
 		addNoteTimeLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addNoteTimeLabel.opacity = 1;
 		
 		var pickerTime = e.value;
 		
-		var hours = pickerTime.getHours();
-		var minutes = pickerTime.getMinutes();
+		var hours = pickerTime.getHours() < 10 ? '0' + pickerTime.getHours() : pickerTime.getHours();
+		var minutes = pickerTime.getMinutes() < 10 ? '0' + pickerTime.getMinutes() : pickerTime.getMinutes();
 		
 		addNoteTimeLabel.text = hours + " : " + minutes;
-		noteObject.time = pickerTime;
+		
+		getTimeData(pickerTime);
 	}
+	noteObject.date = pickerYear+'-'+pickerMonth+'-'+pickerDay+' '+pickerHours+':'+pickerMinutes+':'+pickerSeconds+' +0000';
 }
 
+//validate form 
 function validateNoteForm(){
 	if(isStringNullOrEmpty(addNoteTitleTextField.value)){
 		alert('TITLE IS MISSING');
@@ -399,6 +455,9 @@ function validateNoteForm(){
 	}else if(addNoteDateLabel.text == 'Date'){
 		alert('DATE IS MISSING');
 		return false;
+	}else if(addNoteTimeLabel.text == 'Time'){
+		alert('TIME IS MISSING');
+		return false;
 	}
 	
 	noteObject.title = addNoteTitleTextField.value;
@@ -407,23 +466,145 @@ function validateNoteForm(){
 	return true;
 }
 
+//handle save button
 function handleAddNoteSaveButton(){
 	if(validateNoteForm()){
 		Ti.API.info('note form is valid');
 		
-		saveNote(noteObject);
-		navController.close(openWindows[openWindows.length - 1]);
-		
-		clearPassportTable();
-		
-		var data = [];
-		var noteData = getNotes();
-			
-		//populate section
-		populateTableViewSection(noteData);
-		
+		doSaveNoteOnline();
 	}else{
 		Ti.API.info('note form is not valid');
 	}
 
+}
+
+//update note view to edit note 
+function updateNoteView(nObj, id){
+	addNoteTitleTextField.value = nObj.title;
+	addNoteDescriptionTextArea.value = nObj.description;
+	interactionType = EDIT_NOTE;
+	
+	addNoteCompletedBackground.show();
+	addNoteDescriptionTextAreaLabel.hide();
+	addNoteTitleTextFieldLabel.hide();
+	
+	if(nObj.completed == 1){
+		addNoteCheckImage.show();
+		addNoteCompletedBackground.active = true;
+	}
+	
+	if(nObj.remind_flag == 1){
+		addNoteBellImage.image = IMAGE_PATH+'add_note/bell_icon_selected.png';
+		addNoteRemindBackground.active = true;
+	}
+	
+	//fill noteObject with data 
+	noteObject.note_id = id;
+	noteObject.title = nObj.title;
+	noteObject.description = nObj.description;
+	noteObject.remind_flag = nObj.remind_flag;
+	noteObject.completed = nObj.completed;
+	
+	var date = new Date(nObj.date*1000);
+	
+	getDateData(date);
+	getTimeData(date);
+	
+	addNoteDateTimePicker.value = date;
+	noteObject.date = date;
+	
+	//TODO check timezone - hour is +3 hours
+	var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+	var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+	
+	date = formatDate(date);
+	
+	addNoteTimeLabel.text = hours + " : " + minutes;
+	addNoteTimeLabel.color = 'black';
+	addNoteTimeLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+	addNoteTimeLabel.opacity = 1;
+		
+	addNoteDateLabel.text = date;
+	addNoteDateLabel.color = 'black';
+	addNoteDateLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+	addNoteDateLabel.opacity = 1;
+}
+
+//Server call for saving note
+function doSaveNoteOnline(){
+	Ti.API.info('doSaveNoteOnline() called'); 	
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in doSaveNoteOnline() '+e);
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('doSaveNoteOnline() got back from server '+this.responseText); 	
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			var date = new Date(jsonData.data.date * 1000);
+			noteObject.date = date;
+			
+			if(interactionType == ADD_NOTE){
+				Ti.API.info('doSaveNoteOnline() got back note id from server '+jsonData.data.note_id);
+				noteObject.note_id = jsonData.data.note_id;
+				saveNote(noteObject);
+			}else if(interactionType == EDIT_NOTE){
+				var id = noteObject.note_id;
+				updateNote(noteObject, id);
+			}
+			
+			navController.close(openWindows[openWindows.length - 1]);
+			
+			passportTableView.data = [];
+
+			var noteData = null;
+			noteData = getNotes();
+			
+			//populate section
+			populateTableViewSection(noteData);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else {
+			alert(getErrorMessage(jsonData.response));
+		}
+	};
+	xhr.open('POST',API+'addNote');
+	xhr.send({
+		user_id:userObject.userId,
+		title:noteObject.title,
+		description:noteObject.description,
+		date:noteObject.date,
+		completed:noteObject.completed,
+		remind:noteObject.remind_flag,
+		interaction_type:interactionType,
+		note_id:noteObject.note_id,
+		token:userObject.token
+	});
+}
+
+//get year, month and day from date
+function getDateData(date){
+	pickerYear = date.getFullYear();
+	pickerMonth = (date.getMonth() + 1) < 10 ? '0'+(date.getMonth() + 1) : date.getMonth() + 1;
+	pickerDay = date.getDate() < 10 ? '0'+date.getDate() : date.getDate();
+}
+
+//get hours, minutes and seconds from date
+function getTimeData(time){
+	pickerHours = time.getHours() < 10 ? '0'+time.getHours() : time.getHours();
+	pickerMinutes = time.getMinutes() < 10 ? '0'+time.getMinutes() : time.getMinutes();
+	pickerSeconds = time.getSeconds() < 10 ? '0'+time.getSeconds() : time.getSeconds();
 }

@@ -379,7 +379,7 @@ function saveDog(dogObject){
 function saveNote(nObject){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
-	db.execute('insert into passport (title, description, date, remind_flag) values (?,?,?,?)', nObject.title, nObject.description, nObject.date, nObject.remind_flag);
+	db.execute('insert into passport (title, note_id, description, date, remind_flag, completed) values (?,?,?,?,?,?)', nObject.title, nObject.note_id, nObject.description, nObject.date, nObject.remind_flag, nObject.completed);
 	var noteId = db.lastInsertRowId;
 	
 	Ti.API.info('note stored in DB with id: ' + noteId);
@@ -453,7 +453,7 @@ function getNotes(){
 	
 	var noteRows = [];
 	
-	var rows = db.execute('select title, description, date, remind_flag from passport order by date');
+	var rows = db.execute('select title, description, date, remind_flag, completed, note_id from passport order by date');
 	var i=0;
 	while (rows.isValidRow())
 	{
@@ -463,12 +463,16 @@ function getNotes(){
 	  var date = rows.field(2);
 	  var month = new Date(date*1000).getMonth();
 	  var remind_flag = rows.field(3);
+	  var completed = rows.field(4);
+	  var note_id = rows.field(5);
 	  
 	  var obj = {
 			title:title,
 			description:description,
 			date:date,
 			remind_flag:remind_flag,
+			completed:completed,
+			note_id:note_id
 		};
 	
 		noteRows.push(obj);
@@ -478,6 +482,52 @@ function getNotes(){
 	db.close();
 	
 	return noteRows;
+}
+
+//Gets all notes from the local db
+function getNote(id){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	var row = db.execute('select title, description, date, remind_flag, completed from passport where note_id = ?', id);
+	
+    var title = row.field(0);
+    var description = row.field(1);
+    var date = row.field(2);
+    var remind_flag = row.field(3);
+    var completed = row.field(4);
+  
+    var noteObj = {
+		title:title,
+		description:description,
+		date:date,
+		remind_flag:remind_flag,
+		completed:completed
+	};
+	
+	row.close();
+	db.close();
+	
+	return noteObj;
+}
+
+//update db note
+function updateNote(noteObj, noteId){
+	Ti.API.info('updateNote() called');
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.execute('update passport set title=?, description=?, date=?, remind_flag=?, completed=? where note_id=?', noteObj.title, noteObj.description, noteObj.date, noteObj.remind_flag, noteObj.completed, noteId);
+	
+	db.close();
+}
+
+//delete local db note
+function deleteNote(note_id){
+	Ti.API.info('updateNote() called');
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.execute('delete from passport where note_id=?', note_id);
+	
+	db.close();
 }
 
 //save user whom you follow, in web database
@@ -1356,7 +1406,7 @@ function createDB(){
 	db.execute('create table if not exists ACTIVITIES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"start_date\" real, \"start_time\" real, \"end_time\" real, \"type_id\" integer, \"temperature\" integer, \"pace\" real, \"distance\" real, \"activity_id\" integer, \"sync\" integer)');
 	db.execute('create table if not exists ACTIVITY_DOGS (\"activity_id\" integer, \"dog_id\" integer, \"walk_distance\" real, \"playtime\" integer, \"dogfuel\" integer)');
 	db.execute('create table if not exists ACTIVITY_COORDINATES (\"activity_id\" integer, \"lat\" real, \"lon\" real, \"log_time\" real, \"dt\" real, \"distance\" real)');
-	db.execute('create table if not exists PASSPORT (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"title\" varchar(128), \"description\" varchar(128), \"date\" real, \"remind_flag\" integer)');
+	db.execute('create table if not exists PASSPORT (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"title\" varchar(128), \"note_id\" integer, \"description\" varchar(128), \"date\" real, \"remind_flag\" integer, \"completed\" integer)');
 	db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"remote_user_id\" integer, \"remote_user_name\" varchar(128), \"remote_user_thumb\" varchar(128), \"my_message\" integer, \"read\" integer, \"date\" real, \"message\" text)');
 	db.execute('create table if not exists DOG_BREEDS (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"origin\" varchar(256), \"weight_from\" integer, \"weight_to\" integer, \"kennel_club\" varchar(256), \"active\" integer)');
 	db.execute('create table if not exists MUTUAL_FOLLOWERS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_id\" integer, \"name\" varchar(256),\"thumb\" varchar(128))');

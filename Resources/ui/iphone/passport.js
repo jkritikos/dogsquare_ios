@@ -3,9 +3,8 @@ var addNoteButton = null;
 var passportTableView = null;
 
 //data for the sections
-var data = [];
 var noteData = getNotes();
-	
+
 function buildPassportView(){	
 	if(viewPassport == null){
 		//passport view
@@ -26,6 +25,7 @@ function buildPassportView(){
 		
 		//passport table view
 		passportTableView = Titanium.UI.createTableView({
+			editable:true,
 			minRowHeight:71,
 			width:293,
 			backgroundColor:UI_BACKGROUND_COLOR,
@@ -34,6 +34,13 @@ function buildPassportView(){
 		});
 		viewPassport.add(passportTableView);
 		passportTableView.addEventListener('click', handlePassportTableViewRows);
+		passportTableView.addEventListener('delete', handlePassportTableViewRowDeletion);
+		
+		//inbox table view footer
+		passportTableView.footerView = Ti.UI.createView({
+		    height: 1,
+		    backgroundColor: 'transparent'
+		});
 		
 		//populate section
 		populateTableViewSection(noteData);
@@ -42,8 +49,11 @@ function buildPassportView(){
 
 //populate section
 function populateTableViewSection(nData) {
+	//Disable window sliding
+	window.setPanningMode("NoPanning");
+	
 	Ti.API.info('populating table view');
-	var tableRows = [];
+	var data = [];
 	var numberOfNotes = null;
 	
 	var previousMonth = null;
@@ -110,7 +120,8 @@ function populateTableViewSection(nData) {
 				width:'100%',
 				selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 				backgroundColor:'white',
-				selectedBackgroundColor:'transparent'
+				selectedBackgroundColor:'transparent',
+				id:nData[i].note_id
 			});
 			
 			//title label
@@ -130,7 +141,7 @@ function populateTableViewSection(nData) {
 				text:nData[i].description,
 				color:'black',
 				height:'auto',
-				width:'auto',
+				width:275,
 				textAlign:'left',
 				top:35,
 				bottom:28,
@@ -167,7 +178,8 @@ function populateTableViewSection(nData) {
 				height:'auto',
 				width:'100%',
 				backgroundColor:'white',
-				selectedBackgroundColor:'transparent'
+				selectedBackgroundColor:'transparent',
+				id:nData[i].note_id
 			});
 			
 			var rowTitleLabel = Titanium.UI.createLabel({ 
@@ -185,7 +197,7 @@ function populateTableViewSection(nData) {
 				text:nData[i].description,
 				color:'black',
 				height:'auto',
-				width:'auto',
+				width:275,
 				textAlign:'left',
 				top:35,
 				bottom:28,
@@ -227,11 +239,21 @@ function getMonthName(date){
 	return monthNames[month];
 }
 
+function handlePassportTableViewRowDeletion(e){
+	var note_id = e.row.id;
+	deleteNoteOnline(note_id);
+}
+
 //handle next button
 function handlePassportTableViewRows(e) {
+	var noteId = e.row.id;
+	
+	var noteObj = getNote(noteId);
+	
 	Ti.include('ui/iphone/add_note.js');
 	
 	buildAddNoteView();
+	updateNoteView(noteObj, noteId);
 	
 	//add note window
 	var addNoteWindow = Ti.UI.createWindow({
@@ -257,6 +279,7 @@ function handlePassportTableViewRows(e) {
 	addNoteWindow.add(addNoteView);
 	
 	openWindows.push(addNoteWindow);
+	openWindows[openWindows.length - 1].setRightNavButton(addNoteSaveButton);
     navController.open(addNoteWindow);
 }
 
@@ -294,6 +317,42 @@ function handleAddNoteButton() {
     navController.open(addNoteWindow);
 }
 
-function clearPassportTable(){
-	passportTableView.data = [];
+//delete note in server db
+function deleteNoteOnline(noteId){
+	Ti.API.info('deleteNoteOnline() called'); 	
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in deleteNoteOnline() '+e);
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('deleteNoteOnline() got back from server '+this.responseText); 	
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			deleteNote(noteId);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else {
+			alert(getErrorMessage(jsonData.response));
+		}
+	};
+	xhr.open('POST',API+'deleteNote');
+	xhr.send({
+		user_id:userObject.userId,
+		note_id:noteId,
+		token:userObject.token
+	});
 }

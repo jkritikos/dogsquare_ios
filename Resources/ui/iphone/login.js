@@ -296,6 +296,24 @@ function checkLoginCredentials(lObj){
 			saveDogBreeds(jsonData.data.breeds);
 			savePlaceCategories(jsonData.data.categories);
 			
+			//save passport notes
+			var notes = jsonData.data.notes;
+			var noteObj = {};
+			
+			for(i=0;i<notes.length;i++){
+				noteObj.title = notes[i].Note.title;
+				noteObj.note_id = notes[i].Note.id;
+				noteObj.description = notes[i].Note.description;
+				var date = new Date(notes[i].Note.date);
+				noteObj.date = date;
+				noteObj.remind_flag = notes[i].Note.remind;
+				noteObj.completed = notes[i].Note.completed;
+				
+				saveNote(noteObj);
+				alert(noteObj);
+				noteObj = {};
+			}
+			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;
 			var notifications = jsonData.data.count_notifications;
