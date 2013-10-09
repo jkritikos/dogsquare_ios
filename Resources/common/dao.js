@@ -1173,6 +1173,16 @@ function setMessagesToRead(list){
 	Ti.API.info('setMessagesToRead() changed messages with id:'+ list +' to read: 1');
 }
 
+//delete local db note
+function deleteMessages(userId){
+	Ti.API.info('deleteMessages() called');
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.execute('delete from inbox where remote_user_id=?', userId);
+	
+	db.close();
+}
+
 //Returns all messages from our inbox
 //TODO order by id and group by remote_user_id - get latest message of each user
 function getInboxMessages(){

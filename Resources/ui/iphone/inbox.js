@@ -23,6 +23,7 @@ var inboxTableView = Titanium.UI.createTableView({
 });
 viewInbox.add(inboxTableView);
 inboxTableView.addEventListener('click', handleInboxTableViewRows);
+inboxTableView.addEventListener('delete', handleInboxTableViewRowDeletion);
 
 getUnreadInboxMessages();
 
@@ -205,6 +206,56 @@ function setOnlineMessagesIntoRead(list){
 		list:list,
 		token:userObject.token
 	});
+}
+
+//delete all online messages for the selected user
+function deleteOnlineMessages(target_id){
+	Ti.API.info('deleteOnlineMessages() called ');
+	
+	var list = JSON.stringify(list);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in deleteOnlineMessages() '+e);
+	};
+	
+	xhr.onload = function(e) {
+		Ti.API.info('deleteOnlineMessages() got back from server : '+ this.responseText);
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			deleteMessages(target_id);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('POST',API+'deleteInboxMessages');
+	xhr.send({
+		user_id:userObject.userId,
+		target_id:target_id,
+		token:userObject.token
+	});
+}
+
+//delete messages from table view
+function handleInboxTableViewRowDeletion(e){
+	
+	var user_id = e.row.user_id;
+	deleteOnlineMessages(user_id);
 }
 
 function handleNewMessage(){
