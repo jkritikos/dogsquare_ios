@@ -53,6 +53,27 @@ function getNotificationMessage(code){
 	return msg;
 }
 
+//get size 
+function getSize(size){
+	var sizeObj = {};
+	
+	if(size == 1){
+		sizeObj.label = "Small";
+		sizeObj.left = 180;
+	} else if(size == 2){
+		sizeObj.label = "Medium";
+		sizeObj.left = 169;
+	} else if(size == 3){
+		sizeObj.label = "Large";
+		sizeObj.left = 177;
+	} else if(size == 4){
+		sizeObj.label = "X-Large";	
+		sizeObj.left = 171;
+	}
+	
+	return sizeObj;
+}
+
 //Builds the text description for a feed object
 function getFeedMessage(obj){
 	var currentLanguage = LANGUAGE_ENGLISH;

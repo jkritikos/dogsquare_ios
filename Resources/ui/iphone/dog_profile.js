@@ -4,7 +4,7 @@ var dogProfilePhotoImage = null;
 var dogProfileBreedTypeLabel = null;
 var dogProfileDogGenderLabel = null;
 var dogProfileAgeNumberLabel = null;
-var dogProfileWeightNumberLabel = null;
+var dogProfileSizeNumberLabel = null;
 var dogProfileLikesNumberLabel = null;
 var dogProfileMatingBackground = null;
 var dogProfileView = null;
@@ -142,34 +142,23 @@ function buildDogProfileView(dogId){
 		dogProfileOpacityInfoBar.add(dogProfileAgeLabel);
 		
 		var dogProfileWeightLabel = Titanium.UI.createLabel({ 
-			text:'weight',
+			text:'size',
 			height:19,
 			textAlign:'center',
-			left:182,
+			left:189,
 			bottom:4,
 			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		dogProfileOpacityInfoBar.add(dogProfileWeightLabel);
 		
-		dogProfileWeightNumberLabel = Titanium.UI.createLabel({
+		dogProfileSizeNumberLabel = Titanium.UI.createLabel({
 			height:21,
 			textAlign:'right',
-			width:30,
-			left:167,
+			width:'auto',
 			top:10,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
-		dogProfileOpacityInfoBar.add(dogProfileWeightNumberLabel);
-			
-		var dogProfileWeightUnitLabel = Titanium.UI.createLabel({ 
-			text:'kgs',
-			height:17,
-			textAlign:'center',
-			left:200,
-			top:14,
-			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
-		});
-		dogProfileOpacityInfoBar.add(dogProfileWeightUnitLabel);
+		dogProfileOpacityInfoBar.add(dogProfileSizeNumberLabel);
 		
 		var dogProfileLikesLabel = Titanium.UI.createLabel({ 
 			text:'likes',
@@ -681,7 +670,11 @@ function updateDogProfile(dogObj){
 	dogProfileBreedTypeLabel.text = dogObj.dog_breed;
     dogProfilePhotoImage.image = REMOTE_DOG_IMAGES + dogObj.photo;
     dogProfileAgeNumberLabel.text = dogObj.age;
-    dogProfileWeightNumberLabel.text = dogObj.weight;
+    
+    var sizeObj = getSize(dogObj.size);
+    
+    dogProfileSizeNumberLabel.text = sizeObj.label;
+    dogProfileSizeNumberLabel.left = sizeObj.left;
     dogProfileLikesNumberLabel.text = dogObj.likes;
     if(dogObj.mating == 1){
     	dogProfileMatingBackground.image = IMAGE_PATH+'dog_profile/badge_matting.png';

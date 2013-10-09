@@ -7,6 +7,7 @@ var viewAddDog = Ti.UI.createView({
 var DOG_BREED_PICKER = 1;
 var GENDER_PICKER = 2;
 var MATTING_PICKER = 3;
+var SIZE_PICKER = 4;
 
 //UI components
 var addDogPickerType = null;
@@ -31,11 +32,19 @@ viewAddDog.add(addDogFormFieldImage);
 
 //photo button
 var addDogPhotoButton = Ti.UI.createButton({
-	backgroundImage:IMAGE_PATH+'signup/place_photo.png',
-	width:109,
-	height:91,
+	backgroundImage:IMAGE_PATH+'add_dog/round_field_photo.png',
+	width:81,
+	height:81,
 	top:30
 });
+
+//photo icon
+var addDogPhotoIcon = Ti.UI.createImageView({ 
+	image:IMAGE_PATH+'add_place/photo_icon.png',
+	top:10,
+	left:23
+});
+addDogPhotoButton.add(addDogPhotoIcon);
 
 viewAddDog.add(addDogPhotoButton);
 addDogPhotoButton.addEventListener('click', addDogShowPhotoOptions);
@@ -129,7 +138,8 @@ addDogFieldAge.addEventListener('blur', handleAddDogTextFieldBlur);
 
 //Event listener for the age textfield
 addDogFieldAge.addEventListener('return', function() {
-   addDogFieldWeight.focus();
+   addDogFieldSizeHintTextLabel.fireEvent('click');
+   addDogFormScrollBackground.scrollTo(0,107);
 });
 
 addDogFormScrollBackground.add(addDogFieldAge);
@@ -147,40 +157,20 @@ var addDogFieldAgeHintTextLabel = Ti.UI.createLabel({
 });
 addDogFieldAge.add(addDogFieldAgeHintTextLabel);
 
-//Weight textfield
-var addDogFieldWeight = Ti.UI.createTextField({
-	width:addDogTxtFieldWidth,
-	height:addDogTxtFieldHeight,
-	top:addDogFieldAge.top + addDogTxtFieldOffset,
-	returnKeyType: Ti.UI.RETURNKEY_NEXT,
-	field:4,
-	font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
-});
-addDogFieldWeight.blur();
-addDogFieldWeight.addEventListener('focus', handleAddDogTextFieldFocus);
-addDogFieldWeight.addEventListener('change', handleAddDogTextFieldChange);
-addDogFieldWeight.addEventListener('blur', handleAddDogTextFieldBlur);
-
-//Event listener for the weight textfield
-addDogFieldWeight.addEventListener('return', function() {
-   addDogFieldGenderHintTextLabel.fireEvent('click');
-   addDogFormScrollBackground.scrollTo(0,140); //sometimes it wouldn't open'
-});
-
-addDogFormScrollBackground.add(addDogFieldWeight);
-
 //Weight textfield label
-var addDogFieldWeightHintTextLabel = Ti.UI.createLabel({
-	text:'Weight*',
+var addDogFieldSizeHintTextLabel = Ti.UI.createLabel({
+	text:'Size*',
+	picker:SIZE_PICKER,
 	color:'999999',
 	textAlign:'left',
-	left:4,
+	top:addDogFieldAge.top + addDogTxtFieldOffset,
 	opacity:0.7,
-	width:80,
-	height:30,
+	width:192,
+	height:32,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-addDogFieldWeight.add(addDogFieldWeightHintTextLabel);
+addDogFormScrollBackground.add(addDogFieldSizeHintTextLabel);
+addDogFieldSizeHintTextLabel.addEventListener('click', addDogHandlePicker);
 
 //Gender textfield label
 var addDogFieldGenderHintTextLabel = Ti.UI.createLabel({
@@ -189,7 +179,7 @@ var addDogFieldGenderHintTextLabel = Ti.UI.createLabel({
 	color:'999999',
 	textAlign:'left',
 	opacity:0.7,
-	top:addDogFieldWeight.top + addDogTxtFieldOffset,
+	top:addDogFieldSizeHintTextLabel.top + addDogTxtFieldOffset,
 	width:192,
 	height:32,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -262,6 +252,13 @@ for(i=0;i<addDogViewBreeds.length;i++){
 	
 }
 
+var sizePicker = [];
+
+sizePicker[0]=Ti.UI.createPickerRow({title:'S', id:1});
+sizePicker[1]=Ti.UI.createPickerRow({title:'M', id:2});
+sizePicker[2]=Ti.UI.createPickerRow({title:'L', id:3});
+sizePicker[3]=Ti.UI.createPickerRow({title:'XL', id:4});
+
 var mattingPicker = [];
 	
 mattingPicker[0]=Ti.UI.createPickerRow({title:'Yes', id:1});
@@ -306,7 +303,6 @@ function addDogHandlePicker(e){
     
     addDogFieldName.blur();
 	addDogFieldAge.blur();
-	addDogFieldWeight.blur();
 	
     
     var picker = e.source.picker;
@@ -320,6 +316,9 @@ function addDogHandlePicker(e){
 	}else if(picker === MATTING_PICKER){
 		addDogPicker.add(mattingPicker);
 		addDogFormScrollBackground.scrollTo(0,175);
+	}else if(picker === SIZE_PICKER){
+		addDogPicker.add(sizePicker);
+		addDogFormScrollBackground.scrollTo(0,107);
 	}
 	
 	addDogPicker.selectionIndicator = true;
@@ -378,6 +377,13 @@ function handlePickerDoneButton(e){
 		addDogFieldMattingHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
 		addDogFieldMattingHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldMattingHintTextLabel.opacity = 1;
+	}else if(addDogPickerType === SIZE_PICKER){
+		addDogFieldSizeHintTextLabel.color = 'black';
+		addDogFieldSizeHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		addDogFieldSizeHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
+		addDogFieldSizeHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
+		addDogFieldSizeHintTextLabel.opacity = 1;
+		addDogFieldGenderHintTextLabel.fireEvent('click');
 	}
 }
 
@@ -511,12 +517,6 @@ function handleAddDogTextFieldChange(e){
 		}else {
 			addDogFieldAgeHintTextLabel.show();
 		}
-	}else if(field == 4){
-		if(addDogFieldWeight.value != ''){
-			addDogFieldWeightHintTextLabel.hide();
-		}else {
-			addDogFieldWeightHintTextLabel.show();
-		}
 	}
 }
 
@@ -531,10 +531,6 @@ function handleAddDogTextFieldBlur(e){
 	}else if(field == 3){
 		if(addDogFieldAge.value == ''){
 			addDogFieldAgeHintTextLabel.show();
-		}
-	}else if(field == 4){
-		if(addDogFieldWeight.value == ''){
-			addDogFieldWeightHintTextLabel.show();
 		}
 	}
 }
@@ -590,6 +586,7 @@ function doSaveDogOnline(dObj){
 		thumb:dObj.thumb,
 		name:dObj.name,
 		weight:dObj.weight,
+		size:dObj.size,
 		age:dObj.age,
 		breed_id:dObj.breed_id,
 		gender:dObj.gender,
@@ -608,8 +605,8 @@ function validateDogForm(){
 	}else if(isStringNullOrEmpty(addDogFieldAge.value) || isNaN(addDogFieldAge.value)){
 		alert('AGE IS MISSING OR NOT A NUMBER');
 		return false;
-	} else if(isStringNullOrEmpty(addDogFieldWeight.value) || isNaN(addDogFieldWeight.value)){
-		alert('WEIGHT IS MISSING OR NOT A NUMBER');
+	} else if(addDogFieldSizeHintTextLabel.id == null){
+		alert('WEIGHT IS MISSING');
 		return false;
 	}else if(addDogFieldGenderHintTextLabel.id == null){
 		alert('GENDER IS MISSING');
@@ -625,7 +622,8 @@ function validateDogForm(){
 	addDogObject.name = addDogFieldName.value;
 	addDogObject.breed_id = addDogFieldDogBreedHintTextLabel.id;
 	addDogObject.age = addDogFieldAge.value;
-	addDogObject.weight = addDogFieldWeight.value;
+	addDogObject.weight = 0;
+	addDogObject.size = addDogFieldSizeHintTextLabel.id;
 	addDogObject.gender = addDogFieldGenderHintTextLabel.id;
 	addDogObject.mating = addDogFieldMattingHintTextLabel.id;
 	

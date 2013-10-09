@@ -310,7 +310,6 @@ function checkLoginCredentials(lObj){
 				noteObj.completed = notes[i].Note.completed;
 				
 				saveNote(noteObj);
-				alert(noteObj);
 				noteObj = {};
 			}
 			
