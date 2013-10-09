@@ -366,6 +366,13 @@ var weather = ( function() {
     return api;
 }());
 
+//Updates a dog object in the local db
+function editDog(dogObject){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	db.execute('update dogs set photo=?, thumb=? where dog_id=?', dogObject.photo_filename, dogObject.thumb_path,dogObject.dog_id);
+	db.close();
+}
+
 //Saves a dog object in the local db
 function saveDog(dogObject){
 	var db = Ti.Database.install('dog.sqlite', 'db');

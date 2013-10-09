@@ -15,7 +15,24 @@ var profileImageView = Titanium.UI.createImageView({
 
 viewProfile.add(profileImageView);
 
-//Event handler for remote image
+//Photo dialog with options for viewing/changing the profile image
+var profilePhotoDialog = Titanium.UI.createOptionDialog({
+	options:['View', 'Take Photo', 'Choose From Library', 'Cancel'],
+	cancel:3
+});
+
+//Event listener for profile photo dialog options	
+profilePhotoDialog.addEventListener('click',function(e){
+	if(e.index == 0){
+		profilePhotoView();
+	} else if(e.index == 1){
+		profilePhotoTakeNew();
+	} else if(e.index == 2){
+		profilePhotoChooseExisting();
+	}
+});
+
+//Event handler for remote image - resizes it to the appropriate dimensions
 profileImageView.addEventListener('load', function(){
 	Ti.API.info('Profile image loaded event');
 	
@@ -35,6 +52,11 @@ profileImageView.addEventListener('load', function(){
 		
 		Ti.API.info('Profile image loaded event processing. Image height:'+profileImageViewBlob.height+' width '+profileImageViewBlob.width + ' cropped to height '+profileImageBlobCropped.height + ' and width '+profileImageBlobCropped.width);
 	}
+});
+
+//Event listener for profile image - brings up a dialog for viewing or changing the profile image
+profileImageView.addEventListener('click', function(){
+	profilePhotoDialog.show();
 });
 
 //opacity bar
@@ -520,4 +542,177 @@ function getOnlineUser(){
 		user_id:userObject.userId,
 		token:userObject.token
 	});
+}
+
+function profilePhotoView(){
+	alert('profilePhotoView');
+}
+
+//Takes a new photo and uploads it as the new profile image
+function profilePhotoTakeNew(){
+	Titanium.Media.showCamera({
+		success:function(event){
+			var image = event.media;
+			
+			//Reduce image size first
+			Ti.API.info('Took image with h:'+image.height+' w:'+image.width);
+			
+			//Jpeg compression module
+			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
+			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setWorstCompressQuality(0.40);
+			
+			var compressedImage = jpgcompressor.compress(image);
+			
+			//Create thumbnail
+			var imageThumbnail = image.imageAsThumbnail(60,0,30);
+			
+			var editUserObject = {
+				user_id:userObject.userId,
+				token:userObject.token,
+				photo:compressedImage,
+				thumb:imageThumbnail,
+				image_path:Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg",
+				thumb_path:Titanium.Filesystem.applicationDataDirectory + "pic_profile_thumb.jpg",
+				edit:false //only editing the photo
+			};
+			
+			//Save images on the filesystem
+			var tmpImage = Titanium.Filesystem.getFile(editUserObject.image_path);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
+			tmpImage.write(compressedImage);
+			
+			tmpImage = Titanium.Filesystem.getFile(editUserObject.thumb_path);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
+			
+			tmpImage.write(imageThumbnail);
+			
+			//Upload
+			changeProfilePhoto(editUserObject);
+		},
+		cancel:function(){
+	
+		},
+		error:function(error){
+		},
+		allowEditing:true
+	});
+}
+
+//Selects a photo from the camera roll and uploads it as the new profile image
+function profilePhotoChooseExisting(){
+	Titanium.Media.openPhotoGallery({	
+		
+		success:function(event){
+			var image = event.media;
+			
+			//Jpeg compression module
+			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
+			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setWorstCompressQuality(0.40);
+			
+			var compressedImage = jpgcompressor.compress(image);
+			
+			//Create thumbnail
+			var imageThumbnail = image.imageAsThumbnail(60,0,30);
+			
+			var editUserObject = {
+				user_id:userObject.userId,
+				token:userObject.token,
+				photo:compressedImage,
+				thumb:imageThumbnail,
+				image_path:Titanium.Filesystem.applicationDataDirectory + "pic_profile.jpg",
+				thumb_path:Titanium.Filesystem.applicationDataDirectory + "pic_profile_thumb.jpg",
+				edit:false //only editing the photo
+			};
+			
+			//Save images on the filesystem
+			var tmpImage = Titanium.Filesystem.getFile(editUserObject.image_path);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
+			tmpImage.write(compressedImage);
+			
+			tmpImage = Titanium.Filesystem.getFile(editUserObject.thumb_path);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
+			
+			tmpImage.write(imageThumbnail);
+			
+			//Upload
+			changeProfilePhoto(editUserObject);
+		},
+		cancel:function(){
+	
+		},
+		error:function(error){
+		},
+		allowEditing:true
+	});
+}
+
+//Uploads a new profile image for the current user
+function changeProfilePhoto(obj){
+	Ti.API.info('changeProfilePhoto() called'); 	
+	
+	//progress view
+	var progressView = new ProgressView({window:viewProfile});
+	progressView.show({
+		text:"Uploading..."
+	});
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('changeProfilePhoto() got back error '+e);
+	};
+	
+	xhr.onload = function(e){
+		var jsonData = JSON.parse(this.responseText);
+		Ti.API.info('changeProfilePhoto() got back from server '+this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			//Hide progress view
+			progressView.hide();
+			
+			//Change the profile image on the UI
+			profileImageView.image = obj.image_path;
+			
+			//Save data & update UI
+			var o = {
+				image_path:jsonData.data.photo,
+				thumb_path:jsonData.data.thumb,
+				name:userObject.name,
+				followers:jsonData.data.count_followers
+			};
+			saveUserObject(o);
+			updateLeftMenu(o);
+			
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else {
+			//Show the error message we got back from the server
+			progressView.change({
+		        error:true,
+		        text:getErrorMessage(jsonData.data.response)
+		    });
+		    
+			//and hide it after a while		    
+		    setTimeout(function() {
+			    progressView.hide();
+			}, ERROR_MSG_REMOVE_TIMEOUT);
+		} 
+	};
+	
+	xhr.setRequestHeader("Content-Type", "multipart/form-data");
+	xhr.open('POST',API+'editUser');
+	xhr.send(obj);
 }

@@ -1,4 +1,4 @@
-	
+//UI components	
 var dogProfileHeartImage = null;
 var dogProfilePhotoImage = null;
 var dogProfileBreedTypeLabel = null;
@@ -7,9 +7,38 @@ var dogProfileAgeNumberLabel = null;
 var dogProfileWeightNumberLabel = null;
 var dogProfileLikesNumberLabel = null;
 var dogProfileMatingBackground = null;
-var dogProfileView = null;	
+var dogProfileView = null;
+var dogProfileMyDog = false;
+var dogProfileDogId = null;	
 	
 function buildDogProfileView(dogId){
+	
+	dogProfileDogId = dogId;
+	
+	//Check if this is our dog or not
+	dogProfileMyDog = false;
+	var dogObject = getDogById(dogId);
+	if(dogObject.length > 0 && dogObject[0].id == dogId){
+		dogProfileMyDog = true;
+	}
+	
+	//Always prepare the photo options depending on whether this is our dog or not
+	if(dogProfileMyDog){
+		//Photo dialog with options for viewing/changing the profile image
+		var dogProfilePhotoDialog = Titanium.UI.createOptionDialog({
+			options:['View', 'Take Photo', 'Choose From Library', 'Cancel'],
+			cancel:3
+		});
+	} else {
+		//Photo dialog with options for viewing/changing the profile image
+		var dogProfilePhotoDialog = Titanium.UI.createOptionDialog({
+			options:['View','Cancel'],
+			cancel:1
+		});
+	}
+	
+	Ti.API.info('buildDogProfileView() for dogId '+dogId+' dogProfileMyDog='+dogProfileMyDog);
+	
 	if(dogProfileView == null){
 		dogProfileView = Ti.UI.createView({
 			backgroundColor:'#eeeded'
@@ -19,6 +48,28 @@ function buildDogProfileView(dogId){
 			height:320,
 			top:0,
 			width:320
+		});
+		
+		//Event listener for profile photo dialog options	
+		dogProfilePhotoDialog.addEventListener('click',function(e){
+			if(dogProfileMyDog){
+				if(e.index == 0){
+					dogProfilePhotoView();
+				} else if(e.index == 1){
+					dogProfilePhotoTakeNew();
+				} else if(e.index == 2){
+					dogProfilePhotoChooseExisting();
+				}
+			} else {
+				if(e.index == 0){
+					dogProfilePhotoView();
+				}
+			}
+		});
+		
+		//Event listener for profile image - brings up a dialog for viewing or changing the profile image
+		dogProfilePhotoImage.addEventListener('click', function(){
+			dogProfilePhotoDialog.show();
 		});
 		
 		dogProfileMatingBackground = Titanium.UI.createImageView({
@@ -242,6 +293,193 @@ function buildDogProfileView(dogId){
 	getOnlineDog(dogId);
 	
 	return dogProfileView;
+}
+
+function dogProfilePhotoView(){
+	alert('dogProfilePhotoView');
+}
+
+//Takes a new photo and uploads it as the new profile image
+function dogProfilePhotoTakeNew(){
+	Titanium.Media.showCamera({	
+		
+		success:function(event){
+			var image = event.media;
+			
+			//Jpeg compression module
+			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
+			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setWorstCompressQuality(0.40);
+			
+			var compressedImage = jpgcompressor.compress(image);
+			
+			//Create thumbnail
+			var imageThumbnail = image.imageAsThumbnail(60,0,30);
+			
+			var timestamp = new Date().getTime();
+			var uniqueDogFilename = timestamp + '.jpg';
+			var uniqueDogFilenameThumb = 'thumb_' + timestamp + '.jpg';
+			
+			//save images on the local filesystem
+			var filename = Titanium.Filesystem.applicationDataDirectory + uniqueDogFilename;
+			var filenameThumb = Titanium.Filesystem.applicationDataDirectory + uniqueDogFilenameThumb;
+			
+			var tmpImage = Titanium.Filesystem.getFile(filename);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
+			tmpImage.write(compressedImage);
+			
+			tmpImage = Titanium.Filesystem.getFile(filenameThumb);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
+			tmpImage.write(imageThumbnail);
+			
+			var editDogObject = {
+				photo:compressedImage,
+				thumb:imageThumbnail,
+				user_id:userObject.userId,
+				token:userObject.token,
+				dog_id:dogProfileDogId,
+				photo_filename:uniqueDogFilename,
+				thumb_filename:uniqueDogFilenameThumb,
+				edit:false //only editing the photo
+			};
+			
+			//Upload
+			changeDogProfilePhoto(editDogObject);
+			
+		},
+		cancel:function(){
+	
+		},
+		error:function(error){
+		},
+		allowEditing:true
+	});
+}
+
+//Selects a photo from the camera roll and uploads it as the new profile image
+function dogProfilePhotoChooseExisting(){
+	Titanium.Media.openPhotoGallery({	
+		
+		success:function(event){
+			var image = event.media;
+			
+			//Jpeg compression module
+			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
+			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setWorstCompressQuality(0.40);
+			
+			var compressedImage = jpgcompressor.compress(image);
+			
+			//Create thumbnail
+			var imageThumbnail = image.imageAsThumbnail(60,0,30);
+			
+			var timestamp = new Date().getTime();
+			var uniqueDogFilename = timestamp + '.jpg';
+			var uniqueDogFilenameThumb = 'thumb_' + timestamp + '.jpg';
+			
+			//save images on the local filesystem
+			var filename = Titanium.Filesystem.applicationDataDirectory + uniqueDogFilename;
+			var filenameThumb = Titanium.Filesystem.applicationDataDirectory + uniqueDogFilenameThumb;
+			
+			var tmpImage = Titanium.Filesystem.getFile(filename);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
+			tmpImage.write(compressedImage);
+			
+			tmpImage = Titanium.Filesystem.getFile(filenameThumb);
+			if(tmpImage.exists()){
+				tmpImage.deleteFile();
+			}
+			tmpImage.write(imageThumbnail);
+			
+			var editDogObject = {
+				photo:compressedImage,
+				thumb:imageThumbnail,
+				user_id:userObject.userId,
+				token:userObject.token,
+				dog_id:dogProfileDogId,
+				photo_filename:uniqueDogFilename,
+				thumb_filename:uniqueDogFilenameThumb,
+				edit:false //only editing the photo
+			};
+			
+			//Upload
+			changeDogProfilePhoto(editDogObject);
+			
+		},
+		cancel:function(){
+	
+		},
+		error:function(error){
+		},
+		allowEditing:true
+	});
+}
+
+//Uploads a new profile image for the current dog
+function changeDogProfilePhoto(obj){
+	Ti.API.info('changeDogProfilePhoto() called'); 	
+	
+	//progress view
+	var progressView = new ProgressView({window:dogProfileView});
+	progressView.show({
+		text:"Uploading..."
+	});
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('changeDogProfilePhoto() got back error '+e);
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('changeDogProfilePhoto() got back from server '+this.responseText);
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			//Hide progress view
+			progressView.hide();
+			
+			//Change the profile image on the UI
+			dogProfilePhotoImage.image = Titanium.Filesystem.applicationDataDirectory + obj.photo_filename;
+			
+			//Update dog on the local db
+			var localDog = {
+				dog_id:obj.dog_id,
+				photo_filename:obj.photo_filename,
+				thumb_path:jsonData.data.thumb
+			};
+			
+			editDog(localDog);
+			populateRightMenu(getDogs());
+			
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else {
+			//Show the error message we got back from the server
+			progressView.change({
+		        error:true,
+		        text:getErrorMessage(jsonData.data.response)
+		    });
+		    
+			//and hide it after a while		    
+		    setTimeout(function() {
+			    progressView.hide();
+			}, ERROR_MSG_REMOVE_TIMEOUT);
+		} 
+	};
+	
+	xhr.setRequestHeader("Content-Type", "multipart/form-data");
+	xhr.open('POST',API+'editDog');
+	xhr.send(obj);
 }
 
 function handleDogLikeButton(e){
