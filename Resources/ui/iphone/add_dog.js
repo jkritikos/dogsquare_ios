@@ -116,7 +116,8 @@ var addDogFieldDogBreedHintTextLabel = Ti.UI.createLabel({
 	textAlign:'left',
 	top:addDogFieldName.top + addDogTxtFieldOffset,
 	opacity:0.7,
-	width:192,
+	width:187,
+	left:6,
 	height:32,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
@@ -161,11 +162,12 @@ addDogFieldAge.add(addDogFieldAgeHintTextLabel);
 var addDogFieldSizeHintTextLabel = Ti.UI.createLabel({
 	text:'Size*',
 	picker:SIZE_PICKER,
+	left:6,
 	color:'999999',
 	textAlign:'left',
 	top:addDogFieldAge.top + addDogTxtFieldOffset,
 	opacity:0.7,
-	width:192,
+	width:187,
 	height:32,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
@@ -180,8 +182,9 @@ var addDogFieldGenderHintTextLabel = Ti.UI.createLabel({
 	textAlign:'left',
 	opacity:0.7,
 	top:addDogFieldSizeHintTextLabel.top + addDogTxtFieldOffset,
-	width:192,
+	width:187,
 	height:32,
+	left:6,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
 addDogFormScrollBackground.add(addDogFieldGenderHintTextLabel);
@@ -195,8 +198,9 @@ var addDogFieldMattingHintTextLabel = Ti.UI.createLabel({
 	textAlign:'left',
 	top:addDogFieldGenderHintTextLabel.top + addDogTxtFieldOffset,
 	opacity:0.7,
-	width:192,
+	width:187,
 	height:32,
+	left:6,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 });
 addDogFormScrollBackground.add(addDogFieldMattingHintTextLabel);

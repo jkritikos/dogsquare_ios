@@ -5,7 +5,7 @@ var fullscreenImage = null;
 var galleryDoneButton = null;
 var galleryCameraButton = null;
 var galleryPhotoDialog = null;
-var galleryFullscreenBackground = null;
+var galleryFullscreenImageWindow = null;
 var galleryPhotoType = null;
 var galleryImageObj = {};
 
@@ -34,16 +34,15 @@ function buildGalleryView(target_id, photoType){
 		});
 		viewGallery.add(viewGalleryScroll);
 		
-		galleryFullscreenBackground = Ti.UI.createView({
+		galleryFullscreenImageWindow = Ti.UI.createWindow({
 			backgroundColor:'black',
-			top:415,
-			height:416,
-			zIndex:3
+			barImage:IMAGE_PATH+'common/bar.png',
+			barColor:UI_COLOR,
+			modal:true
 		});
-		viewGallery.add(galleryFullscreenBackground);
 		
 		fullscreenImage = Ti.UI.createImageView();
-		galleryFullscreenBackground.add(fullscreenImage);
+		galleryFullscreenImageWindow.add(fullscreenImage);
 		
 		galleryDoneButton = Titanium.UI.createButton({
 			backgroundImage:IMAGE_PATH+'common/Done_button.png',
@@ -51,6 +50,7 @@ function buildGalleryView(target_id, photoType){
 		    height:34
 		});
 		galleryDoneButton.addEventListener('click', handleGalleryDoneButton);
+		galleryFullscreenImageWindow.setRightNavButton(galleryDoneButton);
 		
 		galleryCameraButton = Titanium.UI.createButton({
 			backgroundImage:IMAGE_PATH+'gallery/add_photo_icon.png',
@@ -218,14 +218,12 @@ function handleThumbImageButton(e){
 	} else if(galleryPhotoType == PHOTO_TYPE_PLACE){
 		fullscreenImage.image = REMOTE_PLACE_IMAGES + imagesArray[id];
 	}
-	
-	navController.getWindow().setRightNavButton(galleryDoneButton);
-	galleryFullscreenBackground.animate({top:0,duration:500});
+
+	galleryFullscreenImageWindow.open();
 }
 
 function handleGalleryDoneButton(){
-	navController.getWindow().setRightNavButton(galleryCameraButton);
-	galleryFullscreenBackground.animate({top:415,duration:500});
+	galleryFullscreenImageWindow.close();
 }
 
 function handleGalleryCameraButton(){
