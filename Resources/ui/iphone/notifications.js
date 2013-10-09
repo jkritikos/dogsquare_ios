@@ -103,10 +103,16 @@ function doGetNotifications(){
 function populateNotificationsTableView(data) {
 	
 	var tableRows = [];
+	var notificationText = '';
 	
 	for(i=0; i< data.length; i++){
 		//build text
-		var notificationText = data[i].name + ' ' + getNotificationMessage(data[i].type_id);
+		if(data[i].type_id != NOTIFICATION_AWARD_BADGE){
+			notificationText = data[i].name + ' ' + getNotificationMessage(data[i].type_id);
+		} else {
+			notificationText = getNotificationMessage(data[i].type_id);
+		}
+		
 		var notificationTime = relativeTime(data[i].created);
 		
 		//notification row
@@ -146,7 +152,7 @@ function populateNotificationsTableView(data) {
 			width:'auto',
 			height:'auto',
 			left:70,
-			font:{fontSize:13, fontWeight:data[i].read == 0 ? 'bold' : 'regular', fontFamily:'Open Sans'}
+			font:{fontSize:13, fontWeight:data[i].read == 0 ? 'semibold' : 'regular', fontFamily:'Open Sans'}
 		});
 		
 		//date label
@@ -221,6 +227,10 @@ function handleNotificationsTableView(e){
 		
 		openWindows.push(notificationRowWindow);
 		navController.open(notificationRowWindow);
+	} else if(notType == NOTIFICATION_AWARD_BADGE){
+		Ti.include('ui/iphone/badge_detail.js');
+		
+		var badgeDetailView = 
 	}
 }
 

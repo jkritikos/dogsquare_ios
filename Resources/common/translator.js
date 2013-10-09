@@ -19,6 +19,7 @@ var NOTIFICATION_NEW_FOLLOWER = 1;
 var NOTIFICATION_WALK_REQUEST = 2;
 var NOTIFICATION_COMMENT_ACTIVITY = 3;
 var NOTIFICATION_LIKE_ACTIVITY = 4;
+var NOTIFICATION_AWARD_BADGE = 5;
 
 //Feed types
 var FEED_NEW_WALK = 1;
@@ -48,6 +49,8 @@ function getNotificationMessage(code){
 		msg = "commented on your activity.";
 	} else if(code == NOTIFICATION_LIKE_ACTIVITY){
 		msg = "liked your activity.";	
+	} else if(code == NOTIFICATION_AWARD_BADGE){
+		msg = "You earned a new badge!";
 	}
 	
 	return msg;

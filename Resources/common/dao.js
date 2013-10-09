@@ -33,7 +33,7 @@ var NETWORK_RESPONSE_OK = 1;
 var NETWORK_RESPONSE_ERROR = -1;
 
 //Badges
-var BADGE_TOTAL = 17;
+var BADGE_TOTAL = 16;
 
 //Various views
 var VIEW_SIGNUP = 1;
@@ -189,65 +189,59 @@ function getBadgeDetails(id){
 		};
 	} else if(id == 7){
 		badge = {
-			title:'Thank You',
+			title:'Savior',
 			title_left:146,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 8){
 		badge = {
-			title:'Mayor',
-			title_left:218,
-			description:'Lorem ipsum blah blab'
-		};
-	} else if(id == 9){
-		badge = {
 			title:'Workie',
 			title_left:23,
 			description:'Lorem ipsum blah blab'
 		};
-	} else if(id == 10){
+	} else if(id == 9){
 		badge = {
 			title:'Swimmie',
 			title_left:83,
 			description:'Lorem ipsum blah blab'
 		};
-	} else if(id == 11){
+	} else if(id == 10){
 		badge = {
 			title:'VIP',
 			title_left:161,
 			description:'Lorem ipsum blah blab'
 		};
-	} else if(id == 12){
+	} else if(id == 11){
 		badge = {
 			title:'Cruelty',
 			title_left:217,
 			description:'Lorem ipsum blah blab'
 		};
-	} else if(id == 13){
+	} else if(id == 12){
 		badge = {
 			title:'Godfather',
 			title_left:16,
 			description:'Lorem ipsum blah blab'
 		};
-	} else if(id == 14){
+	} else if(id == 13){
 		badge = {
 			title:'Rookie',
 			title_left:88,
 			description:'Lorem ipsum blah blab'
 		};
-	} else if(id == 15){
+	} else if(id == 14){
 		badge = {
 			title:'Superstar',
 			title_left:146,
 			description:'Lorem ipsum blah blab'
 		};
-	} else if(id == 16){
+	} else if(id == 15){
 		badge = {
 			title:'Healthy Dog',
 			title_left:207,
 			description:'Lorem ipsum blah blab'
 		};
-	} else if(id == 17){
+	} else if(id == 16){
 		badge = {
 			title:'101 Dalmatians',
 			title_left:6,

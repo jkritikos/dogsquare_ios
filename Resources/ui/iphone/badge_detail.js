@@ -1,5 +1,6 @@
 //UI components
 var viewBadgeDetail = null;
+var badgeDetailLargeBadgeImage = null;
 
 function buildBadgeDetailView(id){
 	if(viewBadgeDetail == null){
@@ -50,7 +51,23 @@ function buildBadgeDetailView(id){
 			top:184,
 			left:133
 		});
-		viewBadgeDetail.add(badgeDetailBadgeImage);
+		
+		//viewBadgeDetail.add(badgeDetailBadgeImage);
+		
+		badgeDetailLargeBadgeImage = Titanium.UI.createImageView({
+			image:IMAGE_PATH+'badges/big/' + 'badge_' + id + '.png',
+			top:100,
+			left:49
+		});
+		viewBadgeDetail.add(badgeDetailLargeBadgeImage);
 		
 	}
+	
+	awardBadgeAnimation();
+}
+
+function awardBadgeAnimation(){
+	var tmpMatrix = Ti.UI.create2DMatrix();
+	tmpMatrix = tmpMatrix.scale(0.26);
+	badgeDetailLargeBadgeImage.animate({transform:tmpMatrix, duration:1200});
 }

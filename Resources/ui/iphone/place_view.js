@@ -1,5 +1,3 @@
-
-
 //UI Components
 var checkinPlaceCommentsBackgroundView = null;
 var checkinPlaceCommentsTextArea = null;

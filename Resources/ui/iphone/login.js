@@ -236,7 +236,7 @@ function checkLoginCredentials(lObj){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-		Ti.API.error('Error in checkLoginCredentials() '+e);
+		Ti.API.error('Error in checkLoginCredentials() '+JSON.stringify(e));
 	};
 	
 	xhr.onload = function(e){

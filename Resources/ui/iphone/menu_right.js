@@ -222,6 +222,9 @@ function handleTableViewRows(e){
 			closeOpenWindows();
 			navController.getWindow().setTitleControl();
 			
+			//Revert to the standard right window button
+			navController.getWindow().rightNavButton = rightBtn;
+			
 			var dogId = e.row.dogId;
 			
 			Ti.include('ui/iphone/dog_profile.js');
