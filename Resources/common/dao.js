@@ -850,8 +850,6 @@ function endActivity(obj){
 	saveActivityOnline(obj.activity_id);
 }
 
-
-
 //Returns a list of all the user activities
 function getActivities(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
@@ -1090,7 +1088,7 @@ function saveNotification(obj){
 	
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	Ti.API.info('saveNotification() called');
-	db.execute('insert into notifications (user_from_id, user_from_name, type_id, read, activity_id, date, user_from_thumb) values (?,?,?,0,?,?,?)',obj.user_from, obj.name, obj.type_id, obj.activity_id, obj.created, obj.thumb);
+	db.execute('insert into notifications (user_from_id, user_from_name, type_id, read, activity_id, date, user_from_thumb, badge_id) values (?,?,?,0,?,?,?,?)',obj.user_from, obj.name, obj.type_id, obj.activity_id, obj.created, obj.thumb, obj.badge_id);
 	db.close();
 	
 	Ti.API.info('saveNotification() saved notification locally');
@@ -1113,29 +1111,20 @@ function getNotifications(){
 	
 	var notificationRows = [];
 	
-	var rows = db.execute('select id, user_from_id, user_from_name, type_id, read, activity_id, date, user_from_thumb from notifications order by date desc');
+	var rows = db.execute('select id, user_from_id, user_from_name, type_id, read, activity_id, date, user_from_thumb, badge_id from notifications order by date desc');
 	var i=0;
-	while (rows.isValidRow())
-	{
+	while (rows.isValidRow()){
 		
-	  var id = rows.field(0);	
-	  var user_from = rows.field(1);
-	  var name = rows.field(2);
-	  var type_id = rows.field(3);
-	  var read = rows.field(4);
-	  var activity_id = rows.field(5);
-	  var created = rows.field(6);
-	  var thumb = rows.field(7);
-	  
-	  var obj = {
-	  		id:id,
-			user_from:user_from,
-			name:name,
-			type_id:type_id,
-			read:read,
-			activity_id:activity_id,
-			created:created,
-			thumb:thumb
+		var obj = {
+  			id:rows.field(0),
+			user_from:rows.field(1),
+			name:rows.field(2),
+			type_id:rows.field(3),
+			read:rows.field(4),
+			activity_id:rows.field(5),
+			created:rows.field(6),
+			thumb:rows.field(7),
+			badge_id:rows.field(8)
 		};
 	
 		notificationRows.push(obj);
@@ -1422,7 +1411,7 @@ function createDB(){
 	db.execute('create table if not exists DOG_BREEDS (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"origin\" varchar(256), \"weight_from\" integer, \"weight_to\" integer, \"kennel_club\" varchar(256), \"active\" integer)');
 	db.execute('create table if not exists MUTUAL_FOLLOWERS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_id\" integer, \"name\" varchar(256),\"thumb\" varchar(128))');
 	db.execute('create table if not exists PLACE_CATEGORIES (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"active\" integer)');
-	db.execute('create table if not exists NOTIFICATIONS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from_id\" integer, \"user_from_name\" varchar(256), \"type_id\" integer, \"read\" integer, \"activity_id\" integer, \"date\" real, \"user_from_thumb\" varchar(128))');
+	db.execute('create table if not exists NOTIFICATIONS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from_id\" integer, \"user_from_name\" varchar(256), \"type_id\" integer, \"read\" integer, \"activity_id\" integer, \"badge_id\" integer, \"date\" real, \"user_from_thumb\" varchar(128))');
 	//db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from\" integer, \"user_to\" integer, \"date\" real, \"message\" text)');
 	
 	db.close();

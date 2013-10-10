@@ -125,7 +125,8 @@ function populateNotificationsTableView(data) {
 			id:data[i].id,
 			notification_type:data[i].type_id,
 			fromUserId:data[i].user_from,
-			fromUserName:data[i].name
+			fromUserName:data[i].name,
+			badge_id:data[i].badge_id
 		});
 		
 		//Wrapper view with vertical layout for the text in each row
@@ -183,6 +184,7 @@ function handleNotificationsTableView(e){
 	var userId = e.row.fromUserId;
 	var name = e.row.fromUserName;
 	var notificationId = e.row.id;
+	var badgeId = e.row.badge_id;
 	
 	setNotificationToRead(notificationId);
 	
@@ -230,7 +232,13 @@ function handleNotificationsTableView(e){
 	} else if(notType == NOTIFICATION_AWARD_BADGE){
 		Ti.include('ui/iphone/badge_detail.js');
 		
-		var badgeDetailView = 
+		buildBadgeDetailView(badgeId, true);
+	
+		notificationRowWindow.add(viewBadgeDetail);
+		notificationRowWindow.setTitle(getBadgeDetails(badgeId).title);
+	
+		openWindows.push(notificationRowWindow);
+		navController.open(notificationRowWindow);
 	}
 }
 

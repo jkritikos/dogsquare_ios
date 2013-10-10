@@ -2,7 +2,7 @@
 var viewBadgeDetail = null;
 var badgeDetailLargeBadgeImage = null;
 
-function buildBadgeDetailView(id){
+function buildBadgeDetailView(id, awardBadge){
 	if(viewBadgeDetail == null){
 		var badgeObj = getBadgeDetails(id, 1);
 		
@@ -46,26 +46,30 @@ function buildBadgeDetailView(id){
 		});
 		viewBadgeDetail.add(badgeDetailDogImage);
 		
-		var badgeDetailBadgeImage = Titanium.UI.createImageView({
-			image:IMAGE_PATH+'badges/color/' + 'badge_' + id + '.png',
-			top:184,
-			left:133
-		});
-		
-		//viewBadgeDetail.add(badgeDetailBadgeImage);
-		
-		badgeDetailLargeBadgeImage = Titanium.UI.createImageView({
-			image:IMAGE_PATH+'badges/big/' + 'badge_' + id + '.png',
-			top:100,
-			left:49
-		});
-		viewBadgeDetail.add(badgeDetailLargeBadgeImage);
-		
+		//Animate the badge if we are awarding it now
+		if(awardBadge){
+			badgeDetailLargeBadgeImage = Titanium.UI.createImageView({
+				image:IMAGE_PATH+'badges/big/' + 'badge_' + id + '.png',
+				top:100,
+				left:49
+			});
+			
+			viewBadgeDetail.add(badgeDetailLargeBadgeImage);
+			
+			awardBadgeAnimation();
+		} else {
+			var badgeDetailBadgeImage = Titanium.UI.createImageView({
+				image:IMAGE_PATH+'badges/color/' + 'badge_' + id + '.png',
+				top:184,
+				left:133
+			});
+			
+			viewBadgeDetail.add(badgeDetailBadgeImage);
+		}
 	}
-	
-	awardBadgeAnimation();
 }
 
+//Performs the animation for badge awarding
 function awardBadgeAnimation(){
 	var tmpMatrix = Ti.UI.create2DMatrix();
 	tmpMatrix = tmpMatrix.scale(0.26);

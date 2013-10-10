@@ -131,7 +131,8 @@ function handleBadgeButton(e){
 	    navController.close(badgeDetailWindow);
 	});
 	
-	buildBadgeDetailView(id);
+	//Build the badge detail view, without the award animation
+	buildBadgeDetailView(id, false);
 	
 	badgeDetailWindow.add(viewBadgeDetail);
 	
