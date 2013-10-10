@@ -230,7 +230,6 @@ function handleNotificationsTableView(e){
 	} else if(notType == NOTIFICATION_AWARD_BADGE){
 		Ti.include('ui/iphone/badge_detail.js');
 		
-		var badgeDetailView = 
 	}
 }
 

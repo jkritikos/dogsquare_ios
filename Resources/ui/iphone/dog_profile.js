@@ -10,36 +10,52 @@ var dogProfileMatingBackground = null;
 var dogProfileView = null;
 var dogProfileMyDog = false;
 var dogProfileDogId = null;	
+var dogProfileEditDialog = null;
 	
 function buildDogProfileView(dogId){
-	
-	dogProfileDogId = dogId;
-	
-	//Check if this is our dog or not
-	dogProfileMyDog = false;
-	var dogObject = getDogById(dogId);
-	if(dogObject.length > 0 && dogObject[0].id == dogId){
-		dogProfileMyDog = true;
-	}
-	
-	//Always prepare the photo options depending on whether this is our dog or not
-	if(dogProfileMyDog){
-		//Photo dialog with options for viewing/changing the profile image
-		var dogProfilePhotoDialog = Titanium.UI.createOptionDialog({
-			options:['View', 'Take Photo', 'Choose From Library', 'Cancel'],
-			cancel:3
-		});
-	} else {
-		//Photo dialog with options for viewing/changing the profile image
-		var dogProfilePhotoDialog = Titanium.UI.createOptionDialog({
-			options:['View','Cancel'],
-			cancel:1
-		});
-	}
-	
-	Ti.API.info('buildDogProfileView() for dogId '+dogId+' dogProfileMyDog='+dogProfileMyDog);
-	
 	if(dogProfileView == null){
+		dogProfileDogId = dogId;
+		
+		//Check if this is our dog or not
+		dogProfileMyDog = false;
+		var dogObject = getDogById(dogId);
+		
+		if(dogObject.length > 0 && dogObject[0].id == dogId){
+			dogProfileMyDog = true;
+		}
+		
+		var dogProfileEditButton = Ti.UI.createButton({
+			backgroundImage:IMAGE_PATH+'common/edit_icon.png',
+			width:24,
+			height:23
+		});
+		dogProfileEditButton.addEventListener('click', handleDogProfileEditButton);
+		
+		//Always prepare the photo options depending on whether this is our dog or not
+		if(dogProfileMyDog){
+			navController.getWindow().rightNavButton = dogProfileEditButton;
+			
+			//Photo dialog with options for viewing/changing the profile image
+			var dogProfilePhotoDialog = Titanium.UI.createOptionDialog({
+				options:['View', 'Take Photo', 'Choose From Library', 'Cancel'],
+				cancel:3
+			});
+		} else {
+			//Photo dialog with options for viewing/changing the profile image
+			var dogProfilePhotoDialog = Titanium.UI.createOptionDialog({
+				options:['View','Cancel'],
+				cancel:1
+			});
+		}
+		
+		Ti.API.info('buildDogProfileView() for dogId '+dogId+' dogProfileMyDog='+dogProfileMyDog);
+		
+		//Edit dialog with options for editing/deleting the dog profile
+		dogProfileEditDialog = Titanium.UI.createOptionDialog({
+			options:['Edit', 'Delete', 'Cancel'],
+			cancel:2
+		});
+	
 		dogProfileView = Ti.UI.createView({
 			backgroundColor:'#eeeded'
 		});
@@ -64,6 +80,15 @@ function buildDogProfileView(dogId){
 				if(e.index == 0){
 					dogProfilePhotoView();
 				}
+			}
+		});
+		
+		//Event listener for profile edit dialog options	
+		dogProfileEditDialog.addEventListener('click',function(e){
+			if(e.index == 0){
+				
+			} else if(e.index == 1){
+				deleteDogProfile();
 			}
 		});
 		
@@ -284,8 +309,68 @@ function buildDogProfileView(dogId){
 	return dogProfileView;
 }
 
+function deleteDogProfile(){
+	deleteDogOnline(dogProfileDogId);
+}
+
+function handleDogProfileEditButton(){
+	dogProfileEditDialog.show();
+}
+
 function dogProfilePhotoView(){
-	alert('dogProfilePhotoView');
+	var image = dogProfilePhotoImage.image;
+		
+	Ti.include('ui/iphone/photo_view.js');
+	
+	buildPhotoView(image);
+
+	photoViewWindow.open();
+}
+
+//delete dog in online server by the user's choise
+function deleteDogOnline(dogId){
+	Ti.API.info('deleteDogOnline() called ');
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in deleteDogOnline() '+e);
+	};
+	
+	xhr.onload = function(e) {
+		Ti.API.info('deleteDogOnline() got back from server : '+ this.responseText);
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			//delete dog locally
+			deleteDog(dogId);
+			var dogObj = getDogs();
+			populateRightMenu(dogObj);
+			
+			openAddDogView();
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
+			alert(getErrorMessage(jsonData.response));
+		}
+		
+	};
+	xhr.open('POST',API+'deleteDog');
+	xhr.send({
+		user_id:userObject.userId,
+		dog_id:dogId,
+		token:userObject.token
+	});
 }
 
 //Takes a new photo and uploads it as the new profile image
@@ -733,4 +818,25 @@ function handleDogLikesButton(e){
 	
 	openWindows.push(listUsersWindow);
 	navController.open(listUsersWindow);
+}
+
+//open add dog view after the dog is deleted by user's choise
+function openAddDogView(){
+	Ti.include('ui/iphone/add_dog.js');
+	
+	var addDogWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Add new dog'
+	});
+	
+	//Revert to the standard right window button
+	addDogWindow.rightNavButton = rightBtn;
+	addDogWindow.leftNavButton = leftBtn;
+	
+	addDogWindow.add(viewAddDog);
+		
+	openWindows.push(addDogWindow);
+	navController.open(addDogWindow);
 }

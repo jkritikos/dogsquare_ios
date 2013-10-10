@@ -1,11 +1,8 @@
 //UI components
 var viewGallery = null;
 var viewGalleryScroll = null;
-var fullscreenImage = null;
-var galleryDoneButton = null;
 var galleryCameraButton = null;
 var galleryPhotoDialog = null;
-var galleryFullscreenImageWindow = null;
 var galleryPhotoType = null;
 var galleryImageObj = {};
 
@@ -33,24 +30,6 @@ function buildGalleryView(target_id, photoType){
 			width:296
 		});
 		viewGallery.add(viewGalleryScroll);
-		
-		galleryFullscreenImageWindow = Ti.UI.createWindow({
-			backgroundColor:'black',
-			barImage:IMAGE_PATH+'common/bar.png',
-			barColor:UI_COLOR,
-			modal:true
-		});
-		
-		fullscreenImage = Ti.UI.createImageView();
-		galleryFullscreenImageWindow.add(fullscreenImage);
-		
-		galleryDoneButton = Titanium.UI.createButton({
-			backgroundImage:IMAGE_PATH+'common/Done_button.png',
-		    width:54,
-		    height:34
-		});
-		galleryDoneButton.addEventListener('click', handleGalleryDoneButton);
-		galleryFullscreenImageWindow.setRightNavButton(galleryDoneButton);
 		
 		galleryCameraButton = Titanium.UI.createButton({
 			backgroundImage:IMAGE_PATH+'gallery/add_photo_icon.png',
@@ -214,16 +193,16 @@ function handleThumbImageButton(e){
 	var id = e.source.id;
 	
 	if(galleryPhotoType == PHOTO_TYPE_USER){
-		fullscreenImage.image = REMOTE_USER_IMAGES + imagesArray[id];
+		image = REMOTE_USER_IMAGES + imagesArray[id];
 	} else if(galleryPhotoType == PHOTO_TYPE_PLACE){
-		fullscreenImage.image = REMOTE_PLACE_IMAGES + imagesArray[id];
+		image = REMOTE_PLACE_IMAGES + imagesArray[id];
 	}
-
-	galleryFullscreenImageWindow.open();
-}
-
-function handleGalleryDoneButton(){
-	galleryFullscreenImageWindow.close();
+	
+	Ti.include('ui/iphone/photo_view.js');
+	
+	buildPhotoView(image);
+	
+	photoViewWindow.open();
 }
 
 function handleGalleryCameraButton(){

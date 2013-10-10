@@ -154,97 +154,81 @@ function getBadgeDetails(id){
 	if(id == 1){
 		badge = {
 			title:'Puppy',
-			title_left:22,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 2){
 		badge = {
 			title:'Lazy',
-			title_left:93,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 3){
 		badge = {
 			title:'Olympian',
-			title_left:146,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 4){
 		badge = {
 			title:'Superfamily',
-			title_left:207,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 5){
 		badge = {
 			title:'Athletic',
-			title_left:22,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 6){
 		badge = {
 			title:'Crossfit',
-			title_left:85,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 7){
 		badge = {
 			title:'Savior',
-			title_left:146,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 8){
 		badge = {
 			title:'Workie',
-			title_left:23,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 9){
 		badge = {
 			title:'Swimmie',
-			title_left:83,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 10){
 		badge = {
 			title:'VIP',
-			title_left:161,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 11){
 		badge = {
 			title:'Cruelty',
-			title_left:217,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 12){
 		badge = {
 			title:'Godfather',
-			title_left:16,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 13){
 		badge = {
 			title:'Rookie',
-			title_left:88,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 14){
 		badge = {
 			title:'Superstar',
-			title_left:146,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 15){
 		badge = {
 			title:'Healthy Dog',
-			title_left:207,
 			description:'Lorem ipsum blah blab'
 		};
 	} else if(id == 16){
 		badge = {
 			title:'101 Dalmatians',
-			title_left:6,
 			description:'Lorem ipsum blah blab'
 		};
 	}
@@ -446,6 +430,16 @@ function getDogById(dogId){
 	return dogRows;
 }
 
+//delete local db dog
+function deleteDog(dog_id){
+	Ti.API.info('deleteDog() called');
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.execute('delete from dogs where dog_id=?', dog_id);
+	
+	db.close();
+}
+
 //Gets all notes from the local db
 function getNotes(){
 	var dbNoteObject = {};
@@ -523,7 +517,7 @@ function updateNote(noteObj, noteId){
 
 //delete local db note
 function deleteNote(note_id){
-	Ti.API.info('updateNote() called');
+	Ti.API.info('deleteNote() called');
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
 	db.execute('delete from passport where note_id=?', note_id);
@@ -533,7 +527,7 @@ function deleteNote(note_id){
 
 //save user whom you follow, in web database
 function followUser(uId, button, win){
-	Ti.API.info('saveFollowingUser() called');
+	Ti.API.info('followUser() called');
 	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
