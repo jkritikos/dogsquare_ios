@@ -26,6 +26,7 @@ function buildBadgeListView(){
 function populateBadgeList(badges){
 	
 	var leftOffset = 9;
+	var leftLabelOffset = 4;
 	var topOffset = 9;
 	var rowBadges = 0;
 	
@@ -48,7 +49,9 @@ function populateBadgeList(badges){
 		var badgeTitleLabel = Titanium.UI.createLabel({
 			text:badgeObj.title,
 			color:'black',
-			left:badgeObj.title_left,
+			textAlign:'center',
+			width:65,
+			left:leftLabelOffset,
 			top:topOffset + 55,
 			font:{fontSize:9, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
@@ -57,11 +60,13 @@ function populateBadgeList(badges){
 		
 		rowBadges++;
 		leftOffset += 65;
+		leftLabelOffset += 65;
 		
 		if(rowBadges == 4){
 			topOffset += 80; 
 			rowBadges = 0;
 			leftOffset = 9;
+			leftLabelOffset = 4;
 		}
 	}
 	

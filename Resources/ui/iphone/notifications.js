@@ -231,7 +231,7 @@ function handleNotificationsTableView(e){
 		navController.open(notificationRowWindow);
 	} else if(notType == NOTIFICATION_AWARD_BADGE){
 		Ti.include('ui/iphone/badge_detail.js');
-		
+
 		buildBadgeDetailView(badgeId, true);
 	
 		notificationRowWindow.add(viewBadgeDetail);
@@ -239,6 +239,7 @@ function handleNotificationsTableView(e){
 	
 		openWindows.push(notificationRowWindow);
 		navController.open(notificationRowWindow);
+
 	}
 }
 

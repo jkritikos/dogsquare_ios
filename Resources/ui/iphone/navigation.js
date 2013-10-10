@@ -40,6 +40,17 @@ rightBtn.addEventListener("click", function(){
 	window.setCenterhiddenInteractivity("TouchEnabled");
 });
 
+var leftBtn = Ti.UI.createButton({
+	backgroundImage:IMAGE_PATH+'common/menu.png',
+	width:38,
+	height:18
+});
+
+leftBtn.addEventListener("click", function(){
+	window.toggleLeftView();
+	window.setCenterhiddenInteractivity("TouchEnabled");
+});
+
 var navController = createCenterNavWindow();
 
 function createCenterNavWindow(){	
@@ -48,17 +59,6 @@ function createCenterNavWindow(){
 		title:"Napp Slide Menu",
 		barColor:UI_COLOR,
 		barImage:IMAGE_PATH+'common/bar.png'
-	});
-	
-	var leftBtn = Ti.UI.createButton({
-		backgroundImage:IMAGE_PATH+'common/menu.png',
-		width:38,
-		height:18
-	});
-	
-	leftBtn.addEventListener("click", function(){
-		window.toggleLeftView();
-		window.setCenterhiddenInteractivity("TouchEnabled");
 	});
 	
 	win.leftNavButton = leftBtn;

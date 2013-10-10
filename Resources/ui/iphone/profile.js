@@ -545,7 +545,12 @@ function getOnlineUser(){
 }
 
 function profilePhotoView(){
-	alert('profilePhotoView');
+	var image = profileImageView.image;
+		
+	Ti.include('ui/iphone/photo_view.js');
+	buildPhotoView(image);
+
+	photoViewWindow.open();
 }
 
 //Takes a new photo and uploads it as the new profile image
