@@ -655,8 +655,12 @@ function getLeftMenuOnlineUser(n){
 function handleLeftSearchResultRows(e){
 	leftmenuSearchTxtfield.blur();
 	setTimeout(function(){clearSearchBackground();},400);
+	
+	//Handle windows
 	closeOpenWindows();
 	restoreWindowState();
+	//Revert to the standard right window button
+	navController.getWindow().rightNavButton = rightBtn;
 	
 	var userId = e.row.user_id;
 	var placeId = e.row.place_id;
