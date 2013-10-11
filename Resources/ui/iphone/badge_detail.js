@@ -4,7 +4,7 @@ var badgeDetailLargeBadgeImage = null;
 
 function buildBadgeDetailView(id, awardBadge){
 	if(viewBadgeDetail == null){
-		var badgeObj = getBadgeDetails(id, 1);
+		var badgeObj = getBadgeDetails(id);
 		
 		viewBadgeDetail = Ti.UI.createView({
 			backgroundColor:'white'
@@ -30,11 +30,12 @@ function buildBadgeDetailView(id, awardBadge){
 		badgeDetailTitleBar.add(badgeDetailTitleLabel);
 		
 		var badgeDetailDescriptionLabel = Titanium.UI.createLabel({
-			text:badgeObj.description,
+			text:awardBadge ? badgeObj.award : badgeObj.description,
 			color:'black',
+			textAlign:'center',
 			width:253,
 			top:40,
-			font:{fontSize:10, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		badgeDetailBackground.add(badgeDetailDescriptionLabel);
 		

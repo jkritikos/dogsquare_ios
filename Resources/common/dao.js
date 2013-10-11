@@ -154,82 +154,98 @@ function getBadgeDetails(id){
 	if(id == 1){
 		badge = {
 			title:'Puppy',
-			description:'Lorem ipsum blah blab'
+			description:'Achieved when adding a dog 1-­2 years old.',
+			award:'Your puppy would like to thank you for adding it to the family of Dogsquare!'
 		};
 	} else if(id == 2){
 		badge = {
 			title:'Lazy',
-			description:'Lorem ipsum blah blab'
+			description:'When a dog from the user\'s pack doesn\'t fill the bar for 3 weeks’ time (not a single time).',
+			award:'Heeeeeeeey! Get off that ugly couch and move your Dog!'
 		};
 	} else if(id == 3){
 		badge = {
 			title:'Olympian',
-			description:'Lorem ipsum blah blab'
+			description:'Achieved when a dog from the user\'s pack fills the Dog fuel bar at least 3 times a week for 4 weeks\' time.',
+			award:'12 ­in a row­ dog bar fillings per month! Olympians never rest­ - keep going!'
 		};
 	} else if(id == 4){
 		badge = {
 			title:'Superfamily',
-			description:'Lorem ipsum blah blab'
+			description:'Unlocked when you add a third dog to the pack.',
+			award:'That\'s a huge Dog family and we love it!'
 		};
 	} else if(id == 5){
 		badge = {
 			title:'Athletic',
-			description:'Lorem ipsum blah blab'
+			description:'Achieved when a dog from the user\'s pack fills the bar 10 times in a month.',
+			award:'10 dog bar filling in a month! Twice the dog bar fillings, double the Glory!'
 		};
 	} else if(id == 6){
 		badge = {
 			title:'Crossfit',
-			description:'Lorem ipsum blah blab'
+			description:'Achieved when a dog fills the fuel bar for 6 times in 2 weeks time.',
+			award:'6 bar fillings in 2 weeks!?! This badge is earned not given.'
 		};
 	} else if(id == 7){
 		badge = {
 			title:'Savior',
-			description:'Lorem ipsum blah blab'
+			description:'Unlocked when ￼tagging a homeless dog.',
+			award:'You are an Angel for the homeless! Adopt one you\'re gonna lovit!'
 		};
 	} else if(id == 8){
 		badge = {
 			title:'Workie',
-			description:'Lorem ipsum blah blab'
+			description:'Achieved when user checks in at work with a dog from his dog pack.',
+			award:'Oh no! You are working again? But that\'s how we progress dont forget...'
 		};
 	} else if(id == 9){
 		badge = {
 			title:'Swimmie',
-			description:'Lorem ipsum blah blab'
+			description:'Achieved when user checks in at a beach with a dog from the pack.',
+			award:'Chilling at the beach, you\'re so luckyyy! We are still at the office...'
 		};
 	} else if(id == 10){
 		badge = {
 			title:'VIP',
-			description:'Lorem ipsum blah blab'
+			description:'Achieved when user checks in at cafe­-bars-­restaurants with a dog from the pack',
+			award:'You fancy the good life eehh? That\'s the spirit keep it on!'
 		};
 	} else if(id == 11){
 		badge = {
 			title:'Cruelty',
-			description:'Lorem ipsum blah blab'
+			description:'Unlocked when reporting a cruelty by tagging it.',
+			award:'You\'re awesome. You might have saved a life!'
 		};
 	} else if(id == 12){
 		badge = {
 			title:'Godfather',
-			description:'Lorem ipsum blah blab'
+			description:'Achieved when a new dog park is added by the user.',
+			award:'New Dog Park discovered! You name it Godfather!'
 		};
 	} else if(id == 13){
 		badge = {
 			title:'Rookie',
-			description:'Lorem ipsum blah blab'
+			description:'Unlocks when creating a user profile for the first time.',
+			award:'Welcome to the \‘Woof your Dog\’ family!'
 		};
 	} else if(id == 14){
 		badge = {
 			title:'Superstar',
-			description:'Lorem ipsum blah blab'
+			description:'Unlocked when any of your dogs gets 20 likes from other users.',
+			award:'More than 20 likes? Hi there Casanova...'
 		};
 	} else if(id == 15){
 		badge = {
 			title:'Healthy Dog',
-			description:'Lorem ipsum blah blab'
+			description:'Unlocked when you complete the Pasport Tasks.',
+			award:'Your Dog would like to thank you for taking so good care of him!'
 		};
 	} else if(id == 16){
 		badge = {
 			title:'101 Dalmatians',
-			description:'Lorem ipsum blah blab'
+			description:'Achieved when reaching 101 checkins.',
+			award:'Woof! You reeeaached 101 checkins!'
 		};
 	}
 	
