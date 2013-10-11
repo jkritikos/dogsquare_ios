@@ -567,7 +567,9 @@ function doSaveDogOnline(dObj){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
+			//populate right menu dogs
 			populateRightMenu(getDogs());
+			
 			navController.getWindow().setRightNavButton(rightBtn);
 			
 			Ti.include('ui/iphone/dog_profile.js');

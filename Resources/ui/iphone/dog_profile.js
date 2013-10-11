@@ -98,9 +98,8 @@ function buildDogProfileView(dogId){
 		});
 		
 		dogProfileMatingBackground = Titanium.UI.createImageView({
-			left:11,
-			top:11,
-			zIndex:2
+			bottom:IPHONE5 ? 55 : 5,
+			right:77
 		});
 		dogProfileView.add(dogProfileMatingBackground);
 	
@@ -283,15 +282,16 @@ function buildDogProfileView(dogId){
 		
 		//Heart image for likes
 		dogProfileHeartImage = Ti.UI.createImageView({ 
-			bottom:IPHONE5 ? 55 : 5,
-			right:77,
+			left:11,
+			top:11,
+			zIndex:2, 
 			dogId:dogId
 		});
 		dogProfileView.add(dogProfileHeartImage);
 		dogProfileHeartImage.addEventListener('click', handleDogLikeButton);
 		
 		var dogProfileLikeMeLabel = Titanium.UI.createLabel({ 
-			text:'Like me?',
+			text:'Mating?',
 			color:'black',
 			height:'auto',
 			textAlign:'left',
@@ -763,6 +763,8 @@ function updateDogProfile(dogObj){
     dogProfileLikesNumberLabel.text = dogObj.likes;
     if(dogObj.mating == 1){
     	dogProfileMatingBackground.image = IMAGE_PATH+'dog_profile/badge_matting.png';
+    }else{
+    	dogProfileMatingBackground.image = IMAGE_PATH+'dog_profile/badge_matting_grey.png';
     }
     
     if(dogObj.gender == 1){

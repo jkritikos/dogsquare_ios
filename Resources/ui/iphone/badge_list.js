@@ -2,7 +2,7 @@
 var viewBadgeList = null;
 var viewBadgeScroll = null;
 
-function buildBadgeListView(){
+function buildBadgeListView(user_id){
 	CURRENT_VIEW = VIEW_BADGES;
 	
 	if(viewBadgeList == null){
@@ -19,7 +19,7 @@ function buildBadgeListView(){
 		});
 		viewBadgeList.add(viewBadgeScroll);
 	}
-	getBadgesOnline();
+	getBadgesOnline(user_id);
 }
 
 
@@ -72,7 +72,7 @@ function populateBadgeList(badges){
 	
 }
 
-function getBadgesOnline(){
+function getBadgesOnline(userId){
 	Ti.API.info('getBadgesOnline() called for user:' + userObject.userId); 	
 	
 	//progress view
@@ -85,7 +85,7 @@ function getBadgesOnline(){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-		
+
 	};
 	
 	xhr.onload = function(e){
@@ -95,6 +95,12 @@ function getBadgesOnline(){
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			populateBadgeList(jsonData.data.badges);
 			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
 			//Hide progress view
 			progressView.hide();
 		} else {
@@ -103,7 +109,9 @@ function getBadgesOnline(){
 	};
 	xhr.open('GET',API+'getBadges');
 	xhr.send({
-		user_id:userObject.userId
+		user_id:userObject.userId,
+		target_id:userId,
+		token:userObject.token
 	});
 }
 

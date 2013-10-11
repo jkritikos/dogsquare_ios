@@ -3,6 +3,7 @@ var profileOtherDogBar = null;
 var profileOtherActivityTableViewBackground = null;
 var profileOtherFollowersNumberLabel = null;
 var profileOtherFollowingNumberLabel = null;
+var profileOtherBadgesNumberLabel = null;
 var profileOtherPhotoImage = null;
 var profileOtherFollowButton = null;
 var profileOtherActivityTableView = null;
@@ -90,6 +91,7 @@ function buildProfileOtherView(uId, name) {
 			height:36,
 			opacity:0.8
 		});
+		profileOtherTransparentBadgesView.addEventListener('click', handleProfileOtherBadgesTab);
 		
 		//badges label on the opacity bar
 		var profileOtherBadgesLabel = Ti.UI.createLabel({
@@ -105,8 +107,7 @@ function buildProfileOtherView(uId, name) {
 		profileOtherTransparentBadgesView.add(profileOtherBadgesLabel);
 		
 		//number of badges label on the opacity bar
-		var profileOtherBadgesNumberLabel = Ti.UI.createLabel({
-			text:'3',
+		profileOtherBadgesNumberLabel = Ti.UI.createLabel({
 			color:'black',
 			textAlign:'center',
 			width:'auto',
@@ -576,10 +577,15 @@ function getOnlineOtherUser(uId){
 			
 			//Hide progress view
 			progressView.hide();
+			//update profile other view
 			updateProfileOther(jsonData.data.user);
+			//populate activity table with online data
 			populateProfileOtherActivityTableView(jsonData.data.activities);
 			
 			onlineDogs = jsonData.data.dogs;
+			
+			//update badges label
+			profileOtherBadgesNumberLabel.text = jsonData.data.badge_count;
 			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;
@@ -664,11 +670,42 @@ function handleProfileOtherFollowersFolowingTab(e){
 	navController.open(listUsersWindow);
 }
 
+function handleProfileOtherBadgesTab(e){
+	Ti.include('ui/iphone/badge_list.js');
+	
+	buildBadgeListView(profileOtherUserId);
+	
+	var badgesWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Badges'
+	});
+	
+	//back button & event listener
+	var badgesBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	badgesWindow.setLeftNavButton(badgesBackButton);
+	badgesBackButton.addEventListener("click", function() {
+	    navController.close(badgesWindow);
+	});
+	
+	badgesWindow.add(viewBadgeList);
+	
+	openWindows.push(badgesWindow);
+	navController.open(badgesWindow);
+}
+
 function handleProfileOtherDogsButton(e){
 	
 	Ti.include('ui/iphone/list_users.js');
 	
 	var listUsersView = buildListUsersView();
+	//populate list table with dogs of the user
 	populateListUsersTableView(onlineDogs);
 	
 	var listUsersWindow = Ti.UI.createWindow({
