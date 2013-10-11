@@ -30,6 +30,15 @@ var addDogFormFieldImage = Ti.UI.createImageView({
 });
 viewAddDog.add(addDogFormFieldImage);
 
+//photo button preview image
+var imageThumbnailPreviewImageView = Ti.UI.createImageView({
+	borderRadius:39,
+	top:30,
+	zIndex:10
+});
+
+viewAddDog.add(imageThumbnailPreviewImageView);
+
 //photo button
 var addDogPhotoButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'add_dog/round_field_photo.png',
@@ -42,7 +51,7 @@ var addDogPhotoButton = Ti.UI.createButton({
 var addDogPhotoIcon = Ti.UI.createImageView({ 
 	image:IMAGE_PATH+'add_place/photo_icon.png',
 	top:10,
-	left:23
+	left:24
 });
 addDogPhotoButton.add(addDogPhotoIcon);
 
@@ -101,7 +110,6 @@ var addDogFieldNameHintTextLabel = Ti.UI.createLabel({
 	color:'999999',
 	textAlign:'left',
 	left:4,
-	opacity:0.7,
 	width:80,
 	height:30,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -115,7 +123,6 @@ var addDogFieldDogBreedHintTextLabel = Ti.UI.createLabel({
 	color:'999999',
 	textAlign:'left',
 	top:addDogFieldName.top + addDogTxtFieldOffset,
-	opacity:0.7,
 	width:187,
 	left:6,
 	height:32,
@@ -151,7 +158,6 @@ var addDogFieldAgeHintTextLabel = Ti.UI.createLabel({
 	color:'999999',
 	textAlign:'left',
 	left:4,
-	opacity:0.7,
 	width:80,
 	height:30,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -166,7 +172,6 @@ var addDogFieldSizeHintTextLabel = Ti.UI.createLabel({
 	color:'999999',
 	textAlign:'left',
 	top:addDogFieldAge.top + addDogTxtFieldOffset,
-	opacity:0.7,
 	width:187,
 	height:32,
 	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -180,7 +185,6 @@ var addDogFieldGenderHintTextLabel = Ti.UI.createLabel({
 	picker:GENDER_PICKER,
 	color:'999999',
 	textAlign:'left',
-	opacity:0.7,
 	top:addDogFieldSizeHintTextLabel.top + addDogTxtFieldOffset,
 	width:187,
 	height:32,
@@ -197,7 +201,6 @@ var addDogFieldMattingHintTextLabel = Ti.UI.createLabel({
 	color:'999999',
 	textAlign:'left',
 	top:addDogFieldGenderHintTextLabel.top + addDogTxtFieldOffset,
-	opacity:0.7,
 	width:187,
 	height:32,
 	left:6,
@@ -404,6 +407,10 @@ function handlePhotoSelection(){
 			jpgcompressor.setWorstCompressQuality(0.40);
 			
 			var compressedImage = jpgcompressor.compress(image);
+			
+			//Preview thumbnail
+			var imageThumbnailPreview = image.imageAsThumbnail(78,0,39);
+			imageThumbnailPreviewImageView.image = imageThumbnailPreview;
 			
 			//Create thumbnail
 			var imageThumbnail = image.imageAsThumbnail(60,0,30);
