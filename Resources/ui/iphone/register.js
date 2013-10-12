@@ -1,36 +1,51 @@
 //UI components
 var registerWindow = null;
-var hiddenRegisterView = null;
 var registerNavBar = null;
 var registerNavBarLabel = null;
-var registerFormBorder = null;
 var registerProfilePhotoButton = null;
-var registerProfilePhotoLabel = null;
-var registerFormScrollBackground = null;
 var registerFormBackground = null;
-var registerGenderMaleLabel = null;
-var registerGenderFemaleLabel = null;
-var registerGenderSelectorSlider = null;
 var registerFieldName = null;
 var registerFieldNameHintTextLabel = null;
+var registerFieldSurname = null;
+var registerFieldSurnameHintTextLabel = null;
 var registerFieldEmail = null;
 var registerFieldEmailHintTextLabel = null;
 var registerFieldPassword = null;
 var registerFieldPasswordHintTextLabel = null;
-var registerFieldAge = null;
-var registerFieldAgeHintTextLabel = null;
+var registerFieldBirthDateHintTextLabel = null;
+var registerFieldGenderHintTextLabel = null;
+var registerFieldCountryHintTextLabel = null;
+var registerFieldAddressHintTextLabel = null;
+var registerFieldAddress = null;
 var registerFacebookButton = null;
 var registerSignupButton = null;
 var registerPhotoDialog = null;
+var registerScrollView = null;
+var registerPicker = null;
+var registerDatePicker = null;
+var registerPickerDoneButton = null;
+var registerToolbar = null;
+var registerFormTermsCheckMark = null;
+var registerFormNewsCheckMark = null;
+var registerFormNewsCheckBox = null;
+var registerFormTermsCheckBox = null;
 
-var GENDER_FEMALE = 'female';
-var GENDER_MALE = 'male';
+var genderPicker = [];
+var countryPicker = [];
 
-var registerGenderNumber = GENDER_MALE;
+var PICKER_DATE_BIRTH = 1;
+var PICKER_COUNTRY = 2;
+var PICKER_GENDER = 3;
+
+var registerPickerType = null;
 
 //Data components
 //Holds the user data entered through the signup form
 var signupUserObject = {};
+signupUserObject.gender = 1;//default gender
+signupUserObject.birth_date = '0000-00-00 00:00:00 +0000';
+signupUserObject.address = '';
+signupUserObject.newsletter = 0;
 
 function buildRegisterWindow(){
 	Titanium.UI.iPhone.showStatusBar();
@@ -41,12 +56,10 @@ function buildRegisterWindow(){
 		backgroundColor:UI_BACKGROUND_COLOR
 	});
 	
-	/*this view is created to get the globalPoint for the slider - it needs a view to do that*/
-	hiddenRegisterView = Ti.UI.createView({
-		backgroundColor:'transparent'
+	registerScrollView = Ti.UI.createScrollView({
+		backgroundColor:UI_BACKGROUND_COLOR
 	});
-	
-	registerWindow.add(hiddenRegisterView);
+	registerWindow.add(registerScrollView);
 	
 	registerNavBar = Ti.UI.createImageView({
 		image:IMAGE_PATH+'common/bar.png',
@@ -77,105 +90,49 @@ function buildRegisterWindow(){
 	
 	registerWindow.add(registerNavBar);
 	
-	//Custom navbar
-	registerFormBorder = Ti.UI.createImageView({
-		image:IMAGE_PATH+'signup/border.png',
-		top:'12%'
-	});
-	
-	registerWindow.add(registerFormBorder);
-	
 	//Profile pic selector
 	registerProfilePhotoButton = Ti.UI.createButton({
 		backgroundImage:IMAGE_PATH+'signup/place_photo.png',
-		width:109,
-		height:91,
-		top:'13%'
+		width:104,
+		height:101,
+		top:64
 	});
-	
 	registerProfilePhotoButton.addEventListener('click', registerShowPhotoOptions);
-	
-	registerWindow.add(registerProfilePhotoButton);
-	
-	registerProfilePhotoLabel = Ti.UI.createLabel({
-		text:'Your Photo Here!',
-		bottom:9,
-		textAlign:'center',
-		width:55,
-		height:30,
-		color:'black',
-		font:{fontSize:8, fontWeight:'regular', fontFamily:'Open Sans'}
-	});
-	registerProfilePhotoButton.add(registerProfilePhotoLabel);
+	registerScrollView.add(registerProfilePhotoButton);
 	
 	//Form scroll container
-	var registerTxtFieldOffset = 34;
-	var registerTxtFieldHeight = 32;
-	var registerTxtFieldWidth = 192;
+	var registerTxtFieldOffset = 41;
+	var registerTxtFieldHeight = 39;
+	var registerTxtFieldWidth = 262;
 	
-	registerFormScrollBackground = Ti.UI.createScrollView({
-		top:IPHONE5 ? 221 : 192,
-		width:192,
-		height:140
+	registerFormBackground = Ti.UI.createView({
+		backgroundColor:'e7e6e6',
+		top:IPHONE5 ? 221 : 184,
+		width:262,
+		height:329
 	});
-	
-	//Form background
-	registerFormBackground = Ti.UI.createImageView({
-		image:IMAGE_PATH+'signup/fields_area.png',
-		top:'32%'
-	});
-	
-	//Gender selector MALE label
-	registerGenderMaleLabel = Ti.UI.createLabel({
-		text:'Male',
-		top:17,
-		left:37,
-		color:'#6a5b5b',
-		font:{fontSize:14, fontWeight:'bold', fontFamily:'Open Sans'},
-		zIndex:2
-	});
-	
-	registerFormBackground.add(registerGenderMaleLabel);
-	
-	//Gender selector FEMALE label
-	registerGenderFemaleLabel = Ti.UI.createLabel({
-		text:'Female',
-		top:17,
-		right:28,
-		color:'#6a5b5b',
-		font:{fontSize:14, fontWeight:'bold', fontFamily:'Open Sans'},
-		zIndex:2
-	});
-	
-	registerFormBackground.add(registerGenderFemaleLabel);
-	
-	//Gender selector sliding button
-	registerGenderSelectorSlider = Ti.UI.createImageView({
-		image:IMAGE_PATH+'signup/Selected_genre.png',
-		top:12,
-		left:8
-	});
-	
-	registerFormBackground.add(registerGenderSelectorSlider);
 	
 	//Name textfield
 	registerFieldName = Ti.UI.createTextField({
 		width:registerTxtFieldWidth,
 		height:registerTxtFieldHeight,
 		top:1,
+		paddingLeft:4, 
+		paddingRight:4, 
 		returnKeyType: Ti.UI.RETURNKEY_NEXT,
 		field:1
 	});
 	
-	registerFieldName.addEventListener('change', handleRegisterTextFieldFocus);
+	registerFieldName.addEventListener('change', handleRegisterTextFieldChange);
 	registerFieldName.addEventListener('blur', handleRegisterTextFieldBlur);
+	registerFieldName.addEventListener('focus', handleRegisterTextFieldFocus);
 	
 	//Event listener for the name textfield
 	registerFieldName.addEventListener('return', function() {
-	    registerFieldEmail.focus();
+	    registerFieldSurname.focus();
 	});
 	
-	registerFormScrollBackground.add(registerFieldName);
+	registerFormBackground.add(registerFieldName);
 	
 	registerFieldNameHintTextLabel = Ti.UI.createLabel({
 		text:'Name*',
@@ -183,32 +140,68 @@ function buildRegisterWindow(){
 		textAlign:'left',
 		left:4,
 		opacity:0.7,
-		width:80,
 		height:30,
-		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+		font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
 	registerFieldName.add(registerFieldNameHintTextLabel);
+	
+	//Surname textfield
+	registerFieldSurname = Ti.UI.createTextField({
+		width:registerTxtFieldWidth,
+		height:registerTxtFieldHeight,
+		paddingLeft:4, 
+		paddingRight:4, 
+		top:registerFieldName.top + registerTxtFieldOffset,
+		returnKeyType: Ti.UI.RETURNKEY_NEXT,
+		field:2
+	});
+	
+	registerFieldSurname.addEventListener('change', handleRegisterTextFieldChange);
+	registerFieldSurname.addEventListener('blur', handleRegisterTextFieldBlur);
+	registerFieldSurname.addEventListener('focus', handleRegisterTextFieldFocus);
+	
+	//Event listener for the name textfield
+	registerFieldSurname.addEventListener('return', function() {
+	    registerFieldEmail.focus();
+	});
+	
+	registerFormBackground.add(registerFieldSurname);
+	
+	registerFieldSurnameHintTextLabel = Ti.UI.createLabel({
+		text:'Surname*',
+		color:'999999',
+		textAlign:'left',
+		left:4,
+		opacity:0.7,
+		height:30,
+		font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
+	});
+	
+	registerFieldSurname.add(registerFieldSurnameHintTextLabel);
 	
 	//Email textfield
 	registerFieldEmail = Ti.UI.createTextField({
 		width:registerTxtFieldWidth,
 		height:registerTxtFieldHeight,
-		top:registerFieldName.top + registerTxtFieldOffset,
+		paddingLeft:4, 
+		paddingRight:4, 
+		top:registerFieldSurname.top + registerTxtFieldOffset,
 		keyboardType:Ti.UI.KEYBOARD_EMAIL,
 		returnKeyType: Ti.UI.RETURNKEY_NEXT,
-		field:2
+		field:3
 	});
 	
-	registerFieldEmail.addEventListener('change', handleRegisterTextFieldFocus);
+	registerFieldEmail.addEventListener('change', handleRegisterTextFieldChange);
 	registerFieldEmail.addEventListener('blur', handleRegisterTextFieldBlur);
+	registerFieldEmail.addEventListener('focus', handleRegisterTextFieldFocus);
 	
 	//Event listener for the email textfield
 	registerFieldEmail.addEventListener('return', function() {
 	    registerFieldPassword.focus();
 	});
 	
-	registerFormScrollBackground.add(registerFieldEmail);
+	registerFormBackground.add(registerFieldEmail);
 	
 	registerFieldEmailHintTextLabel = Ti.UI.createLabel({
 		text:'Email address*',
@@ -216,9 +209,8 @@ function buildRegisterWindow(){
 		textAlign:'left',
 		left:4,
 		opacity:0.7,
-		width:95,
 		height:30,
-		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+		font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
 	registerFieldEmail.add(registerFieldEmailHintTextLabel);
@@ -227,22 +219,26 @@ function buildRegisterWindow(){
 	registerFieldPassword = Ti.UI.createTextField({
 		width:registerTxtFieldWidth,
 		height:registerTxtFieldHeight,
+		paddingLeft:4, 
+		paddingRight:4, 
 		top:registerFieldEmail.top + registerTxtFieldOffset,
 		backgroundColor:'grey',
 		passwordMask:true,
 		returnKeyType: Ti.UI.RETURNKEY_NEXT,
-		field:3
+		field:4
 	});
 	
-	registerFieldPassword.addEventListener('change', handleRegisterTextFieldFocus);
+	registerFieldPassword.addEventListener('change', handleRegisterTextFieldChange);
 	registerFieldPassword.addEventListener('blur', handleRegisterTextFieldBlur);
+	registerFieldPassword.addEventListener('focus', handleRegisterTextFieldFocus);
 	
 	//Event listener for the password textfield
 	registerFieldPassword.addEventListener('return', function() {
-	    registerFieldAge.focus();
+	    registerFieldBirthDateHintTextLabel.fireEvent('click');
+	    registerScrollView.scrollTo(0,190);
 	});
 	
-	registerFormScrollBackground.add(registerFieldPassword);
+	registerFormBackground.add(registerFieldPassword);
 	
 	registerFieldPasswordHintTextLabel = Ti.UI.createLabel({
 		text:'Password*',
@@ -250,68 +246,177 @@ function buildRegisterWindow(){
 		textAlign:'left',
 		left:4,
 		opacity:0.7,
-		width:80,
 		height:30,
-		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+		font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
 	registerFieldPassword.add(registerFieldPasswordHintTextLabel);
 	
-	//Age textfield
-	registerFieldAge = Ti.UI.createTextField({
+	registerFieldBirthDateHintTextLabel = Ti.UI.createLabel({
+		text:'Date of birth',
 		width:registerTxtFieldWidth,
 		height:registerTxtFieldHeight,
+		color:'999999',
 		top:registerFieldPassword.top + registerTxtFieldOffset,
-		returnKeyType: Ti.UI.RETURNKEY_DONE,
-		field:4
+		textAlign:'left',
+		left:4,
+		opacity:0.7,
+		font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'},
+		picker:PICKER_DATE_BIRTH
+	});
+	registerFormBackground.add(registerFieldBirthDateHintTextLabel);
+	registerFieldBirthDateHintTextLabel.addEventListener('click', registerHandlePicker);
+	
+	//Password textfield
+	registerFieldAddress = Ti.UI.createTextField({
+		width:registerTxtFieldWidth,
+		height:registerTxtFieldHeight,
+		paddingLeft:4, 
+		paddingRight:4, 
+		top:registerFieldBirthDateHintTextLabel.top + registerTxtFieldOffset,
+		backgroundColor:'grey',
+		returnKeyType: Ti.UI.RETURNKEY_NEXT,
+		field:5
 	});
 	
-	registerFieldAge.addEventListener('change', handleRegisterTextFieldFocus);
-	registerFieldAge.addEventListener('blur', handleRegisterTextFieldBlur);
-	registerFormScrollBackground.add(registerFieldAge);
+	registerFieldAddress.addEventListener('change', handleRegisterTextFieldChange);
+	registerFieldAddress.addEventListener('blur', handleRegisterTextFieldBlur);
+	registerFieldAddress.addEventListener('focus', handleRegisterTextFieldFocus);
 	
-	registerFieldAgeHintTextLabel = Ti.UI.createLabel({
-		text:'Age',
+	//Event listener for the password textfield
+	registerFieldAddress.addEventListener('return', function() {
+	    registerFieldCountryHintTextLabel.fireEvent('click');
+	    registerScrollView.scrollTo(0,272);
+	});
+	
+	registerFormBackground.add(registerFieldAddress);
+	
+	registerFieldAddressHintTextLabel = Ti.UI.createLabel({
+		text:'Address',
 		color:'999999',
 		textAlign:'left',
 		left:4,
 		opacity:0.7,
-		width:80,
 		height:30,
-		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+		font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
+	registerFieldAddress.add(registerFieldAddressHintTextLabel);
 	
-	registerFieldAge.add(registerFieldAgeHintTextLabel);
+	registerFieldCountryHintTextLabel = Ti.UI.createLabel({
+		text:'Country*',
+		width:registerTxtFieldWidth,
+		height:registerTxtFieldHeight,
+		color:'999999',
+		top:registerFieldAddress.top + registerTxtFieldOffset,
+		textAlign:'left',
+		left:4,
+		opacity:0.7,
+		font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'},
+		picker:PICKER_COUNTRY
+	});
+	registerFormBackground.add(registerFieldCountryHintTextLabel);
+	registerFieldCountryHintTextLabel.addEventListener('click', registerHandlePicker);
+	
+	registerFieldGenderHintTextLabel = Ti.UI.createLabel({
+		text:'Gender',
+		width:registerTxtFieldWidth,
+		height:registerTxtFieldHeight,
+		color:'999999',
+		top:registerFieldCountryHintTextLabel.top + registerTxtFieldOffset,
+		textAlign:'left',
+		left:4,
+		opacity:0.7,
+		font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'},
+		picker:PICKER_GENDER
+	});
+	registerFormBackground.add(registerFieldGenderHintTextLabel);
+	registerFieldGenderHintTextLabel.addEventListener('click', registerHandlePicker);
 	
 	//sepparator offset
 	var sepparatorOffset = 0;
 	
 	//creation of sepparators
-	for(var i=0; i<=3; i++) {
+	for(var i=0; i<=7; i++) {
 		var registerSepparator = Ti.UI.createView({
 			backgroundColor:'CCCCCC',
 			width:registerTxtFieldWidth,
 			height:2,
-			top:33 + sepparatorOffset,
+			top:40 + sepparatorOffset,
 			opacity:0.4
 		});
-		registerFormScrollBackground.add(registerSepparator);
+		registerFormBackground.add(registerSepparator);
 		
-		sepparatorOffset += 34;
+		sepparatorOffset += 41;
 	}
 	
-	registerWindow.add(registerFormBackground);
-	registerWindow.add(registerFormScrollBackground);
+	registerScrollView.add(registerFormBackground);
+	
+		
+	registerFormNewsCheckBox = Ti.UI.createImageView({
+		image:IMAGE_PATH+'signup/check_box.png',
+		top:527,
+		left:30,
+		active:false
+	});
+	
+	registerFormNewsCheckMark = Ti.UI.createImageView({
+		image:IMAGE_PATH+'signup/check_mark.png',
+		active:false
+	});
+	registerFormNewsCheckBox.add(registerFormNewsCheckMark);
+	registerFormNewsCheckMark.hide();
+	
+	registerScrollView.add(registerFormNewsCheckBox);
+	registerFormNewsCheckBox.addEventListener('click', handleRegisterFormNewsCheckBox);
+	
+	registerFormTermsCheckBox = Ti.UI.createImageView({
+		image:IMAGE_PATH+'signup/check_box.png',
+		top:563,
+		left:30,
+		active:false
+	});
+	
+	registerFormTermsCheckMark = Ti.UI.createImageView({
+		image:IMAGE_PATH+'signup/check_mark.png',
+		active:false
+	});
+	registerFormTermsCheckBox.add(registerFormTermsCheckMark);
+	registerFormTermsCheckMark.hide();
+	
+	registerScrollView.add(registerFormTermsCheckBox);
+	registerFormTermsCheckBox.addEventListener('click', handleRegisterFormTermsCheckBox);
+	
+	
+	var registerReceiveNewsLabel = Titanium.UI.createLabel({
+		text:'I want to receive news from Dogsquare',
+		textAlign:'left',
+		left:270,
+		top:532,
+		left:60,
+		font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
+	});
+	registerScrollView.add(registerReceiveNewsLabel);
+	
+	var registerTermsLabel = Titanium.UI.createLabel({
+		text:'I agree to the Dogsquare TERMS OF USE',//TODO change TERMS OF USE TO LINK
+		textAlign:'left',
+		left:270,
+		top:568,
+		left:60,
+		font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
+	});
+	registerScrollView.add(registerTermsLabel);
 	
 	//Facebook button
 	registerFacebookButton = Ti.UI.createButton({
 		backgroundImage:IMAGE_PATH+'signup/Facebook_button.png',
 		width:241,
 		height:45,
-		bottom:5
+		top:664,
+		bottom:50
 	});
 	
-	registerWindow.add(registerFacebookButton);
+	registerScrollView.add(registerFacebookButton);
 	
 	registerFacebookButton.addEventListener('click', function(){
 		fb.authorize();
@@ -328,47 +433,12 @@ function buildRegisterWindow(){
 		backgroundImage:IMAGE_PATH+'signup/sign_up_button.png',
 		width:161,
 		height:47,
-		bottom:75
+		top:614
 	});
 	
 	registerSignupButton.addEventListener('click', handleSignupClick);
 	
-	registerWindow.add(registerSignupButton);
-	
-	registerGenderSelectorSlider.addEventListener('touchstart', function(e){ //changed by alex
-	     e.source.axis = parseInt(e.x);
-	});
-	
-	registerGenderSelectorSlider.addEventListener('touchmove', function(e){ //changed by alex
-		var globalPoint = e.source.convertPointToView({x:e.x, y:e.y}, hiddenRegisterView);
-	    var coordinates = (globalPoint.x - e.source.axis) - 63;
-	    
-        if(coordinates <= 102 && coordinates >= 8){
-	    	registerGenderSelectorSlider.left = coordinates;
-	    }
-        
-	});
-	
-	registerGenderSelectorSlider.addEventListener('touchend', function(e){ //changed by alex
-	   
-	    if(registerGenderSelectorSlider.left >= 60){
-	    	registerGenderNumber = GENDER_FEMALE;
-	    	
-	        // Positioning the slider to the right
-	        registerGenderSelectorSlider.animate({
-	            left:102,
-	            duration:300
-	        });
-	    }else if(registerGenderSelectorSlider.left <= 60){
-	    	registerGenderNumber = GENDER_MALE;
-	    	
-	        // Positioning the slider to the left
-	        registerGenderSelectorSlider.animate({
-	            left:8,
-	            duration:300
-	        });
-	    }
-	});
+	registerScrollView.add(registerSignupButton);
 	
 	registerPhotoDialog = Titanium.UI.createOptionDialog({
 		options:['Take Photo', 'Choose From Library', 'Cancel'],
@@ -383,7 +453,231 @@ function buildRegisterWindow(){
 		}
 	});
 	
+	//Set up minimum and maximum dates
+	var today = new Date();
+	
+	var minDate = new Date();
+	minDate.setFullYear(today.getFullYear());
+	minDate.setMonth(today.getMonth());
+	minDate.setDate(today.getDate());
+	
+	var maxDate = new Date();
+	maxDate.setFullYear(2020);
+	maxDate.setMonth(11);
+	maxDate.setDate(31);
+	
+	var value = new Date();
+	value.setFullYear(today.getFullYear());
+	value.setMonth(today.getMonth());
+	value.setDate(today.getDate());
+	
+	//date picker - sepparate picker because of an error when changing type of picker
+	registerDatePicker = Ti.UI.createPicker({
+	  type:Ti.UI.PICKER_TYPE_DATE,
+	  bottom:-219,
+	  minDate:minDate,
+	  maxDate:maxDate,
+	  value:value
+	});
+	registerWindow.add(registerDatePicker);
+	registerDatePicker.addEventListener("change", handleRegisterDatePickerChange);
+	
+	//picker for country and gender
+	registerPicker = Ti.UI.createPicker({
+	  bottom:-216
+	});
+	registerWindow.add(registerPicker);
+	registerPicker.addEventListener("change", handleRegisterPickerChange);
+	
+	//picker done button
+	registerPickerDoneButton = Ti.UI.createButton({
+		backgroundImage:IMAGE_PATH+'common/Done_button.png',
+	    width:54,
+	    height:34
+	});
+	registerPickerDoneButton.addEventListener("click", handleRegisterPickerDoneButton);
+	
+	//picker - toolbar flex space
+	var registerFlexSpace = Titanium.UI.createButton({
+	    systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+	});
+	
+	//picker toolbar
+	registerToolbar = Titanium.UI.iOS.createToolbar({
+	    items:[registerFlexSpace, registerPickerDoneButton],
+	    barColor:'999999',
+	    bottom:-44,
+	    borderTop:true,
+	    borderBottom:false
+	}); 
+	registerWindow.add(registerToolbar);
+	
+	//gender picker data
+	genderPicker[0]=Ti.UI.createPickerRow({title:'Male', id:1});
+	genderPicker[1]=Ti.UI.createPickerRow({title:'Female', id:2});
+	
+	//country picker data
+	countryPicker[0]=Ti.UI.createPickerRow({title:'Greece', id:1});
+	countryPicker[1]=Ti.UI.createPickerRow({title:'USA', id:2});
+	
+	registerPicker.add(countryPicker);
+	
 	return registerWindow;
+}
+
+function handleRegisterFormTermsCheckBox(e){
+	var active = e.source.active;
+	
+	if(active){
+		registerFormTermsCheckMark.hide();
+		registerFormTermsCheckMark.active = false;
+		registerFormTermsCheckBox.active = false;
+	}else{
+		registerFormTermsCheckMark.show();
+		registerFormTermsCheckMark.active = true;
+		registerFormTermsCheckBox.active = true;
+	}
+}
+
+function handleRegisterFormNewsCheckBox(e){
+	var active = e.source.active;
+	
+	if(active){
+		registerFormNewsCheckMark.hide();
+		registerFormNewsCheckBox.active = false;
+		registerFormNewsCheckMark.active = false;
+		signupUserObject.newsletter = 0;
+	}else{
+		registerFormNewsCheckMark.show();
+		registerFormNewsCheckMark.active = true;
+		registerFormNewsCheckBox.active = true;
+		signupUserObject.newsletter = 1;
+		
+	}
+}
+
+function handleRegisterDatePickerChange(e){
+	//show date
+	registerFieldBirthDateHintTextLabel.color = 'black';
+	registerFieldBirthDateHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+	registerFieldBirthDateHintTextLabel.opacity = 1;
+	
+	var pickerDate = e.value;
+	
+	var date = formatDate(pickerDate);
+	
+	registerFieldBirthDateHintTextLabel.text = date;
+	signupUserObject.birth_date = pickerDate;
+}
+
+function handleRegisterPickerChange(e){
+	if(registerPickerType == PICKER_COUNTRY){
+		registerFieldCountryHintTextLabel.color = 'black';
+		registerFieldCountryHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		registerFieldCountryHintTextLabel.opacity = 1;
+		
+		var data = registerPicker.getSelectedRow(0).title;
+		signupUserObject.country = registerPicker.getSelectedRow(0).id;
+		registerFieldCountryHintTextLabel.text = data;
+	}else if(registerPickerType == PICKER_GENDER){
+		registerFieldGenderHintTextLabel.color = 'black';
+		registerFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		registerFieldGenderHintTextLabel.opacity = 1;
+		
+		var data = registerPicker.getSelectedRow(0).title;
+		signupUserObject.gender = registerPicker.getSelectedRow(0).id;
+		registerFieldGenderHintTextLabel.text = data;
+	}
+}
+
+//handle picker done button
+function handleRegisterPickerDoneButton(e){
+	
+	if(registerPickerType === PICKER_DATE_BIRTH){
+		registerDatePicker.animate({bottom:-216, duration:500});
+		registerFieldAddress.focus();
+	}else if(registerPickerType === PICKER_COUNTRY){
+		registerPicker.animate({bottom:-216, duration:500});
+		registerFieldGenderHintTextLabel.fireEvent('click');
+		registerScrollView.scrollTo(0,312);
+	}else if(registerPickerType === PICKER_GENDER){
+		registerPicker.animate({bottom:-216, duration:500});
+		registerScrollView.scrollTo(0,135);
+	}
+	registerToolbar.animate({bottom:-44, duration:500});
+}
+
+//handle picker data and animation
+function registerHandlePicker(e){
+	//clear all picker rows method
+    clearRegisterPickerRows();
+    
+    registerFieldName.blur();
+	registerFieldSurname.blur();
+	registerFieldEmail.blur();
+	registerFieldAddress.blur();
+	registerFieldPassword.blur();
+	
+    var picker = e.source.picker;
+    //add data for specified picker
+	if(picker === PICKER_DATE_BIRTH){
+		var pickerDate = registerDatePicker.value;
+		registerFieldBirthDateHintTextLabel.color = 'black';
+		registerFieldBirthDateHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		registerFieldBirthDateHintTextLabel.opacity = 1;
+	
+		var date = formatDate(pickerDate);
+		
+		registerFieldBirthDateHintTextLabel.text = date;
+		signupUserObject.birth_date = pickerDate;
+		registerScrollView.scrollTo(0,190);
+		registerDatePicker.animate({bottom:0, duration:500});
+	}else if(picker === PICKER_COUNTRY){
+		registerPicker.add(countryPicker);
+		registerPicker.setSelectedRow(0, false);
+		
+		registerFieldCountryHintTextLabel.color = 'black';
+		registerFieldCountryHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		registerFieldCountryHintTextLabel.opacity = 1;
+		
+		signupUserObject.country = registerPicker.getSelectedRow(0).id;
+		
+		registerScrollView.scrollTo(0,272);
+		registerPicker.animate({bottom:0, duration:500});
+	}else if(picker === PICKER_GENDER){
+		registerPicker.add(genderPicker);
+		registerPicker.setSelectedRow(0, false);
+		
+		registerFieldGenderHintTextLabel.color = 'black';
+		registerFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		registerFieldGenderHintTextLabel.opacity = 1;
+		
+		signupUserObject.gender = registerPicker.getSelectedRow(0).id;
+		
+		registerScrollView.scrollTo(0,312);
+		registerPicker.animate({bottom:0, duration:500});
+	}
+	
+	registerDatePicker.selectionIndicator = true;
+	registerPicker.selectionIndicator = true;
+	
+	registerToolbar.animate({bottom:216, duration:500});
+	
+	registerPickerType = picker;
+}
+
+//clear all picker rows
+function clearRegisterPickerRows(){
+	if (registerPicker.getColumns()[0]) {
+ 
+        var _col = registerPicker.getColumns()[0];
+	    var len  = _col.rowCount;
+ 
+	    for (var x = len - 1; x >= 0; x--) {
+                var _row = _col.rows[x];
+                _col.removeRow(_row);
+        }
+    }
 }
 
 //Event handler for profile photo selection
@@ -394,9 +688,11 @@ function registerShowPhotoOptions(){
 //Validator for signup form
 function validateSignupForm(){
 	//TODO translator integration here
-	
 	if(isStringNullOrEmpty(registerFieldName.value)){
 		alert('NAME IS MISSING');
+		return false;
+	} else if(isStringNullOrEmpty(registerFieldSurname.value)){
+		alert('SURNAME IS MISSING');
 		return false;
 	} else if(isStringNullOrEmpty(registerFieldEmail.value)){
 		alert('EMAIL IS MISSING');
@@ -404,10 +700,8 @@ function validateSignupForm(){
 	} else if(isStringNullOrEmpty(registerFieldPassword.value)){
 		alert('PASSWORD IS MISSING');
 		return false;
-	}
-	
-	if(!isStringNullOrEmpty(registerFieldAge.value) && !isWithinRange(registerFieldAge.value, 12, 100)){
-		alert('INVALID AGE');
+	}else if(typeof signupUserObject.country == 'undefined'){
+		alert('COUNTRY IS MISSING');
 		return false;
 	}
 	
@@ -422,15 +716,12 @@ function validateSignupForm(){
 	}
 	
 	//Prepare the signup object
-	signupUserObject.name = registerFieldName.value;
+	signupUserObject.name = registerFieldName.value +' '+registerFieldSurname.value;
 	signupUserObject.email = registerFieldEmail.value;
 	signupUserObject.password = registerFieldPassword.value;
-	signupUserObject.age = registerFieldAge.value;
 	signupUserObject.followers = 0;
 	signupUserObject.following = 0;
-	signupUserObject.gender = registerGenderNumber;
-	//signupUserObject.gender =;
-	//signupUserObject.facebook_id = d;
+	signupUserObject.address = registerFieldAddress.value;
 	
 	return true;
 }
@@ -454,16 +745,20 @@ function handleRegisterTextFieldBlur(e){
 			registerFieldNameHintTextLabel.show();
 		}
 	}else if(field == 2){
+		if(registerFieldSurname.value == ''){
+			registerFieldSurnameHintTextLabel.show();
+		}
+	}else if(field == 3){
 		if(registerFieldEmail.value == ''){
 			registerFieldEmailHintTextLabel.show();
 		}
-	}else if(field == 3){
+	}else if(field == 4){
 		if(registerFieldPassword.value == ''){
 			registerFieldPasswordHintTextLabel.show();
 		}
-	}else if(field == 4){
-		if(registerFieldAge.value == ''){
-			registerFieldAgeHintTextLabel.show();
+	}else if(field == 5){
+		if(registerFieldAddress.value == ''){
+			registerFieldAddressHintTextLabel.show();
 		}
 	}
 }
@@ -533,9 +828,12 @@ function doSignup(uObj){
 		name:uObj.name,
 		email:uObj.email,
 		password:uObj.password,
-		age:uObj.age,
+		birth_date:uObj.birth_date,
 		facebook_id:uObj.facebook_id,
-		gender:uObj.gender
+		gender:uObj.gender,
+		address:uObj.address,
+		country:uObj.country,
+		newsletter:uObj.newsletter
 	});
 }
 	
@@ -639,8 +937,19 @@ function handleCameraSelection(){
 		allowEditing:true
 	});
 }	
-	
+
 function handleRegisterTextFieldFocus(e){
+	
+	if(registerPickerType === PICKER_DATE_BIRTH){
+		registerDatePicker.animate({bottom:-216, duration:500});
+	}else if(registerPickerType === PICKER_COUNTRY  || registerPickerType === PICKER_GENDER){
+		registerPicker.animate({bottom:-216, duration:500});
+	}
+	
+	registerToolbar.animate({bottom:-44, duration:500});
+}
+	
+function handleRegisterTextFieldChange(e){
 	var field = e.source.field;
 	
 	if(field == 1){
@@ -650,22 +959,28 @@ function handleRegisterTextFieldFocus(e){
 			registerFieldNameHintTextLabel.show();
 		}
 	}else if(field == 2){
+		if(registerFieldSurname.value != ''){
+			registerFieldSurnameHintTextLabel.hide();
+		}else {
+			registerFieldSurnameHintTextLabel.show();
+		}
+	}else if(field == 3){
 		if(registerFieldEmail.value != ''){
 			registerFieldEmailHintTextLabel.hide();
 		}else {
 			registerFieldEmailHintTextLabel.show();
 		}
-	}else if(field == 3){
+	}else if(field == 4){
 		if(registerFieldPassword.value != ''){
 			registerFieldPasswordHintTextLabel.hide();
 		}else {
 			registerFieldPasswordHintTextLabel.show();
 		}
-	}else if(field == 4){
-		if(registerFieldAge.value != ''){
-			registerFieldAgeHintTextLabel.hide();
+	}else if(field == 5){
+		if(registerFieldAddress.value != ''){
+			registerFieldAddressHintTextLabel.hide();
 		}else {
-			registerFieldAgeHintTextLabel.show();
+			registerFieldAddressHintTextLabel.show();
 		}
 	}
 }

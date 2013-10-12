@@ -208,6 +208,7 @@ leftTableView.addEventListener("click", function(e){
 		case MENU_SETTINGS:
 			navController.getWindow().setTitleControl();
 			Ti.include('ui/iphone/settings.js');
+			buildSettingsView();
 			navController.getWindow().add(viewSettings);
 			navController.getWindow().setTitle('Settings');
 			break;
