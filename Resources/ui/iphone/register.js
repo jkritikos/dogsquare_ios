@@ -17,7 +17,7 @@ var registerFieldGenderHintTextLabel = null;
 var registerFieldCountryHintTextLabel = null;
 var registerFieldAddressHintTextLabel = null;
 var registerFieldAddress = null;
-var registerFacebookButton = null;
+//var registerFacebookButton = null;
 var registerSignupButton = null;
 var registerPhotoDialog = null;
 var registerScrollView = null;
@@ -42,8 +42,6 @@ var registerPickerType = null;
 //Data components
 //Holds the user data entered through the signup form
 var signupUserObject = {};
-signupUserObject.gender = 1;//default gender
-signupUserObject.birth_date = '0000-00-00 00:00:00 +0000';
 signupUserObject.address = '';
 signupUserObject.newsletter = 0;
 
@@ -60,6 +58,12 @@ function buildRegisterWindow(){
 		backgroundColor:UI_BACKGROUND_COLOR
 	});
 	registerWindow.add(registerScrollView);
+	
+	var registerViewDogsquareLogo = Ti.UI.createImageView({
+		image:IMAGE_PATH+'signup/dogsquare_logo.png',
+		top:61
+	});
+	registerScrollView.add(registerViewDogsquareLogo);
 	
 	registerNavBar = Ti.UI.createImageView({
 		image:IMAGE_PATH+'common/bar.png',
@@ -95,7 +99,7 @@ function buildRegisterWindow(){
 		backgroundImage:IMAGE_PATH+'signup/place_photo.png',
 		width:104,
 		height:101,
-		top:64
+		top:116
 	});
 	registerProfilePhotoButton.addEventListener('click', registerShowPhotoOptions);
 	registerScrollView.add(registerProfilePhotoButton);
@@ -107,7 +111,7 @@ function buildRegisterWindow(){
 	
 	registerFormBackground = Ti.UI.createView({
 		backgroundColor:'e7e6e6',
-		top:IPHONE5 ? 221 : 184,
+		top:IPHONE5 ? 221 : 235,
 		width:262,
 		height:329
 	});
@@ -235,7 +239,7 @@ function buildRegisterWindow(){
 	//Event listener for the password textfield
 	registerFieldPassword.addEventListener('return', function() {
 	    registerFieldBirthDateHintTextLabel.fireEvent('click');
-	    registerScrollView.scrollTo(0,190);
+	    registerScrollView.scrollTo(0,241);
 	});
 	
 	registerFormBackground.add(registerFieldPassword);
@@ -253,7 +257,7 @@ function buildRegisterWindow(){
 	registerFieldPassword.add(registerFieldPasswordHintTextLabel);
 	
 	registerFieldBirthDateHintTextLabel = Ti.UI.createLabel({
-		text:'Date of birth',
+		text:'Date of birth*',
 		width:registerTxtFieldWidth,
 		height:registerTxtFieldHeight,
 		color:'999999',
@@ -286,7 +290,7 @@ function buildRegisterWindow(){
 	//Event listener for the password textfield
 	registerFieldAddress.addEventListener('return', function() {
 	    registerFieldCountryHintTextLabel.fireEvent('click');
-	    registerScrollView.scrollTo(0,272);
+	    registerScrollView.scrollTo(0,323);
 	});
 	
 	registerFormBackground.add(registerFieldAddress);
@@ -318,7 +322,7 @@ function buildRegisterWindow(){
 	registerFieldCountryHintTextLabel.addEventListener('click', registerHandlePicker);
 	
 	registerFieldGenderHintTextLabel = Ti.UI.createLabel({
-		text:'Gender',
+		text:'Gender*',
 		width:registerTxtFieldWidth,
 		height:registerTxtFieldHeight,
 		color:'999999',
@@ -354,7 +358,7 @@ function buildRegisterWindow(){
 		
 	registerFormNewsCheckBox = Ti.UI.createImageView({
 		image:IMAGE_PATH+'signup/check_box.png',
-		top:527,
+		top:578,
 		left:30,
 		active:false
 	});
@@ -371,7 +375,7 @@ function buildRegisterWindow(){
 	
 	registerFormTermsCheckBox = Ti.UI.createImageView({
 		image:IMAGE_PATH+'signup/check_box.png',
-		top:563,
+		top:614,
 		left:30,
 		active:false
 	});
@@ -391,7 +395,7 @@ function buildRegisterWindow(){
 		text:'I want to receive news from Dogsquare',
 		textAlign:'left',
 		left:270,
-		top:532,
+		top:583,
 		left:60,
 		font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
@@ -401,39 +405,40 @@ function buildRegisterWindow(){
 		text:'I agree to the Dogsquare TERMS OF USE',//TODO change TERMS OF USE TO LINK
 		textAlign:'left',
 		left:270,
-		top:568,
+		top:619,
 		left:60,
 		font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	registerScrollView.add(registerTermsLabel);
 	
 	//Facebook button
-	registerFacebookButton = Ti.UI.createButton({
+	/*registerFacebookButton = Ti.UI.createButton({
 		backgroundImage:IMAGE_PATH+'signup/Facebook_button.png',
 		width:241,
 		height:45,
-		top:664,
-		bottom:50
+		top:672,
+		bottom:30
 	});
 	
 	registerScrollView.add(registerFacebookButton);
 	
 	registerFacebookButton.addEventListener('click', function(){
 		fb.authorize();
-		/*
+		
 		w.close();
 		loginWindow.animate({opacity:0, duration:1}, function(){
 			window.remove(loginWindow);
 		});
-		*/
-	});
+		
+	});*/
 
 	//Signup button
 	registerSignupButton = Ti.UI.createButton({
-		backgroundImage:IMAGE_PATH+'signup/sign_up_button.png',
-		width:161,
-		height:47,
-		top:614
+		backgroundImage:IMAGE_PATH+'signup/signup_btn.png',
+		width:270,
+		height:55,
+		top:665,
+		bottom:30
 	});
 	
 	registerSignupButton.addEventListener('click', handleSignupClick);
@@ -599,10 +604,10 @@ function handleRegisterPickerDoneButton(e){
 	}else if(registerPickerType === PICKER_COUNTRY){
 		registerPicker.animate({bottom:-216, duration:500});
 		registerFieldGenderHintTextLabel.fireEvent('click');
-		registerScrollView.scrollTo(0,312);
+		registerScrollView.scrollTo(0,364);
 	}else if(registerPickerType === PICKER_GENDER){
 		registerPicker.animate({bottom:-216, duration:500});
-		registerScrollView.scrollTo(0,135);
+		registerScrollView.scrollTo(0,186);
 	}
 	registerToolbar.animate({bottom:-44, duration:500});
 }
@@ -630,7 +635,7 @@ function registerHandlePicker(e){
 		
 		registerFieldBirthDateHintTextLabel.text = date;
 		signupUserObject.birth_date = pickerDate;
-		registerScrollView.scrollTo(0,190);
+		registerScrollView.scrollTo(0,241);
 		registerDatePicker.animate({bottom:0, duration:500});
 	}else if(picker === PICKER_COUNTRY){
 		registerPicker.add(countryPicker);
@@ -642,7 +647,7 @@ function registerHandlePicker(e){
 		
 		signupUserObject.country = registerPicker.getSelectedRow(0).id;
 		
-		registerScrollView.scrollTo(0,272);
+		registerScrollView.scrollTo(0,323);
 		registerPicker.animate({bottom:0, duration:500});
 	}else if(picker === PICKER_GENDER){
 		registerPicker.add(genderPicker);
@@ -654,7 +659,7 @@ function registerHandlePicker(e){
 		
 		signupUserObject.gender = registerPicker.getSelectedRow(0).id;
 		
-		registerScrollView.scrollTo(0,312);
+		registerScrollView.scrollTo(0,364);
 		registerPicker.animate({bottom:0, duration:500});
 	}
 	
@@ -700,8 +705,14 @@ function validateSignupForm(){
 	} else if(isStringNullOrEmpty(registerFieldPassword.value)){
 		alert('PASSWORD IS MISSING');
 		return false;
+	}else if(typeof signupUserObject.birth_date == 'undefined'){
+		alert('DATE OF BIRTH IS MISSING');
+		return false;
 	}else if(typeof signupUserObject.country == 'undefined'){
 		alert('COUNTRY IS MISSING');
+		return false;
+	}else if(typeof signupUserObject.gender == 'undefined'){
+		alert('GENDER IS MISSING');
 		return false;
 	}
 	
@@ -712,6 +723,11 @@ function validateSignupForm(){
 	
 	if(signupUserObject.image == null){
 		alert('PROFILE PHOTO MISSING');
+		return false;
+	}
+	
+	if(!registerFormTermsCheckBox.active){
+		alert('Please agree to the terms!');
 		return false;
 	}
 	

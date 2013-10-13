@@ -48,24 +48,25 @@ function buildLoginWindow(isPopup){
 	loginNavBar.add(loginNavBarLabel);
 	loginWindow.add(loginNavBar);
 	
-	//Form background
-	var loginFormBackgroundImage = Ti.UI.createImageView({
-		image:IMAGE_PATH+'login/field.png',
-		top:65
+	var loginViewDogsquareLogo = Ti.UI.createImageView({
+		image:IMAGE_PATH+'signup/dogsquare_logo.png',
+		top:75
 	});
-	loginWindow.add(loginFormBackgroundImage);
+	loginWindow.add(loginViewDogsquareLogo);
 	
 	var loginFormBackground = Ti.UI.createView({
 		backgroundColor:'e7e6e6',
-		top:93,
-		width:192,
-		height:62
+		top:136,
+		width:262,
+		height:83
 	});
 	
 	//email textfield
 	loginFieldEmail = Ti.UI.createTextField({
-		width:192,
-		height:29,
+		width:262,
+		height:39,
+		paddingLeft:4, 
+		paddingRight:4,
 		top:1,
 		keyboardType:Ti.UI.KEYBOARD_EMAIL,
 		returnKeyType: Ti.UI.RETURNKEY_NEXT,
@@ -86,18 +87,19 @@ function buildLoginWindow(isPopup){
 		textAlign:'left',
 		left:4,
 		opacity:0.7,
-		width:80,
 		height:30,
-		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+		font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	loginFieldEmail.add(loginFieldEmailHintTextLabel);
 	loginFormBackground.add(loginFieldEmail);
 	
 	//password textfield
 	loginFieldPassword = Ti.UI.createTextField({
-		width:192,
-		height:29,
-		top:31,
+		width:262,
+		height:39,
+		paddingLeft:4, 
+		paddingRight:4,
+		top:42,
 		passwordMask:true,
 		field:2
 	});
@@ -111,9 +113,8 @@ function buildLoginWindow(isPopup){
 		textAlign:'left',
 		left:4,
 		opacity:0.7,
-		width:80,
 		height:30,
-		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+		font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	loginFieldPassword.add(loginFieldPasswordHintTextLabel);
 	loginFormBackground.add(loginFieldPassword);
@@ -125,14 +126,14 @@ function buildLoginWindow(isPopup){
 	for(var i=0; i<=1; i++) {
 		var loginSepparator = Ti.UI.createView({
 			backgroundColor:'CCCCCC',
-			width:192,
+			width:262,
 			height:2,
-			top:30 + sepparatorOffset,
+			top:40 + sepparatorOffset,
 			opacity:0.4
 		});
 		loginFormBackground.add(loginSepparator);
 		
-		sepparatorOffset += 29;
+		sepparatorOffset += 41;
 	}
 	loginWindow.add(loginFormBackground);
 	
@@ -140,30 +141,29 @@ function buildLoginWindow(isPopup){
 		text:'forgot your password?',
 		color:'black',
 		textAlign:'left',
-		left:160,
-		top:155,
-		width:103,
+		top:305,
 		height:18,
-		font:{fontSize:9, fontWeight:'regular', fontFamily:'Open Sans'}
+		opacity:0.6,
+		font:{fontSize:11, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	loginWindow.add(loginForgotPasswordLabel);
 	
 	//login button
 	var loginButton = Ti.UI.createButton({
-		backgroundImage:IMAGE_PATH+'login/Login_button.png',
-		width:155,
-		height:45,
-		top:198
+		backgroundImage:IMAGE_PATH+'login/login_btn.png',
+		width:270,
+		height:55,
+		top:232
 	});
 	loginWindow.add(loginButton);
 	loginButton.addEventListener('click', handleLoginButton);
 	
 	//Facebook login button
 	var facebookButton = Ti.UI.createButton({
-		backgroundImage:IMAGE_PATH+'login/Facebook_login.png',
-		width:237,
-		height:43,
-		top:298
+		backgroundImage:IMAGE_PATH+'login/facebook_btn.png',
+		width:274,
+		height:85,
+		top:341
 	});
 	loginWindow.add(facebookButton);
 	
