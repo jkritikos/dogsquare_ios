@@ -8,7 +8,8 @@ function buildPhotoView(img){
 		backgroundColor:'black',
 		barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR,
-		modal:true
+		modal:true,
+		title:'Gallery'
 	});
 	
 	photoViewImage = Ti.UI.createImageView({

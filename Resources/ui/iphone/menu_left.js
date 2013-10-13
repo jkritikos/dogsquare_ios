@@ -555,7 +555,7 @@ function handleLeftMenuTextFieldChange(e){
 	
 	if(field == 'search'){
 		//on textfield change, change the opacity and get users found
-		if(name != ''){
+		if(name != '' && name.length > 1){
 			leftmenuEraseIcon.show();
 			leftmenuSearchBackgroundView.opacity = 1;
 			getLeftMenuOnlineUser(name);

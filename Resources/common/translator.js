@@ -36,6 +36,9 @@ function TT(s){
 	var currentLanguage = LANGUAGE_ENGLISH;
 }
 
+//Report a problem subject
+var REPORT_PROBLEM_SUBJECT = 'Dogsquare problem';
+
 //Build the text description for a notification object
 function getNotificationMessage(code){
 	var currentLanguage = LANGUAGE_ENGLISH;

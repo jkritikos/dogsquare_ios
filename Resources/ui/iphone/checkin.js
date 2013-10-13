@@ -140,11 +140,12 @@ function populatecheckinPlacesTableView(places){
 			
 			//place image
 			var rowPlaceImage = Titanium.UI.createImageView({
-				image:getUserPhoto(userObject.thumb_path),
+				image:REMOTE_PLACE_IMAGES + places[i].thumb,
+				defaultImage:IMAGE_PATH+'common/default_place_photo.png',
 				left:10,
 				top:5,
-				borderRadius:27,
-				borderWidth:3,
+				borderRadius:30,
+				borderWidth:2,
 				borderColor:'f5a92c'
 			});
 			
@@ -152,7 +153,6 @@ function populatecheckinPlacesTableView(places){
 			var rowPlaceTitleLabel = Titanium.UI.createLabel({ 
 				text:places[i].name,
 				color:'black',
-				//height:16,
 				top:10,
 				width:'auto',
 				textAlign:'left',
@@ -165,7 +165,6 @@ function populatecheckinPlacesTableView(places){
 			var rowPlaceDescriptionLabel = Titanium.UI.createLabel({ 
 				text:places[i].category,
 				color:'black',
-				//height:14,
 				top:28,
 				width:'auto',
 				textAlign:'left',

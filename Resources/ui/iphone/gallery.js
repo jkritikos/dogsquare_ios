@@ -59,6 +59,7 @@ function buildGalleryView(target_id, photoType){
 }
 
 function populateGallery(photos, type){
+	Ti.API.info('populateGallery() for type '+type);
 	
 	var leftOffset = 9;
 	var topOffset = 9;
@@ -323,6 +324,7 @@ function handleGalleryCameraSelection(){
 	
 		},
 		error:function(error){
+			alert('Camera problem');
 		},
 		allowEditing:true
 	});

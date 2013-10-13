@@ -97,7 +97,6 @@ function buildCheckinPlaceView(view, placeId){
 			top:0,
 			textAlign:'left',
 			width:280,
-			//height:21,
 			left:17,
 			color:'black',
 			opacity:0.6,
@@ -111,7 +110,6 @@ function buildCheckinPlaceView(view, placeId){
 			top:17,
 			textAlign:'left',
 			width:180,
-			//height:16,
 			left:17,
 			color:'black',
 			opacity:0.8,
@@ -125,7 +123,7 @@ function buildCheckinPlaceView(view, placeId){
 		if(view == VIEW_PLACE_VIEW){
 			//checkin number label
 			var checkinNumberLabel = Ti.UI.createLabel({
-				text:'16 Check-ins',
+				text:'1600 Check-ins',
 				textAlign:'left',
 				width:'auto',
 				height:20,
@@ -262,7 +260,7 @@ var checkinPlacePhotoDialog = Titanium.UI.createOptionDialog({
 //photo dialog event listener
 checkinPlacePhotoDialog.addEventListener('click',function(e){
 	if(e.index == 0){
-		//handleCameraSelection();
+		handleCameraSelection();
 	} else if(e.index == 1){
 		handleCheckinPlacePhotoSelection();
 	}
@@ -381,6 +379,43 @@ function handleCheckinPlacePhotoSelection(){
 	
 		},
 		error:function(error){
+		},
+		allowEditing:true
+	});
+}
+
+//Takes a new photo and uploads it
+function handleCameraSelection(){
+	Titanium.Media.showCamera({	
+		
+		success:function(event){
+			var image = event.media;
+			
+			//Jpeg compression module
+			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
+			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setWorstCompressQuality(0.40);
+			
+			var compressedImage = jpgcompressor.compress(image);
+			
+			//Create thumbnail
+			var imageThumbnail = image.imageAsThumbnail(60,0,30);
+			
+			var placePhotoObject = {
+				photo:compressedImage,
+				thumb:imageThumbnail,
+				user_id:userObject.userId,
+				token:userObject.token,
+				place_id:checkinPlaceHeartImage.placeId
+			};
+			
+			uploadPlacePhoto(placePhotoObject);
+		},
+		cancel:function(){
+	
+		},
+		error:function(error){
+			alert('Camera problem');
 		},
 		allowEditing:true
 	});

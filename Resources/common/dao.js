@@ -207,7 +207,7 @@ function getBadgeDetails(id){
 		};
 	} else if(id == 10){
 		badge = {
-			title:'VIP',
+			title:'VID',
 			description:'Achieved when user checks in at cafe­-bars-­restaurants with a dog from the pack',
 			award:'You fancy the good life eehh? That\'s the spirit keep it on!'
 		};

@@ -20,7 +20,7 @@ function buildSettingsView(){
 			width:293
 		});
 		viewSettings.add(settingsMenuTable);
-		//settingsMenuTable.addEventListener('click', handleSettingsMenuTableRows);
+		settingsMenuTable.addEventListener('click', handleSettingsMenuTableRows);
 		
 		//inbox table view footer
 		settingsMenuTable.footerView = Ti.UI.createView({
@@ -36,6 +36,33 @@ function buildSettingsView(){
 		
 		settingsMenuTable.setData(settingsMenuData);
 	}
+}
+
+//Event handler for settings table
+function handleSettingsMenuTableRows(e){
+	var selectedItem = e.row.menu;
+	
+	if(selectedItem == MENU_EDIT_PROFILE){
+		
+	} else if(selectedItem == MENU_TAKE_TOUR){
+		
+	} else if(selectedItem == MENU_REPORT_PROBLEM){
+		showProblemReportEmailDialog();
+	} else if(selectedItem == MENU_LOGOUT){
+		
+	}
+}
+
+//Opens an email dialog for reporting app problems
+function showProblemReportEmailDialog(){
+	var recipients = ['report@dogsquare.com'];
+	
+	var emailDialog = Ti.UI.createEmailDialog();
+	emailDialog.setBarColor('black');
+	emailDialog.setHtml(true);
+	emailDialog.setSubject(REPORT_PROBLEM_SUBJECT);
+	emailDialog.setToRecipients(recipients);
+	emailDialog.open();
 }
 
 function createSettingsMenuRow(menu){
