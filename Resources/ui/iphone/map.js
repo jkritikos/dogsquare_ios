@@ -5,9 +5,12 @@ var FILTER_CRUELTY = 3;
 var FILTER_PETSHOP = 4;
 var FILTER_VETERINARY = 5;
 var FILTER_DOG_HOSPITAL = 6;
-var FILTER_RECENTLY_OPEN = 7;
-var FILTER_MATING = 8;
-var FILTER_SAME_BREED = 9;
+var FILTER_PUBLIC_PLACE = 7;
+var FILTER_BEACH = 8;
+var FILTER_WORKPLACE = 9;
+var FILTER_RECENTLY_OPEN = 100;
+var FILTER_MATING = 101;
+var FILTER_SAME_BREED = 102;
 
 //UI components
 var viewMapTargetMode = null;
@@ -144,7 +147,10 @@ function buildMapView(windowMode){
 	mapSearchFilterData.push(createMapFilterRow(FILTER_RECENTLY_OPEN));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_MATING));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_SAME_BREED));
-	
+	mapSearchFilterData.push(createMapFilterRow(FILTER_PUBLIC_PLACE));
+	mapSearchFilterData.push(createMapFilterRow(FILTER_BEACH));
+	mapSearchFilterData.push(createMapFilterRow(FILTER_WORKPLACE));
+
 	mapSearchCategoriesTableView.setData(mapSearchFilterData);
 
 	viewMap.add(mapSearchCategoriesBackground);
@@ -289,6 +295,15 @@ function createMapFilterRow(filter){
 	} else if(filter == FILTER_SAME_BREED){
 		icon = IMAGE_PATH+'map_filters/sameBreed_icon.png';
 		label = 'Same breed';
+	} else if(filter == FILTER_BEACH){
+		icon = IMAGE_PATH+'map_filters/beach_icon.png';
+		label = 'Beach';
+	} else if(filter == FILTER_WORKPLACE){
+		icon = IMAGE_PATH+'map_filters/workplace_icon.png';
+		label = 'Workplace';
+	} else if(filter == FILTER_PUBLIC_PLACE){
+		icon = IMAGE_PATH+'map_filters/publicplace_icon.png';
+		label = 'Public place';
 	}
 	
 	var rowIcon = Titanium.UI.createImageView({
