@@ -295,6 +295,7 @@ function checkLoginCredentials(lObj){
 			populateRightMenu(dogArray);
 			
 			saveDogBreeds(jsonData.data.breeds);
+			saveDogfuelRules(jsonData.data.rules);
 			savePlaceCategories(jsonData.data.categories);
 			
 			//save passport notes

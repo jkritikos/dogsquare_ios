@@ -269,13 +269,12 @@ function buildDogProfileView(dogId){
 		});
 		dogProfileView.add(dogProfileBoneImage);
 		
-		//Filled bone image
-		//var boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'dog_profile/bone_colours.png');
-		//var boneFillImageBlob = boneFillImage.toBlob();
-		//var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:70});
+		var boneFillImageBlobCropped = createCroppedBoneImage(VIEW_DOG_PROFILE,50);
 		var dogProfileBoneImageColor = Ti.UI.createImageView({ 
-			image:IMAGE_PATH+'dog_profile/bone_colours.png',
+			image:boneFillImageBlobCropped,
 			bottom:IPHONE5 ? 96 : 44,
+			width: RETINA_DEVICE ? boneFillImageBlobCropped.width / 2 : boneFillImageBlobCropped.width,
+			height: RETINA_DEVICE ? boneFillImageBlobCropped.height / 2 : boneFillImageBlobCropped.height,
 			left:143,
 			zIndex:2
 		});

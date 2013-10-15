@@ -376,9 +376,14 @@ function populateViewActivityDogsTableView(dogObj){
 		row.add(rowBoneImage);
 		
 		//Filled bone image
+		var boneFillImageBlobCropped = createCroppedBoneImage(VIEW_RUN_FINISH,50);
 		var rowBoneFillImage = Ti.UI.createImageView({ 
-			image:IMAGE_PATH+'run_finish/bone_colours.png',
-			right:14,
+			//image:IMAGE_PATH+'run_finish/bone_colours.png',
+			image:boneFillImageBlobCropped,
+			width: RETINA_DEVICE ? boneFillImageBlobCropped.width / 2 : boneFillImageBlobCropped.width,
+			height: RETINA_DEVICE ? boneFillImageBlobCropped.height / 2 : boneFillImageBlobCropped.height,
+			//right:14,
+			left:210,
 			top:20,
 			zIndex:2
 		});

@@ -47,6 +47,26 @@ function isWithinRange(input, min, max){
 	}
 }
 
+//Hack for cropping images for retina/non-retina devices - creates the blob in the correct dimensions
+function createCroppedBoneImage(view, dogfuelValue){
+	var boneFillImage = null;
+	if(view == VIEW_DOG_PROFILE){
+		boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'dog_profile/bone_colours.png');
+	} else if(view == VIEW_RUN_FINISH || view == VIEW_ACTIVITY_NEW){
+		boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'run_finish/bone_colours.png');
+	} else {
+		boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'menu_right/bone_colours.png');
+	}
+	
+	var boneFillImageBlob = boneFillImage.toBlob();
+	var targetWidthForCropping = Math.round((dogfuelValue * boneFillImageBlob.width) / 100);
+	var targetHeightForCropping = RETINA_DEVICE ? (boneFillImageBlob.height * 2) : boneFillImageBlob.height;
+	Ti.API.info('createCroppedBoneImage() RETINA_DEVICE='+RETINA_DEVICE+' called with input file width:'+boneFillImageBlob.width+' height:'+boneFillImageBlob.height);
+	var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:targetWidthForCropping, height:targetHeightForCropping});
+	
+	return boneFillImageBlobCropped;
+}
+
 //Custom import function imports only ONCE
 function _import(file){
 	if(!FILES_IMPORTED[file]){

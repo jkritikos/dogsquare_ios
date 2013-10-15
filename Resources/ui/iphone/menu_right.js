@@ -77,7 +77,7 @@ function populateRightMenu(dogObject){
 	rightMenuData.push(rightMenuAddDogRow);
 	
 	for(var i=0;i<dogObject.length;i++){
-		Ti.API.info('dog rows are being populated with dog id '+dogObject[i].dog_id);
+		Ti.API.info('right menu dog rows are being populated with dog id '+dogObject[i].dog_id);
 
 		//all dog rows
 		var rightMenuRow = Ti.UI.createTableViewRow({
@@ -157,8 +157,12 @@ function populateRightMenu(dogObject){
 		});
 		
 		//grey bone image inside the dog row - right menu row
+		var boneFillImageBlobCropped = createCroppedBoneImage(VIEW_RIGHT_MENU,50);
 		var rowColorBoneImage = Ti.UI.createImageView({ 
-			image:IMAGE_PATH+'menu_right/bone_colours.png',
+			//image:IMAGE_PATH+'menu_right/bone_colours.png',
+			image:boneFillImageBlobCropped,
+			width: RETINA_DEVICE ? boneFillImageBlobCropped.width / 2 : boneFillImageBlobCropped.width,
+			height: RETINA_DEVICE ? boneFillImageBlobCropped.height / 2 : boneFillImageBlobCropped.height,
 			left:239,
 			top:50,
 			type:TYPE_SELECT_ROW,
