@@ -461,20 +461,20 @@ function buildRegisterWindow(){
 	//Set up minimum and maximum dates
 	var today = new Date();
 	
-	var minDate = new Date();
-	minDate.setFullYear(today.getFullYear());
-	minDate.setMonth(today.getMonth());
-	minDate.setDate(today.getDate());
-	
 	var maxDate = new Date();
-	maxDate.setFullYear(2020);
-	maxDate.setMonth(11);
+	maxDate.setFullYear(today.getFullYear() - 5);
+	maxDate.setMonth(13);
 	maxDate.setDate(31);
 	
+	var minDate = new Date();
+	minDate.setFullYear(today.getFullYear() - 70);
+	minDate.setMonth(0);
+	minDate.setDate(1);
+	
 	var value = new Date();
-	value.setFullYear(today.getFullYear());
-	value.setMonth(today.getMonth());
-	value.setDate(today.getDate());
+	value.setFullYear(today.getFullYear() - 5);
+	value.setMonth(12);
+	value.setDate(1);
 	
 	//date picker - sepparate picker because of an error when changing type of picker
 	registerDatePicker = Ti.UI.createPicker({

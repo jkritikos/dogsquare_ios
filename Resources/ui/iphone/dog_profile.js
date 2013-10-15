@@ -11,6 +11,8 @@ var dogProfileView = null;
 var dogProfileMyDog = false;
 var dogProfileDogId = null;	
 var dogProfileEditDialog = null;
+
+var dogProfileEditButton = null;
 	
 function buildDogProfileView(dogId){
 	if(dogProfileView == null){
@@ -24,7 +26,7 @@ function buildDogProfileView(dogId){
 			dogProfileMyDog = true;
 		}
 		
-		var dogProfileEditButton = Ti.UI.createButton({
+		dogProfileEditButton = Ti.UI.createButton({
 			backgroundImage:IMAGE_PATH+'common/edit_icon.png',
 			width:24,
 			height:23
@@ -86,7 +88,7 @@ function buildDogProfileView(dogId){
 		//Event listener for profile edit dialog options	
 		dogProfileEditDialog.addEventListener('click',function(e){
 			if(e.index == 0){
-				
+				editDogProfile();
 			} else if(e.index == 1){
 				deleteDogProfile();
 			}
@@ -311,6 +313,42 @@ function buildDogProfileView(dogId){
 
 function deleteDogProfile(){
 	deleteDogOnline(dogProfileDogId);
+}
+
+function editDogProfile(){
+	Ti.include('ui/iphone/add_dog.js');
+	
+	updateAddDogView(dogProfileDogId);
+	
+	var addDogWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Add new dog'
+	});
+	
+	//back button
+	var addDogBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	addDogWindow.setLeftNavButton(addDogBackButton);
+	
+	//event listener for back button
+	addDogBackButton.addEventListener("click", function() {
+		navController.getWindow().setRightNavButton(dogProfileEditButton);
+	    navController.close(addDogWindow);
+	});
+	
+	//Revert to the standard right window button
+	addDogWindow.setRightNavButton(addDogSaveButton);
+	addDogWindow.leftNavButton = addDogBackButton;
+	
+	addDogWindow.add(viewAddDog);
+		
+	openWindows.push(addDogWindow);
+	navController.open(addDogWindow);
 }
 
 function handleDogProfileEditButton(){
@@ -835,7 +873,7 @@ function openAddDogView(){
 	});
 	
 	//Revert to the standard right window button
-	addDogWindow.rightNavButton = rightBtn;
+	addDogWindow.rightNavButton = addDogSaveButton;
 	addDogWindow.leftNavButton = leftBtn;
 	
 	addDogWindow.add(viewAddDog);

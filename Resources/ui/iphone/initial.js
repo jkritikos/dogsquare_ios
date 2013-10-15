@@ -1,24 +1,16 @@
 var initialWindow = Ti.UI.createWindow({
-	backgroundImage:IMAGE_PATH+'intro_login/Default.png',
+	backgroundImage:IMAGE_PATH+'intro_login/Default.png'
 });
-
-var initialWindowBackground = Ti.UI.createView({
-	height:163,
-	top:150,
-	width:215,
-	left:319
-});
-
-initialWindowBackground.animate({left:52,duration:800});
 
 var registerButton = Ti.UI.createButton({
-	backgroundImage:IMAGE_PATH+'intro_login/Register_button.png',
-	width:175,
-	height:56,
-	bottom:0
+	backgroundImage:IMAGE_PATH+'intro_login/register_btn.png',
+	width:156,
+	height:50,
+	top:230,
+	right:2
 });
 
-initialWindowBackground.add(registerButton);
+initialWindow.add(registerButton);
 
 registerButton.addEventListener('click', function(){
 	
@@ -34,14 +26,14 @@ registerButton.addEventListener('click', function(){
 });
 
 var loginButton = Ti.UI.createButton({
-	backgroundImage:IMAGE_PATH+'intro_login/Login_button.png',
-	width:175,
-	height:56,
-	top:45
+	backgroundImage:IMAGE_PATH+'intro_login/login_btn.png',
+	width:156,
+	height:50,
+	top:230,
+	left:1
 });
 
-initialWindowBackground.add(loginButton);
-initialWindow.add(initialWindowBackground);
+initialWindow.add(loginButton);
 
 loginButton.addEventListener('click', function(){
 	
@@ -52,3 +44,25 @@ loginButton.addEventListener('click', function(){
 	CURRENT_VIEW = VIEW_LOGIN;
 	loginWindow.open();
 });
+
+var takeTourButton = Ti.UI.createButton({
+	backgroundImage:IMAGE_PATH+'intro_login/takeTheTour.png',
+	width:320,
+	height:49,
+	top:285
+});
+initialWindow.add(takeTourButton);
+
+takeTourButton.addEventListener('click', function(){
+	
+});
+
+var gradientImage = Ti.UI.createImageView({
+	image:IMAGE_PATH+'intro_login/gradient.png',
+	bottom:0,
+	width:320,
+	right:320
+});
+initialWindow.add(gradientImage);
+
+gradientImage.animate({right:0, duration:800});

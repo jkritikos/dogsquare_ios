@@ -369,10 +369,22 @@ function editDog(dogObject){
 
 //Saves a dog object in the local db
 function saveDog(dogObject){
+	Ti.API.info('saveDog() called');
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
-	db.execute('insert into dogs (breed_id,dog_id,name,age,weight,mating,gender,photo,thumb) values (?,?,?,?,?,?,?,?,?)', dogObject.breed_id, dogObject.dog_id, dogObject.name, dogObject.age, dogObject.weight, dogObject.mating, dogObject.gender, dogObject.photo_filename, dogObject.thumb_path);
+	db.execute('insert into dogs (breed_id,dog_id,name,age,weight,size,mating,gender,photo,thumb) values (?,?,?,?,?,?,?,?,?,?)', dogObject.breed_id, dogObject.dog_id, dogObject.name, dogObject.age, dogObject.weight, dogObject.size, dogObject.mating, dogObject.gender, dogObject.photo_filename, dogObject.thumb_path);
 	var dogId = db.lastInsertRowId;
+	db.close();
+}
+
+//edit dog in local db
+function editDogLocal(dogObject){
+	Ti.API.info('editDogLocal() called');
+	
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	db.execute('update dogs set breed_id=?, name=?, age=?, weight=?, size=?, mating=?, gender=?, photo=?, thumb=? where dog_id=?', dogObject.breed_id, dogObject.name, dogObject.age, dogObject.weight, dogObject.size, dogObject.mating, dogObject.gender, dogObject.photo_filename, dogObject.thumb_path, dogObject.dog_id);
+	
 	db.close();
 }
 
@@ -423,7 +435,8 @@ function getDogById(dogId){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	var dogRows = [];
 	
-	var rows = db.execute('select dog_id, name, photo, weight, gender, age, breed_id from dogs where dog_id=?', dogId);
+	var rows = db.execute('select d.dog_id, d.name, d.photo, d.weight, d.gender, d.age, d.breed_id, db.name, d.size, d.mating , d.thumb from dogs d inner join dog_breeds db on (d.breed_id=db.id) where d.dog_id=?', dogId);
+
 	while (rows.isValidRow()) {
 
 	  	var obj = {
@@ -434,6 +447,10 @@ function getDogById(dogId){
 			gender:rows.field(4),
 			age:rows.field(5),
 			breed_id:rows.field(6),
+			breed:rows.field(7),
+			size:rows.field(8),
+			mating:rows.field(9),
+			thumb:rows.field(10)
 		};
 		
 	  	dogRows.push(obj);	
@@ -1412,7 +1429,7 @@ function createDB(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
 	db.execute('create table if not exists DOGFUEL_RULES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"user_id\" integer,\"walk_distance\" integer, \"playtime\" integer )');
-	db.execute('create table if not exists DOGS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"dog_id\" integer, \"name\" varchar(128), \"age\" integer, \"weight\" integer, \"mating\" integer, \"gender\" integer, \"photo\" varchar(128), \"thumb\" varchar(128))');
+	db.execute('create table if not exists DOGS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"dog_id\" integer, \"name\" varchar(128), \"age\" integer, \"weight\" integer, \"size\" integer, \"mating\" integer, \"gender\" integer, \"photo\" varchar(128), \"thumb\" varchar(128))');
 	db.execute('create table if not exists ACTIVITIES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"start_date\" real, \"start_time\" real, \"end_time\" real, \"type_id\" integer, \"temperature\" integer, \"pace\" real, \"distance\" real, \"activity_id\" integer, \"sync\" integer)');
 	db.execute('create table if not exists ACTIVITY_DOGS (\"activity_id\" integer, \"dog_id\" integer, \"walk_distance\" real, \"playtime\" integer, \"dogfuel\" integer)');
 	db.execute('create table if not exists ACTIVITY_COORDINATES (\"activity_id\" integer, \"lat\" real, \"lon\" real, \"log_time\" real, \"dt\" real, \"distance\" real)');

@@ -1,3 +1,5 @@
+var viewAddDog = null;
+
 //Add dog view
 var viewAddDog = Ti.UI.createView({
 	backgroundColor:UI_BACKGROUND_COLOR
@@ -9,8 +11,20 @@ var GENDER_PICKER = 2;
 var MATTING_PICKER = 3;
 var SIZE_PICKER = 4;
 
+var selectedPickerDogBreed = 0;
+var selectedPickerSize = 0;
+var selectedPickerGender = 0;
+var selectedPickerMating = 0;
+
 //UI components
 var addDogPickerType = null;
+
+var ADD_DOG_USE = 1;
+var EDIT_DOG_USE = 2;
+
+var editDogId = null;
+
+var addDogInteractionType = ADD_DOG_USE;
 
 var addDogObject = {};
 
@@ -26,15 +40,6 @@ var addDogSaveButton = Ti.UI.createButton({
 navController.getWindow().setRightNavButton(addDogSaveButton);
 addDogSaveButton.addEventListener('click', handleAddDogSaveButton);
 
-//photo button preview image
-var imageThumbnailPreviewImageView = Ti.UI.createImageView({
-	borderRadius:39,
-	top:30,
-	zIndex:10
-});
-
-addDogScrollBackground.add(imageThumbnailPreviewImageView);
-
 //photo button
 var addDogPhotoButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'add_dog/place_photo.png',
@@ -42,6 +47,14 @@ var addDogPhotoButton = Ti.UI.createButton({
 	height:101,
 	top:19
 });
+
+//photo button preview image
+var imageThumbnailPreviewImageView = Ti.UI.createImageView({
+	borderRadius:39,
+	zIndex:2
+});
+
+addDogPhotoButton.add(imageThumbnailPreviewImageView);
 
 //photo label
 var addDogPhotoLabel = Ti.UI.createLabel({
@@ -229,6 +242,7 @@ var addDogPicker = Ti.UI.createPicker({
   bottom:-216
 });
 viewAddDog.add(addDogPicker);
+addDogPicker.addEventListener("change", handleAddDogPickerChange);
 
 //picker data
 var genderPicker = [];
@@ -255,10 +269,10 @@ for(i=0;i<addDogViewBreeds.length;i++){
 
 var sizePicker = [];
 
-sizePicker[0]=Ti.UI.createPickerRow({title:'S', id:1});
-sizePicker[1]=Ti.UI.createPickerRow({title:'M', id:2});
-sizePicker[2]=Ti.UI.createPickerRow({title:'L', id:3});
-sizePicker[3]=Ti.UI.createPickerRow({title:'XL', id:4});
+sizePicker[0]=Ti.UI.createPickerRow({title:'Small', id:1});
+sizePicker[1]=Ti.UI.createPickerRow({title:'Medium', id:2});
+sizePicker[2]=Ti.UI.createPickerRow({title:'Large', id:3});
+sizePicker[3]=Ti.UI.createPickerRow({title:'X-Large', id:4});
 
 var mattingPicker = [];
 	
@@ -305,21 +319,24 @@ function addDogHandlePicker(e){
     addDogFieldName.blur();
 	addDogFieldAge.blur();
 	
-    
     var picker = e.source.picker;
     //add data for specified picker
 	if(picker === DOG_BREED_PICKER){
 		addDogScrollBackground.scrollTo(0,60);
 		addDogPicker.add(dogBreedPicker);
+		addDogPicker.setSelectedRow(0, 4, true);
 	}else if(picker === GENDER_PICKER){
 		addDogPicker.add(genderPicker);
 		addDogScrollBackground.scrollTo(0,183);
+		//addDogPicker.setSelectedRow(selectedPickerGender, false);
 	}else if(picker === MATTING_PICKER){
 		addDogPicker.add(mattingPicker);
 		addDogScrollBackground.scrollTo(0,224);
+		//addDogPicker.setSelectedRow(selectedPickerMating, false);
 	}else if(picker === SIZE_PICKER){
 		addDogPicker.add(sizePicker);
 		addDogScrollBackground.scrollTo(0,142);
+		//addDogPicker.setSelectedRow(selectedPickerSize, false);
 	}
 	
 	addDogPicker.selectionIndicator = true;
@@ -577,6 +594,7 @@ function doSaveDogOnline(dObj){
 			var dogProfileView = buildDogProfileView(dObj.dog_id);
 		
 			navController.getWindow().add(dogProfileView);
+			closeOpenWindows();
 		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
 			Ti.API.error('Unauthorised request - need to login again');
 			showLoginPopup();
@@ -613,7 +631,7 @@ function validateDogForm(){
 		alert('AGE IS MISSING OR NOT A NUMBER');
 		return false;
 	} else if(addDogFieldSizeHintTextLabel.id == null){
-		alert('WEIGHT IS MISSING');
+		alert('SIZE IS MISSING');
 		return false;
 	}else if(addDogFieldGenderHintTextLabel.id == null){
 		alert('GENDER IS MISSING');
@@ -641,8 +659,200 @@ function handleAddDogSaveButton(){
 	
 	if(validateDogForm()){
 		Ti.API.info('dog form is valid');
-		doSaveDogOnline(addDogObject);	
+		if(addDogInteractionType == ADD_DOG_USE){
+			doSaveDogOnline(addDogObject);	
+		}else if(addDogInteractionType == EDIT_DOG_USE){
+			doEditDogOnline(addDogObject);
+		}
 	}else{
 		Ti.API.info('dog form is not valid');
+	}
+}
+
+function updateAddDogView(id){
+	addDogInteractionType = EDIT_DOG_USE;
+	
+	editDogId = id;
+	
+	var dogObj = getDogById(id);
+	
+	//update image thumbnail - TODO get photo from online - it works when we have local filename
+	/*var filename = Titanium.Filesystem.applicationDataDirectory + dogObj[0].photo;
+	addDogObject.photo_filename = dogObj[0].photo;
+	
+	var image = Titanium.Filesystem.getFile(filename);
+	var photo = image.toBlob();
+	
+	//Jpeg compression module
+	var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
+	jpgcompressor.setCompressSize(200000);
+	jpgcompressor.setWorstCompressQuality(0.40);
+	
+	var compressedPhoto = jpgcompressor.compress(photo);
+	addDogObject.photo = compressedPhoto;
+	
+	//Create thumbnail
+	var photoThumbnail = photo.imageAsThumbnail(60,0,30);
+	addDogObject.thumb = photoThumbnail;
+	
+	var photoThumbnailPreview = photo.imageAsThumbnail(78,0,39);
+	imageThumbnailPreviewImageView.image = photoThumbnailPreview;*/
+	
+	//update name
+	addDogFieldName.value = dogObj[0].name;
+	addDogFieldNameHintTextLabel.hide();
+	addDogObject.name = dogObj[0].name;
+	
+	//update dog breed
+	addDogFieldDogBreedHintTextLabel.text = dogObj[0].breed;
+	addDogFieldDogBreedHintTextLabel.color = 'black';
+	addDogFieldDogBreedHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+	selectedPickerDogBreed = dogObj[0].breed_id;
+	addDogFieldDogBreedHintTextLabel.opacity = 1;
+	addDogObject.breed_id = dogObj[0].breed_id;
+	addDogFieldDogBreedHintTextLabel.id = dogObj[0].breed_id;
+	
+	//update age
+	addDogFieldAge.value = dogObj[0].age;
+	addDogObject.age = dogObj[0].age;
+	
+	//update size
+	var size = getSize(dogObj[0].size);
+	
+	addDogFieldSizeHintTextLabel.text = size.label;
+	addDogFieldSizeHintTextLabel.color = 'black';
+	addDogFieldSizeHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+	selectedPickerSize = dogObj[0].size;
+	addDogFieldSizeHintTextLabel.opacity = 1;
+	addDogObject.size = dogObj[0].size;
+	addDogFieldSizeHintTextLabel.id = dogObj[0].size;
+	
+	//update gender
+	var genderLabel = '';
+	
+	if(dogObj[0].gender == 1){
+		genderLabel = 'Male';
+	}else{
+		genderLabel = 'Female';
+	}
+	
+	addDogFieldGenderHintTextLabel.text = genderLabel;
+	addDogFieldGenderHintTextLabel.color = 'black';
+	addDogFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+	selectedPickerGender = dogObj[0].gender;
+	addDogFieldGenderHintTextLabel.opacity = 1;
+	addDogObject.gender = dogObj[0].gender;
+	addDogFieldGenderHintTextLabel.id = dogObj[0].gender;
+	
+	//update mating
+	var matingLabel = '';
+	
+	if(dogObj[0].mating == 1){
+		matingLabel = 'Yes';
+	}else{
+		matingLabel = 'No';
+	}
+	
+	addDogFieldMattingHintTextLabel.text = matingLabel;
+	addDogFieldMattingHintTextLabel.color = 'black';
+	addDogFieldMattingHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+	selectedPickerMating = dogObj[0].mating;
+	addDogFieldMattingHintTextLabel.opacity = 1;
+	addDogObject.mating = dogObj[0].mating;
+	addDogFieldMattingHintTextLabel.id = dogObj[0].mating;
+	
+	addDogObject.weight = 0;
+}
+
+//Server call to edit dog profile
+function doEditDogOnline(dObj){
+	Ti.API.info('doEditDogOnline() called with dogObject='+dObj + 'and dog_id=' + editDogId); 	
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in doEditDogOnline() '+e);
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('doEditDogOnline() got back from server '+this.responseText); 	
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			//Add the server dog id to the object
+			dObj.dog_id = editDogId;
+			dObj.thumb_path = jsonData.data.thumb;
+			
+			Ti.API.info('doEditDogOnline() got back dog id from server '+jsonData.data.dog_id);
+			editDogLocal(dObj);
+			
+			/*var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);*/
+			//populate right menu dogs
+			populateRightMenu(getDogs());
+			
+			navController.getWindow().setRightNavButton(rightBtn);
+			
+			Ti.include('ui/iphone/dog_profile.js');
+			var dogProfileView = buildDogProfileView(dObj.dog_id);
+		
+			navController.getWindow().add(dogProfileView);
+			closeOpenWindows();
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else {
+			alert(getErrorMessage(jsonData.response));
+		}
+	};
+	
+	xhr.setRequestHeader("Content-Type", "multipart/form-data");
+	xhr.open('POST',API+'editDog');
+	xhr.send({
+		user_id:userObject.userId,
+		dog_id:editDogId,
+		photo:dObj.photo,
+		thumb:dObj.thumb,
+		name:dObj.name,
+		weight:dObj.weight,
+		size:dObj.size,
+		age:dObj.age,
+		breed_id:dObj.breed_id,
+		gender:dObj.gender,
+		mating:dObj.mating,
+		edit:true,
+		token:userObject.token
+	});
+}
+
+function handleAddDogPickerChange(e){
+	if(addDogPickerType == DOG_BREED_PICKER){
+		addDogFieldDogBreedHintTextLabel.color = 'black';
+		addDogFieldDogBreedHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		addDogFieldDogBreedHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
+		addDogFieldDogBreedHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
+		addDogFieldDogBreedHintTextLabel.opacity = 1;
+	}else if(addDogPickerType == GENDER_PICKER){
+		addDogFieldGenderHintTextLabel.color = 'black';
+		addDogFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		addDogFieldGenderHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
+		addDogFieldGenderHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
+		addDogFieldGenderHintTextLabel.opacity = 1;
+	}else if(addDogPickerType == MATTING_PICKER){
+		addDogFieldMattingHintTextLabel.color = 'black';
+		addDogFieldMattingHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		addDogFieldMattingHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
+		addDogFieldMattingHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
+		addDogFieldMattingHintTextLabel.opacity = 1;
+	}else if(addDogPickerType == SIZE_PICKER){
+		addDogFieldSizeHintTextLabel.color = 'black';
+		addDogFieldSizeHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+		addDogFieldSizeHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
+		addDogFieldSizeHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
+		addDogFieldSizeHintTextLabel.opacity = 1;
 	}
 }
