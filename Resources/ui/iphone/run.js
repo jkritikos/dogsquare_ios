@@ -30,6 +30,8 @@ var timestampPrevious = 0;
 var tick = 0;
 
 function buildRunView(){
+	var iphone5Offset = 30;
+	
 	//Reset cronometer
 	horas = 0, minutos = 0, segundos = 0, total_seconds = 0;
 	
@@ -44,7 +46,7 @@ function buildRunView(){
 
 	runDistanceValueLabel = Ti.UI.createLabel({
 		text:'0.00',
-		top:115,
+		top:IPHONE5 ? 115+iphone5Offset : 115,
 		left:33,
 		color:UI_COLOR_RUN,
 		font:{fontSize:82, fontWeight:'bold', fontFamily:'Open Sans'}
@@ -52,7 +54,7 @@ function buildRunView(){
 
 	runDistanceUnitLabel = Ti.UI.createLabel({
 		text:'km',
-		top:156,
+		top:IPHONE5 ? 156+iphone5Offset : 156,
 		right:40,
 		color:UI_COLOR_RUN,
 		font:{fontSize:41, fontWeight:'bold', fontFamily:'Open Sans'}
@@ -75,7 +77,7 @@ function buildRunView(){
 	
 	runAvgPaceMinuteLabel = Ti.UI.createLabel({
 		text:'0.0',
-		top:216,
+		top:IPHONE5? 216+iphone5Offset : 216,
 		left:35,
 		color:UI_COLOR_RUN,
 		font:{fontSize:27, fontWeight:'bold', fontFamily:'Open Sans'}
@@ -83,7 +85,7 @@ function buildRunView(){
 	
 	var runAvgPaceLabel = Ti.UI.createLabel({
 		text:'Avg pace',
-		top:251,
+		top:IPHONE5? 251+iphone5Offset : 251,
 		left:25,
 		color:UI_COLOR_RUN,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
@@ -91,14 +93,14 @@ function buildRunView(){
 	
 	runDurationValueLabel = Ti.UI.createLabel({
 		text:'0:00:00',
-		top:216,
+		top:IPHONE5? 216+iphone5Offset : 216,
 		color:UI_COLOR_RUN,
 		font:{fontSize:27, fontWeight:'bold', fontFamily:'Open Sans'}
 	});
 	
 	var runDurationLabel = Ti.UI.createLabel({
 		text:'Duration',
-		top:251,
+		top:IPHONE5? 251+iphone5Offset : 251,
 		color:UI_COLOR_RUN,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -108,13 +110,13 @@ function buildRunView(){
 		right:52,
 		width:26,
 		height:23,
-		top:228
+		top:IPHONE5? 228+iphone5Offset : 228
 	});
 	runMapButton.addEventListener('click', handleMapButton);
 	
 	var runMapLabel = Ti.UI.createLabel({
 		text:'View map',
-		top:251,
+		top:IPHONE5? 251+iphone5Offset : 251,
 		right:25,
 		color:UI_COLOR_RUN,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}

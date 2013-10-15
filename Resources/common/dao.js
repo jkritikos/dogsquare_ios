@@ -30,6 +30,7 @@ if(Ti.Platform.displayCaps.density == 'high'){
 	RETINA_DEVICE = true;
 }
 
+
 //Language constants
 var LANGUAGE_ENGLISH = 1;
 
@@ -879,7 +880,7 @@ function saveActivityOnline(id){
 function endActivity(obj){
 	var now = new Date().getTime();
 	
-	Ti.API.info('updateActivity() called for activity id '+obj.activity_id+' with walk '+obj.walk+' and play '+obj.play);
+	Ti.API.info('updateActivity() called for activity id '+obj.activity_id);
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
 	db.execute('update activities set end_time=?, temperature=?, pace=?,distance=? where id=?',now,obj.temperature,obj.pace,obj.distance,obj.activity_id);
@@ -959,6 +960,8 @@ function getActivity(id){
 
 //Returns the dog related info for the specified activity
 function getActivityDetails(id){
+	//Ti.API.info('getActivityDetails() called for activity '+id);
+	
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
 	var info = [];
@@ -966,6 +969,8 @@ function getActivityDetails(id){
 	var sql = 'select ad.dog_id, d.name, d.photo, d.breed_id, dr.walk_distance, dr.playtime from activity_dogs ad inner join dogs d on (ad.dog_id=d.dog_id) left join DOGFUEL_RULES dr on (d.breed_id=dr.breed_id) where ad.activity_id=?';
 	var rows = db.execute(sql, id);
 	while (rows.isValidRow()){
+		
+		//Ti.API.info('Found dog '+rows.field(0)+' for activity '+id);
 		
 		var obj = {
 			dog_id:rows.field(0),
@@ -1053,7 +1058,6 @@ function calculateDogfuel(activityId){
 	
 	var debug = '';
 	for(var i=0; i < coordinateData.length; i++){
-		
 		currentActivityMode = coordinateData[i].mode;
 		
 		//Distance from previous row
@@ -1071,30 +1075,15 @@ function calculateDogfuel(activityId){
 		} else if(currentActivityMode == ACTIVITY_MODE_WALKING){
 			totalWalkDistance += currentDistanceFormated;
 		}
-		/*
-		if(coordinateData[i].distance != null){
-			if(currentDistanceFormated > PLAYTIME_THRESHOLD){
-				Ti.API.info('      *** '+currentDistanceFormated+' is > than '+PLAYTIME_THRESHOLD+' - so, counting this row as WALK');
-				debug += '      *** '+currentDistanceFormated+' is > than '+PLAYTIME_THRESHOLD+' - so, counting this row as WALK';
-				totalWalkDistance += currentDistanceFormated;	
-			} else {
-				Ti.API.info('      *** '+currentDistanceFormated+' is <= than '+PLAYTIME_THRESHOLD+' - so, counting this row as PLAY');
-				debug += '      *** '+currentDistanceFormated+' is <= than '+PLAYTIME_THRESHOLD+' - so, counting this row as PLAY';
-				totalPlaytime += coordinateData[i].dt;
-			}
-		} else {
-			Ti.API.info(' *** Null distance for row '+i);
-		}
-		*/
 		
-		Ti.API.info(' *** Checkpoint: mode: '+currentActivityMode+' lat: '+coordinateData[i].lat+' lon '+coordinateData[i].lon+ ' total distance '+coordinateData[i].distance+' - Did '+currentDistanceFormated+' in '+coordinateData[i].dt+' ms');
+		Ti.API.info(' *** Checkpoint: lat: '+coordinateData[i].lat+' lon '+coordinateData[i].lon+ ' total distance '+coordinateData[i].distance+' - Did '+currentDistanceFormated+' in '+coordinateData[i].dt+' ms');
 	}
 	
 	//Convert to minutes
 	totalPlaytime = (totalPlaytime / 1000) / 60;
 	
 	//alert(debug);
-	Ti.API.info(' *** totalWalkDistance '+totalWalkDistance+' Km, totalPlaytime '+totalPlaytime+' ms');
+	Ti.API.info(' *** totalWalkDistance '+totalWalkDistance+' Km, totalPlaytime '+totalPlaytime+' minutes');
 	//alert(' *** totalWalkDistance '+totalWalkDistance+' Km, totalPlaytime '+totalPlaytime+' ms');
 	
 	//TODO update activity_dogs with dogfuel value
@@ -1476,7 +1465,7 @@ function saveDogfuelRules(obj){
 				db.execute('insert into DOGFUEL_RULES (breed_id, walk_distance, playtime) values (?,?,?)', obj[i].DogfuelRule.breed_id, obj[i].DogfuelRule.walk_distance, obj[i].DogfuelRule.playtime);
 			}
 		}
-	
+ 	
 		Ti.API.info('saveDogfuelRules() saved '+obj.length+' rows');
 	} else {
 		Ti.API.info('saveDogfuelRules() NO data to save');
