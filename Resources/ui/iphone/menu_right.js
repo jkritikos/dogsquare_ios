@@ -241,6 +241,7 @@ function handleTableViewRows(e){
 		navController.getWindow().setTitleControl();
 		
 		Ti.include('ui/iphone/add_dog.js');
+		builAddDogView(TARGET_MODE_REUSE);
 		navController.getWindow().add(viewAddDog);
 		navController.getWindow().setTitle('Add new dog');
 		

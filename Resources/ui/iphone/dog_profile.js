@@ -318,8 +318,6 @@ function deleteDogProfile(){
 function editDogProfile(){
 	Ti.include('ui/iphone/add_dog.js');
 	
-	updateAddDogView(dogProfileDogId);
-	
 	var addDogWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
 		barImage:IMAGE_PATH+'common/bar.png',
@@ -337,17 +335,19 @@ function editDogProfile(){
 	
 	//event listener for back button
 	addDogBackButton.addEventListener("click", function() {
-		navController.getWindow().setRightNavButton(dogProfileEditButton);
 	    navController.close(addDogWindow);
 	});
 	
 	//Revert to the standard right window button
-	addDogWindow.setRightNavButton(addDogSaveButton);
 	addDogWindow.leftNavButton = addDogBackButton;
 	
-	addDogWindow.add(viewAddDog);
-		
 	openWindows.push(addDogWindow);
+	
+	builAddDogView(TARGET_MODE_NEW_WINDOW);
+	updateAddDogView(dogProfileDogId);
+	
+	addDogWindow.add(viewAddDog);
+	
 	navController.open(addDogWindow);
 }
 
@@ -873,9 +873,9 @@ function openAddDogView(){
 	});
 	
 	//Revert to the standard right window button
-	addDogWindow.rightNavButton = addDogSaveButton;
 	addDogWindow.leftNavButton = leftBtn;
 	
+	builAddDogView(TARGET_MODE_NEW_WINDOW);
 	addDogWindow.add(viewAddDog);
 		
 	openWindows.push(addDogWindow);
