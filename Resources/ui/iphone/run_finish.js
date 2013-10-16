@@ -360,20 +360,18 @@ function populateRunFinishTableView(o){
 		//bone image
 		var rowBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_grey.png',
-			right:14,
+			left:210,
 			top:20
 		});
 		
 		row.add(rowBoneImage);
 	
 		//bone fill image
-		var boneFillImageBlobCropped = createCroppedBoneImage(VIEW_RUN_FINISH,50);
+		var croppedDataObject = createCroppedBoneImage(VIEW_RUN_FINISH,data.dogs[i].dogfuel);
 		var rowBoneFillImage = Ti.UI.createImageView({ 
-			//image:IMAGE_PATH+'run_finish/bone_colours.png',
-			image:boneFillImageBlobCropped,
-			width: RETINA_DEVICE ? boneFillImageBlobCropped.width / 2 : boneFillImageBlobCropped.width,
-			height: RETINA_DEVICE ? boneFillImageBlobCropped.height / 2 : boneFillImageBlobCropped.height,
-			//right:14,
+			image:croppedDataObject.photo,
+			width: croppedDataObject.view_width,
+			height:30,
 			left:210,
 			top:20,
 			zIndex:2
@@ -396,7 +394,7 @@ function populateRunFinishTableView(o){
 		
 		//mood percent label
 		var rowMoodPercentLabel = Titanium.UI.createLabel({ 
-			text:'14%',
+			text:data.dogs[i].dogfuel + '%',
 			color:'999900',
 			height:15,
 			textAlign:'center',

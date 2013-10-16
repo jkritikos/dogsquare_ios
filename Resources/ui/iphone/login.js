@@ -285,6 +285,7 @@ function checkLoginCredentials(lObj){
 				dogObj.thumb_path = jsonData.data.dogs[i].Dog.thumb;
 				dogObj.mating = jsonData.data.dogs[i].Dog.mating;
 				dogObj.size = jsonData.data.dogs[i].Dog.size;
+				dogObj.dogfuel = jsonData.data.dogs[i].Dog.dogfuel;
 				
 				//Save dog data
 				saveDog(dogObj);

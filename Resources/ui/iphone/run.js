@@ -78,7 +78,9 @@ function buildRunView(){
 	runAvgPaceMinuteLabel = Ti.UI.createLabel({
 		text:'0.0',
 		top:IPHONE5? 216+iphone5Offset : 216,
-		left:35,
+		left:12,
+		width:85,
+		textAlign:'center',
 		color:UI_COLOR_RUN,
 		font:{fontSize:27, fontWeight:'bold', fontFamily:'Open Sans'}
 	});

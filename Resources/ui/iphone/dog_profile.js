@@ -11,6 +11,8 @@ var dogProfileView = null;
 var dogProfileMyDog = false;
 var dogProfileDogId = null;	
 var dogProfileEditDialog = null;
+var dogProfileMoodPercentLabel = null;
+var dogProfileBoneImageColor = null;
 
 var dogProfileEditButton = null;
 	
@@ -101,7 +103,7 @@ function buildDogProfileView(dogId){
 		
 		dogProfileMatingBackground = Titanium.UI.createImageView({
 			bottom:IPHONE5 ? 55 : 5,
-			right:77
+			right:81
 		});
 		dogProfileView.add(dogProfileMatingBackground);
 	
@@ -250,7 +252,7 @@ function buildDogProfileView(dogId){
 		});
 		dogProfileView.add(dogProfileMoodLabel);
 		
-		var dogProfileMoodPercentLabel = Titanium.UI.createLabel({ 
+		dogProfileMoodPercentLabel = Titanium.UI.createLabel({ 
 			text:'53%',
 			color:'999900',
 			height:'auto',
@@ -269,14 +271,15 @@ function buildDogProfileView(dogId){
 		});
 		dogProfileView.add(dogProfileBoneImage);
 		
-		var boneFillImageBlobCropped = createCroppedBoneImage(VIEW_DOG_PROFILE,50);
-		var dogProfileBoneImageColor = Ti.UI.createImageView({ 
-			image:boneFillImageBlobCropped,
+		
+		dogProfileBoneImageColor = Ti.UI.createImageView({ 
+			//image:croppedDataObject.photo,
 			bottom:IPHONE5 ? 96 : 44,
-			width: RETINA_DEVICE ? boneFillImageBlobCropped.width / 2 : boneFillImageBlobCropped.width,
-			height: RETINA_DEVICE ? boneFillImageBlobCropped.height / 2 : boneFillImageBlobCropped.height,
+			//width: croppedDataObject.view_width,
+			height: 45,
 			left:143,
-			zIndex:2
+			zIndex:2,
+			visible:false
 		});
 		
 		dogProfileView.add(dogProfileBoneImageColor);
@@ -799,6 +802,7 @@ function updateDogProfile(dogObj){
     dogProfileSizeNumberLabel.text = sizeObj.label;
     dogProfileSizeNumberLabel.left = sizeObj.left;
     dogProfileLikesNumberLabel.text = dogObj.likes;
+    
     if(dogObj.mating == 1){
     	dogProfileMatingBackground.image = IMAGE_PATH+'dog_profile/badge_matting.png';
     }else{
@@ -819,10 +823,20 @@ function updateDogProfile(dogObj){
     if(dogObj.liked == null){
 		dogProfileHeartImage.image = IMAGE_PATH+'common/best_icon_default.png';
 		dogProfileHeartImage.toggle = false;
-	}else{
+	} else{
 		dogProfileHeartImage.image = IMAGE_PATH+'common/best_icon_selected_red.png';
 		dogProfileHeartImage.toggle = true;
 	}
+	
+	//Show dogfuel value and colored bone image
+	if(dogObj.dogfuel != null){
+		dogProfileMoodPercentLabel.text = dogObj.dogfuel + '%';
+		var croppedDataObject = createCroppedBoneImage(VIEW_DOG_PROFILE,dogObj.dogfuel);
+		dogProfileBoneImageColor.width = croppedDataObject.view_width;
+		dogProfileBoneImageColor.image = croppedDataObject.photo;
+		dogProfileBoneImageColor.show();
+	}
+	
 }
 
 function handleDogLikesButton(e){

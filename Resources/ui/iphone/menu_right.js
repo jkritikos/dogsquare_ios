@@ -34,8 +34,6 @@ function getSelectedDogs(){
 function populateRightMenu(dogObject){
 	
 	var rightMenuData = [];
-	//temporary arrays
-	var percent = ['76 %', '53 %', '39 %'];
 	
 	//add dog row - buttton
 	var rightMenuAddDogRow = Ti.UI.createTableViewRow({
@@ -137,14 +135,14 @@ function populateRightMenu(dogObject){
 		
 		//dog percent label inside the dog row - right menu row
 		var rowDogPercentLabel = Titanium.UI.createLabel({ 
-			text:percent[i],
+			text:dogObject[i].dogfuel+'%',
 			color:'ab7b04',
 			height:18,
 			width:35,
 			textAlign:'left',
 			left:184,
 			top:50,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'},
 			type:TYPE_SELECT_ROW
 		});
 		
@@ -156,13 +154,12 @@ function populateRightMenu(dogObject){
 			type:TYPE_SELECT_ROW
 		});
 		
-		//grey bone image inside the dog row - right menu row
-		var boneFillImageBlobCropped = createCroppedBoneImage(VIEW_RIGHT_MENU,50);
+		//color bone image inside the dog row - right menu row
+		var croppedDataObject = createCroppedBoneImage(VIEW_RIGHT_MENU,dogObject[i].dogfuel);
 		var rowColorBoneImage = Ti.UI.createImageView({ 
-			//image:IMAGE_PATH+'menu_right/bone_colours.png',
-			image:boneFillImageBlobCropped,
-			width: RETINA_DEVICE ? boneFillImageBlobCropped.width / 2 : boneFillImageBlobCropped.width,
-			height: RETINA_DEVICE ? boneFillImageBlobCropped.height / 2 : boneFillImageBlobCropped.height,
+			image:croppedDataObject.photo,
+			width: croppedDataObject.view_width,
+			height:22,
 			left:239,
 			top:50,
 			type:TYPE_SELECT_ROW,

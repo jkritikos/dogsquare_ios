@@ -50,21 +50,36 @@ function isWithinRange(input, min, max){
 //Hack for cropping images for retina/non-retina devices - creates the blob in the correct dimensions
 function createCroppedBoneImage(view, dogfuelValue){
 	var boneFillImage = null;
+	var targetHeightForCropping, targetWidthForCropping, viewWidth, viewHeight = 0;
+	
+	var boneFillImageBlob = null;
+	
 	if(view == VIEW_DOG_PROFILE){
 		boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'dog_profile/bone_colours.png');
+		boneFillImageBlob = boneFillImage.toBlob();
+		targetHeightForCropping = RETINA_DEVICE ? 90 : 45;
 	} else if(view == VIEW_RUN_FINISH || view == VIEW_ACTIVITY_NEW){
 		boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'run_finish/bone_colours.png');
+		boneFillImageBlob = boneFillImage.toBlob();
+		targetHeightForCropping = RETINA_DEVICE ? 60 : 30;
 	} else {
 		boneFillImage = Titanium.Filesystem.getFile(IMAGE_PATH+'menu_right/bone_colours.png');
+		boneFillImageBlob = boneFillImage.toBlob();
+		targetHeightForCropping = RETINA_DEVICE ? 44 : 22;
 	}
 	
-	var boneFillImageBlob = boneFillImage.toBlob();
-	var targetWidthForCropping = Math.round((dogfuelValue * boneFillImageBlob.width) / 100);
-	var targetHeightForCropping = RETINA_DEVICE ? (boneFillImageBlob.height * 2) : boneFillImageBlob.height;
-	Ti.API.info('createCroppedBoneImage() RETINA_DEVICE='+RETINA_DEVICE+' called with input file width:'+boneFillImageBlob.width+' height:'+boneFillImageBlob.height);
+	targetWidthForCropping =  RETINA_DEVICE ? 2 * Math.round((dogfuelValue * boneFillImageBlob.width) / 100) : Math.round((dogfuelValue * boneFillImageBlob.width) / 100);
+	viewWidth = RETINA_DEVICE? targetWidthForCropping / 2 : targetWidthForCropping;
+	
+	Ti.API.info('createCroppedBoneImage() RETINA_DEVICE='+RETINA_DEVICE+' called with input file width:'+boneFillImageBlob.width+' height:'+boneFillImageBlob.height+' CROPPING to w:'+targetWidthForCropping+' h:'+targetHeightForCropping);
 	var boneFillImageBlobCropped = boneFillImageBlob.imageAsCropped({y:0,x:0,width:targetWidthForCropping, height:targetHeightForCropping});
 	
-	return boneFillImageBlobCropped;
+	var obj = {
+		photo:boneFillImageBlobCropped,
+		view_width:viewWidth
+	};
+	
+	return obj;
 }
 
 //Custom import function imports only ONCE
