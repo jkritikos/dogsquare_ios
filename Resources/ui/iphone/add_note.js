@@ -15,6 +15,7 @@ var addNotePickerDoneButton = null;
 
 //UI components
 var selected = false;
+var selectedNoteDatePicker = false;
 
 var PICKER_TIME = 0;
 var PICKER_DATE = 1;
@@ -340,7 +341,7 @@ function handleAddNoteDateTimeLabel(e){
 			minDate.setDate(today.getDate());
 			
 			var maxDate = new Date();
-			maxDate.setFullYear(2020);
+			maxDate.setFullYear(today.getFullYear() + 20);
 			maxDate.setMonth(11);
 			maxDate.setDate(31);
 			
@@ -349,7 +350,11 @@ function handleAddNoteDateTimeLabel(e){
 			value.setMonth(today.getMonth());
 			value.setDate(today.getDate());
 			
-			addNoteDateTimePicker.value = value;
+			if(!selectedNoteDatePicker){
+				addNoteDateTimePicker.value = value;
+				selectedNoteDatePicker = true;
+			}
+			
 		}
 		//show date 
 		addNoteDateTimePicker.type = Ti.UI.PICKER_TYPE_DATE;
@@ -406,6 +411,9 @@ function handleAddNotePickerDoneButton(){
 	addNoteDateTimePicker.animate({bottom:-219, duration:500});
 	
 	openWindows[openWindows.length - 1].setRightNavButton(addNoteSaveButton);
+	
+	addNoteDateTimePicker.value = addNoteDateTimePicker.value;
+	
 }
 
 //handle picker when changed

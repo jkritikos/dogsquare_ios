@@ -43,7 +43,7 @@ function handleSettingsMenuTableRows(e){
 	var selectedItem = e.row.menu;
 	
 	if(selectedItem == MENU_EDIT_PROFILE){
-		
+		showEditProfileView();
 	} else if(selectedItem == MENU_TAKE_TOUR){
 		
 	} else if(selectedItem == MENU_REPORT_PROBLEM){
@@ -51,6 +51,35 @@ function handleSettingsMenuTableRows(e){
 	} else if(selectedItem == MENU_LOGOUT){
 		
 	}
+}
+
+function showEditProfileView(){
+	Ti.include('ui/iphone/profile_edit.js');
+	
+	var editProfileView = buildEditProfileView();
+	
+	var editProfileWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR
+	});
+	
+	//back button & event listener
+	var editProfileBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	editProfileWindow.setLeftNavButton(editProfileBackButton);
+	editProfileBackButton.addEventListener("click", function() {
+	    navController.close(editProfileWindow);
+	});
+	
+	editProfileWindow.add(editProfileView);
+	
+	openWindows.push(editProfileWindow);
+	navController.open(editProfileWindow);
 }
 
 //Opens an email dialog for reporting app problems

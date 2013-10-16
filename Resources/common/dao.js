@@ -255,12 +255,13 @@ function getBadgeDetails(id){
 //Updates the global user object - only keys in obj are updated
 function saveUserObject(obj){
 	Ti.API.info('saveUserObject '+JSON.stringify(obj));
+	
 	//image
-	if(obj.image_path){
+	if(typeof obj.image_path != 'undefined'){
 		userObject.image_path = obj.image_path;	
 	}
 	
-	if(obj.thumb_path){
+	if(typeof obj.thumb_path != 'undefined'){
 		userObject.thumb_path = obj.thumb_path;	
 	}
 	
@@ -302,6 +303,22 @@ function saveUserObject(obj){
 	
 	if(obj.token){
 		userObject.token = obj.token;
+	}
+	
+	if(obj.birth_date){
+		userObject.birth_date = obj.birth_date;	
+	}
+	
+	if(obj.country){
+		userObject.country = obj.country;	
+	}
+	
+	if(obj.address != null){
+		userObject.address = obj.address;	
+	}
+	
+	if(obj.newsletter){
+		userObject.newsletter = obj.newsletter;	
 	}
 	
 	if(obj.lat){
@@ -383,7 +400,11 @@ function editDogLocal(dogObject){
 	
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
-	db.execute('update dogs set breed_id=?, name=?, age=?, weight=?, size=?, mating=?, gender=?, photo=?, thumb=? where dog_id=?', dogObject.breed_id, dogObject.name, dogObject.age, dogObject.weight, dogObject.size, dogObject.mating, dogObject.gender, dogObject.photo_filename, dogObject.thumb_path, dogObject.dog_id);
+	if(typeof dogObject.photo == 'undefined'){
+		db.execute('update dogs set breed_id=?, name=?, age=?, weight=?, size=?, mating=?, gender=? where dog_id=?', dogObject.breed_id, dogObject.name, dogObject.age, dogObject.weight, dogObject.size, dogObject.mating, dogObject.gender, dogObject.dog_id);
+	}else{
+		db.execute('update dogs set breed_id=?, name=?, age=?, weight=?, size=?, mating=?, gender=?, photo=?, thumb=? where dog_id=?', dogObject.breed_id, dogObject.name, dogObject.age, dogObject.weight, dogObject.size, dogObject.mating, dogObject.gender, dogObject.photo_filename, dogObject.thumb_path, dogObject.dog_id);
+	}
 	
 	db.close();
 }
@@ -1379,6 +1400,26 @@ function savePlaceCategories(obj){
 	db.close();
 }
 
+//Updates the local db with the latest list of countries
+function saveCountries(obj){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	if(obj !=  null && obj.length > 0){
+		db.execute('delete from COUNTRIES');
+		
+		for(i=0; i < obj.length; i++){
+			Ti.API.info('saveCountries() saved country '+obj[i].Country.id);
+			db.execute('insert into COUNTRIES (id, name, active) values (?,?,?)', obj[i].Country.id, obj[i].Country.name, obj[i].Country.active);
+		}
+	
+		Ti.API.info('saveCountries() saved '+obj.length+' rows');
+	} else {
+		Ti.API.info('saveCountries() NO data to save');
+	}
+	
+	db.close();
+}
+
 function getPlaceCategories(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	var categoryRows = [];
@@ -1401,6 +1442,45 @@ function getPlaceCategories(){
 	return categoryRows;
 }
 
+// get all countries from local db
+function getCountries(){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	var countryRows = [];
+	
+	var rows = db.execute('select id, name, active from countries');
+	
+	while(rows.isValidRow()) {
+	  	var obj = {
+	  		id:rows.field(0),
+			name:rows.field(1),
+			active:rows.field(2)
+		};
+		
+	  	countryRows.push(obj);	
+	  	rows.next();
+	}
+	rows.close();
+	db.close();
+	
+	return countryRows;
+}
+
+//get country name by id for edit profile view
+function getCountryById(id){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	var rows = db.execute('select name from countries where id=?', id);
+	
+	while(rows.isValidRow()) {
+	  	var name = rows.field(0);
+	  	rows.next();
+	}
+	rows.close();
+	db.close();
+	
+	return name;
+}
+
 //Updates the local db with the list of dogfuel rules
 function saveDogfuelRules(obj){
 	
@@ -1417,6 +1497,7 @@ function cleanDB(){
 	db.execute('delete from PASSPORT');
 	db.execute('delete from INBOX');
 	db.execute('delete from DOG_BREEDS');
+	db.execute('delete from COUNTRIES');
 	db.execute('delete from MUTUAL_FOLLOWERS');
 	db.execute('delete from NOTIFICATIONS');
 	
@@ -1438,6 +1519,7 @@ function createDB(){
 	db.execute('create table if not exists DOG_BREEDS (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"origin\" varchar(256), \"weight_from\" integer, \"weight_to\" integer, \"kennel_club\" varchar(256), \"active\" integer)');
 	db.execute('create table if not exists MUTUAL_FOLLOWERS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_id\" integer, \"name\" varchar(256),\"thumb\" varchar(128))');
 	db.execute('create table if not exists PLACE_CATEGORIES (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"active\" integer)');
+	db.execute('create table if not exists COUNTRIES (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"active\" integer)');
 	db.execute('create table if not exists NOTIFICATIONS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from_id\" integer, \"user_from_name\" varchar(256), \"type_id\" integer, \"read\" integer, \"activity_id\" integer, \"badge_id\" integer, \"date\" real, \"user_from_thumb\" varchar(128))');
 	//db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from\" integer, \"user_to\" integer, \"date\" real, \"message\" text)');
 	

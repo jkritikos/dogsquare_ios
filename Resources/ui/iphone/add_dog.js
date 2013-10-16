@@ -14,6 +14,7 @@ var addDogFieldMattingHintTextLabel = null;
 var addDogToolbar = null;
 var addDogPicker = null;
 var addDogPhotoDialog = null;
+var addDogPickerBackground = null;
 
 //picker data
 var genderPicker = [];
@@ -134,11 +135,16 @@ function builAddDogView(windowMode){
 		addDogFieldName.addEventListener('change', handleAddDogTextFieldChange);
 		addDogFieldName.addEventListener('blur', handleAddDogTextFieldBlur);
 		
-		//Event listener for the name textfield
-		addDogFieldName.addEventListener('return', function() {
-		    addDogFieldDogBreedHintTextLabel.fireEvent('click');
-		    addDogScrollBackground.scrollTo(0,40);
-		});
+		//check if it is adding a dog or editing a dog - change functionality
+		if(viewAddDogTargetMode == TARGET_MODE_REUSE) {
+			//Event listener for the name textfield
+			addDogFieldName.addEventListener('return', function() {
+			    addDogFieldDogBreedHintTextLabel.fireEvent('click');
+			    addDogScrollBackground.scrollTo(0,40);
+			});
+		}else{
+			addDogFieldName.returnKeyType = Ti.UI.RETURNKEY_RETURN;
+		}
 		
 		addDogFormBackgroundView.add(addDogFieldName);
 		
@@ -184,11 +190,15 @@ function builAddDogView(windowMode){
 		addDogFieldAge.addEventListener('change', handleAddDogTextFieldChange);
 		addDogFieldAge.addEventListener('blur', handleAddDogTextFieldBlur);
 		
-		//Event listener for the age textfield
-		addDogFieldAge.addEventListener('return', function() {
-		   addDogFieldSizeHintTextLabel.fireEvent('click');
-		   addDogScrollBackground.scrollTo(0,107);
-		});
+		if(viewAddDogTargetMode == TARGET_MODE_REUSE) {
+			//Event listener for the age textfield
+			addDogFieldAge.addEventListener('return', function() {
+			   addDogFieldSizeHintTextLabel.fireEvent('click');
+			   addDogScrollBackground.scrollTo(0,107);
+			});
+		}else{
+			addDogFieldAge.returnKeyType = Ti.UI.RETURNKEY_RETURN;
+		}
 		
 		addDogFormBackgroundView.add(addDogFieldAge);
 		
@@ -261,25 +271,32 @@ function builAddDogView(windowMode){
 		    systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
 		});
 		
+		addDogPickerBackground = Titanium.UI.createView({
+		    height:260,
+		    bottom:-260
+		}); 
+		viewAddDog.add(addDogPickerBackground);
+		
 		addDogToolbar = Titanium.UI.iOS.createToolbar({
 		    items:[addDogFlexSpace, addDogPickerDoneButton],
 		    barColor:'999999',
-		    bottom:-44,
+		    top:0,
 		    borderTop:true,
 		    borderBottom:false
 		}); 
-		viewAddDog.add(addDogToolbar);
+		addDogPickerBackground.add(addDogToolbar);
 		
 		//picker
 		addDogPicker = Ti.UI.createPicker({
-		  bottom:-216
+		  bottom:0
 		});
-		viewAddDog.add(addDogPicker);
+		addDogPickerBackground.add(addDogPicker);
 		addDogPicker.addEventListener("change", handleAddDogPickerChange);
 		
 		//data for gender picker
 		genderPicker[0]=Ti.UI.createPickerRow({title:'Male', id:1});
 		genderPicker[1]=Ti.UI.createPickerRow({title:'Female', id:2});
+		addDogPicker.add(genderPicker);
 		
 		//data for dog breeds picker
 		var addDogViewBreeds = getDogBreeds();
@@ -344,6 +361,11 @@ function builAddDogView(windowMode){
 
 //handle picker data and animation
 function addDogHandlePicker(e){
+	
+	if(viewAddDogTargetMode == TARGET_MODE_REUSE) {
+		addDogPicker.setSelectedRow(0, 0, true);
+	}
+	
 	//clear all picker rows method
     clearPickerRows();
     
@@ -355,24 +377,50 @@ function addDogHandlePicker(e){
 	if(picker === DOG_BREED_PICKER){
 		addDogScrollBackground.scrollTo(0,60);
 		addDogPicker.add(dogBreedPicker);
-		addDogPicker.setSelectedRow(0, 4, true);
+		
+		//if user is editing
+		if(viewAddDogTargetMode != TARGET_MODE_REUSE) {
+			
+			//setSelectRow only the first time
+			if(selectedPickerDogBreed != 0){
+				addDogPicker.setSelectedRow(0, selectedPickerDogBreed-1, false);
+				selectedPickerDogBreed = 0;
+			}
+		}
 	}else if(picker === GENDER_PICKER){
 		addDogPicker.add(genderPicker);
 		addDogScrollBackground.scrollTo(0,183);
-		//addDogPicker.setSelectedRow(selectedPickerGender, false);
+		
+		if(viewAddDogTargetMode != TARGET_MODE_REUSE) {
+			if(selectedPickerGender != 0){
+				addDogPicker.setSelectedRow(0, selectedPickerGender-1, false);
+				selectedPickerGender = 0;
+			}
+		}
 	}else if(picker === MATTING_PICKER){
 		addDogPicker.add(mattingPicker);
 		addDogScrollBackground.scrollTo(0,224);
-		//addDogPicker.setSelectedRow(selectedPickerMating, false);
+		
+		if(viewAddDogTargetMode != TARGET_MODE_REUSE) {
+			if(selectedPickerMating != 0){
+				addDogPicker.setSelectedRow(0, selectedPickerMating-1, false);
+				selectedPickerMating = 0;
+			}
+		}
 	}else if(picker === SIZE_PICKER){
 		addDogPicker.add(sizePicker);
 		addDogScrollBackground.scrollTo(0,142);
-		//addDogPicker.setSelectedRow(selectedPickerSize, false);
+		
+		if(viewAddDogTargetMode != TARGET_MODE_REUSE) {
+			if(selectedPickerSize != 0){
+				addDogPicker.setSelectedRow(0, selectedPickerSize-1, false);
+				selectedPickerSize = 0;
+			}
+		}
 	}
 	
 	addDogPicker.selectionIndicator = true;
-	addDogPicker.animate({bottom:0, duration:500});
-	addDogToolbar.animate({bottom:216, duration:500});
+	addDogPickerBackground.animate({bottom:0, duration:500});
 	
 	addDogPickerType = picker;
 }
@@ -401,8 +449,7 @@ function handlePickerDoneButton(e){
 	addDogScrollBackground.scrollTo(0,0);
 	Ti.API.info('inside picker');
 	
-	addDogPicker.animate({bottom:-216, duration:500});
-	addDogToolbar.animate({bottom:-44, duration:500});
+	addDogPickerBackground.animate({bottom:-260, duration:500});
 	
 	//change text to the chosen picker row
 	if(addDogPickerType === DOG_BREED_PICKER){
@@ -411,14 +458,20 @@ function handlePickerDoneButton(e){
 		addDogFieldDogBreedHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
 		addDogFieldDogBreedHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldDogBreedHintTextLabel.opacity = 1;
-		addDogFieldAge.focus();
+		
+		if(viewAddDogTargetMode == TARGET_MODE_REUSE) {
+			addDogFieldAge.focus();
+		}
 	}else if(addDogPickerType === GENDER_PICKER){
 		addDogFieldGenderHintTextLabel.color = 'black';
 		addDogFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addDogFieldGenderHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
 		addDogFieldGenderHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldGenderHintTextLabel.opacity = 1;
-		addDogFieldMattingHintTextLabel.fireEvent('click');
+		
+		if(viewAddDogTargetMode == TARGET_MODE_REUSE) {
+			addDogFieldMattingHintTextLabel.fireEvent('click');
+		}
 	}else if(addDogPickerType === MATTING_PICKER){
 		addDogFieldMattingHintTextLabel.color = 'black';
 		addDogFieldMattingHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
@@ -431,8 +484,14 @@ function handlePickerDoneButton(e){
 		addDogFieldSizeHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
 		addDogFieldSizeHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldSizeHintTextLabel.opacity = 1;
-		addDogFieldGenderHintTextLabel.fireEvent('click');
+		
+		if(viewAddDogTargetMode == TARGET_MODE_REUSE) {
+			addDogFieldGenderHintTextLabel.fireEvent('click');
+		}
 	}
+	
+	//set as selected, the row which the user selected previously
+	addDogPicker.setSelectedRow(0, addDogPicker.getSelectedRow(0).id-1, false);
 }
 
 //handle photo selection
@@ -547,8 +606,7 @@ function handleCameraSelection(){
 }	
 
 function handleAddDogTextFieldFocus(){
-	addDogPicker.animate({bottom:-216, duration:500});
-	addDogToolbar.animate({bottom:-44, duration:500});
+	addDogPickerBackground.animate({bottom:-260, duration:500});
 }
 
 //handle all textfields when changed
@@ -589,6 +647,12 @@ function handleAddDogTextFieldBlur(e){
 function doSaveDogOnline(dObj){
 	Ti.API.info('doSaveDogOnline() called with dogObject='+dObj); 	
 	
+	//progress view
+	var progressView = new ProgressView({window:registerWindow});
+	progressView.show({
+		text:"Saving..."
+	});
+
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
@@ -616,6 +680,9 @@ function doSaveDogOnline(dObj){
 			//populate right menu dogs
 			populateRightMenu(getDogs());
 			
+			//Hide message and close register window
+			progressView.hide();
+			
 			navController.getWindow().setRightNavButton(rightBtn);
 			
 			Ti.include('ui/iphone/dog_profile.js');
@@ -627,7 +694,15 @@ function doSaveDogOnline(dObj){
 			Ti.API.error('Unauthorised request - need to login again');
 			showLoginPopup();
 		} else {
-			alert(getErrorMessage(jsonData.response));
+			//Show the error message we got back from the server
+			progressView.change({
+		        error:true,
+		        text:getErrorMessage(jsonData.data.response)
+		    });
+			//and hide it after a while		    
+		    setTimeout(function() {
+			    progressView.hide();
+			}, ERROR_MSG_REMOVE_TIMEOUT);
 		}
 	};
 	
@@ -667,9 +742,13 @@ function validateDogForm(){
 	}else if(addDogFieldMattingHintTextLabel.id == null){
 		alert('MATTING IS MISSING');
 		return false;
-	}else if(addDogObject.photo == null){
-		alert('PROFILE PHOTO MISSING');
-		return false;
+	}
+	
+	if(addDogInteractionType == ADD_DOG_USE){
+		if(addDogObject.photo == null){
+			alert('PROFILE PHOTO MISSING');
+			return false;
+		}
 	}
 	
 	addDogObject.name = addDogFieldName.value;
@@ -810,7 +889,9 @@ function doEditDogOnline(dObj){
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			//Add the server dog id to the object
 			dObj.dog_id = editDogId;
-			dObj.thumb_path = jsonData.data.thumb;
+			if(jsonData.data.thumb){
+				dObj.thumb_path = jsonData.data.thumb;
+			}
 			
 			Ti.API.info('doEditDogOnline() got back dog id from server '+jsonData.data.dog_id);
 			editDogLocal(dObj);

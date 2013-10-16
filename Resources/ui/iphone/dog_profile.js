@@ -875,9 +875,10 @@ function openAddDogView(){
 	//Revert to the standard right window button
 	addDogWindow.leftNavButton = leftBtn;
 	
+	openWindows.push(addDogWindow);
+	
 	builAddDogView(TARGET_MODE_NEW_WINDOW);
 	addDogWindow.add(viewAddDog);
-		
-	openWindows.push(addDogWindow);
+	
 	navController.open(addDogWindow);
 }

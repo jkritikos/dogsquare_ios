@@ -258,6 +258,10 @@ function checkLoginCredentials(lObj){
 			userObj.thumb_path = jsonData.data.user.thumb;
 			userObj.name = jsonData.data.user.name;
 			userObj.email = jsonData.data.user.email;
+			userObj.address = jsonData.data.user.address;
+			userObj.newsletter = jsonData.data.user.newsletter;
+			userObj.birth_date = jsonData.data.user.birth_date;
+			userObj.country = jsonData.data.user.country;
 			userObj.facebook_id = jsonData.data.user.facebook_id;
 			userObj.gender = jsonData.data.user.gender;
 			userObj.followers = jsonData.data.user.followers;
@@ -295,7 +299,10 @@ function checkLoginCredentials(lObj){
 			populateRightMenu(dogArray);
 			
 			saveDogBreeds(jsonData.data.breeds);
+			//save place categories
 			savePlaceCategories(jsonData.data.categories);
+			//save countries
+			saveCountries(jsonData.data.countries);
 			
 			//save passport notes
 			var notes = jsonData.data.notes;

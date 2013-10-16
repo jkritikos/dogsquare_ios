@@ -29,6 +29,9 @@ var registerFormTermsCheckMark = null;
 var registerFormNewsCheckMark = null;
 var registerFormNewsCheckBox = null;
 var registerFormTermsCheckBox = null;
+var registerPickerBackground = null;
+var registerDatePickerBackground = null;
+var registerThumbnailPreviewImageView = null;
 
 var genderPicker = [];
 var countryPicker = [];
@@ -101,6 +104,14 @@ function buildRegisterWindow(){
 		height:101,
 		top:116
 	});
+	
+	//photo button preview image
+	registerThumbnailPreviewImageView = Ti.UI.createImageView({
+		borderRadius:39
+	});
+	
+	registerProfilePhotoButton.add(registerThumbnailPreviewImageView);
+	
 	registerProfilePhotoButton.addEventListener('click', registerShowPhotoOptions);
 	registerScrollView.add(registerProfilePhotoButton);
 	
@@ -476,22 +487,35 @@ function buildRegisterWindow(){
 	value.setMonth(12);
 	value.setDate(1);
 	
+	registerDatePickerBackground = Titanium.UI.createView({
+	    height:260,
+	    bottom:-260,
+	    backgroundColor:'red'
+	}); 
+	registerWindow.add(registerDatePickerBackground);
+	
+	registerPickerBackground = Titanium.UI.createView({
+	    height:260,
+	    bottom:-260
+	}); 
+	registerWindow.add(registerPickerBackground);
+	
 	//date picker - sepparate picker because of an error when changing type of picker
 	registerDatePicker = Ti.UI.createPicker({
 	  type:Ti.UI.PICKER_TYPE_DATE,
-	  bottom:-219,
+	  bottom:0,
 	  minDate:minDate,
 	  maxDate:maxDate,
 	  value:value
 	});
-	registerWindow.add(registerDatePicker);
+	registerDatePickerBackground.add(registerDatePicker);
 	registerDatePicker.addEventListener("change", handleRegisterDatePickerChange);
 	
 	//picker for country and gender
 	registerPicker = Ti.UI.createPicker({
-	  bottom:-216
+	  bottom:0
 	});
-	registerWindow.add(registerPicker);
+	registerPickerBackground.add(registerPicker);
 	registerPicker.addEventListener("change", handleRegisterPickerChange);
 	
 	//picker done button
@@ -511,19 +535,52 @@ function buildRegisterWindow(){
 	registerToolbar = Titanium.UI.iOS.createToolbar({
 	    items:[registerFlexSpace, registerPickerDoneButton],
 	    barColor:'999999',
-	    bottom:-44,
+	    top:0,
 	    borderTop:true,
 	    borderBottom:false
 	}); 
-	registerWindow.add(registerToolbar);
+	registerPickerBackground.add(registerToolbar);
+	
+	//picker done button
+	registerDatePickerDoneButton = Ti.UI.createButton({
+		backgroundImage:IMAGE_PATH+'common/Done_button.png',
+	    width:54,
+	    height:34
+	});
+	registerDatePickerDoneButton.addEventListener("click", handleRegisterPickerDoneButton);
+	
+	//picker - toolbar flex space
+	var registerDateFlexSpace = Titanium.UI.createButton({
+	    systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+	});
+	
+	//picker toolbar
+	registerDateToolbar = Titanium.UI.iOS.createToolbar({
+	    items:[registerDateFlexSpace, registerDatePickerDoneButton],
+	    barColor:'999999',
+	    top:0,
+	    borderTop:true,
+	    borderBottom:false
+	}); 
+	registerDatePickerBackground.add(registerDateToolbar);
 	
 	//gender picker data
 	genderPicker[0]=Ti.UI.createPickerRow({title:'Male', id:1});
 	genderPicker[1]=Ti.UI.createPickerRow({title:'Female', id:2});
 	
 	//country picker data
-	countryPicker[0]=Ti.UI.createPickerRow({title:'Greece', id:1});
-	countryPicker[1]=Ti.UI.createPickerRow({title:'USA', id:2});
+	var countries = getCountries();
+	
+	for(i=0;i<countries.length;i++){
+		
+		var countryPickerName = countries[i].name;
+		var countryPickerId = countries[i].id;
+		
+		if(!isStringNullOrEmpty(countryPickerName)){
+			countryPicker[i]=Ti.UI.createPickerRow({title:countryPickerName, id:countryPickerId});
+		}
+		
+	}
 	
 	registerPicker.add(countryPicker);
 	
@@ -599,17 +656,16 @@ function handleRegisterPickerChange(e){
 function handleRegisterPickerDoneButton(e){
 	
 	if(registerPickerType === PICKER_DATE_BIRTH){
-		registerDatePicker.animate({bottom:-216, duration:500});
+		registerDatePickerBackground.animate({bottom:-260, duration:500});
 		registerFieldAddress.focus();
 	}else if(registerPickerType === PICKER_COUNTRY){
-		registerPicker.animate({bottom:-216, duration:500});
+		registerPickerBackground.animate({bottom:-260, duration:500});
 		registerFieldGenderHintTextLabel.fireEvent('click');
 		registerScrollView.scrollTo(0,364);
 	}else if(registerPickerType === PICKER_GENDER){
-		registerPicker.animate({bottom:-216, duration:500});
+		registerPickerBackground.animate({bottom:-260, duration:500});
 		registerScrollView.scrollTo(0,186);
 	}
-	registerToolbar.animate({bottom:-44, duration:500});
 }
 
 //handle picker data and animation
@@ -636,7 +692,7 @@ function registerHandlePicker(e){
 		registerFieldBirthDateHintTextLabel.text = date;
 		signupUserObject.birth_date = pickerDate;
 		registerScrollView.scrollTo(0,241);
-		registerDatePicker.animate({bottom:0, duration:500});
+		registerDatePickerBackground.animate({bottom:0, duration:500});
 	}else if(picker === PICKER_COUNTRY){
 		registerPicker.add(countryPicker);
 		registerPicker.setSelectedRow(0, false);
@@ -648,7 +704,7 @@ function registerHandlePicker(e){
 		signupUserObject.country = registerPicker.getSelectedRow(0).id;
 		
 		registerScrollView.scrollTo(0,323);
-		registerPicker.animate({bottom:0, duration:500});
+		registerPickerBackground.animate({bottom:0, duration:500});
 	}else if(picker === PICKER_GENDER){
 		registerPicker.add(genderPicker);
 		registerPicker.setSelectedRow(0, false);
@@ -660,13 +716,11 @@ function registerHandlePicker(e){
 		signupUserObject.gender = registerPicker.getSelectedRow(0).id;
 		
 		registerScrollView.scrollTo(0,364);
-		registerPicker.animate({bottom:0, duration:500});
+		registerPickerBackground.animate({bottom:0, duration:500});
 	}
 	
 	registerDatePicker.selectionIndicator = true;
 	registerPicker.selectionIndicator = true;
-	
-	registerToolbar.animate({bottom:216, duration:500});
 	
 	registerPickerType = picker;
 }
@@ -786,7 +840,7 @@ function doSignup(uObj){
 	//progress view
 	var progressView = new ProgressView({window:registerWindow});
 	progressView.show({
-		text:"Loading..."
+		text:"Saving data..."
 	});
 	
 	var xhr = Ti.Network.createHTTPClient();
@@ -877,6 +931,10 @@ function handlePhotoSelection(){
 			
 			var compressedImage = jpgcompressor.compress(image);
 			
+			//Preview thumbnail
+			var imageThumbnailPreview = image.imageAsThumbnail(78,0,39);
+			registerThumbnailPreviewImageView.image = imageThumbnailPreview;
+			
 			//Create thumbnail
 			var imageThumbnail = image.imageAsThumbnail(60,0,30);
 			
@@ -923,6 +981,10 @@ function handleCameraSelection(){
 			
 			var compressedImage = jpgcompressor.compress(image);
 			
+			//Preview thumbnail
+			var imageThumbnailPreview = image.imageAsThumbnail(78,0,39);
+			registerThumbnailPreviewImageView.image = imageThumbnailPreview;
+			
 			//Create thumbnail
 			var imageThumbnail = image.imageAsThumbnail(60,0,30);
 			
@@ -955,14 +1017,11 @@ function handleCameraSelection(){
 }	
 
 function handleRegisterTextFieldFocus(e){
-	
 	if(registerPickerType === PICKER_DATE_BIRTH){
-		registerDatePicker.animate({bottom:-216, duration:500});
+		registerDatePickerBackground.animate({bottom:-260, duration:500});
 	}else if(registerPickerType === PICKER_COUNTRY  || registerPickerType === PICKER_GENDER){
-		registerPicker.animate({bottom:-216, duration:500});
+		registerPickerBackground.animate({bottom:-260, duration:500});
 	}
-	
-	registerToolbar.animate({bottom:-44, duration:500});
 }
 	
 function handleRegisterTextFieldChange(e){
