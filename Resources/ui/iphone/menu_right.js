@@ -34,8 +34,6 @@ function getSelectedDogs(){
 function populateRightMenu(dogObject){
 	
 	var rightMenuData = [];
-	//temporary arrays
-	var percent = ['76 %', '53 %', '39 %'];
 	
 	//add dog row - buttton
 	var rightMenuAddDogRow = Ti.UI.createTableViewRow({
@@ -77,7 +75,7 @@ function populateRightMenu(dogObject){
 	rightMenuData.push(rightMenuAddDogRow);
 	
 	for(var i=0;i<dogObject.length;i++){
-		Ti.API.info('dog rows are being populated with dog id '+dogObject[i].dog_id);
+		Ti.API.info('right menu dog rows are being populated with dog id '+dogObject[i].dog_id);
 
 		//all dog rows
 		var rightMenuRow = Ti.UI.createTableViewRow({
@@ -137,14 +135,14 @@ function populateRightMenu(dogObject){
 		
 		//dog percent label inside the dog row - right menu row
 		var rowDogPercentLabel = Titanium.UI.createLabel({ 
-			text:percent[i],
+			text:dogObject[i].dogfuel+'%',
 			color:'ab7b04',
 			height:18,
 			width:35,
 			textAlign:'left',
 			left:184,
 			top:50,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'},
 			type:TYPE_SELECT_ROW
 		});
 		
@@ -156,9 +154,12 @@ function populateRightMenu(dogObject){
 			type:TYPE_SELECT_ROW
 		});
 		
-		//grey bone image inside the dog row - right menu row
+		//color bone image inside the dog row - right menu row
+		var croppedDataObject = createCroppedBoneImage(VIEW_RIGHT_MENU,dogObject[i].dogfuel);
 		var rowColorBoneImage = Ti.UI.createImageView({ 
-			image:IMAGE_PATH+'menu_right/bone_colours.png',
+			image:croppedDataObject.photo,
+			width: croppedDataObject.view_width,
+			height:22,
 			left:239,
 			top:50,
 			type:TYPE_SELECT_ROW,

@@ -124,7 +124,8 @@ function buildRunFinishView(obj){
 		text:obj.pace,
 		height:21,
 		textAlign:'right',
-		left:131,
+		left:114,
+		width:40,
 		top:10,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -359,16 +360,19 @@ function populateRunFinishTableView(o){
 		//bone image
 		var rowBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_grey.png',
-			right:14,
+			left:210,
 			top:20
 		});
 		
 		row.add(rowBoneImage);
 	
 		//bone fill image
+		var croppedDataObject = createCroppedBoneImage(VIEW_RUN_FINISH,data.dogs[i].dogfuel);
 		var rowBoneFillImage = Ti.UI.createImageView({ 
-			image:IMAGE_PATH+'run_finish/bone_colours.png',
-			right:14,
+			image:croppedDataObject.photo,
+			width: croppedDataObject.view_width,
+			height:30,
+			left:210,
 			top:20,
 			zIndex:2
 		}); 
@@ -390,7 +394,7 @@ function populateRunFinishTableView(o){
 		
 		//mood percent label
 		var rowMoodPercentLabel = Titanium.UI.createLabel({ 
-			text:'14%',
+			text:data.dogs[i].dogfuel + '%',
 			color:'999900',
 			height:15,
 			textAlign:'center',

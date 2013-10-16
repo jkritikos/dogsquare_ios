@@ -369,16 +369,20 @@ function populateViewActivityDogsTableView(dogObj){
 		//bone image
 		var rowBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_grey.png',
-			right:14,
-			top:20
+			left:210,
+			top:20,
+			height:30
 		});
 		
 		row.add(rowBoneImage);
 		
 		//Filled bone image
+		var croppedDataObject = createCroppedBoneImage(VIEW_RUN_FINISH,dogObj[i].Dog.dogfuel);
 		var rowBoneFillImage = Ti.UI.createImageView({ 
-			image:IMAGE_PATH+'run_finish/bone_colours.png',
-			right:14,
+			image:croppedDataObject.photo,
+			width: croppedDataObject.view_width,
+			height:30,
+			left:210,
 			top:20,
 			zIndex:2
 		});
@@ -400,7 +404,7 @@ function populateViewActivityDogsTableView(dogObj){
 		
 		//mood percent label
 		var rowMoodPercentLabel = Titanium.UI.createLabel({ 
-			text:'14%',
+			text:dogObj[i].Dog.dogfuel + '%',
 			color:'999900',
 			height:15,
 			textAlign:'center',
@@ -761,6 +765,7 @@ function getActivityLikedUsersOnline(aId){
 	});
 }
 
+//Updates the UI with the data returned from the server
 function updateActivityView(activityObj){
 	
 	viewActivityDistanceNumberLabel.text = activityObj.distance;
@@ -772,7 +777,7 @@ function updateActivityView(activityObj){
     if(activityObj.liked == null){
 		viewActivityHeartImage.image = IMAGE_PATH+'common/best_icon_default.png';
 		viewActivityHeartImage.toggle = false;
-	}else{
+	} else{
 		viewActivityHeartImage.image = IMAGE_PATH+'common/best_icon_selected_red.png';
 		viewActivityHeartImage.toggle = true;
 	}
@@ -796,11 +801,6 @@ function updateActivityCoordinates(coordsObj){
 		};
 		
 		viewActivityMap.setLocation(viewActivityRegion);
-		
-		//TMP DEBUG
-		for(var i=0; i < coordsObj.length; i++){
-			//Ti.API.info('-- viewActivity coordinates for route: lat '+coordsObj[i].latitude+' lon '+coordsObj[i].longitude);
-		}
 		
 		//route object
 		var route = {

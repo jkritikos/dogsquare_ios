@@ -1,4 +1,5 @@
 var runningMode = false;
+var currentActivityMode = null;
 var runningPathCoordinates = [];
 var runningDistanceKm = 0;
 var runningDistanceKmLabelValue = '';
@@ -10,6 +11,7 @@ var runDistanceValueLabel = null;
 var runDistanceUnitLabel = null;
 var runDurationValueLabel = null;
 var runPauseButton = null;
+var runPlayButton = null;
 var runEndButton = null;
 var runAvgPaceMinuteLabel = null;
 
@@ -28,6 +30,8 @@ var timestampPrevious = 0;
 var tick = 0;
 
 function buildRunView(){
+	var iphone5Offset = 30;
+	
 	//Reset cronometer
 	horas = 0, minutos = 0, segundos = 0, total_seconds = 0;
 	
@@ -35,9 +39,14 @@ function buildRunView(){
 		backgroundColor:UI_BACKGROUND_COLOR
 	});
 
+	var runDogsquareLogo = Ti.UI.createImageView({
+		image:IMAGE_PATH+'run/dogsquare.png',
+		top:2
+	});
+
 	runDistanceValueLabel = Ti.UI.createLabel({
 		text:'0.00',
-		top:20,
+		top:IPHONE5 ? 115+iphone5Offset : 115,
 		left:33,
 		color:UI_COLOR_RUN,
 		font:{fontSize:82, fontWeight:'bold', fontFamily:'Open Sans'}
@@ -45,7 +54,7 @@ function buildRunView(){
 
 	runDistanceUnitLabel = Ti.UI.createLabel({
 		text:'km',
-		top:59,
+		top:IPHONE5 ? 156+iphone5Offset : 156,
 		right:40,
 		color:UI_COLOR_RUN,
 		font:{fontSize:41, fontWeight:'bold', fontFamily:'Open Sans'}
@@ -68,23 +77,17 @@ function buildRunView(){
 	
 	runAvgPaceMinuteLabel = Ti.UI.createLabel({
 		text:'0.0',
-		top:146,
-		left:35,
+		top:IPHONE5? 216+iphone5Offset : 216,
+		left:12,
+		width:85,
+		textAlign:'center',
 		color:UI_COLOR_RUN,
 		font:{fontSize:27, fontWeight:'bold', fontFamily:'Open Sans'}
 	});
 	
-	var runAvgPaceUnitLabel = Ti.UI.createLabel({
-		text:'km/h',
-		top:165,
-		left:70,
-		color:UI_COLOR_RUN,
-		font:{fontSize:10, fontWeight:'semibold', fontFamily:'Open Sans'}
-	});
-	
 	var runAvgPaceLabel = Ti.UI.createLabel({
 		text:'Avg pace',
-		top:181,
+		top:IPHONE5? 251+iphone5Offset : 251,
 		left:25,
 		color:UI_COLOR_RUN,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
@@ -92,14 +95,14 @@ function buildRunView(){
 	
 	runDurationValueLabel = Ti.UI.createLabel({
 		text:'0:00:00',
-		top:146,
+		top:IPHONE5? 216+iphone5Offset : 216,
 		color:UI_COLOR_RUN,
 		font:{fontSize:27, fontWeight:'bold', fontFamily:'Open Sans'}
 	});
 	
 	var runDurationLabel = Ti.UI.createLabel({
 		text:'Duration',
-		top:181,
+		top:IPHONE5? 251+iphone5Offset : 251,
 		color:UI_COLOR_RUN,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -109,13 +112,13 @@ function buildRunView(){
 		right:52,
 		width:26,
 		height:23,
-		top:158
+		top:IPHONE5? 228+iphone5Offset : 228
 	});
 	runMapButton.addEventListener('click', handleMapButton);
 	
 	var runMapLabel = Ti.UI.createLabel({
-		text:'View Map',
-		top:181,
+		text:'View map',
+		top:IPHONE5? 251+iphone5Offset : 251,
 		right:25,
 		color:UI_COLOR_RUN,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
@@ -126,47 +129,47 @@ function buildRunView(){
 	viewRun.add(runDurationValueLabel);
 	viewRun.add(runAvgPaceLabel);
 	viewRun.add(runAvgPaceMinuteLabel);
-	//viewRun.add(runAvgPaceUnitLabel);
 	viewRun.add(runDistanceValueLabel);
 	viewRun.add(runDistanceUnitLabel);
 	viewRun.add(runMapLabel);
 	viewRun.add(runMapButton);
-
+	viewRun.add(runDogsquareLogo);
+	
 	runPauseButton = Ti.UI.createButton({
-		backgroundImage:IMAGE_PATH+'run/start_btn.png',
-		bottom:73,
-		left:21,
-		width:153,
-		height:54,
-		zIndex:2
+		backgroundImage:IMAGE_PATH+'run/start_walking_orange.png',
+		bottom:68,
+		left:2,
+		width:157,
+		height:50,
+		zIndex:2,
+		type:ACTIVITY_MODE_WALKING
+	});
+	
+	runPlayButton = Ti.UI.createButton({
+		backgroundImage:IMAGE_PATH+'run/start_playing_orange.png',
+		bottom:68,
+		right:2,
+		width:157,
+		height:50,
+		zIndex:2,
+		type:ACTIVITY_MODE_PLAYING
 	});
 
 	runEndButton = Ti.UI.createButton({
-		backgroundImage:IMAGE_PATH+'run/end_button.png',
-		bottom:73,
-		right:21,
-		width:96,
-		height:50,
+		backgroundImage:IMAGE_PATH+'run/endActivity_orange.png',
+		bottom:5,
+		width:320,
+		height:62,
 		zIndex:2
 	});
 
 	viewRun.add(runPauseButton);
 	viewRun.add(runEndButton);
+	viewRun.add(runPlayButton);
 	
+	runPlayButton.addEventListener('click', handleStartRunButton);
 	runPauseButton.addEventListener('click', handleStartRunButton);
 	runEndButton.addEventListener('click', handleEndRunButton);
-	
-	//TMP DEBUG
-	runDebugView = Ti.UI.createScrollView({
-		backgroundColor:'black',
-		top:100,
-		bottom:80,
-		contentWidth:100,
-		contentHeight:'auto',
-		layout:'vertical'
-	});
-	
-	//viewRun.add(runDebugView);
 	
 	viewRunSummaryMap = Titanium.Map.createView({
 		width:'100%',
@@ -179,8 +182,21 @@ function buildRunView(){
 	    visible:true
 	});
 	
+	//TMP DEBUG
+	/*
+	runDebugView = Ti.UI.createScrollView({
+		backgroundColor:'black',
+		top:100,
+		bottom:80,
+		contentWidth:100,
+		contentHeight:'auto',
+		layout:'vertical'
+	});
+	
+	//viewRun.add(runDebugView);
+	
 	//viewRun.add(viewRunSummaryMap);
-
+	*/
 	return viewRun;
 }
 
@@ -242,7 +258,26 @@ function clockTick(){
 	runDurationValueLabel.text = tmpLabel;
 }
 
-function handleStartRunButton(){
+//Changes and enables/disables the walk/play buttons
+function handleRunUIButtons(){
+	if(currentActivityMode == ACTIVITY_MODE_PLAYING){
+		runPlayButton.backgroundImage = IMAGE_PATH+'run/playing_grey.png';
+		runPlayButton.enabled = false;
+		runPauseButton.enabled = true;
+		runPauseButton.backgroundImage = IMAGE_PATH+'run/start_walking_orange.png';
+	} else if(currentActivityMode == ACTIVITY_MODE_WALKING){
+		runPauseButton.backgroundImage = IMAGE_PATH+'run/walking_grey.png';
+		runPauseButton.enabled = false;
+		runPlayButton.enabled = true;
+		runPlayButton.backgroundImage = IMAGE_PATH+'run/start_playing_orange.png';
+	}
+}
+
+function handleStartRunButton(e){
+	currentActivityMode = e.source.type;
+	
+	Ti.API.info('handleStartRunButton() called with activity mode '+currentActivityMode);
+	
 	if(!runningMode){
 		var selectedDogs = getSelectedDogs();
 		if(selectedDogs.length > 0){
@@ -257,7 +292,7 @@ function handleStartRunButton(){
 			}
 			
 			//Adapt UI
-			runPauseButton.backgroundImage = IMAGE_PATH+'run/Pause_btn.png';
+			handleRunUIButtons();
 			runningMode = true;
 			
 			//Start location tracking
@@ -271,6 +306,9 @@ function handleStartRunButton(){
 			alert('NO DOGS SELECTED');
 		}
 	} else {
+		handleRunUIButtons();
+		
+		/*
 		clearInterval(cronometerInterval);
 		
 		runPauseButton.backgroundImage = IMAGE_PATH+'run/start_btn.png';
@@ -281,6 +319,7 @@ function handleStartRunButton(){
 		
 		//Enable window sliding
 		window.setPanningMode("FullViewPanning");
+		*/
 	}
 }
 
@@ -296,8 +335,10 @@ function handleEndRunButton(){
 		Titanium.Geolocation.removeEventListener('location',trackLocation);
 		Ti.API.info('Tracking location ENDS - collected '+runningPathCoordinates.length+' coordinates');
 		
-		
-		var dogfuelEarned = calculateDogfuel(runObject.activity_id);
+		//Calculate the total distance, playtime
+		var activityTotals = calculateDogfuel(runObject.activity_id);
+		runObject.walk = activityTotals.walk;
+		runObject.play = activityTotals.play;
 		
 		//Update our activity object
 		endActivity(runObject);
@@ -352,6 +393,12 @@ function handleEndRunButton(){
 		
 		//clear run object
 		runObject = {};
+		tick = 0;
+		//reset UI objects
+		runningDistanceKm = 0;
+		runningDistanceKmLabelValue = 0;
+		timestampCurrent = null;
+		timestampPrevious = null;
 		
 		openWindows.push(runFinishWindow);
 		navController.open(runFinishWindow);
@@ -400,17 +447,17 @@ function trackLocation(){
 			//Get weather once we get the 1st accurate set of coordinates
 			if(tick == 1){
 				weather.getWeather(e.coords.latitude, e.coords.longitude);	
-				
 			}
 			
 			var tmpDistance = calculateDistance(coordinates);
 			runObject.distance = tmpDistance;
 			
 			//Save coordinates
-			saveActivityCoordinates(runObject.activity_id, e.coords.latitude, e.coords.longitude, timestampCurrent, timestampDiff, tmpDistance);
+			saveActivityCoordinates(runObject.activity_id, e.coords.latitude, e.coords.longitude, timestampCurrent, timestampDiff, tmpDistance, currentActivityMode);
 			
 			runningPathCoordinates.push(coordinates);
 			
+			/*
 			var t = 'Lat:'+e.coords.latitude+' & lon: '+e.coords.longitude+' accuracy: '+e.coords.accuracy+' distance '+tmpDistance;
 			var tmpLabel = Ti.UI.createLabel({
 				text:t,
@@ -420,6 +467,7 @@ function trackLocation(){
 			});
 			
 			runDebugView.add(tmpLabel);
+			*/
 			
 			var speed = e.coords.speed;
 			var velocidad_km_h = (speed / 0.28).toFixed(0);	
@@ -443,14 +491,22 @@ function calculateDistance(newCoordinates){
 		var d = R * c;
 		
 		runningDistanceKm += parseFloat(d);
-		runningDistanceKmLabelValue = runningDistanceKm.toFixed(3);
+		runningDistanceKmLabelValue = runningDistanceKm.toFixed(2);
 		runDistanceValueLabel.text = runningDistanceKmLabelValue;
 		
 		var hourInSeconds = 3600;
+		var pace = 0;
+		
 		//km per hour
-		var pace = Math.round((hourInSeconds * runningDistanceKmLabelValue) / total_seconds);
-		runAvgPaceMinuteLabel.text = pace;
-		runObject.pace = pace;
+		if(total_seconds > 0){
+			var pace = (hourInSeconds * runningDistanceKmLabelValue) / total_seconds;
+			Ti.API.info('pace is '+pace + ' runningDistanceKmLabelValue='+runningDistanceKmLabelValue+' total_seconds = '+total_seconds);
+			pace = isNaN(pace) ? 0 : pace;
+		}
+		
+		
+		runAvgPaceMinuteLabel.text = pace.toFixed(1);
+		runObject.pace = pace.toFixed(1);
 		
 	} else {
 		Ti.API.info('calculateDistance() NOT enough points for distance calculation');

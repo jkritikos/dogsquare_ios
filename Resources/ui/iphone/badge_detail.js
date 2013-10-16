@@ -51,8 +51,8 @@ function buildBadgeDetailView(id, awardBadge){
 		if(awardBadge){
 			badgeDetailLargeBadgeImage = Titanium.UI.createImageView({
 				image:IMAGE_PATH+'badges/big/' + 'badge_' + id + '.png',
-				top:100,
-				left:49
+				top:IPHONE5? 55 :100,
+				left:IPHONE5? 4: 49
 			});
 			
 			viewBadgeDetail.add(badgeDetailLargeBadgeImage);
@@ -72,7 +72,8 @@ function buildBadgeDetailView(id, awardBadge){
 
 //Performs the animation for badge awarding
 function awardBadgeAnimation(){
+	var scale = RETINA_DEVICE? 0.19 : 0.26;
 	var tmpMatrix = Ti.UI.create2DMatrix();
-	tmpMatrix = tmpMatrix.scale(0.26);
+	tmpMatrix = tmpMatrix.scale(scale);
 	badgeDetailLargeBadgeImage.animate({transform:tmpMatrix, duration:1200});
 }
