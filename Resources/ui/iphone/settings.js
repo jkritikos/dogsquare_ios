@@ -41,6 +41,7 @@ function buildSettingsView(){
 //Event handler for settings table
 function handleSettingsMenuTableRows(e){
 	var selectedItem = e.row.menu;
+	Ti.API.info('Settings clicked on '+selectedItem);
 	
 	if(selectedItem == MENU_EDIT_PROFILE){
 		showEditProfileView();
@@ -54,6 +55,8 @@ function handleSettingsMenuTableRows(e){
 }
 
 function showEditProfileView(){
+	Ti.API.info('showEditProfileView() called ');
+	
 	Ti.include('ui/iphone/profile_edit.js');
 	
 	var editProfileView = buildEditProfileView();

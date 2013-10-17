@@ -35,6 +35,7 @@ window.setParallaxAmount(0.3);
 
 Ti.include('ui/iphone/run.js');
 
+/*
 var notify = require('bencoding.localnotify');
 notify.scheduleLocalNotification({
     alertBody:"notification 1",
@@ -49,3 +50,4 @@ notify.scheduleLocalNotification({
     userInfo:{"id":1,"hello":"world"},
     date:new Date(new Date().getTime() + 15000) 
 });
+*/
