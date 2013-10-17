@@ -247,6 +247,9 @@ function handleMapSearchTextFieldFocus(e){
 function handleMapSearchTextFieldChange(e){
 	if(mapSearchTxtfield.value != ''){
 		mapSearchTxtfieldLabel.hide();
+		
+		//search for places
+		searchNearbyPlaces(mapSearchTxtfield.value);
 	}else{
 		mapSearchTxtfieldLabel.show();
 	}
@@ -346,6 +349,29 @@ function handleMapSearchCategoriesRows(e){
 	navController.getWindow().setRightNavButton(rightBtn);
 	mapSearchTxtfield.blur();
 	mapSearchCategoriesBackground.animate({opacity:0, duration:400});
+}
+
+//Searches for nearby places according to the user input from the searchfield on the navbar
+function searchNearbyPlaces(placeName){
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in searchNearbyPlaces() '+e);
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('getPlacesByFilterOnline() got back from server '+this.responseText);
+		var jsonData = JSON.parse(this.responseText);
+	};
+	
+	xhr.open('GET',API+'getPlaces');
+	xhr.send({
+		user_id:userObject.userId,
+		lat:mapLatitude,
+		lon:mapLongitude,
+		name:placeName
+	});
 }
 
 //get places by filter 

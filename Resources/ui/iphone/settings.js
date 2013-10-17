@@ -2,6 +2,7 @@
 var viewSettings = null;
 var settingsMenuTable = null;
 
+var MENU_CHANGE_PASSWORD = 0;
 var MENU_EDIT_PROFILE = 1;
 var MENU_TAKE_TOUR = 2;
 var MENU_REPORT_PROBLEM = 3;
@@ -29,6 +30,7 @@ function buildSettingsView(){
 		});
 		
 		var settingsMenuData = [];
+		settingsMenuData.push(createSettingsMenuRow(MENU_CHANGE_PASSWORD));
 		settingsMenuData.push(createSettingsMenuRow(MENU_EDIT_PROFILE));
 		settingsMenuData.push(createSettingsMenuRow(MENU_TAKE_TOUR));
 		settingsMenuData.push(createSettingsMenuRow(MENU_REPORT_PROBLEM));
@@ -41,8 +43,11 @@ function buildSettingsView(){
 //Event handler for settings table
 function handleSettingsMenuTableRows(e){
 	var selectedItem = e.row.menu;
+	Ti.API.info('Settings clicked on '+selectedItem);
 	
-	if(selectedItem == MENU_EDIT_PROFILE){
+	if(selectedItem == MENU_CHANGE_PASSWORD){
+		showChangePasswordView();
+	} else if(selectedItem == MENU_EDIT_PROFILE){
 		showEditProfileView();
 	} else if(selectedItem == MENU_TAKE_TOUR){
 		
@@ -53,7 +58,14 @@ function handleSettingsMenuTableRows(e){
 	}
 }
 
+//Opens a new window with the change password form
+function showChangePasswordView(){
+	
+}
+
 function showEditProfileView(){
+	Ti.API.info('showEditProfileView() called ');
+	
 	Ti.include('ui/iphone/profile_edit.js');
 	
 	var editProfileView = buildEditProfileView();
@@ -61,7 +73,8 @@ function showEditProfileView(){
 	var editProfileWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
 		barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR
+		barColor:UI_COLOR,
+		title:'Edit profile'
 	});
 	
 	//back button & event listener
@@ -104,7 +117,10 @@ function createSettingsMenuRow(menu){
 	});
 		
 	var icon, label;
-	if(menu == MENU_EDIT_PROFILE){
+	if(menu == MENU_CHANGE_PASSWORD){
+		icon = IMAGE_PATH+'settings/profile_edit.png';
+		label = 'Change password';
+	} else if(menu == MENU_EDIT_PROFILE){
 		icon = IMAGE_PATH+'settings/profile_edit.png';
 		label = 'Edit Profile';
 	} else if(menu == MENU_TAKE_TOUR){

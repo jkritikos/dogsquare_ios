@@ -143,6 +143,9 @@ fb.addEventListener('login', function(e) {
     				};
     				
     				checkLoginCredentials(loginObject);
+    			} else if(CURRENT_VIEW == VIEW_FIND_FRIENDS){
+    				Ti.API.info('FB Login from find friends view');
+    				facebookGetAllFriends();
     			}
     			
     		} else if (e.error) {
@@ -158,6 +161,12 @@ fb.addEventListener('login', function(e) {
 		Ti.API.info('USER **NOT** LOGGED IN TO FACEBOOK!');
 	}	
 });
+
+function sortFBFriends(a, b){
+	var aName = a.name.toLowerCase();
+	var bName = b.name.toLowerCase();
+	return ((aName < bName) ? -1 : ((aName > bName) ? 1: 0));
+}
 
 //Returns the properties for the specified badge object
 function getBadgeDetails(id){

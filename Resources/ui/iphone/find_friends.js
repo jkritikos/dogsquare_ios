@@ -35,6 +35,7 @@ Ti.Contacts.requestAuthorization(function(e){
     }
 });	
 
+
 function buildFindFriendsView(){
 	if(viewFindFriends == null){
 		viewFindFriends = Ti.UI.createView({
@@ -194,12 +195,44 @@ function buildFindFriendsView(){
 		
 		//dummy view for facebook
 		findFriendsFacebookView = Titanium.UI.createView({
-			backgroundColor:'yellow',
+			backgroundColor:'eeeded',
 			bottom:0,
 			width:'100%',
 			height:285
 		});
 		viewFindFriends.add(findFriendsFacebookView);
+		
+		//Connect to FB text
+		var findFriendsFacebookConnectLabel = Ti.UI.createLabel({
+			text:'Connect with your Facebook friends \non DOGSQUARE',
+			textAlign:'center',
+			top:10,
+			font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+		});
+		
+		//Connect to FB image
+		var findFriendsFacebookConnectImage = Ti.UI.createImageView({
+			image:IMAGE_PATH+'follow_invite/connecting.png',
+			top:40
+		});
+		
+		//Connect to FB button
+		var findFriendsFacebookConnectButton = Ti.UI.createButton({
+			backgroundImage:IMAGE_PATH+'follow_invite/Facebook_button.png',
+			width:280,
+			height:52,
+			top:150
+		});
+		
+		//Connect to FB event handler
+		findFriendsFacebookConnectButton.addEventListener('click', function(){
+			Ti.API.info('Facebook login button clicked from find friends view');
+			fb.authorize();
+		});
+		
+		findFriendsFacebookView.add(findFriendsFacebookConnectImage);
+		findFriendsFacebookView.add(findFriendsFacebookConnectLabel);
+		findFriendsFacebookView.add(findFriendsFacebookConnectButton);
 		findFriendsFacebookView.hide();
 		
 		//table view for all
@@ -236,12 +269,51 @@ function buildFindFriendsView(){
 	}
 }
 
-
 function sortByFullName(a, b) {
     var x = JSON.stringify(a.fullName).toUpperCase();
     var y = JSON.stringify(b.fullName).toUpperCase(); 
     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 };
+
+//populate FB friends
+function populateFindFriendsFacebookTableView(data){
+	for(var i=0; i < data.length; i++){
+		Ti.API.info('FB friend '+ JSON.stringify(data[i]));
+		
+		var row = Ti.UI.createTableViewRow({
+			className:'contactsRow',
+			height:73,
+			backgroundColor:'white',
+			selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+			type:FRIENDS_TYPE_ROW,
+			button:'invite'
+		});
+		
+		
+		var rowFriendImage = Titanium.UI.createImageView({
+			image:IMAGE_PATH+'follow_invite/default_User_photo.png',
+			left:3,
+			type:FRIENDS_TYPE_ROW,
+			button:'invite'
+		});
+		row.add(rowFriendImage);
+		
+		//friend's fullname label
+		var rowFullNameLabel = Titanium.UI.createLabel({
+			text:data[i].name,
+			//color:'red',
+			height:22,
+			textAlign:'left',
+			//opacity:0.6,
+			left:72,
+			width:116,
+			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'},
+			type:FRIENDS_TYPE_ROW,
+			button:'invite'
+		});
+		row.add(rowFullNameLabel);
+	}
+}
 
 //populate contacts table view
 function populateFindFriendsContactsTableView(uData){
@@ -408,16 +480,16 @@ function populateFindFriendsDogsquareTableView(uObj){
 
 //handle textfield focus
 function handlefindFriendsTextFieldFocus(e){
-		var field = e.source.field;
-		
-		if(field == 'search'){
-			if(findFriendsSearchTxtfield.value != ''){
-				findFriendsSearchTxtfieldLabel.hide();
-			}else{
-				findFriendsSearchTxtfieldLabel.show();
-			}
+	var field = e.source.field;
+	
+	if(field == 'search'){
+		if(findFriendsSearchTxtfield.value != ''){
+			findFriendsSearchTxtfieldLabel.hide();
+		}else{
+			findFriendsSearchTxtfieldLabel.show();
 		}
 	}
+}
 	
 //handle textfield blur
 function handlefindFriendsTextFieldBlur(e){
@@ -430,7 +502,7 @@ function handlefindFriendsTextFieldBlur(e){
 	}
 }
 
-//handle tabs
+//handle tab clicking
 function handleFindFriendsTabs(e){
 	var tab = e.source.tab;
 	if(tab == FACEBOOK_TAB){
@@ -439,7 +511,17 @@ function handleFindFriendsTabs(e){
 		findFriendsTabDogsquareSelection.hide();
 		
 		findFriendsTableView.hide();
-		findFriendsFacebookView.show();
+		
+		//Fetch facebook friends who have the app, if connected
+		if(fb.loggedIn){
+			Ti.API.info('FindFriends: FB connected TRUE');
+			facebookGetAllFriends();
+		} else {
+			Ti.API.info('FindFriends: FB connected FALSE');
+			findFriendsFacebookView.show();
+		}
+		
+		
 	}else if(tab == CONTACTS_TAB){
 		findFriendsTabFacebookSelection.hide();
 		findFriendsTabContactsSelection.show();
@@ -527,7 +609,6 @@ function getOnlineUser(n){
 		token:userObject.token
 	});
 }
-
 
 //get info if contact has the app or not or has been followed by the user
 function doSearchUserByEmail(cEmail){
@@ -647,5 +728,83 @@ function handlefriendsTableViewRows(e){
 		});
 	
 	    smsDialog.open({animated: true});
+	}
+}
+
+/*Gets the friends that have installed the app*/
+function facebookGetFriendsWithApp(){
+	if (Titanium.Network.online == true){
+		
+		Ti.API.warn('GETTING FB FRIENDS');
+		
+		var data = {};
+		if(fb.loggedIn){
+			fb.request('friends.getAppUsers', data,function(e) {
+		    	if (e.success) {
+		        	Ti.API.warn('FACEBOOK - Success in getting FB friends with Dogsquare :'+e.result);
+		        	var friends = JSON.parse(e.result);
+		        	
+		        	var friendString = '';
+		        	for(var i=0; i < friends.length; i++){
+		        		friendString += friends[i];
+		        		
+		        		if(i < (friends.length -1)){
+		        			friendString += ',';
+		        		}
+		        	}
+		        	
+		        	//saveFacebookFriends(friendString);
+		        	//getOnlineHighScores(friendString);
+		        	Ti.API.warn('FACEBOOK - Saved the FB friends list as '+friendString);
+		    	} else {
+		        	if (e.error) {
+		         	   Ti.API.warn('FACEBOOK - ERROR in getting FB friends');
+		        	} else {
+		            	Ti.API.warn('FACEBOOK - UNKNOWN response in getting FB friends');
+		        	}
+		    	}
+			});
+		} 
+	}
+}
+
+function facebookGetAllFriends(){
+	var data = {};
+	
+	if (Titanium.Network.online == true){
+		Ti.API.warn('GETTING ALL FB FRIENDS');
+		if(fb.loggedIn){
+			
+			//progress view
+			progressView.show({
+				text:"Loading..."
+			});
+			
+			fb.requestWithGraphPath('me/friends', data, "GET", function(e) {
+		    	if (e.success) {
+		        	
+		        	var allFriends = JSON.parse(e.result);
+		        	var allFriendsObject = allFriends.data;
+		        	
+		        	allFriendsObject.sort(sortFBFriends);
+		        	Ti.API.info('FACEBOOK - Success in getting ALL friends '+allFriendsObject.length);
+		        	
+		        	populateFindFriendsFacebookTableView(allFriendsObject);
+		        	
+		    	} else {
+		        	if (e.error) {
+		         	   Ti.API.info('FACEBOOK - ERROR '+e.error+' in getting ALL friends');
+		        	} else {
+		            	Ti.API.info('FACEBOOK - UNKNOWN response in getting ALL friends');
+		        	}
+		    	}
+			});
+			
+			//Hide the progress view
+			progressView.hide();
+			
+		} else {
+			Ti.API.info('FACEBOOK - NOT logged in');
+		}
 	}
 }

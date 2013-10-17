@@ -199,6 +199,7 @@ leftTableView.addEventListener("click", function(e){
 			break;
 		
 		case MENU_FIND_FRIENDS:
+			CURRENT_VIEW = VIEW_FIND_FRIENDS;
 			navController.getWindow().setTitleControl();
 			Ti.include('ui/iphone/find_friends.js');
 			buildFindFriendsView();
