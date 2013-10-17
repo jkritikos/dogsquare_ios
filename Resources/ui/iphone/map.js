@@ -251,8 +251,13 @@ function handleMapSearchTextFieldChange(e){
 		
 		//search for places
 		if(mapSearchTxtfield.value.length > 2 && mapSearchTxtfield.value != mapSearchLastValue){
-			mapSearchLastValue = mapSearchTxtfield.value;
-			searchNearbyPlaces(mapSearchTxtfield.value);
+			
+			//sweet anti-flooding approach
+			clearTimeout(timers['autocomplete_map']);
+			timers['autocomplete_map'] = setTimeout(function(){
+	        	mapSearchLastValue = mapSearchTxtfield.value;
+	         	searchNearbyPlaces(mapSearchTxtfield.value);
+	      	}, 300);
 		}
 	}else{
 		mapSearchTxtfieldLabel.show();
@@ -265,16 +270,8 @@ function handleMapSearchTextFieldBlur(e){
 	}
 }
 
-function createMapFilterRow(filter){
-	var row = Ti.UI.createTableViewRow({
-		height:47,
-		className:'mapFilter',
-		backgroundColor:'white',
-		selectedBackgroundColor:'transparent',
-		filter:filter
-	});
-		
-	var icon, label;
+//Returns the filter object according to the specified id
+function getMapFilter(filter){
 	if(filter == FILTER_PARK){
 		icon = IMAGE_PATH+'map_filters/park_icon.png';
 		label = 'Park';
@@ -312,6 +309,27 @@ function createMapFilterRow(filter){
 		icon = IMAGE_PATH+'map_filters/publicplace_icon.png';
 		label = 'Public place';
 	}
+	
+	var obj = {
+		icon:icon,
+		label:label
+	};
+	
+	return obj;
+}
+
+function createMapFilterRow(filter){
+	var row = Ti.UI.createTableViewRow({
+		height:47,
+		className:'mapFilter',
+		backgroundColor:'white',
+		selectedBackgroundColor:'transparent',
+		filter:filter
+	});
+		
+	var filterObject = getMapFilter(filter);
+	var icon = filterObject.icon;
+	var label = filterObject.label;
 	
 	var rowIcon = Titanium.UI.createImageView({
 		image:icon,
@@ -365,7 +383,7 @@ function searchNearbyPlaces(placeName){
 	};
 	
 	xhr.onload = function(e){
-		Ti.API.info('getPlacesByFilterOnline() got back from server '+this.responseText);
+		Ti.API.info('searchNearbyPlaces() got back from server '+this.responseText);
 		var jsonData = JSON.parse(this.responseText);
 		
 		showMapSearchResults(jsonData.data.places);
@@ -383,11 +401,63 @@ function searchNearbyPlaces(placeName){
 
 //Updates the filter table with the search results
 function showMapSearchResults(data){
+	var tableRows = [];
+	
 	if(data.length > 0){
-		
+		for(var i=0; i < data.length; i++){
+			
+			var rowIcon = Titanium.UI.createImageView({
+				image:getMapFilter(data[i].category_id).icon,
+				left:7
+			});
+			
+			var row = Ti.UI.createTableViewRow({
+				height:47,
+				backgroundColor:'white',
+				selectedBackgroundColor:'transparent'
+			});
+			
+			var rowLabel = Titanium.UI.createLabel({
+				text:data[i].name,
+				color:'#716767',
+				left:52,
+				font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
+			});
+			
+			var rowDistance = Titanium.UI.createLabel({
+				text:data[i].distance,
+				color:'#716767',
+				right:10,
+				textAlign:'right',
+				font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
+			});
+			
+			row.add(rowLabel);
+			row.add(rowDistance);
+			row.add(rowIcon);
+			
+			tableRows.push(row);		
+		}
 	} else {
+		var row = Ti.UI.createTableViewRow({
+			height:47,
+			backgroundColor:'white',
+			selectedBackgroundColor:'transparent'
+		});
 		
+		var rowLabel = Titanium.UI.createLabel({
+			text:'No results',
+			color:'#716767',
+			left:12,
+			font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
+		});
+		
+		row.add(rowLabel);
+		
+		tableRows.push(row);
 	}
+	
+	mapSearchCategoriesTableView.setData(tableRows);
 }
 
 //get places by filter 

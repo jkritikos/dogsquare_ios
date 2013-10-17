@@ -5,8 +5,10 @@ Ti.Geolocation.accuracy = Ti.Geolocation.ACCURACY_BEST_FOR_NAVIGATION;
 Ti.Geolocation.preferredProvider = Ti.Geolocation.PROVIDER_GPS;
 Ti.Geolocation.distanceFilter = 10;
 
+//holds the window stack
 var openWindows = [];
-
+//holds global timers for various async tasks
+var timers = [];
 
 Ti.include('common/dao.js');
 
