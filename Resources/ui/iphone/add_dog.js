@@ -33,8 +33,6 @@ var selectedPickerSize = 0;
 var selectedPickerGender = 0;
 var selectedPickerMating = 0;
 
-var selectPickerRowOnce = false;
-
 //UI components
 var addDogPickerType = null;
 
@@ -366,13 +364,6 @@ function builAddDogView(windowMode){
 //handle picker data and animation
 function addDogHandlePicker(e){
 	
-	if(viewAddDogTargetMode == TARGET_MODE_REUSE) {
-		if(!selectPickerRowOnce){
-			addDogPicker.setSelectedRow(0, 0, true);
-			selectPickerRowOnce = true;
-		}
-	}
-	
 	//clear all picker rows method
     clearPickerRows();
     
@@ -431,7 +422,6 @@ function addDogShowPhotoOptions(){
 //handle picker done button
 function handlePickerDoneButton(e){
 	addDogScrollBackground.scrollTo(0,0);
-	//alert('inside picker, selected index '+addDogPicker.getSelectedRow(0).breedIndex);
 	
 	addDogPickerBackground.animate({bottom:-260, duration:500});
 	
@@ -718,7 +708,7 @@ function validateDogForm(){
 	}else if(isStringNullOrEmpty(addDogFieldAge.value) || isNaN(addDogFieldAge.value)){
 		alert('AGE IS MISSING OR NOT A NUMBER');
 		return false;
-	} else if(addDogFieldSizeHintTextLabel.id == null){
+	}else if(addDogFieldSizeHintTextLabel.id == null){
 		alert('SIZE IS MISSING');
 		return false;
 	}else if(addDogFieldGenderHintTextLabel.id == null){
@@ -928,25 +918,21 @@ function handleAddDogPickerChange(e){
 		addDogFieldDogBreedHintTextLabel.color = 'black';
 		addDogFieldDogBreedHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addDogFieldDogBreedHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
-		addDogFieldDogBreedHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldDogBreedHintTextLabel.opacity = 1;
 	}else if(addDogPickerType == GENDER_PICKER){
 		addDogFieldGenderHintTextLabel.color = 'black';
 		addDogFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addDogFieldGenderHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
-		addDogFieldGenderHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldGenderHintTextLabel.opacity = 1;
 	}else if(addDogPickerType == MATTING_PICKER){
 		addDogFieldMattingHintTextLabel.color = 'black';
 		addDogFieldMattingHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addDogFieldMattingHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
-		addDogFieldMattingHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldMattingHintTextLabel.opacity = 1;
 	}else if(addDogPickerType == SIZE_PICKER){
 		addDogFieldSizeHintTextLabel.color = 'black';
 		addDogFieldSizeHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addDogFieldSizeHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
-		addDogFieldSizeHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldSizeHintTextLabel.opacity = 1;
 	}
 }

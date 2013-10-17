@@ -1584,7 +1584,6 @@ function cleanDB(){
 	db.execute('delete from PASSPORT');
 	db.execute('delete from INBOX');
 	db.execute('delete from DOG_BREEDS');
-	db.execute('delete from COUNTRIES');
 	db.execute('delete from DOGFUEL_RULES');
 	db.execute('delete from MUTUAL_FOLLOWERS');
 	db.execute('delete from NOTIFICATIONS');

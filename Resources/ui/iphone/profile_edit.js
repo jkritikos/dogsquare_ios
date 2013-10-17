@@ -26,13 +26,14 @@ var editProfilePickerBackground = null;
 var editProfileDatePickerBackground = null;
 var editProfileThumbnailPreviewImageView = null;
 
-var genderPicker = [];
-var countryPicker = [];
+var editProfileGenderPicker = [];
+var editProfileCountryPicker = [];
+var editProfileCountryIndexes = [];
 
-var setSelectedRowCountry = false;
-var setSelectedRowGender = false;
+var editProfileSelectedRowCountry = 0;
+var editProfileSelectedRowGender = 0;
 
-var PICKER_DATE_BIRTH = 1;
+var PICKER_DATE_BIRTH = 1;//same constants as register. Ask what to do? Remove or rename? TODO
 var PICKER_COUNTRY = 2;
 var PICKER_GENDER = 3;
 
@@ -266,6 +267,7 @@ function buildEditProfileView(){
 	var countryName = getCountryById(userObject.country);
 	editProfileFieldCountryHintTextLabel.text = countryName;
 	editProfileObject.country = userObject.country;
+	editProfileSelectedRowCountry = userObject.country;
 	
 	editProfileFieldGenderHintTextLabel = Ti.UI.createLabel({
 		width:editProfileTxtFieldWidth,
@@ -287,6 +289,7 @@ function buildEditProfileView(){
 		editProfileFieldGenderHintTextLabel.text = 'Female';
 	}
 	editProfileObject.gender = userObject.gender;
+	editProfileSelectedRowGender = userObject.gender;
 	
 	//sepparator offset
 	var sepparatorOffset = 0;
@@ -484,8 +487,8 @@ function buildEditProfileView(){
 	editProfileDatePickerBackground.add(editProfileDateToolbar);
 	
 	//gender picker data
-	genderPicker[0]=Ti.UI.createPickerRow({title:'Male', id:1});
-	genderPicker[1]=Ti.UI.createPickerRow({title:'Female', id:2});
+	editProfileGenderPicker[0]=Ti.UI.createPickerRow({title:'Male', id:1});
+	editProfileGenderPicker[1]=Ti.UI.createPickerRow({title:'Female', id:2});
 	
 	//country picker data
 	var countries = getCountries();
@@ -496,12 +499,13 @@ function buildEditProfileView(){
 		var countryPickerId = countries[i].id;
 		
 		if(!isStringNullOrEmpty(countryPickerName)){
-			countryPicker[i]=Ti.UI.createPickerRow({title:countryPickerName, id:countryPickerId});
+			editProfileCountryPicker[i]=Ti.UI.createPickerRow({title:countryPickerName, id:countryPickerId});
+			editProfileCountryIndexes[countryPickerId] = i;
 		}
 		
 	}
 	
-	editProfilePicker.add(countryPicker);
+	editProfilePicker.add(editProfileCountryPicker);
 	
 	return editProfileView;
 }
@@ -544,7 +548,7 @@ function handleEditProfilePickerChange(e){
 		editProfileFieldCountryHintTextLabel.opacity = 1;
 		
 		var data = editProfilePicker.getSelectedRow(0).title;
-		editProfileObject.country = editProfilePicker.getSelectedRow(0).id;
+		
 		editProfileFieldCountryHintTextLabel.text = data;
 	}else if(editProfilePickerType == PICKER_GENDER){
 		editProfileFieldGenderHintTextLabel.color = 'black';
@@ -552,7 +556,6 @@ function handleEditProfilePickerChange(e){
 		editProfileFieldGenderHintTextLabel.opacity = 1;
 		
 		var data = editProfilePicker.getSelectedRow(0).title;
-		editProfileObject.gender = editProfilePicker.getSelectedRow(0).id;
 		editProfileFieldGenderHintTextLabel.text = data;
 	}
 }
@@ -567,13 +570,15 @@ function handleEditProfilePickerDoneButton(e){
 	}else if(editProfilePickerType === PICKER_COUNTRY){
 		editProfilePickerBackground.animate({bottom:-260, duration:500});
 		editProfileScrollView.scrollTo(0,200);
+		editProfileObject.country = editProfilePicker.getSelectedRow(0).id;
 		//set as selected the row which the user selected previously
-		editProfilePicker.setSelectedRow(0, editProfilePicker.getSelectedRow(0).id-1, false);
+		editProfileSelectedRowCountry = editProfilePicker.getSelectedRow(0).id;
 	}else if(editProfilePickerType === PICKER_GENDER){
 		editProfilePickerBackground.animate({bottom:-260, duration:500});
 		editProfileScrollView.scrollTo(0,200);
+		editProfileObject.gender = editProfilePicker.getSelectedRow(0).id;
 		//set as selected the row which the user selected previously
-		editProfilePicker.setSelectedRow(0, editProfilePicker.getSelectedRow(0).id-1, false);
+		editProfileSelectedRowGender = editProfilePicker.getSelectedRow(0).id;
 	}
 	
 }
@@ -603,12 +608,9 @@ function editProfileHandlePicker(e){
 		editProfileScrollView.scrollTo(0,200);
 		editProfileDatePickerBackground.animate({bottom:0, duration:500});
 	}else if(picker === PICKER_COUNTRY){
-		editProfilePicker.add(countryPicker);
+		editProfilePicker.add(editProfileCountryPicker);
 		
-		if(!setSelectedRowCountry){
-			editProfilePicker.setSelectedRow(0, userObject.country-1, false);
-			setSelectedRowCountry = true;
-		}
+		editProfilePicker.setSelectedRow(0, editProfileCountryIndexes[editProfileSelectedRowCountry], false);
 		
 		editProfileFieldCountryHintTextLabel.color = 'black';
 		editProfileFieldCountryHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
@@ -617,12 +619,9 @@ function editProfileHandlePicker(e){
 		editProfileScrollView.scrollTo(0,282);
 		editProfilePickerBackground.animate({bottom:0, duration:500});
 	}else if(picker === PICKER_GENDER){
-		editProfilePicker.add(genderPicker);
+		editProfilePicker.add(editProfileGenderPicker);
 		
-		if(!setSelectedRowGender){
-			editProfilePicker.setSelectedRow(0, userObject.gender-1, false);
-			setSelectedRowGender = true;
-		}
+		editProfilePicker.setSelectedRow(0, editProfileSelectedRowGender-1, false);
 		
 		editProfileFieldGenderHintTextLabel.color = 'black';
 		editProfileFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};

@@ -35,6 +35,10 @@ var registerThumbnailPreviewImageView = null;
 
 var genderPicker = [];
 var countryPicker = [];
+var countryIndexes = [];
+
+var registerSelectedRowCountry = 0;
+var registerSelectedRowGender = 0;
 
 var PICKER_DATE_BIRTH = 1;
 var PICKER_COUNTRY = 2;
@@ -578,6 +582,7 @@ function buildRegisterWindow(){
 		
 		if(!isStringNullOrEmpty(countryPickerName)){
 			countryPicker[i]=Ti.UI.createPickerRow({title:countryPickerName, id:countryPickerId});
+			countryIndexes[countryPickerId] = i;
 		}
 		
 	}
@@ -639,7 +644,6 @@ function handleRegisterPickerChange(e){
 		registerFieldCountryHintTextLabel.opacity = 1;
 		
 		var data = registerPicker.getSelectedRow(0).title;
-		signupUserObject.country = registerPicker.getSelectedRow(0).id;
 		registerFieldCountryHintTextLabel.text = data;
 	}else if(registerPickerType == PICKER_GENDER){
 		registerFieldGenderHintTextLabel.color = 'black';
@@ -647,7 +651,7 @@ function handleRegisterPickerChange(e){
 		registerFieldGenderHintTextLabel.opacity = 1;
 		
 		var data = registerPicker.getSelectedRow(0).title;
-		signupUserObject.gender = registerPicker.getSelectedRow(0).id;
+		
 		registerFieldGenderHintTextLabel.text = data;
 	}
 }
@@ -662,14 +666,22 @@ function handleRegisterPickerDoneButton(e){
 		registerPickerBackground.animate({bottom:-260, duration:500});
 		registerFieldGenderHintTextLabel.fireEvent('click');
 		registerScrollView.scrollTo(0,364);
+		//store in object the id
+		signupUserObject.country = registerPicker.getSelectedRow(0).id;
+		//store the selected id in a variable
+		registerSelectedRowCountry = registerPicker.getSelectedRow(0).id;
 	}else if(registerPickerType === PICKER_GENDER){
 		registerPickerBackground.animate({bottom:-260, duration:500});
 		registerScrollView.scrollTo(0,186);
+		
+		signupUserObject.gender = registerPicker.getSelectedRow(0).id;
+		registerSelectedRowGender = registerPicker.getSelectedRow(0).id;
 	}
 }
 
 //handle picker data and animation
 function registerHandlePicker(e){
+	
 	//clear all picker rows method
     clearRegisterPickerRows();
     
@@ -695,25 +707,25 @@ function registerHandlePicker(e){
 		registerDatePickerBackground.animate({bottom:0, duration:500});
 	}else if(picker === PICKER_COUNTRY){
 		registerPicker.add(countryPicker);
-		registerPicker.setSelectedRow(0, false);
 		
 		registerFieldCountryHintTextLabel.color = 'black';
 		registerFieldCountryHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		registerFieldCountryHintTextLabel.opacity = 1;
 		
-		signupUserObject.country = registerPicker.getSelectedRow(0).id;
+		//select previously selected row
+		registerPicker.setSelectedRow(0, countryIndexes[registerSelectedRowCountry], false);
 		
 		registerScrollView.scrollTo(0,323);
 		registerPickerBackground.animate({bottom:0, duration:500});
 	}else if(picker === PICKER_GENDER){
 		registerPicker.add(genderPicker);
-		registerPicker.setSelectedRow(0, false);
 		
 		registerFieldGenderHintTextLabel.color = 'black';
 		registerFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		registerFieldGenderHintTextLabel.opacity = 1;
 		
-		signupUserObject.gender = registerPicker.getSelectedRow(0).id;
+		//select previously selected row
+		registerPicker.setSelectedRow(0, registerSelectedRowGender-1, false);
 		
 		registerScrollView.scrollTo(0,364);
 		registerPickerBackground.animate({bottom:0, duration:500});
