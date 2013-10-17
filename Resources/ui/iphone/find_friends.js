@@ -784,6 +784,7 @@ function facebookGetAllFriends(){
 		if(fb.loggedIn){
 			
 			//progress view
+			var progressView = new ProgressView({window:viewFindFriends});
 			progressView.show({
 				text:"Loading..."
 			});
