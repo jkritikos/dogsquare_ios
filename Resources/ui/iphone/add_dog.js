@@ -310,7 +310,7 @@ function builAddDogView(windowMode){
 			var id = addDogViewBreeds[i].id;
 			
 			if(!isStringNullOrEmpty(name)){
-				dogBreedPicker[i]=Ti.UI.createPickerRow({title:name, id:id});
+				dogBreedPicker[i]=Ti.UI.createPickerRow({title:name, id:id, breedIndex:i});
 			}
 			
 		}
@@ -447,7 +447,7 @@ function addDogShowPhotoOptions(){
 //handle picker done button
 function handlePickerDoneButton(e){
 	addDogScrollBackground.scrollTo(0,0);
-	Ti.API.info('inside picker');
+	Ti.API.info('inside picker, selected index '+addDogPicker.getSelectedRow(0).breedIndex);
 	
 	addDogPickerBackground.animate({bottom:-260, duration:500});
 	
