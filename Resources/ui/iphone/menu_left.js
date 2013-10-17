@@ -201,6 +201,7 @@ leftTableView.addEventListener("click", function(e){
 		case MENU_FIND_FRIENDS:
 			navController.getWindow().setTitleControl();
 			Ti.include('ui/iphone/find_friends.js');
+			buildFindFriendsView();
 			navController.getWindow().add(viewFindFriends);
 			navController.getWindow().setTitle('Find friends');
 			break;

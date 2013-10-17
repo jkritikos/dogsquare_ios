@@ -3,6 +3,7 @@ var UI_COLOR = '#f9bf30';
 var UI_BACKGROUND_COLOR = '#eeeded';
 var UI_MENU_BACKGROUND_COLOR = '#252931';
 var UI_COLOR_RUN = '#6a5b5b';
+var UI_FONT_COLOR_LIGHT_BLACK = '#666666';
 var UI_FONT_REGULAR = {fontSize:25, fontWeight:'regular', fontFamily:'Open Sans'};
 var UI_FONT_BOLD = {fontSize:25, fontWeight:'bold', fontFamily:'Open Sans'};
 var UI_FONT_SEMIBOLD_NAVBAR = {fontSize:25, fontWeight:'semibold', fontFamily:'Open Sans'};
