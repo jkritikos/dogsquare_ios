@@ -1607,9 +1607,8 @@ function createDB(){
 	db.execute('create table if not exists DOG_BREEDS (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"origin\" varchar(256), \"weight_from\" integer, \"weight_to\" integer, \"kennel_club\" varchar(256), \"active\" integer)');
 	db.execute('create table if not exists MUTUAL_FOLLOWERS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_id\" integer, \"name\" varchar(256),\"thumb\" varchar(128))');
 	db.execute('create table if not exists PLACE_CATEGORIES (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"active\" integer)');
-	db.execute('create table if not exists COUNTRIES (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"active\" integer)');
+	//db.execute('create table if not exists COUNTRIES (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"active\" integer)');
 	db.execute('create table if not exists NOTIFICATIONS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from_id\" integer, \"user_from_name\" varchar(256), \"type_id\" integer, \"read\" integer, \"activity_id\" integer, \"badge_id\" integer, \"date\" real, \"user_from_thumb\" varchar(128))');
-	//db.execute('create table if not exists INBOX (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from\" integer, \"user_to\" integer, \"date\" real, \"message\" text)');
 	
 	db.close();
 	Ti.API.info('createDB() ends');
