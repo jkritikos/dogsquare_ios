@@ -12,10 +12,9 @@ var FACEBOOK_TAB = 1;
 var CONTACTS_TAB = 2;
 var DOGSQUARE_TAB = 3;
 
-var TYPE_CONTACTS_ROW = 1;
-var TYPE_DOGSQUARE_ROW = 2;
-var TYPE_FOLLOW_BUTTON = 3;
-var TYPE_INVITE_BUTTON = 4;
+var TYPE_FRIENDS_ROW = 1;
+var TYPE_FOLLOW_BUTTON = 2;
+var TYPE_INVITE_BUTTON = 3;
 
 var FIND_FRIENDS_WIN = 1;
 
@@ -285,15 +284,14 @@ function populateFindFriendsFacebookTableView(data){
 			height:73,
 			backgroundColor:'white',
 			selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-			type:FRIENDS_TYPE_ROW,
+			type:TYPE_FRIENDS_ROW,
 			button:'invite'
 		});
-		
 		
 		var rowFriendImage = Titanium.UI.createImageView({
 			image:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:3,
-			type:FRIENDS_TYPE_ROW,
+			type:TYPE_FRIENDS_ROW,
 			button:'invite'
 		});
 		row.add(rowFriendImage);
@@ -308,7 +306,7 @@ function populateFindFriendsFacebookTableView(data){
 			left:72,
 			width:116,
 			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'},
-			type:FRIENDS_TYPE_ROW,
+			type:TYPE_FRIENDS_ROW,
 			button:'invite'
 		});
 		row.add(rowFullNameLabel);
@@ -328,7 +326,7 @@ function populateFindFriendsContactsTableView(uData){
 			height:73,
 			backgroundColor:'white',
 			selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-			type:TYPE_CONTACTS_ROW,
+			type:TYPE_FRIENDS_ROW,
 			button:'invite'
 		});
 		
@@ -336,7 +334,7 @@ function populateFindFriendsContactsTableView(uData){
 		var rowFriendImage = Titanium.UI.createImageView({
 			image:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:3,
-			type:TYPE_CONTACTS_ROW,
+			type:TYPE_FRIENDS_ROW,
 			button:'invite'
 		});
 		row.add(rowFriendImage);
@@ -350,7 +348,7 @@ function populateFindFriendsContactsTableView(uData){
 			left:72,
 			width:116,
 			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'},
-			type:TYPE_CONTACTS_ROW,
+			type:TYPE_FRIENDS_ROW,
 			button:'invite'
 		});
 		row.add(rowFullNameLabel);
@@ -388,6 +386,11 @@ function populateFindFriendsContactsTableView(uData){
 					}
 						
 					followCreated = true;//follow is created
+					
+					//these exist to identify that the row is a row with a follow button
+					row.button = 'follow';
+					rowFriendImage.button = 'follow';
+					rowFullNameLabel.button = 'follow';
 				}
 			}
 		}
@@ -424,7 +427,7 @@ function populateFindFriendsDogsquareTableView(uObj){
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',
 			selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-			type:TYPE_DOGSQUARE_ROW
+			type:TYPE_FRIENDS_ROW
 		});
 		
 		//friend's profile name
@@ -435,7 +438,7 @@ function populateFindFriendsDogsquareTableView(uObj){
 			borderRadius:30,
 			borderWidth:2,
 			borderColor:'#f9bf30',
-			type:TYPE_DOGSQUARE_ROW
+			type:TYPE_FRIENDS_ROW
 		});
 		row.add(rowFriendImage);
 		
@@ -448,7 +451,7 @@ function populateFindFriendsDogsquareTableView(uObj){
 			width:116,
 			left:72,
 			font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'},
-			type:TYPE_DOGSQUARE_ROW
+			type:TYPE_FRIENDS_ROW
 		});
 		row.add(rowNameLabel);
 		
@@ -471,6 +474,11 @@ function populateFindFriendsDogsquareTableView(uObj){
 			rowFollowButton.backgroundImage = IMAGE_PATH+'follow_invite/Unfollow_btn.png';
 			rowFollowButton.toggle = true;
 		}
+		
+		//these exist to identify that the row is a row with a follow button
+		row.button = 'follow';
+		rowFriendImage.button = 'follow';
+		rowNameLabel.button = 'follow';
 		
 		tableRows.push(row);
 	}
@@ -678,7 +686,7 @@ function doSearchUserByEmail(cEmail){
 }
 
 function handlefriendsTableViewRows(e){
-	if(e.source.type == TYPE_DOGSQUARE_ROW){
+	if(e.source.type == TYPE_FRIENDS_ROW && e.source.button == 'follow'){
 		
 		Ti.include('ui/iphone/profile_other.js');
 		
