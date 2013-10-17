@@ -305,8 +305,6 @@ function checkLoginCredentials(lObj){
 			
 			//save place categories
 			savePlaceCategories(jsonData.data.categories);
-			//save countries
-			saveCountries(jsonData.data.countries);
 			
 			//save passport notes
 			var notes = jsonData.data.notes;

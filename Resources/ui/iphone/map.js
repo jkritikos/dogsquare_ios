@@ -24,6 +24,7 @@ var mapSearchCategoriesBackground = null;
 var mapSearchCategoriesTableView = null;
 var mapCheckInButton = null;
 var mapview = null;
+var mapSearchLastValue = "";
 
 //Map coordinates
 var mapLatitude = null;
@@ -249,7 +250,10 @@ function handleMapSearchTextFieldChange(e){
 		mapSearchTxtfieldLabel.hide();
 		
 		//search for places
-		searchNearbyPlaces(mapSearchTxtfield.value);
+		if(mapSearchTxtfield.value.length > 2 && mapSearchTxtfield.value != mapSearchLastValue){
+			mapSearchLastValue = mapSearchTxtfield.value;
+			searchNearbyPlaces(mapSearchTxtfield.value);
+		}
 	}else{
 		mapSearchTxtfieldLabel.show();
 	}
@@ -363,6 +367,8 @@ function searchNearbyPlaces(placeName){
 	xhr.onload = function(e){
 		Ti.API.info('getPlacesByFilterOnline() got back from server '+this.responseText);
 		var jsonData = JSON.parse(this.responseText);
+		
+		showMapSearchResults(jsonData.data.places);
 	};
 	
 	xhr.open('GET',API+'getPlaces');
@@ -370,8 +376,18 @@ function searchNearbyPlaces(placeName){
 		user_id:userObject.userId,
 		lat:mapLatitude,
 		lon:mapLongitude,
-		name:placeName
+		name:placeName,
+		breed_list:[]
 	});
+}
+
+//Updates the filter table with the search results
+function showMapSearchResults(data){
+	if(data.length > 0){
+		
+	} else {
+		
+	}
 }
 
 //get places by filter 
