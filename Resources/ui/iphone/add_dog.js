@@ -33,6 +33,8 @@ var selectedPickerSize = 0;
 var selectedPickerGender = 0;
 var selectedPickerMating = 0;
 
+var selectPickerRowOnce = false;
+
 //UI components
 var addDogPickerType = null;
 
@@ -45,6 +47,7 @@ var addDogInteractionType = ADD_DOG_USE;
 var viewAddDogTargetMode = null;
 
 var addDogObject = {};
+var dogBreedIndexes = [];
 
 function builAddDogView(windowMode){
 	if(viewAddDog == null){
@@ -310,7 +313,8 @@ function builAddDogView(windowMode){
 			var id = addDogViewBreeds[i].id;
 			
 			if(!isStringNullOrEmpty(name)){
-				dogBreedPicker[i]=Ti.UI.createPickerRow({title:name, id:id, breedIndex:i});
+				dogBreedPicker[i]=Ti.UI.createPickerRow({title:name, id:id});
+				dogBreedIndexes[id] = i;
 			}
 			
 		}
@@ -363,7 +367,10 @@ function builAddDogView(windowMode){
 function addDogHandlePicker(e){
 	
 	if(viewAddDogTargetMode == TARGET_MODE_REUSE) {
-		addDogPicker.setSelectedRow(0, 0, true);
+		if(!selectPickerRowOnce){
+			addDogPicker.setSelectedRow(0, 0, true);
+			selectPickerRowOnce = true;
+		}
 	}
 	
 	//clear all picker rows method
@@ -378,45 +385,22 @@ function addDogHandlePicker(e){
 		addDogScrollBackground.scrollTo(0,60);
 		addDogPicker.add(dogBreedPicker);
 		
-		//if user is editing
-		if(viewAddDogTargetMode != TARGET_MODE_REUSE) {
-			
-			//setSelectRow only the first time
-			if(selectedPickerDogBreed != 0){
-				addDogPicker.setSelectedRow(0, selectedPickerDogBreed-1, false);
-				selectedPickerDogBreed = 0;
-			}
-		}
+		addDogPicker.setSelectedRow(0, dogBreedIndexes[selectedPickerDogBreed], false);
 	}else if(picker === GENDER_PICKER){
 		addDogPicker.add(genderPicker);
 		addDogScrollBackground.scrollTo(0,183);
 		
-		if(viewAddDogTargetMode != TARGET_MODE_REUSE) {
-			if(selectedPickerGender != 0){
-				addDogPicker.setSelectedRow(0, selectedPickerGender-1, false);
-				selectedPickerGender = 0;
-			}
-		}
+		addDogPicker.setSelectedRow(0, selectedPickerGender-1, false);
 	}else if(picker === MATTING_PICKER){
 		addDogPicker.add(mattingPicker);
 		addDogScrollBackground.scrollTo(0,224);
 		
-		if(viewAddDogTargetMode != TARGET_MODE_REUSE) {
-			if(selectedPickerMating != 0){
-				addDogPicker.setSelectedRow(0, selectedPickerMating-1, false);
-				selectedPickerMating = 0;
-			}
-		}
+		addDogPicker.setSelectedRow(0, selectedPickerMating-1, false);
 	}else if(picker === SIZE_PICKER){
 		addDogPicker.add(sizePicker);
 		addDogScrollBackground.scrollTo(0,142);
 		
-		if(viewAddDogTargetMode != TARGET_MODE_REUSE) {
-			if(selectedPickerSize != 0){
-				addDogPicker.setSelectedRow(0, selectedPickerSize-1, false);
-				selectedPickerSize = 0;
-			}
-		}
+		addDogPicker.setSelectedRow(0, selectedPickerSize-1, false);
 	}
 	
 	addDogPicker.selectionIndicator = true;
@@ -447,7 +431,7 @@ function addDogShowPhotoOptions(){
 //handle picker done button
 function handlePickerDoneButton(e){
 	addDogScrollBackground.scrollTo(0,0);
-	Ti.API.info('inside picker, selected index '+addDogPicker.getSelectedRow(0).breedIndex);
+	//alert('inside picker, selected index '+addDogPicker.getSelectedRow(0).breedIndex);
 	
 	addDogPickerBackground.animate({bottom:-260, duration:500});
 	
@@ -458,6 +442,7 @@ function handlePickerDoneButton(e){
 		addDogFieldDogBreedHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
 		addDogFieldDogBreedHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldDogBreedHintTextLabel.opacity = 1;
+		selectedPickerDogBreed = addDogPicker.getSelectedRow(0).id;
 		
 		if(viewAddDogTargetMode == TARGET_MODE_REUSE) {
 			addDogFieldAge.focus();
@@ -468,6 +453,7 @@ function handlePickerDoneButton(e){
 		addDogFieldGenderHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
 		addDogFieldGenderHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldGenderHintTextLabel.opacity = 1;
+		selectedPickerGender = addDogPicker.getSelectedRow(0).id;
 		
 		if(viewAddDogTargetMode == TARGET_MODE_REUSE) {
 			addDogFieldMattingHintTextLabel.fireEvent('click');
@@ -478,20 +464,19 @@ function handlePickerDoneButton(e){
 		addDogFieldMattingHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
 		addDogFieldMattingHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldMattingHintTextLabel.opacity = 1;
+		selectedPickerMating = addDogPicker.getSelectedRow(0).id;
 	}else if(addDogPickerType === SIZE_PICKER){
 		addDogFieldSizeHintTextLabel.color = 'black';
 		addDogFieldSizeHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addDogFieldSizeHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
 		addDogFieldSizeHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 		addDogFieldSizeHintTextLabel.opacity = 1;
+		selectedPickerSize = addDogPicker.getSelectedRow(0).id;
 		
 		if(viewAddDogTargetMode == TARGET_MODE_REUSE) {
 			addDogFieldGenderHintTextLabel.fireEvent('click');
 		}
 	}
-	
-	//set as selected, the row which the user selected previously
-	addDogPicker.setSelectedRow(0, addDogPicker.getSelectedRow(0).id-1, false);
 }
 
 //handle photo selection
@@ -648,7 +633,7 @@ function doSaveDogOnline(dObj){
 	Ti.API.info('doSaveDogOnline() called with dogObject='+dObj); 	
 	
 	//progress view
-	var progressView = new ProgressView({window:registerWindow});
+	var progressView = new ProgressView({window:viewAddDog});
 	progressView.show({
 		text:"Saving..."
 	});
