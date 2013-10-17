@@ -25,6 +25,7 @@ var mapSearchCategoriesTableView = null;
 var mapCheckInButton = null;
 var mapview = null;
 var mapSearchLastValue = "";
+var mapSearchFilterData = [];
 
 //Map coordinates
 var mapLatitude = null;
@@ -138,7 +139,7 @@ function buildMapView(windowMode){
 	    backgroundColor: 'transparent'
 	});
 	
-	var mapSearchFilterData = [];
+	//Prepare filters table
 	mapSearchFilterData.push(createMapFilterRow(FILTER_PARK));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_HOMELESS));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_CRUELTY));
@@ -351,8 +352,12 @@ function createMapFilterRow(filter){
 
 //Event handler for closing the map filter view
 function handleCloseFilterViewButton(){
+	Ti.API.info('Map filter DONE button pressed');
 	//Close the filter view and revert to the standard right nav button
-	mapSearchCategoriesBackground.animate({opacity:0, duration:400});
+	mapSearchCategoriesBackground.animate({opacity:0, duration:400}, function(){
+		//Revert back to the filters table
+		mapSearchCategoriesTableView.setData(mapSearchFilterData);
+	});
 	
 	//handle the cancel button
 	if(viewMapTargetMode == TARGET_MODE_REUSE){
@@ -364,13 +369,53 @@ function handleCloseFilterViewButton(){
 	mapSearchTxtfield.blur();
 }
 
+//Event handler for the filter/search results table
 function handleMapSearchCategoriesRows(e){
-	var filter = e.row.filter;
-	getPlacesByFilterOnline(filter);
-	
 	navController.getWindow().setRightNavButton(rightBtn);
 	mapSearchTxtfield.blur();
 	mapSearchCategoriesBackground.animate({opacity:0, duration:400});
+	
+	if(e.row.filter){
+		Ti.API.info('MapTable click on a FILTER');
+		var filter = e.row.filter;
+		getPlacesByFilterOnline(filter);
+	} else if(e.row.searchResultId){
+		Ti.API.info('MapTable click on a RESULT');
+		
+		var placeId = e.row.searchResultId;
+		var placeTitle = e.row.children[0].text;
+	
+		Ti.include('ui/iphone/place_view.js');
+	
+		var checkinPlaceWindow = Ti.UI.createWindow({
+			backgroundColor:UI_BACKGROUND_COLOR,
+			barImage:IMAGE_PATH+'common/bar.png',
+			barColor:UI_COLOR
+		});
+	
+		//back button
+		var checkinPlaceBackButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'common/back_button.png',
+		    width:48,
+		    height:33
+		});
+		
+		checkinPlaceWindow.setLeftNavButton(checkinPlaceBackButton);
+		
+		checkinPlaceBackButton.addEventListener("click", function() {
+		    navController.close(checkinPlaceWindow);
+		});
+		
+		checkinPlaceWindow.setTitle(placeTitle);
+		var checkinPlaceView = buildCheckinPlaceView(CHECKIN_PLACE_VIEW, placeId);
+		
+		checkinPlaceWindow.add(checkinPlaceView);
+		openWindows.push(checkinPlaceWindow);
+		//openWindows[1] = checkinPlaceWindow;
+		navController.open(checkinPlaceWindow);
+			
+	}
+	
 }
 
 //Searches for nearby places according to the user input from the searchfield on the navbar
@@ -414,7 +459,8 @@ function showMapSearchResults(data){
 			var row = Ti.UI.createTableViewRow({
 				height:47,
 				backgroundColor:'white',
-				selectedBackgroundColor:'transparent'
+				selectedBackgroundColor:'transparent',
+				searchResultId:data[i].id
 			});
 			
 			var rowLabel = Titanium.UI.createLabel({
