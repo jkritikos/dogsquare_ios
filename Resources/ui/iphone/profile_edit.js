@@ -550,6 +550,7 @@ function handleEditProfilePickerChange(e){
 		var data = editProfilePicker.getSelectedRow(0).title;
 		
 		editProfileFieldCountryHintTextLabel.text = data;
+		editProfileObject.country = editProfilePicker.getSelectedRow(0).id;
 	}else if(editProfilePickerType == PICKER_GENDER){
 		editProfileFieldGenderHintTextLabel.color = 'black';
 		editProfileFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
@@ -557,6 +558,7 @@ function handleEditProfilePickerChange(e){
 		
 		var data = editProfilePicker.getSelectedRow(0).title;
 		editProfileFieldGenderHintTextLabel.text = data;
+		editProfileObject.gender = editProfilePicker.getSelectedRow(0).id;
 	}
 }
 

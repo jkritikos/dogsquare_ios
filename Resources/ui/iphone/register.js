@@ -645,6 +645,7 @@ function handleRegisterPickerChange(e){
 		
 		var data = registerPicker.getSelectedRow(0).title;
 		registerFieldCountryHintTextLabel.text = data;
+		signupUserObject.country = registerPicker.getSelectedRow(0).id;
 	}else if(registerPickerType == PICKER_GENDER){
 		registerFieldGenderHintTextLabel.color = 'black';
 		registerFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
@@ -653,6 +654,7 @@ function handleRegisterPickerChange(e){
 		var data = registerPicker.getSelectedRow(0).title;
 		
 		registerFieldGenderHintTextLabel.text = data;
+		signupUserObject.gender = registerPicker.getSelectedRow(0).id;
 	}
 }
 

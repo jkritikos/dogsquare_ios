@@ -81,9 +81,8 @@ function buildViewActivityView(aId){
 		
 		for(i=0;i<=2;i++){
 			var viewActivityDividerBar = Titanium.UI.createView({ 
-				backgroundColor:'black',
+				backgroundColor:UI_FONT_COLOR_LIGHT_GREY,
 				width:1,
-				opacity:0.4,
 				height:31,
 				left:79 + dividerLeftOffset
 			});
@@ -254,8 +253,8 @@ function buildViewActivityView(aId){
 		
 		//background for comments
 		viewActivityCommentsBackgroundView = Ti.UI.createView({
-			top:374,
-			height:429,
+			top:IPHONE5 ? 417 : 374,
+			height:IPHONE5 ? 513 : 429,
 			width:'100%',
 			backgroundColor:UI_BACKGROUND_COLOR,
 			zIndex:2
@@ -357,11 +356,10 @@ function populateViewActivityDogsTableView(dogObj){
 		//dog name label
 		var rowDogNameLabel = Titanium.UI.createLabel({ 
 			text:dogObj[i].Dog.name,
-			color:'black',
+			color:'#474747',
 			height:65,
 			textAlign:'center',
 			left:91,
-			opacity:0.7,
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		row.add(rowDogNameLabel);
@@ -392,12 +390,11 @@ function populateViewActivityDogsTableView(dogObj){
 		//mood label
 		var rowMoodLabel = Titanium.UI.createLabel({ 
 			text:'Happy',
-			color:'black',
+			color:'#afaeae',
 			height:15,
 			textAlign:'center',
 			right:52,
 			bottom:13,
-			opacity:0.3,
 			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		row.add(rowMoodLabel);
@@ -422,6 +419,7 @@ function populateViewActivityDogsTableView(dogObj){
 
 //populate comment rows
 function populateViewActivityCommentsTableView(comObj){
+	
 	var tableRows = [];
 	
 	var addCommentRow = Ti.UI.createTableViewRow({
@@ -452,73 +450,72 @@ function populateViewActivityCommentsTableView(comObj){
 	addCommentRow.add(addCommentPlusImage);
 	tableRows.push(addCommentRow);
 	
-	if(comObj.length > 0){
-		for(i=0;i<comObj.length;i++){
-			//comment row
-			var commentRow = Ti.UI.createTableViewRow({
-				className:'commentRow',
-				height:'auto',
-				width:'100%',
-				backgroundColor:'transparent',
-				selectedBackgroundColor:'transparent',
-				rowId:COMMENT_ROW
-			});
-			
-			//comment label
-			var commentLabel = Ti.UI.createLabel({
-				text:comObj[i].comm.text,
-				top:8,
-				textAlign:'left',
-				width:292,
-				bottom:24,
-				height:'auto',
-				left:14,
-				opacity:0.6,
-				color:'black',
-				font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
-			});
-			
-			var date = new Date(comObj[i].comm.date * 1000);
-			
-			//comment time
-			var timeLabel = Ti.UI.createLabel({
-				text:relativeTime(date),
-				bottom:10,
-				textAlign:'left',
-				width:180,
-				height:15,
-				left:16,
-				opacity:0.4,
-				color:'black',
-				font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
-			});
-			
-			commentRow.add(commentLabel);
-			commentRow.add(timeLabel);
-			
-			tableRows.push(commentRow);
-		}
-	}else {
+	
+	for(i=0;i<comObj.length;i++){
+		//comment row
 		var commentRow = Ti.UI.createTableViewRow({
 			className:'commentRow',
-			height:48,
+			height:'auto',
 			width:'100%',
 			backgroundColor:'white',
-			selectedBackgroundColor:'transparent'
+			selectedBackgroundColor:'transparent',
+			rowId:COMMENT_ROW
+		});
+		
+		var commentRowUserImage = Titanium.UI.createImageView({
+			image:API+'photo?user_id='+comObj[i].comm.user_id,
+			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
+			top:6,
+			left:2,
+			borderRadius:30,
+			borderWidth:2,
+			borderColor:'f5a92c'
+		});
+		
+		//comment name label
+		var commentNameLabel = Ti.UI.createLabel({
+			text:comObj[i].comm.name,
+			top:10,
+			textAlign:'left',
+			width:292,
+			bottom:24,
+			height:'auto',
+			left:84,
+			color:'black',
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		//comment label
 		var commentLabel = Ti.UI.createLabel({
-			text:'No comments',
+			text:comObj[i].comm.text,
+			top:30,
+			bottom:30,
 			textAlign:'left',
-			width:'auto',
+			width:203,
 			height:'auto',
-			opacity:0.6,
-			color:'black',
-			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
+			left:82,
+			color:UI_FONT_COLOR_LIGHT_BLACK,
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		
+		var date = new Date(comObj[i].comm.date * 1000);
+		
+		//comment time
+		var timeLabel = Ti.UI.createLabel({
+			text:relativeTime(date),
+			bottom:10,
+			textAlign:'left',
+			width:180,
+			height:15,
+			left:84,
+			color:UI_FONT_COLOR_LIGHT_GREY,
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		commentRow.add(commentLabel);
+		commentRow.add(timeLabel);
+		commentRow.add(commentNameLabel);
+		commentRow.add(commentRowUserImage);
 		
 		tableRows.push(commentRow);
 	}
@@ -533,7 +530,7 @@ function handleViewActivityCommentButton(e){
 	
 	if(toggle){
 		openWindows[openWindows.length - 1].setRightNavButton(null);
-		viewActivityCommentsBackgroundView.animate({top:374, duration:500});
+		viewActivityCommentsBackgroundView.animate({top:IPHONE5 ? 417 : 374, duration:500});
 		viewActivityCommentsTextArea.blur();
 		viewActivityCommentsTextArea.hide();
 		viewActivityCommentsTableView.show();
@@ -853,48 +850,79 @@ function handleActivityLikesButton(e){
 
 function appendCommentActivityTableView(date, message){
 	//comment row
-	var commentRow = Ti.UI.createTableViewRow({
-		className:'commentRow',
-		height:'auto',
-		width:'100%',
-		backgroundColor:'transparent',
-		selectedBackgroundColor:'transparent',
-		rowId:COMMENT_ROW
-	});
+		var commentRow = Ti.UI.createTableViewRow({
+			className:'commentRow',
+			height:'auto',
+			width:'100%',
+			backgroundColor:'white',
+			selectedBackgroundColor:'transparent',
+			rowId:COMMENT_ROW
+		});
+		
+		var commentRowUserImage = Titanium.UI.createImageView({
+			image:API+'photo?user_id='+userObject.userId,
+			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
+			top:6,
+			left:2,
+			borderRadius:30,
+			borderWidth:2,
+			borderColor:'f5a92c'
+		});
+		
+		//comment name label
+		var commentNameLabel = Ti.UI.createLabel({
+			text:userObject.name,
+			top:10,
+			textAlign:'left',
+			width:292,
+			bottom:24,
+			height:'auto',
+			left:84,
+			color:'black',
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		
+		//comment label
+		var commentLabel = Ti.UI.createLabel({
+			text:message,
+			top:30,
+			bottom:30,
+			textAlign:'left',
+			width:203,
+			height:'auto',
+			left:82,
+			color:UI_FONT_COLOR_LIGHT_BLACK,
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		
+		var date = new Date(date * 1000);
+		
+		//comment time
+		var timeLabel = Ti.UI.createLabel({
+			text:relativeTime(date),
+			bottom:10,
+			textAlign:'left',
+			width:180,
+			height:15,
+			left:84,
+			color:UI_FONT_COLOR_LIGHT_GREY,
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		
+		commentRow.add(commentLabel);
+		commentRow.add(timeLabel);
+		commentRow.add(commentNameLabel);
+		commentRow.add(commentRowUserImage);
 	
-	//comment label
-	var commentLabel = Ti.UI.createLabel({
-		text:message,
-		top:8,
-		textAlign:'left',
-		width:292,
-		bottom:24,
-		height:'auto',
-		left:14,
-		opacity:0.6,
-		color:'black',
-		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
-	});
 	
-	var dateCreated = new Date(date * 1000);
+	if(viewActivityCommentsTableView.data[0].rows.length > 1){
+		//viewActivityCommentsTableView.appendRow(commentRow);
+		viewActivityCommentsTableView.insertRowBefore(1, commentRow);
+	}else{
+		viewActivityCommentsTableView.appendRow(commentRow);
+	}
 	
-	//comment time
-	var timeLabel = Ti.UI.createLabel({
-		text:relativeTime(dateCreated),
-		bottom:10,
-		textAlign:'left',
-		width:180,
-		height:15,
-		left:16,
-		opacity:0.4,
-		color:'black',
-		font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
-	});
+	viewActivityCommentsTableView.scrollToIndex(1);
 	
-	commentRow.add(commentLabel);
-	commentRow.add(timeLabel);
-	
-	//viewActivityCommentsTableView.appendRow(commentRow);
-	viewActivityCommentsTableView.insertRowBefore(1, commentRow);
-	viewActivityCommentsTableView.scrollToIndex(viewActivityCommentsTableView.data[0].rows.length - 1);
+	viewActivityCommentsTextArea.value = '';
 }

@@ -919,20 +919,24 @@ function handleAddDogPickerChange(e){
 		addDogFieldDogBreedHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addDogFieldDogBreedHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
 		addDogFieldDogBreedHintTextLabel.opacity = 1;
+		addDogFieldDogBreedHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 	}else if(addDogPickerType == GENDER_PICKER){
 		addDogFieldGenderHintTextLabel.color = 'black';
 		addDogFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addDogFieldGenderHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
 		addDogFieldGenderHintTextLabel.opacity = 1;
+		addDogFieldGenderHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 	}else if(addDogPickerType == MATTING_PICKER){
 		addDogFieldMattingHintTextLabel.color = 'black';
 		addDogFieldMattingHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addDogFieldMattingHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
 		addDogFieldMattingHintTextLabel.opacity = 1;
+		addDogFieldMattingHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 	}else if(addDogPickerType == SIZE_PICKER){
 		addDogFieldSizeHintTextLabel.color = 'black';
 		addDogFieldSizeHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		addDogFieldSizeHintTextLabel.text = addDogPicker.getSelectedRow(0).title;
 		addDogFieldSizeHintTextLabel.opacity = 1;
+		addDogFieldSizeHintTextLabel.id = addDogPicker.getSelectedRow(0).id;
 	}
 }
