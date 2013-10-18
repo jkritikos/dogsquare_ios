@@ -441,7 +441,7 @@ function saveNote(nObject){
 	db.execute('insert into passport (title, note_id, description, date, remind_flag, completed) values (?,?,?,?,?,?)', nObject.title, nObject.note_id, nObject.description, nObject.date, nObject.remind_flag, nObject.completed);
 	var noteId = db.lastInsertRowId;
 	
-	Ti.API.info('note stored in DB with id: ' + noteId);
+	Ti.API.info('note stored in DB with id: ' + noteId+' date '+nObject.date);
 	
 	db.close();
 }
@@ -585,13 +585,47 @@ function getNote(id){
 	return noteObj;
 }
 
+//Schedules a local notification
+function scheduleNotification(title, dueDate, noteId){
+	Ti.API.info('scheduleNotification called for dueDate '+dueDate);
+	
+	var now = new Date();
+	//Check if 3 days before the dueDate is in the future and schedule the notification
+	var dueDateMinus3 = new Date(dueDate.getTime() - (1000 * 60 * 60 * 24 * 3));
+	//dueDateMinus3.setDate(dueDate.getDate() - 3);
+	Ti.API.info('scheduleNotification -3 notification is '+dueDateMinus3);
+	if(dueDateMinus3 > now){
+		notifyModule.scheduleLocalNotification({
+		    alertBody:title,
+		    alertAction:"Just a test",
+		    userInfo:{"note":noteId,"hello":"world"},
+		    date:dueDateMinus3 
+		});
+	} else {
+		Ti.API.info('scheduleNotification NOT scheduling -3 notification for '+dueDateMinus3);
+	}
+	
+	//Check if 1 day1 before the dueDate is in the future and schedule the notification
+	var dueDateMinus1 = new Date(dueDate.getTime() - (1000 * 60 * 60 * 24 * 1));
+	if(dueDateMinus1 > now){
+		notifyModule.scheduleLocalNotification({
+		    alertBody:title,
+		    alertAction:"Just a test",
+		    userInfo:{"note":noteId,"hello":"world"},
+		    date:dueDateMinus1 
+		});
+	} else {
+		Ti.API.info('scheduleNotification NOT scheduling -1 notification for '+dueDateMinus1);
+	}
+}
+
 //update db note
 function updateNote(noteObj, noteId){
 	Ti.API.info('updateNote() called');
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
 	db.execute('update passport set title=?, description=?, date=?, remind_flag=?, completed=? where note_id=?', noteObj.title, noteObj.description, noteObj.date, noteObj.remind_flag, noteObj.completed, noteId);
-	
+	Ti.API.info('updateNote() updated note '+noteId+' - date is '+noteObj.date);
 	db.close();
 }
 

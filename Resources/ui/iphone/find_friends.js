@@ -276,9 +276,9 @@ function sortByFullName(a, b) {
 
 //populate FB friends
 function populateFindFriendsFacebookTableView(data){
+	var tableRows = [];
+	
 	for(var i=0; i < data.length; i++){
-		Ti.API.info('FB friend '+ JSON.stringify(data[i]));
-		
 		var row = Ti.UI.createTableViewRow({
 			className:'contactsRow',
 			height:73,
@@ -289,7 +289,11 @@ function populateFindFriendsFacebookTableView(data){
 		});
 		
 		var rowFriendImage = Titanium.UI.createImageView({
-			image:IMAGE_PATH+'follow_invite/default_User_photo.png',
+			image:'http://graph.facebook.com/'+data[i].id+'/picture?height=60&width=60',
+			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
+			borderRadius:30,
+			borderColor:UI_COLOR,
+			borderWidth:2,
 			left:3,
 			type:TYPE_FRIENDS_ROW,
 			button:'invite'
@@ -310,7 +314,21 @@ function populateFindFriendsFacebookTableView(data){
 			button:'invite'
 		});
 		row.add(rowFullNameLabel);
+		
+		//invite button
+		var rowInviteButton = Titanium.UI.createButton({
+			backgroundImage:IMAGE_PATH+'follow_invite/Invite_btn.png',
+			right:9,
+			width:86,
+			height:29,
+			type:TYPE_INVITE_BUTTON
+		});
+		row.add(rowInviteButton);
+		
+		tableRows.push(row);
 	}
+	
+	findFriendsTableView.setData(tableRows);
 }
 
 //populate contacts table view
@@ -798,7 +816,9 @@ function facebookGetAllFriends(){
 		        	allFriendsObject.sort(sortFBFriends);
 		        	Ti.API.info('FACEBOOK - Success in getting ALL friends '+allFriendsObject.length);
 		        	
+		        	findFriendsFacebookView.hide();
 		        	populateFindFriendsFacebookTableView(allFriendsObject);
+		        	findFriendsTableView.show();
 		        	
 		    	} else {
 		        	if (e.error) {

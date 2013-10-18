@@ -67,7 +67,10 @@ function populateTableViewSection(nData) {
 			previousMonth = month;
 			
 			var rowDate = formatDate(date);
+			var rowTime = date.getHours() + ':' + date.getMinutes();
 			var monthName = getMonthName(date);
+			
+			Ti.API.info('passport date '+date + ' hours '+date.getHours() + ' minutes '+date.getMinutes());
 			
 			var monthCategoryLabel = monthName + ' ' + date.getFullYear();
 			
@@ -153,14 +156,14 @@ function populateTableViewSection(nData) {
 			
 			//date label
 			var rowDateLabel1 = Titanium.UI.createLabel({ 
-				text:rowDate,
+				text:rowDate+ ' ' + rowTime,
 				color:'black',
-				bottom:13,
+				bottom:8,
 				height:12,
 				width:'auto',
 				textAlign:'left',
 				left:7,
-				font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
+				font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
 			});
 			passportRow1.add(rowDateLabel1);
 			
@@ -209,16 +212,17 @@ function populateTableViewSection(nData) {
 			
 			var date = new Date(nData[i].date*1000);
 			var rowDate = formatDate(date);
+			var rowTime = date.getHours() + ':' + date.getMinutes();
 			
 			var rowDateLabel = Titanium.UI.createLabel({ 
-				text:rowDate,
+				text:rowDate + ' ' + rowTime,
 				color:'black',
-				bottom:13,
+				bottom:8,
 				height:12,
 				width:'auto',
 				textAlign:'left',
 				left:7,
-				font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
+				font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
 			});
 			passportRow.add(rowDateLabel);
 			

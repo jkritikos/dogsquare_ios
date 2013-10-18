@@ -397,6 +397,18 @@ function handleAddNoteDateTimeLabel(e){
 	}
 	//create a date string with the current data
 	noteObject.date = pickerYear+'-'+pickerMonth+'-'+pickerDay+' '+pickerHours+':'+pickerMinutes+':'+pickerSeconds+' +0000';
+	//create a date object as well
+	var tmpDateObject = new Date();
+	tmpDateObject.setYear(pickerYear);
+	tmpDateObject.setMonth(pickerMonth-1);
+	tmpDateObject.setDate(pickerDay);
+	tmpDateObject.setHours(pickerHours);
+	//Ti.API.info('---- DATE OBJECT SET HOURS '+pickerHours);
+	tmpDateObject.setMinutes(pickerMinutes);
+	tmpDateObject.setSeconds(pickerSeconds);
+	noteObject.dateObject = tmpDateObject;
+	//Ti.API.info('---- DATE OBJECT '+tmpDateObject);
+	
 	addNoteTitleTextField.blur();
 	addNoteDescriptionTextArea.blur();
 	
@@ -449,7 +461,20 @@ function handleDatePickerChange(e) {
 		
 		getTimeData(pickerTime);
 	}
+	//Create a string with the date
 	noteObject.date = pickerYear+'-'+pickerMonth+'-'+pickerDay+' '+pickerHours+':'+pickerMinutes+':'+pickerSeconds+' +0000';
+	
+	//create a date object as well
+	var tmpDateObject = new Date();
+	tmpDateObject.setYear(pickerYear);
+	tmpDateObject.setMonth(pickerMonth-1);
+	tmpDateObject.setDate(pickerDay);
+	tmpDateObject.setHours(pickerHours);
+	//Ti.API.info('---- DATE OBJECT SET HOURS '+pickerHours);
+	tmpDateObject.setMinutes(pickerMinutes);
+	tmpDateObject.setSeconds(pickerSeconds);
+	noteObject.dateObject = tmpDateObject;
+	//Ti.API.info('---- DATE OBJECT '+tmpDateObject);
 }
 
 //validate form 
@@ -520,6 +545,7 @@ function updateNoteView(nObj, id){
 	
 	addNoteDateTimePicker.value = date;
 	noteObject.date = date;
+	noteObject.dateObject = date;
 	
 	//TODO check timezone - hour is +3 hours
 	var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
@@ -540,7 +566,7 @@ function updateNoteView(nObj, id){
 
 //Server call for saving note
 function doSaveNoteOnline(){
-	Ti.API.info('doSaveNoteOnline() called'); 	
+	Ti.API.info('doSaveNoteOnline() called with date '+noteObject.date+ ' and completed flag '+noteObject.completed+ ' and remind flag '+noteObject.remind_flag); 	
 	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
@@ -554,8 +580,11 @@ function doSaveNoteOnline(){
 		var jsonData = JSON.parse(this.responseText);
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
-			var date = new Date(jsonData.data.date * 1000);
-			noteObject.date = date;
+			//var date = new Date(jsonData.data.date * 1000);
+			//noteObject.date = date;
+			
+			//Save the entire date object
+			noteObject.date = noteObject.dateObject;
 			
 			if(interactionType == ADD_NOTE){
 				Ti.API.info('doSaveNoteOnline() got back note id from server '+jsonData.data.note_id);
@@ -564,6 +593,14 @@ function doSaveNoteOnline(){
 			}else if(interactionType == EDIT_NOTE){
 				var id = noteObject.note_id;
 				updateNote(noteObject, id);
+			}
+			
+			//Clear notifications
+			var canceledCount =  notifyModule.cancelLocalNotificationByKey(noteObject.note_id,"note");
+			Ti.API.info('Cancelled '+canceledCount+' notifications for note id '+noteObject.note_id);
+			//Schedule notification
+			if(noteObject.remind_flag == 1 && noteObject.completed == 0){
+				scheduleNotification(noteObject.title, noteObject.dateObject, noteObject.note_id);
 			}
 			
 			navController.close(openWindows[openWindows.length - 1]);

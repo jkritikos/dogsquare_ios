@@ -22,6 +22,10 @@ Ti.include('common/utils.js');
 Ti.include('common/translator.js');
 //Progress view component
 Ti.include("modules/progress.view.js");
+//Date manipulations
+var momentModule = require('modules/moment.min');
+//Local notifications
+var notifyModule = require('bencoding.localnotify');
 //Left & center windows
 Ti.include('ui/iphone/navigation.js');
 
@@ -38,7 +42,7 @@ window.setParallaxAmount(0.3);
 Ti.include('ui/iphone/run.js');
 
 /*
-var notify = require('bencoding.localnotify');
+
 notify.scheduleLocalNotification({
     alertBody:"notification 1",
     alertAction:"Just a test",
