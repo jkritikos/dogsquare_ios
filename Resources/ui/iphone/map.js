@@ -65,6 +65,9 @@ function buildMapView(windowMode){
 		};
 			
 		mapview.setLocation(mapRegion);
+		
+		//Get all nearby places
+		getPlacesByFilterOnline(null);
 	});
 	
 	viewMapTargetMode = windowMode;
@@ -177,8 +180,6 @@ function buildMapView(windowMode){
 	mapFilterCancelButton.addEventListener('click', handleCloseFilterViewButton);
 	
 	mapCheckInButton.addEventListener('click', function(){
-		
-		
 		Ti.include('ui/iphone/checkin.js');
 		
 		//checkin window
@@ -412,10 +413,8 @@ function handleMapSearchCategoriesRows(e){
 		checkinPlaceWindow.add(checkinPlaceView);
 		openWindows.push(checkinPlaceWindow);
 		//openWindows[1] = checkinPlaceWindow;
-		navController.open(checkinPlaceWindow);
-			
+		navController.open(checkinPlaceWindow);		
 	}
-	
 }
 
 //Searches for nearby places according to the user input from the searchfield on the navbar
@@ -466,6 +465,8 @@ function showMapSearchResults(data){
 			var rowLabel = Titanium.UI.createLabel({
 				text:data[i].name,
 				color:'#716767',
+				width:170,
+				height:24,
 				left:52,
 				font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 			});
@@ -509,11 +510,11 @@ function showMapSearchResults(data){
 //get places by filter 
 function getPlacesByFilterOnline(catId){
 	var currentUser = getUserObject();
-	Ti.API.info('getPlacesByFilterOnline() called for user '+currentUser.userId+' with token '+currentUser.token);
+	Ti.API.info('getPlacesByFilterOnline() called for user '+currentUser.userId+' with lat '+mapLatitude+' and lon '+mapLongitude);
 	
 	var dogBreeds = [];
 	
-	if(catId == FILTER_SAME_BREED) {
+	if(catId != null && catId == FILTER_SAME_BREED) {
 		var dogs  = getDogs();
 		
 		for(i=0;i<dogs.length;i++){
@@ -524,10 +525,13 @@ function getPlacesByFilterOnline(catId){
 	var dogBreeds = JSON.stringify(dogBreeds);
 	
 	//progress view
-	var progressView = new ProgressView({window:viewMap});
-	progressView.show({
-		text:"Loading..."
-	});
+	if(catId != null){
+		var progressView = new ProgressView({window:viewMap});
+		progressView.show({
+			text:"Loading..."
+		});
+	}
+	
 	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
@@ -541,7 +545,9 @@ function getPlacesByFilterOnline(catId){
 		var jsonData = JSON.parse(this.responseText);
 		
 		//Hide progress view
-		progressView.hide();
+		if(catId != null){
+			progressView.hide();
+		}
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 		
@@ -568,19 +574,43 @@ function getPlacesByFilterOnline(catId){
 	});
 }
 
+//Displays the map annotations
 function updateMapWithAnnotations(places){
-	//start point annotation
-	
 	var annotationArray = [];
 	
 	if(places.length != 0 && places != null){
 		for(i=0;i<places.length;i++){
+			
+			var customPin2 = Ti.UI.createView({
+				backgroundImage:IMAGE_PATH+'map/pin_user.png',
+				width:76,
+				height:86
+			});
+			
+			//Add the place thumb, if available
+			var placeImage = Ti.UI.createImageView({
+				image:REMOTE_PLACE_IMAGES + places[i].thumb,
+				defaultImage:IMAGE_PATH+'common/default_place_photo.png',
+				zIndex:2,
+				top:3
+			});
+			
+			customPin2.add(placeImage);
+			
+			var customView = Ti.UI.createView({
+				backgroundColor:'red',
+				width:50,
+				height:30
+			});
+			
 			var mapAnnotations = Titanium.Map.createAnnotation({
 				latitude:places[i].lat,
 				longitude:places[i].lon,
 				title:places[i].name,
 				animate:true,
-				image:IMAGE_PATH+'run_finish/pin.png'
+				customView:customPin2
+				//image:customPin2.toImage()
+				//image:IMAGE_PATH+'run_finish/pin.png'
 			});
 			
 			annotationArray.push(mapAnnotations);
