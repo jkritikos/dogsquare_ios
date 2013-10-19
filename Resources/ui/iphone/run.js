@@ -4,6 +4,7 @@ var runningPathCoordinates = [];
 var runningDistanceKm = 0;
 var runningDistanceKmLabelValue = '';
 var runObject = {};
+var runFirstSetOfCoordinates = null;
 
 //UI components
 var viewRun = null;
@@ -335,6 +336,21 @@ function handleEndRunButton(){
 		Titanium.Geolocation.removeEventListener('location',trackLocation);
 		Ti.API.info('Tracking location ENDS - collected '+runningPathCoordinates.length+' coordinates');
 		
+		//Prepare run object for the next window
+		if(runningPathCoordinates != null && runningPathCoordinates.length > 0){
+			runObject.coordinates = runningPathCoordinates;
+		} else {
+			
+			//User did not move, or the coordinates were not accurate enough, so we save what we have
+			//Save coordinates
+			saveActivityCoordinates(runObject.activity_id, runFirstSetOfCoordinates.latitude, runFirstSetOfCoordinates.longitude, new Date().getTime(), 0, 0, currentActivityMode);
+			runObject.pace = 0;
+			runObject.distance = 0;
+			
+			runningPathCoordinates.push(runFirstSetOfCoordinates);
+			runObject.coordinates = runningPathCoordinates;
+		}
+		
 		//Calculate the total distance, playtime
 		var activityTotals = calculateDogfuel(runObject.activity_id);
 		runObject.walk = activityTotals.walk;
@@ -342,9 +358,6 @@ function handleEndRunButton(){
 		
 		//Update our activity object
 		endActivity(runObject);
-		
-		//Prepare run object for the next window
-		runObject.coordinates = runningPathCoordinates;
 		
 		Ti.include('ui/iphone/run_finish.js');
 		
@@ -394,6 +407,8 @@ function handleEndRunButton(){
 		//clear run object
 		runObject = {};
 		tick = 0;
+		runFirstSetOfCoordinates = null;
+		runningPathCoordinates = [];
 		//reset UI objects
 		runningDistanceKm = 0;
 		runningDistanceKmLabelValue = 0;
@@ -430,8 +445,15 @@ function trackLocation(){
 		
 		viewRunSummaryMap.setLocation(coordinates);
 		
+		//Keep a copy of the first set of coordinates, regardless of accuracy
+		if(runFirstSetOfCoordinates == null){
+			runFirstSetOfCoordinates = coordinates;
+			weather.getWeather(e.coords.latitude, e.coords.longitude);
+		}
+		
 		//only use accurate coordinates
 		if(e.coords.accuracy <= 15){
+			Ti.API.info('trackLocation() got coordinates - processing');
 			tick++;
 			
 			if(tick == 1){
@@ -471,6 +493,8 @@ function trackLocation(){
 			
 			var speed = e.coords.speed;
 			var velocidad_km_h = (speed / 0.28).toFixed(0);	
+		} else {
+			Ti.API.info('trackLocation() got inaccurate coordinates - ignoring (accuracy '+ e.coords.accuracy+')');
 		}
 	});
 }

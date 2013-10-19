@@ -948,7 +948,7 @@ function saveActivityOnline(id){
 function endActivity(obj){
 	var now = new Date().getTime();
 	
-	Ti.API.info('updateActivity() called for activity id '+obj.activity_id);
+	Ti.API.info('endActivity() called for activity id '+obj.activity_id + ' with '+obj.coordinates.length+' coordinates');
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
 	db.execute('update activities set end_time=?, temperature=?, pace=?,distance=? where id=?',now,obj.temperature,obj.pace,obj.distance,obj.activity_id);
