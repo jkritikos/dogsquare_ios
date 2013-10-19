@@ -46,7 +46,6 @@ editProfileObject.address = '';
 editProfileObject.newsletter = 0;
 
 function buildEditProfileView(){
-	Titanium.UI.iPhone.showStatusBar();
 	
 	editProfileView = Ti.UI.createView({
 		backgroundColor:UI_BACKGROUND_COLOR
@@ -214,7 +213,7 @@ function buildEditProfileView(){
 	
 	editProfileFieldBirthDateHintTextLabel.text = birth_date;
 	
-	//Password textfield
+	//Address textfield
 	editProfileFieldAddress = Ti.UI.createTextField({
 		width:editProfileTxtFieldWidth,
 		height:editProfileTxtFieldHeight,
@@ -772,6 +771,9 @@ function editUserProfile(uObj){
 			navController.close(openWindows[openWindows.length-1]);
 			//Hide message and close edit Profile window
 			progressView.hide();
+		}else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
 		} else {
 			
 			//Show the error message we got back from the server

@@ -60,7 +60,35 @@ function handleSettingsMenuTableRows(e){
 
 //Opens a new window with the change password form
 function showChangePasswordView(){
+	Ti.API.info('showChangePasswordView() called ');
 	
+	Ti.include('ui/iphone/password_edit.js');
+	
+	var passwordEditWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Change Password'
+	});
+	
+	//back button & event listener
+	var passwordEditBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	passwordEditWindow.setLeftNavButton(passwordEditBackButton);
+	passwordEditBackButton.addEventListener("click", function() {
+	    navController.close(passwordEditWindow);
+	});
+	
+	buildPasswordEditView();
+	
+	passwordEditWindow.add(passwordEditView);
+	
+	openWindows.push(passwordEditWindow);
+	navController.open(passwordEditWindow);
 }
 
 function showEditProfileView(){
