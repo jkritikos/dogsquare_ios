@@ -15,6 +15,14 @@ var profileImageView = Titanium.UI.createImageView({
 
 viewProfile.add(profileImageView);
 
+var profileEditButton = Ti.UI.createButton({
+	backgroundImage:IMAGE_PATH+'common/edit_icon.png',
+	width:24,
+	height:23
+});
+//navController.getWindow().rightNavButton = profileEditButton;
+profileEditButton.addEventListener('click', handleProfileEditButton);
+
 //Photo dialog with options for viewing/changing the profile image
 var profilePhotoDialog = Titanium.UI.createOptionDialog({
 	options:['View', 'Take Photo', 'Choose From Library', 'Cancel'],
@@ -723,4 +731,36 @@ function changeProfilePhoto(obj){
 	xhr.setRequestHeader("Content-Type", "multipart/form-data");
 	xhr.open('POST',API+'editUser');
 	xhr.send(obj);
+}
+
+function handleProfileEditButton(){
+	Ti.API.info('handleProfileEditButton() called ');
+	
+	Ti.include('ui/iphone/profile_edit.js');
+	
+	var editProfileView = buildEditProfileView(VIEW_PROFILE);
+	
+	var editProfileWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		title:'Edit profile'
+	});
+	
+	//back button & event listener
+	var editProfileBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	editProfileWindow.setLeftNavButton(editProfileBackButton);
+	editProfileBackButton.addEventListener("click", function() {
+	    navController.close(editProfileWindow);
+	});
+	
+	editProfileWindow.add(editProfileView);
+	
+	openWindows.push(editProfileWindow);
+	navController.open(editProfileWindow);
 }

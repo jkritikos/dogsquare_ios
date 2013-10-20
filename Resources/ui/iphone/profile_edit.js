@@ -39,13 +39,16 @@ var PICKER_GENDER = 3;
 
 var editProfilePickerType = null;
 
+var toEditProfileFromWindow = null;
+
 //Data components
 //Holds the user data entered through the signup form
 var editProfileObject = {};
 editProfileObject.address = '';
 editProfileObject.newsletter = 0;
 
-function buildEditProfileView(){
+function buildEditProfileView(window){
+	toEditProfileFromWindow = window;
 	
 	editProfileView = Ti.UI.createView({
 		backgroundColor:UI_BACKGROUND_COLOR
@@ -87,7 +90,7 @@ function buildEditProfileView(){
 	
 	editProfileFormBackground = Ti.UI.createView({
 		backgroundColor:'e7e6e6',
-		top:IPHONE5 ? 221 : 191,
+		top:191,
 		width:262,
 		height:288
 	});
@@ -100,7 +103,8 @@ function buildEditProfileView(){
 		paddingLeft:4, 
 		paddingRight:4, 
 		returnKeyType: Ti.UI.RETURNKEY_RETURN,
-		field:1
+		field:1,
+		font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
 	editProfileFieldName.addEventListener('change', handleEditProfileTextFieldChange);
@@ -134,7 +138,8 @@ function buildEditProfileView(){
 		paddingRight:4, 
 		top:editProfileFieldName.top + editProfileTxtFieldOffset,
 		returnKeyType: Ti.UI.RETURNKEY_RETURN,
-		field:2
+		field:2,
+		font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
 	editProfileFieldSurname.addEventListener('change', handleEditProfileTextFieldChange);
@@ -167,7 +172,8 @@ function buildEditProfileView(){
 		top:editProfileFieldSurname.top + editProfileTxtFieldOffset,
 		keyboardType:Ti.UI.KEYBOARD_EMAIL,
 		returnKeyType: Ti.UI.RETURNKEY_RETURN,
-		field:3
+		field:3,
+		font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
 	editProfileFieldEmail.addEventListener('change', handleEditProfileTextFieldChange);
@@ -192,7 +198,7 @@ function buildEditProfileView(){
 	editProfileFieldEmailHintTextLabel.hide();
 	
 	editProfileFieldBirthDateHintTextLabel = Ti.UI.createLabel({
-		width:editProfileTxtFieldWidth,
+		width:editProfileTxtFieldWidth-9,
 		height:editProfileTxtFieldHeight,
 		color:'black',
 		top:editProfileFieldEmail.top + editProfileTxtFieldOffset,
@@ -222,7 +228,8 @@ function buildEditProfileView(){
 		top:editProfileFieldBirthDateHintTextLabel.top + editProfileTxtFieldOffset,
 		backgroundColor:'grey',
 		returnKeyType: Ti.UI.RETURNKEY_RETURN,
-		field:4
+		field:4,
+		font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
 	editProfileFieldAddress.addEventListener('change', handleEditProfileTextFieldChange);
@@ -250,7 +257,7 @@ function buildEditProfileView(){
 	
 	editProfileFieldCountryHintTextLabel = Ti.UI.createLabel({
 		text:'Country*',
-		width:editProfileTxtFieldWidth,
+		width:editProfileTxtFieldWidth-9,
 		height:editProfileTxtFieldHeight,
 		color:'black',
 		top:editProfileFieldAddress.top + editProfileTxtFieldOffset,
@@ -269,7 +276,7 @@ function buildEditProfileView(){
 	editProfileSelectedRowCountry = userObject.country;
 	
 	editProfileFieldGenderHintTextLabel = Ti.UI.createLabel({
-		width:editProfileTxtFieldWidth,
+		width:editProfileTxtFieldWidth-9,
 		height:editProfileTxtFieldHeight,
 		color:'black',
 		opacity:1,
@@ -568,15 +575,18 @@ function handleEditProfilePickerDoneButton(e){
 		editProfileDatePickerBackground.animate({bottom:-260, duration:500});
 		//set as selected the row which the user selected previously
 		editProfilePicker.value = editProfilePicker.value;
+		if(IPHONE5){
+			editProfileScrollView.scrollTo(0,114);
+		}     
 	}else if(editProfilePickerType === PICKER_COUNTRY){
 		editProfilePickerBackground.animate({bottom:-260, duration:500});
-		editProfileScrollView.scrollTo(0,200);
+		editProfileScrollView.scrollTo(0,IPHONE5 ? 114 : 200);
 		editProfileObject.country = editProfilePicker.getSelectedRow(0).id;
 		//set as selected the row which the user selected previously
 		editProfileSelectedRowCountry = editProfilePicker.getSelectedRow(0).id;
 	}else if(editProfilePickerType === PICKER_GENDER){
 		editProfilePickerBackground.animate({bottom:-260, duration:500});
-		editProfileScrollView.scrollTo(0,200);
+		editProfileScrollView.scrollTo(0,IPHONE5 ? 114 : 200);
 		editProfileObject.gender = editProfilePicker.getSelectedRow(0).id;
 		//set as selected the row which the user selected previously
 		editProfileSelectedRowGender = editProfilePicker.getSelectedRow(0).id;
@@ -606,7 +616,7 @@ function editProfileHandlePicker(e){
 		
 		editProfileFieldBirthDateHintTextLabel.text = date;
 		editProfileObject.birth_date = pickerDate;
-		editProfileScrollView.scrollTo(0,200);
+		editProfileScrollView.scrollTo(0,IPHONE5 ? 112 : 200);
 		editProfileDatePickerBackground.animate({bottom:0, duration:500});
 	}else if(picker === PICKER_COUNTRY){
 		editProfilePicker.add(editProfileCountryPicker);
@@ -617,7 +627,7 @@ function editProfileHandlePicker(e){
 		editProfileFieldCountryHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		editProfileFieldCountryHintTextLabel.opacity = 1;
 		
-		editProfileScrollView.scrollTo(0,282);
+		editProfileScrollView.scrollTo(0,IPHONE5 ? 194 : 282);
 		editProfilePickerBackground.animate({bottom:0, duration:500});
 	}else if(picker === PICKER_GENDER){
 		editProfilePicker.add(editProfileGenderPicker);
@@ -628,7 +638,7 @@ function editProfileHandlePicker(e){
 		editProfileFieldGenderHintTextLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
 		editProfileFieldGenderHintTextLabel.opacity = 1;
 		
-		editProfileScrollView.scrollTo(0,323);
+		editProfileScrollView.scrollTo(0,IPHONE5 ? 235 : 323);
 		editProfilePickerBackground.animate({bottom:0, duration:500});
 	}
 	
@@ -767,6 +777,11 @@ function editUserProfile(uObj){
 			//Save data & update UI
 			saveUserObject(uObj);
 			updateLeftMenu(uObj);
+			
+			if(toEditProfileFromWindow == VIEW_PROFILE){
+				navController.getWindow().setTitle(userObject.name);
+				profileImageView.image = getUserPhoto(userObject.image_path);
+			}
 			
 			navController.close(openWindows[openWindows.length-1]);
 			//Hide message and close edit Profile window

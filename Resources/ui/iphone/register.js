@@ -139,7 +139,8 @@ function buildRegisterWindow(){
 		paddingLeft:4, 
 		paddingRight:4, 
 		returnKeyType: Ti.UI.RETURNKEY_NEXT,
-		field:1
+		field:1,
+		font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
 	registerFieldName.addEventListener('change', handleRegisterTextFieldChange);
@@ -173,7 +174,8 @@ function buildRegisterWindow(){
 		paddingRight:4, 
 		top:registerFieldName.top + registerTxtFieldOffset,
 		returnKeyType: Ti.UI.RETURNKEY_NEXT,
-		field:2
+		field:2,
+		font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
 	registerFieldSurname.addEventListener('change', handleRegisterTextFieldChange);
@@ -208,7 +210,8 @@ function buildRegisterWindow(){
 		top:registerFieldSurname.top + registerTxtFieldOffset,
 		keyboardType:Ti.UI.KEYBOARD_EMAIL,
 		returnKeyType: Ti.UI.RETURNKEY_NEXT,
-		field:3
+		field:3,
+		font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
 	registerFieldEmail.addEventListener('change', handleRegisterTextFieldChange);
@@ -244,7 +247,8 @@ function buildRegisterWindow(){
 		backgroundColor:'grey',
 		passwordMask:true,
 		returnKeyType: Ti.UI.RETURNKEY_NEXT,
-		field:4
+		field:4,
+		font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
 	registerFieldPassword.addEventListener('change', handleRegisterTextFieldChange);
@@ -273,7 +277,7 @@ function buildRegisterWindow(){
 	
 	registerFieldBirthDateHintTextLabel = Ti.UI.createLabel({
 		text:'Date of birth*',
-		width:registerTxtFieldWidth,
+		width:registerTxtFieldWidth-9,
 		height:registerTxtFieldHeight,
 		color:'999999',
 		top:registerFieldPassword.top + registerTxtFieldOffset,
@@ -295,7 +299,8 @@ function buildRegisterWindow(){
 		top:registerFieldBirthDateHintTextLabel.top + registerTxtFieldOffset,
 		backgroundColor:'grey',
 		returnKeyType: Ti.UI.RETURNKEY_NEXT,
-		field:5
+		field:5,
+		font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
 	registerFieldAddress.addEventListener('change', handleRegisterTextFieldChange);
@@ -323,7 +328,7 @@ function buildRegisterWindow(){
 	
 	registerFieldCountryHintTextLabel = Ti.UI.createLabel({
 		text:'Country*',
-		width:registerTxtFieldWidth,
+		width:registerTxtFieldWidth-9,
 		height:registerTxtFieldHeight,
 		color:'999999',
 		top:registerFieldAddress.top + registerTxtFieldOffset,
@@ -338,7 +343,7 @@ function buildRegisterWindow(){
 	
 	registerFieldGenderHintTextLabel = Ti.UI.createLabel({
 		text:'Gender*',
-		width:registerTxtFieldWidth,
+		width:registerTxtFieldWidth-9,
 		height:registerTxtFieldHeight,
 		color:'999999',
 		top:registerFieldCountryHintTextLabel.top + registerTxtFieldOffset,
@@ -409,7 +414,6 @@ function buildRegisterWindow(){
 	var registerReceiveNewsLabel = Titanium.UI.createLabel({
 		text:'I want to receive news from Dogsquare',
 		textAlign:'left',
-		left:270,
 		top:583,
 		left:60,
 		font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -417,14 +421,23 @@ function buildRegisterWindow(){
 	registerScrollView.add(registerReceiveNewsLabel);
 	
 	var registerTermsLabel = Titanium.UI.createLabel({
-		text:'I agree to the Dogsquare TERMS OF USE',//TODO change TERMS OF USE TO LINK
+		text:'I agree to the Dogsquare',
 		textAlign:'left',
-		left:270,
 		top:619,
 		left:60,
 		font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	registerScrollView.add(registerTermsLabel);
+	
+	var registerTermsLinkLabel = Titanium.UI.createLabel({
+		text:'TERMS OF USE',
+		textAlign:'left',
+		top:618,
+		left:178,
+		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+	});
+	registerScrollView.add(registerTermsLinkLabel);
+	registerTermsLinkLabel.addEventListener('click', handleTermsLabelLink);
 	
 	//Facebook button
 	/*registerFacebookButton = Ti.UI.createButton({
@@ -623,6 +636,13 @@ function handleRegisterFormNewsCheckBox(e){
 	}
 }
 
+function handleTermsLabelLink(){
+	Ti.include('ui/iphone/terms.js');
+	buildTermsView();
+	
+	termsWindow.open();
+}
+
 function handleRegisterDatePickerChange(e){
 	//show date
 	registerFieldBirthDateHintTextLabel.color = 'black';
@@ -667,14 +687,14 @@ function handleRegisterPickerDoneButton(e){
 	}else if(registerPickerType === PICKER_COUNTRY){
 		registerPickerBackground.animate({bottom:-260, duration:500});
 		registerFieldGenderHintTextLabel.fireEvent('click');
-		registerScrollView.scrollTo(0,364);
+		registerScrollView.scrollTo(0,IPHONE5 ? 262 : 364);
 		//store in object the id
 		signupUserObject.country = registerPicker.getSelectedRow(0).id;
 		//store the selected id in a variable
 		registerSelectedRowCountry = registerPicker.getSelectedRow(0).id;
 	}else if(registerPickerType === PICKER_GENDER){
 		registerPickerBackground.animate({bottom:-260, duration:500});
-		registerScrollView.scrollTo(0,186);
+		registerScrollView.scrollTo(0,IPHONE5 ? 202 : 186);
 		
 		signupUserObject.gender = registerPicker.getSelectedRow(0).id;
 		registerSelectedRowGender = registerPicker.getSelectedRow(0).id;
@@ -705,7 +725,7 @@ function registerHandlePicker(e){
 		
 		registerFieldBirthDateHintTextLabel.text = date;
 		signupUserObject.birth_date = pickerDate;
-		registerScrollView.scrollTo(0,241);
+		registerScrollView.scrollTo(0,IPHONE5 ? 139 : 241);
 		registerDatePickerBackground.animate({bottom:0, duration:500});
 	}else if(picker === PICKER_COUNTRY){
 		registerPicker.add(countryPicker);
@@ -717,7 +737,7 @@ function registerHandlePicker(e){
 		//select previously selected row
 		registerPicker.setSelectedRow(0, countryIndexes[registerSelectedRowCountry], false);
 		
-		registerScrollView.scrollTo(0,323);
+		registerScrollView.scrollTo(0,IPHONE5 ? 221 : 323);
 		registerPickerBackground.animate({bottom:0, duration:500});
 	}else if(picker === PICKER_GENDER){
 		registerPicker.add(genderPicker);
@@ -729,7 +749,7 @@ function registerHandlePicker(e){
 		//select previously selected row
 		registerPicker.setSelectedRow(0, registerSelectedRowGender-1, false);
 		
-		registerScrollView.scrollTo(0,364);
+		registerScrollView.scrollTo(0,IPHONE5 ? 262 : 364);
 		registerPickerBackground.animate({bottom:0, duration:500});
 	}
 	

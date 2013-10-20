@@ -168,7 +168,7 @@ function builAddDogView(windowMode){
 			color:'999999',
 			textAlign:'left',
 			top:addDogFieldName.top + addDogTxtFieldOffset,
-			width:addDogTxtFieldWidth,
+			width:addDogTxtFieldWidth-9,
 			left:4,
 			height:addDogTxtFieldHeight,
 			font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -223,7 +223,7 @@ function builAddDogView(windowMode){
 			color:'999999',
 			textAlign:'left',
 			top:addDogFieldAge.top + addDogTxtFieldOffset,
-			width:addDogTxtFieldWidth,
+			width:addDogTxtFieldWidth-9,
 			height:addDogTxtFieldHeight,
 			font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
@@ -237,7 +237,7 @@ function builAddDogView(windowMode){
 			color:'999999',
 			textAlign:'left',
 			top:addDogFieldSizeHintTextLabel.top + addDogTxtFieldOffset,
-			width:addDogTxtFieldWidth,
+			width:addDogTxtFieldWidth-9,
 			height:addDogTxtFieldHeight,
 			left:4,
 			font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -252,7 +252,7 @@ function builAddDogView(windowMode){
 			color:'999999',
 			textAlign:'left',
 			top:addDogFieldGenderHintTextLabel.top + addDogTxtFieldOffset,
-			width:addDogTxtFieldWidth,
+			width:addDogTxtFieldWidth-9,
 			height:addDogTxtFieldHeight,
 			left:4,
 			font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -373,23 +373,23 @@ function addDogHandlePicker(e){
     var picker = e.source.picker;
     //add data for specified picker
 	if(picker === DOG_BREED_PICKER){
-		addDogScrollBackground.scrollTo(0,60);
+		addDogScrollBackground.scrollTo(0,IPHONE5 ?  0 : 60);
 		addDogPicker.add(dogBreedPicker);
 		
 		addDogPicker.setSelectedRow(0, dogBreedIndexes[selectedPickerDogBreed], false);
 	}else if(picker === GENDER_PICKER){
 		addDogPicker.add(genderPicker);
-		addDogScrollBackground.scrollTo(0,183);
+		addDogScrollBackground.scrollTo(0,IPHONE5 ?  95 : 183);
 		
 		addDogPicker.setSelectedRow(0, selectedPickerGender-1, false);
 	}else if(picker === MATTING_PICKER){
 		addDogPicker.add(mattingPicker);
-		addDogScrollBackground.scrollTo(0,224);
+		addDogScrollBackground.scrollTo(0,IPHONE5 ?  136 : 224);
 		
 		addDogPicker.setSelectedRow(0, selectedPickerMating-1, false);
 	}else if(picker === SIZE_PICKER){
 		addDogPicker.add(sizePicker);
-		addDogScrollBackground.scrollTo(0,142);
+		addDogScrollBackground.scrollTo(0,IPHONE5 ?  54 : 142);
 		
 		addDogPicker.setSelectedRow(0, selectedPickerSize-1, false);
 	}

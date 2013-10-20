@@ -45,6 +45,7 @@ function populateListUsersTableView(uData){
 		
 		var rowUserImage = Titanium.UI.createImageView({
 			image:typeof uData.users != 'undefined' ? getUserPhoto(uData.users[i].User.thumb) : REMOTE_DOG_IMAGES+uData[i].Dog.thumb,
+			defaultImage: IMAGE_PATH + typeof uData.users != 'undefined' ? 'follow_invite/default_User_photo.png' : 'common/default_dog_photo.png',
 			left:3,
 			borderRadius:30,
 			borderWidth:2,
