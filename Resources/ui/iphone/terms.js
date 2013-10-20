@@ -12,7 +12,7 @@ function buildTermsView(){
 	
 	var termsScrollView = Ti.UI.createScrollView({
 		backgroundColor:UI_BACKGROUND_COLOR,
-		contentHeight:'90%'
+		contentHeight:'800px'
 	});
 	termsWindow.add(termsScrollView);
 	
@@ -24,6 +24,7 @@ function buildTermsView(){
 		color:'black',
 		textAlign:'center',
 		width:280,
+		bottom:30,
 		top:30,
 		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
