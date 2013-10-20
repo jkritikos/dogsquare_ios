@@ -244,7 +244,8 @@ var runWindow = null;
 profileStartButton.addEventListener('click', function(){
 	runWindow = Ti.UI.createWindow({
 		backgroundColor:UI_BACKGROUND_COLOR,
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:'Activity'
 	});
@@ -271,9 +272,9 @@ profileMapButton.addEventListener('click', function(){
 	
 	var profileMapWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR
-		//title:'Map'
+		//barImage:IMAGE_PATH+'common/bar.png',
+		barColor:UI_COLOR,
+		translucent:false
 	});
 	
 	//map back button
@@ -421,7 +422,8 @@ function handleProfileActivityRows(e){
 	
 	var viewActivityWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:'Activity details'
 	});
@@ -454,7 +456,8 @@ function handleFollowersFolowingTab(e){
 	
 	var listUsersWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR
 	});
 	

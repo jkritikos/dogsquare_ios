@@ -49,6 +49,8 @@ function isWithinRange(input, min, max){
 
 //Hack for cropping images for retina/non-retina devices - creates the blob in the correct dimensions
 function createCroppedBoneImage(view, dogfuelValue){
+	Ti.API.info('createCroppedBoneImage() called with dogfuelValue '+dogfuelValue);
+	
 	var boneFillImage = null;
 	var targetHeightForCropping, targetWidthForCropping, viewWidth, viewHeight = 0;
 	

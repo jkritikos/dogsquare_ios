@@ -185,7 +185,8 @@ function buildMapView(windowMode){
 		//checkin window
 		var checkinWindow = Ti.UI.createWindow({
 			backgroundColor:UI_BACKGROUND_COLOR,
-			barImage:IMAGE_PATH+'common/bar.png',
+			//barImage:IMAGE_PATH+'common/bar.png',
+			translucent:false,
 			barColor:UI_COLOR,
 			title:'Check in'
 		});
@@ -390,7 +391,8 @@ function handleMapSearchCategoriesRows(e){
 	
 		var checkinPlaceWindow = Ti.UI.createWindow({
 			backgroundColor:UI_BACKGROUND_COLOR,
-			barImage:IMAGE_PATH+'common/bar.png',
+			translucent:false,
+			//barImage:IMAGE_PATH+'common/bar.png',
 			barColor:UI_COLOR
 		});
 	

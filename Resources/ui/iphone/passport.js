@@ -262,7 +262,8 @@ function handlePassportTableViewRows(e) {
 	//add note window
 	var addNoteWindow = Ti.UI.createWindow({
 		backgroundColor:UI_BACKGROUND_COLOR,
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:'Add Note'
 	});
@@ -296,7 +297,8 @@ function handleAddNoteButton() {
 	//add note window
 	var addNoteWindow = Ti.UI.createWindow({
 		backgroundColor:UI_BACKGROUND_COLOR,
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:'Add Note'
 	});

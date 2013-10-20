@@ -230,7 +230,8 @@ function handleCheckinPlacesTableViewRow(e){
 	
 	var checkinPlaceWindow = Ti.UI.createWindow({
 		backgroundColor:UI_BACKGROUND_COLOR,
-		barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
+		//barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR
 	});
 	

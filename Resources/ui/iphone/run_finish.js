@@ -367,17 +367,19 @@ function populateRunFinishTableView(o){
 		row.add(rowBoneImage);
 	
 		//bone fill image
-		var croppedDataObject = createCroppedBoneImage(VIEW_RUN_FINISH,data.dogs[i].dogfuel);
-		var rowBoneFillImage = Ti.UI.createImageView({ 
-			image:croppedDataObject.photo,
-			width: croppedDataObject.view_width,
-			height:30,
-			left:210,
-			top:20,
-			zIndex:2
-		}); 
-		
-		row.add(rowBoneFillImage);
+		if(data.dogs[i].dogfuel != null && data.dogs[i].dogfuel > 0){
+			var croppedDataObject = createCroppedBoneImage(VIEW_RUN_FINISH,data.dogs[i].dogfuel);
+			var rowBoneFillImage = Ti.UI.createImageView({ 
+				image:croppedDataObject.photo,
+				width: croppedDataObject.view_width,
+				height:30,
+				left:210,
+				top:20,
+				zIndex:2
+			}); 
+			
+			row.add(rowBoneFillImage);	
+		}
 		
 		//mood label
 		var rowMoodLabel = Titanium.UI.createLabel({ 

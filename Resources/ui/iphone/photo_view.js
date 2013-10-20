@@ -6,7 +6,8 @@ var photoViewWindow = null;
 function buildPhotoView(img){
 	photoViewWindow = Ti.UI.createWindow({
 		backgroundColor:'black',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		modal:true,
 		title:'Gallery'

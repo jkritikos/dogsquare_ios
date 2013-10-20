@@ -78,7 +78,8 @@ function handleListUsersTableViewRows(e){
 	if(type == ROW_TYPE_USER){
 		var profileWindow = Ti.UI.createWindow({
 			backgroundColor:'white',
-			barImage:IMAGE_PATH+'common/bar.png',
+			//barImage:IMAGE_PATH+'common/bar.png',
+			translucent:false,
 			barColor:UI_COLOR
 		});
 		
@@ -120,7 +121,8 @@ function handleListUsersTableViewRows(e){
 		
 		var dogProfileWindow = Ti.UI.createWindow({
 			backgroundColor:UI_BACKGROUND_COLOR,
-			barImage:IMAGE_PATH+'common/bar.png',
+			//barImage:IMAGE_PATH+'common/bar.png',
+			translucent:false,
 			barColor:UI_COLOR,
 			title:e.row.children[1].text
 		});

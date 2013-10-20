@@ -30,6 +30,20 @@ if(Ti.Platform.displayCaps.density == 'high'){
 	RETINA_DEVICE = true;
 }
 
+//Determine iOS7
+var iOS7 = false;
+if (Titanium.Platform.name == 'iPhone OS'){
+	var version = Titanium.Platform.version.split(".");
+	var major = parseInt(version[0],10);
+
+	// Can only test this support on a 3.2+ device
+	if (major >= 7){
+		iOS7 = true;
+	}
+}
+
+var WINDOW_TOP = iOS7 ? 20 : 0;
+
 //Language constants
 var LANGUAGE_ENGLISH = 1;
 

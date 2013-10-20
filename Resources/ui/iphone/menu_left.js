@@ -11,7 +11,7 @@ var MENU_BADGES = 8;
 var MENU_NOTIFICATIONS = 9;
 
 //Left window
-var winLeft = Ti.UI.createWindow();
+var winLeft = Ti.UI.createWindow({top:WINDOW_TOP});
 
 //Search view
 var leftmenuSearchView = Ti.UI.createView({

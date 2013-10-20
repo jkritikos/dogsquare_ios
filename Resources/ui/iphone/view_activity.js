@@ -331,7 +331,6 @@ function buildViewActivityView(aId){
 }
 
 function populateViewActivityDogsTableView(dogObj){
-	
 	var tableRows = [];
 	
 	for(i=0;i<dogObj.length;i++){
@@ -375,17 +374,19 @@ function populateViewActivityDogsTableView(dogObj){
 		row.add(rowBoneImage);
 		
 		//Filled bone image
-		var croppedDataObject = createCroppedBoneImage(VIEW_RUN_FINISH,dogObj[i].Dog.dogfuel);
-		var rowBoneFillImage = Ti.UI.createImageView({ 
-			image:croppedDataObject.photo,
-			width: croppedDataObject.view_width,
-			height:30,
-			left:210,
-			top:20,
-			zIndex:2
-		});
-		
-		row.add(rowBoneFillImage);
+		if(dogObj[i].Dog.dogfuel != null && dogObj[i].Dog.dogfuel > 0){
+			var croppedDataObject = createCroppedBoneImage(VIEW_RUN_FINISH,dogObj[i].Dog.dogfuel);
+			var rowBoneFillImage = Ti.UI.createImageView({ 
+				image:croppedDataObject.photo,
+				width: croppedDataObject.view_width,
+				height:30,
+				left:210,
+				top:20,
+				zIndex:2
+			});
+			
+			row.add(rowBoneFillImage);
+		}
 		
 		//mood label
 		var rowMoodLabel = Titanium.UI.createLabel({ 
@@ -419,7 +420,6 @@ function populateViewActivityDogsTableView(dogObj){
 
 //populate comment rows
 function populateViewActivityCommentsTableView(comObj){
-	
 	var tableRows = [];
 	
 	var addCommentRow = Ti.UI.createTableViewRow({
@@ -826,7 +826,8 @@ function handleActivityLikesButton(e){
 	
 	var listUsersWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR
 	});
 	

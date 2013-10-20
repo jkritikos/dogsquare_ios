@@ -60,8 +60,10 @@ function createCenterNavWindow(){
 	var win = Ti.UI.createWindow({
 		backgroundColor:'#eee',
 		title:"Napp Slide Menu",
-		barColor:UI_COLOR,
-		barImage:IMAGE_PATH+'common/bar.png'
+		navTintColor:UI_COLOR,
+		translucent:false,
+		barColor:UI_COLOR
+		//barImage:IMAGE_PATH+'common/bar.png'
 	});
 	
 	win.leftNavButton = leftBtn;
@@ -92,7 +94,9 @@ var window = NappSlideMenu.createSlideMenuWindow({
 	leftWindow:winLeft,
 	rightWindow:winRight,
 	leftLedge:65,
-	rightLedge:43
+	rightLedge:43,
+	translucent:false,
+	modal:true
 });
 
 Ti.include('initial.js');

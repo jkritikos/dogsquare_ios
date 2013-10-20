@@ -126,7 +126,8 @@ function handleBadgeButton(e){
 	//inbox view window
 	var badgeDetailWindow = Ti.UI.createWindow({
 		backgroundColor:UI_BACKGROUND_COLOR,
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:title
 	});

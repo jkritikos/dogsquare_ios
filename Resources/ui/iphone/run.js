@@ -205,7 +205,8 @@ function handleMapButton(){
 	
 	var runMapWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:'Map'
 	});
@@ -365,7 +366,8 @@ function handleEndRunButton(){
 	
 		var runFinishWindow = Ti.UI.createWindow({
 			backgroundColor:'white',
-			barImage:IMAGE_PATH+'common/bar.png',
+			//barImage:IMAGE_PATH+'common/bar.png',
+			translucent:false,
 			barColor:UI_COLOR,
 			title:'Activity details'
 		});

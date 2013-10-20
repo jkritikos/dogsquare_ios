@@ -528,7 +528,8 @@ function handleProfileOtherActivityTableViewRows(e){
 	
 	var viewActivityWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:'Activity'
 	});
@@ -640,7 +641,8 @@ function handleProfileOtherFollowersFolowingTab(e){
 	
 	var listUsersWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR
 	});
 	
@@ -677,7 +679,8 @@ function handleProfileOtherBadgesTab(e){
 	
 	var badgesWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:'Badges'
 	});
@@ -710,7 +713,8 @@ function handleProfileOtherDogsButton(e){
 	
 	var listUsersWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:'Dogs'
 	});
@@ -744,7 +748,8 @@ function handleProfileOtherChatButton(e){
 		//inbox new window
 		var inboxNewWindow = Ti.UI.createWindow({
 			backgroundColor:UI_BACKGROUND_COLOR,
-			barImage:IMAGE_PATH+'common/bar.png',
+			//barImage:IMAGE_PATH+'common/bar.png',
+			translucent:false,
 			barColor:UI_COLOR,
 			title:'New Message'
 		});
@@ -787,7 +792,8 @@ function handleProfileOtherGalleryButton(e){
 	
 	var galleryWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:'Gallery'
 	});

@@ -264,7 +264,8 @@ function handleNewMessage(){
 	//inbox new window
 	var inboxNewWindow = Ti.UI.createWindow({
 		backgroundColor:UI_BACKGROUND_COLOR,
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:'New Message'
 	});
@@ -314,7 +315,8 @@ function handleInboxTableViewRows(e){
 	//inbox view window
 	var inboxViewWindow = Ti.UI.createWindow({
 		backgroundColor:UI_BACKGROUND_COLOR,
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:name
 	});

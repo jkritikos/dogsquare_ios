@@ -14,12 +14,14 @@ function buildLoginWindow(isPopup){
 	
 	loginWindow = Ti.UI.createWindow({
 		title:'Login',
-		backgroundColor:UI_BACKGROUND_COLOR
+		backgroundColor:UI_BACKGROUND_COLOR,
+		navTintColor:UI_COLOR,
+		translucent:true
 	});
 	
 	var loginNavBar = Ti.UI.createImageView({
 		image:IMAGE_PATH+'common/bar.png',
-		top:0
+		top:WINDOW_TOP
 	});
 	
 	//Back button only when not in popup mode

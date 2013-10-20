@@ -1,6 +1,7 @@
 var addPlaceWindow = Ti.UI.createWindow({
 	backgroundColor:UI_BACKGROUND_COLOR,
-	barImage:IMAGE_PATH+'common/bar.png',
+	//barImage:IMAGE_PATH+'common/bar.png',
+	translucent:false,
 	barColor:UI_COLOR,
 	title:'Add Place'
 });
@@ -359,7 +360,8 @@ function doSavePlaceOnline(pObj){
 			var placeCheckinView = buildCheckinPlaceView(CHECKIN_PLACE_VIEW, jsonData.data.place_id);
 			var placeCheckinWindow = Ti.UI.createWindow({
 				backgroundColor:'white',
-				barImage:IMAGE_PATH+'common/bar.png',
+				//barImage:IMAGE_PATH+'common/bar.png',
+				translucent:false,
 				barColor:UI_COLOR,
 				title:pObj.name
 			});

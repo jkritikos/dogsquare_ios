@@ -312,7 +312,8 @@ function handleInboxViewThumbImage(e){
 	
 	var profileWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
+		//barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR
 	});
 	

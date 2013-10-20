@@ -322,7 +322,8 @@ function editDogProfile(){
 	
 	var addDogWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:'Add new dog'
 	});
@@ -361,9 +362,7 @@ function dogProfilePhotoView(){
 	var image = dogProfilePhotoImage.image;
 		
 	Ti.include('ui/iphone/photo_view.js');
-	
 	buildPhotoView(image);
-
 	photoViewWindow.open();
 }
 
@@ -831,12 +830,15 @@ function updateDogProfile(dogObj){
 	//Show dogfuel value and colored bone image
 	if(dogObj.dogfuel != null){
 		dogProfileMoodPercentLabel.text = dogObj.dogfuel + '%';
-		var croppedDataObject = createCroppedBoneImage(VIEW_DOG_PROFILE,dogObj.dogfuel);
-		dogProfileBoneImageColor.width = croppedDataObject.view_width;
-		dogProfileBoneImageColor.image = croppedDataObject.photo;
-		dogProfileBoneImageColor.show();
+		
+		//Only crop if necessary
+		if(dogObj.dogfuel > 0){
+			var croppedDataObject = createCroppedBoneImage(VIEW_DOG_PROFILE,dogObj.dogfuel);
+			dogProfileBoneImageColor.width = croppedDataObject.view_width;
+			dogProfileBoneImageColor.image = croppedDataObject.photo;
+			dogProfileBoneImageColor.show();	
+		}
 	}
-	
 }
 
 function handleDogLikesButton(e){
@@ -852,7 +854,8 @@ function handleDogLikesButton(e){
 	
 	var listUsersWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
+		//barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR
 	});
 	
@@ -880,7 +883,8 @@ function openAddDogView(){
 	
 	var addDogWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR,
 		title:'Add new dog'
 	});

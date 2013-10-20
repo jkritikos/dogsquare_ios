@@ -190,7 +190,8 @@ function handleNotificationsTableView(e){
 	
 	var notificationRowWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR
 	});
 	

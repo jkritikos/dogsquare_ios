@@ -174,7 +174,8 @@ function handleFeedsTableViewRows(e){
 	
 	var feedsRowWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
-		barImage:IMAGE_PATH+'common/bar.png',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
 		barColor:UI_COLOR
 	});
 	
@@ -191,7 +192,6 @@ function handleFeedsTableViewRows(e){
 	    navController.getWindow().setTitle('Feed');
 	    doGetFeeds();
 	});
-	
 	
 	if(feedType == FEED_NEW_WALK || feedType == FEED_FRIEND_COMMENT_ACTIVITY || feedType == FEED_FRIEND_LIKE_ACTIVITY){
 		

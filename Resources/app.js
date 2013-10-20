@@ -1,4 +1,4 @@
-Ti.API.info('debug 3');
+Ti.API.info('debug iOS7');
 
 Ti.Geolocation.purpose = "Retrieve user location";
 Ti.Geolocation.accuracy = Ti.Geolocation.ACCURACY_BEST_FOR_NAVIGATION;
@@ -31,29 +31,11 @@ Ti.include('ui/iphone/navigation.js');
 
 //Show the initial screen if no user object is persisted
 if(!userObject.userId){
-	window.add(initialWindow);
+	//window.add(initialWindow);
+	initialWindow.open();
 } else {
-	Titanium.UI.iPhone.showStatusBar();
+	window.open(); //init the app
+	window.setParallaxAmount(0.3);
 }
 
-window.open(); //init the app
-window.setParallaxAmount(0.3);
-
 Ti.include('ui/iphone/run.js');
-
-/*
-
-notify.scheduleLocalNotification({
-    alertBody:"notification 1",
-    alertAction:"Just a test",
-    userInfo:{"id":1,"hello":"world"},
-    date:new Date(new Date().getTime() + 10000) 
-});
-
-notify.scheduleLocalNotification({
-    alertBody:"notification 2",
-    alertAction:"Just a test",
-    userInfo:{"id":1,"hello":"world"},
-    date:new Date(new Date().getTime() + 15000) 
-});
-*/
