@@ -11,8 +11,6 @@ var imagesArray = [];
 var ADD_PHOTO = 1;
 var GET_PHOTOS = 2;
 
-var progressView = new ProgressView({window:viewGallery});
-
 //Build the gallery view
 function buildGalleryView(target_id, photoType){
 	CURRENT_VIEW = VIEW_GALLERY;
@@ -97,6 +95,7 @@ function populateGallery(photos, type){
 function getUserPhotosOnline(method , targetId, photoType){
 	Ti.API.info('getUserPhotosOnline() called for targer '+targetId+' with photo type '+photoType); 	
 	
+	var progressView = new ProgressView({window:viewGallery});
 	if(method == GET_PHOTOS){
 		progressView.show({
 			text:"Loading..."
@@ -147,6 +146,7 @@ function getUserPhotosOnline(method , targetId, photoType){
 function savePhotoOnline(){
 	Ti.API.info('savePhotoOnline() called for current user'); 	
 	
+	var progressView = new ProgressView({window:viewGallery});
 	progressView.show({
 		text:"Uploading..."
 	});
@@ -172,6 +172,8 @@ function savePhotoOnline(){
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
 			
+			//Hide progress view
+			progressView.hide();
 		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
 			Ti.API.error('Unauthorised request - need to login again');
 			showLoginPopup();

@@ -28,7 +28,7 @@ function buildPasswordEditView(){
 		
 		passwordEditFormBackground = Ti.UI.createView({
 			backgroundColor:'e7e6e6',
-			top:IPHONE5 ? 221 : 83,
+			top:83,
 			width:262,
 			height:83
 		});

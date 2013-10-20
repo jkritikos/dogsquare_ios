@@ -96,7 +96,7 @@ function showEditProfileView(){
 	
 	Ti.include('ui/iphone/profile_edit.js');
 	
-	var editProfileView = buildEditProfileView();
+	var editProfileView = buildEditProfileView(VIEW_SETTINGS);
 	
 	var editProfileWindow = Ti.UI.createWindow({
 		backgroundColor:'white',

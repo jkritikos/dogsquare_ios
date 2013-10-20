@@ -301,7 +301,7 @@ function buildViewActivityView(aId){
 			width:276,
 			height:137,
 			top:55,
-			font:{fontSize:15}
+			font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		viewActivityCommentsBackgroundView.add(viewActivityCommentsTextArea);
 		viewActivityCommentsTextArea.hide();
@@ -466,7 +466,7 @@ function populateViewActivityCommentsTableView(comObj){
 			image:API+'photo?user_id='+comObj[i].comm.user_id,
 			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			top:6,
-			left:2,
+			left:10,
 			borderRadius:30,
 			borderWidth:2,
 			borderColor:'f5a92c'
@@ -475,14 +475,14 @@ function populateViewActivityCommentsTableView(comObj){
 		//comment name label
 		var commentNameLabel = Ti.UI.createLabel({
 			text:comObj[i].comm.name,
-			top:10,
+			top:6,
 			textAlign:'left',
 			width:292,
 			bottom:24,
 			height:'auto',
 			left:84,
 			color:'black',
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		//comment label
@@ -493,9 +493,9 @@ function populateViewActivityCommentsTableView(comObj){
 			textAlign:'left',
 			width:203,
 			height:'auto',
-			left:82,
+			left:84,
 			color:UI_FONT_COLOR_LIGHT_BLACK,
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
 		var date = new Date(comObj[i].comm.date * 1000);
@@ -508,8 +508,8 @@ function populateViewActivityCommentsTableView(comObj){
 			width:180,
 			height:15,
 			left:84,
-			color:UI_FONT_COLOR_LIGHT_GREY,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			color:'black',
+			font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
 		commentRow.add(commentLabel);
@@ -667,6 +667,7 @@ function handleActivityCommentSaveButton(e){
 		viewActivityCommentsTextArea.blur();
 		viewActivityCommentsTextArea.hide();
 		viewActivityCommentsTableView.show();
+		openWindows[openWindows.length - 1].setRightNavButton(null);
 	}
 }
 
@@ -863,7 +864,7 @@ function appendCommentActivityTableView(date, message){
 			image:API+'photo?user_id='+userObject.userId,
 			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			top:6,
-			left:2,
+			left:10,
 			borderRadius:30,
 			borderWidth:2,
 			borderColor:'f5a92c'
@@ -872,14 +873,14 @@ function appendCommentActivityTableView(date, message){
 		//comment name label
 		var commentNameLabel = Ti.UI.createLabel({
 			text:userObject.name,
-			top:10,
+			top:6,
 			textAlign:'left',
 			width:292,
 			bottom:24,
 			height:'auto',
 			left:84,
 			color:'black',
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		//comment label
@@ -890,9 +891,9 @@ function appendCommentActivityTableView(date, message){
 			textAlign:'left',
 			width:203,
 			height:'auto',
-			left:82,
+			left:84,
 			color:UI_FONT_COLOR_LIGHT_BLACK,
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
 		var date = new Date(date * 1000);
@@ -905,8 +906,8 @@ function appendCommentActivityTableView(date, message){
 			width:180,
 			height:15,
 			left:84,
-			color:UI_FONT_COLOR_LIGHT_GREY,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			color:'black',
+			font:{fontSize:10, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
 		commentRow.add(commentLabel);

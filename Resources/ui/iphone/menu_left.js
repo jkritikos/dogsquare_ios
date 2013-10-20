@@ -521,10 +521,20 @@ function populateSearchResultsTableView(uObj, pObj){
 			type:'place'
 		});
 		
+		var placeRowThumbImage = Titanium.UI.createImageView({
+			image:REMOTE_PLACE_IMAGES+pObj[i].Place.thumb,
+			defaultImage:IMAGE_PATH+'common/default_place_photo.png',
+			left:4,
+			top:4,
+			borderRadius:30,
+			borderWidth:2,
+			borderColor:'454950'
+		});
+		
 		var placeRowNameLabel = Titanium.UI.createLabel({
 			text:pObj[i].Place.name,
 			color:'#ab7b04',
-			left:52,
+			left:77,
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
@@ -537,6 +547,7 @@ function populateSearchResultsTableView(uObj, pObj){
 		
 		placeRow.add(placeRowSeparator);
 		placeRow.add(placeRowNameLabel);
+		placeRow.add(placeRowThumbImage);
 		placeTableViewSection.add(placeRow);
 	}
 	
