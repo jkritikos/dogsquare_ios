@@ -21,7 +21,7 @@ registerButton.addEventListener('click', function(){
 	
 	//Mark current view as open
 	CURRENT_VIEW = VIEW_SIGNUP;
-	w.open();
+	w.open({transition:Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT});
 	
 });
 
@@ -42,7 +42,7 @@ loginButton.addEventListener('click', function(){
 	
 	//Mark current view as open
 	CURRENT_VIEW = VIEW_LOGIN;
-	loginWindow.open();
+	loginWindow.open({transition:Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT});
 });
 
 var takeTourButton = Ti.UI.createButton({

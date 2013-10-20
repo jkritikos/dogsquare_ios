@@ -14,7 +14,7 @@ var inboxNewUserThumbCreated = false;
 
 function buildViewInboxNew(){
 	if(inboxNewView == null){
-		inboxNewView = Ti.UI.createWindow({
+		inboxNewView = Ti.UI.createView({
 			backgroundColor:UI_BACKGROUND_COLOR
 		});
 		

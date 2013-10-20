@@ -16,12 +16,12 @@ function buildLoginWindow(isPopup){
 		title:'Login',
 		backgroundColor:UI_BACKGROUND_COLOR,
 		navTintColor:UI_COLOR,
-		translucent:true
+		translucent:false
 	});
 	
 	var loginNavBar = Ti.UI.createImageView({
-		image:IMAGE_PATH+'common/bar.png',
-		top:WINDOW_TOP
+		image:iOS7 ? IMAGE_PATH+'common/bar7.png' : IMAGE_PATH+'common/bar.png',
+		top:0
 	});
 	
 	//Back button only when not in popup mode
@@ -30,13 +30,14 @@ function buildLoginWindow(isPopup){
 		    backgroundImage: IMAGE_PATH+'common/back_button.png',
 		    width:48,
 		    height:33,
-		    left:6
+		    left:6,
+		    top:23
 		});
 		
 		loginNavBar.add(loginBackButton);
 		
 		loginBackButton.addEventListener("click", function() {
-		   	loginWindow.close();
+		   	loginWindow.close({transition:Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_RIGHT});
 		   	initialWindow.remove(loginWindow);
 		});
 	}
@@ -44,7 +45,8 @@ function buildLoginWindow(isPopup){
 	var loginNavBarLabel = Ti.UI.createLabel({
 		text:'Login',
 		color:'white',
-		font:UI_FONT_SEMIBOLD_NAVBAR
+		font:UI_FONT_SEMIBOLD_NAVBAR,
+		top:20
 	});
 	
 	loginNavBar.add(loginNavBarLabel);

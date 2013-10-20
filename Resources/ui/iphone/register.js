@@ -58,6 +58,7 @@ function buildRegisterWindow(){
 	registerWindow = Ti.UI.createWindow({
 		backButtonTitle:'back',
 		title:'register',
+		translucent:false,
 		backgroundColor:UI_BACKGROUND_COLOR
 	});
 	
@@ -68,12 +69,12 @@ function buildRegisterWindow(){
 	
 	var registerViewDogsquareLogo = Ti.UI.createImageView({
 		image:IMAGE_PATH+'signup/dogsquare_logo.png',
-		top:61
+		top:71
 	});
 	registerScrollView.add(registerViewDogsquareLogo);
 	
 	registerNavBar = Ti.UI.createImageView({
-		image:IMAGE_PATH+'common/bar.png',
+		image:iOS7 ? IMAGE_PATH+'common/bar7.png' : IMAGE_PATH+'common/bar.png',
 		top:0
 	});
 	
@@ -82,19 +83,21 @@ function buildRegisterWindow(){
 	    backgroundImage: IMAGE_PATH+'common/back_button.png',
 	    width:48,
 	    height:33,
-	    left:6
+	    left:6,
+	    top:23
 	});
 	registerNavBar.add(registerBackButton);
 	
 	registerBackButton.addEventListener("click", function() {
-	   	registerWindow.close();
+	   	registerWindow.close({transition:Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_RIGHT});
 	   	initialWindow.remove(registerWindow);
 	});
 	
 	registerNavBarLabel = Ti.UI.createLabel({
 		text:'Welcome',
 		color:'white',
-		font:UI_FONT_SEMIBOLD_NAVBAR
+		font:UI_FONT_SEMIBOLD_NAVBAR,
+		top:20
 	});
 	
 	registerNavBar.add(registerNavBarLabel);
