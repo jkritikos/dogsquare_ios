@@ -80,7 +80,7 @@ function buildMapView(windowMode){
 	//search field
 	mapSearchContainer = Titanium.UI.createView({
 		backgroundColor:'white',
-		width:200,
+		width:165,
 		height:27
 	});
 	
@@ -278,9 +278,6 @@ function handleMapAnnotationClick(e){
 			
 		}
 	}
-	
-	
-
 }
 
 function handleMapSearchCategoriesScroll(){

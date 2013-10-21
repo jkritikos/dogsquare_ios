@@ -10,6 +10,9 @@ var MENU_SETTINGS = 7;
 var MENU_BADGES = 8;
 var MENU_NOTIFICATIONS = 9;
 
+//Value of last searched element
+var leftMenuSeachLastValue = '';
+
 //Left window
 var winLeft = Ti.UI.createWindow({top:WINDOW_TOP});
 
@@ -567,11 +570,21 @@ function handleLeftMenuTextFieldChange(e){
 	var name = e.source.value;	
 	
 	if(field == 'search'){
+	
 		//on textfield change, change the opacity and get users found
-		if(name != '' && name.length > 1){
+		if(name != '' && name.length > 2 && name != leftMenuSeachLastValue){
+			
+			//adapt ui
 			leftmenuEraseIcon.show();
 			leftmenuSearchBackgroundView.opacity = 1;
-			getLeftMenuOnlineUser(name);
+			
+			//sweet anti-flooding approach
+			clearTimeout(timers['autocomplete_leftmenu']);
+			timers['autocomplete_leftmenu'] = setTimeout(function(){
+	        	leftMenuSeachLastValue = name;
+	         	getLeftMenuOnlineUser(name);
+	      	}, 300);
+		
 		}else{
 			leftmenuEraseIcon.hide();
 			//if textfield empty, reset search view
@@ -593,6 +606,7 @@ function handleLeftMenuTextFieldFocus(e){
 	if(menuLeftSearchResultsTableView.data == []){
 		
 	}
+	
 	leftmenuSearchBackgroundView.show();
 	window.leftLedge = 0;
 	window.setParallaxAmount(0.0);

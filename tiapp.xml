@@ -50,8 +50,8 @@
         <module platform="iphone">facebook</module>
         <module platform="iphone">com.sideshowcoder.jpgcompressor</module>
         <module platform="iphone">bencoding.localnotify</module>
-        <module platform="iphone">com.omorandi</module>
         <module platform="iphone">dk.napp.slidemenu</module>
+        <module platform="iphone">com.omorandi</module>
     </modules>
     <deployment-targets>
         <target device="blackberry">false</target>

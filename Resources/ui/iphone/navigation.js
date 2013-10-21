@@ -52,9 +52,20 @@ var leftBtn = Ti.UI.createButton({
 leftBtn.addEventListener("click", function(){
 	window.toggleLeftView();
 	window.setCenterhiddenInteractivity("TouchEnabled");
+	
+	hideTextfields();
 });
 
 var navController = createCenterNavWindow();
+
+//Hides the textfields according to the previous view
+function hideTextfields(){
+	Ti.API.info('HIDE THEM!');
+	
+	if(CURRENT_VIEW == VIEW_NOTIFICATIONS){
+	
+	}
+}
 
 function createCenterNavWindow(){	
 	var win = Ti.UI.createWindow({
@@ -79,13 +90,10 @@ function createCenterNavWindow(){
 		Ti.include('profile.js');
 		navController.getWindow().add(viewProfile);
 		navController.getWindow().setTitle(userObject.name);
-	} else {
-		Ti.API.info('BLACK SCREEN1?');
 	}
 	
 	return navController;
 }
-
 
 ////////////////////////////////////////////////
 // NappSlideMenu WINDOW
@@ -100,5 +108,8 @@ var window = NappSlideMenu.createSlideMenuWindow({
 	translucent:false,
 	modal:true
 });
+
+//Event listener for main window being slided or animated (i.e revealing left/right menu)
+window.addEventListener('viewWillOpen', hideTextfields);
 
 Ti.include('initial.js');

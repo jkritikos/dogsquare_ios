@@ -26,6 +26,8 @@ Ti.include("modules/progress.view.js");
 var momentModule = require('modules/moment.min');
 //Local notifications
 var notifyModule = require('bencoding.localnotify');
+//SMS module
+var smsModule = require("com.omorandi");
 //Left & center windows
 Ti.include('ui/iphone/navigation.js');
 

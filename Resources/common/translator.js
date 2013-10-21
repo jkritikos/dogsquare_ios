@@ -66,6 +66,9 @@ var FEED_FRIEND_COMMENT_ACTIVITY = 6;
 //Remove error messages after a while
 var ERROR_MSG_REMOVE_TIMEOUT = 1500;
 
+//SMS invite text message
+var INVITE_SMS_MSG = 'Hey there, join me on Dogsquare!';
+
 function TT(s){
 	var currentLanguage = LANGUAGE_ENGLISH;
 }

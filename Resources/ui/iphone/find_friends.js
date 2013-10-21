@@ -6,6 +6,7 @@ var findFriendsSearchTxtfield = null;
 var findFriendsSearchTxtfieldLabel = null;
 var findFriendsFacebookView = null;
 var findFriendsTableView = null;
+var findFriendsPhoneDialog = null;
 
 //UI components
 var FACEBOOK_TAB = 1;
@@ -15,6 +16,7 @@ var DOGSQUARE_TAB = 3;
 var TYPE_FRIENDS_ROW = 1;
 var TYPE_FOLLOW_BUTTON = 2;
 var TYPE_INVITE_BUTTON = 3;
+var TYPE_INVITE_FB_BUTTON = 4;
 
 var FIND_FRIENDS_WIN = 1;
 
@@ -24,17 +26,45 @@ var contactsEmailArray = [];
 //temporary variable to store data from server
 var localDataForContacts = null;
 
-Ti.Contacts.requestAuthorization(function(e){
-    if (e.success) {
-       //get all contacts from iphone
-		people = Titanium.Contacts.getAllPeople();
-		people.sort(sortByFullName);
-    } else {
-       alert('PLEASE ENABLE CONTACTS ACCESS');
-    }
-});	
+//Gets access to the address book and performs contact retrieval
+function getAddressBookContacts(){
+	var contactsAccess = Ti.Contacts.contactsAuthorization;
+	if(contactsAccess == Ti.Contacts.AUTHORIZATION_AUTHORIZED){
+		readContacts();
+	} else {
+		Ti.Contacts.requestAuthorization(function(e){
+		    if (e.success) {
+		       readContacts();
+		    } else {
+		       alert('PLEASE ENABLE CONTACTS ACCESS');
+		    }
+		});	
+	}
+}
 
+//Gets and sorts the address book contacts
+function readContacts(){
+	//get all contacts from iphone
+	people = Titanium.Contacts.getAllPeople();
+	people.sort(sortByFullName);
+	
+	//push every email from work or from home
+	if(people.length != 0){
+		for(j=0;j<people.length;j++){	
+			
+			if(people[j].email.home != null){
+				contactsEmailArray[j] = people[j].email.home[0];
+			}else if(people[j].email.work != null){
+				contactsEmailArray[j] = people[j].email.work[0];
+			}
+		}
+		
+		//find user info via email from the server - to check if he owns the app 
+		doSearchUserByEmail(contactsEmailArray);
+	}
+}
 
+//UI building
 function buildFindFriendsView(){
 	if(viewFindFriends == null){
 		viewFindFriends = Ti.UI.createView({
@@ -79,7 +109,7 @@ function buildFindFriendsView(){
 		findFriendsTabContactsSelection = Titanium.UI.createView({
 			backgroundColor:UI_COLOR,
 			bottom:3,
-			width:129,
+			width:131,
 			height:8
 		});
 		findFriendsTabsAreaImage.add(findFriendsTabContactsSelection);
@@ -89,7 +119,7 @@ function buildFindFriendsView(){
 			backgroundColor:UI_COLOR,
 			left:0,
 			bottom:3,
-			width:93,
+			width:94,
 			height:8
 		});
 		findFriendsTabsAreaImage.add(findFriendsTabFacebookSelection);
@@ -100,7 +130,7 @@ function buildFindFriendsView(){
 			backgroundColor:UI_COLOR,
 			right:0,
 			bottom:3,
-			width:94,
+			width:95,
 			height:8
 		});
 		findFriendsTabsAreaImage.add(findFriendsTabDogsquareSelection);
@@ -170,13 +200,12 @@ function buildFindFriendsView(){
 		findFriendsSearchTxtfield.addEventListener('blur', handlefindFriendsTextFieldBlur);
 		
 		findFriendsSearchTxtfield.addEventListener('return', function() {
-		   var nameUser = findFriendsSearchTxtfield.value;
-		   if(nameUser != ''){
-		       getOnlineUser(nameUser);
-		   }else{
+			var nameUser = findFriendsSearchTxtfield.value;
+		   	if(nameUser != ''){
+		    	getOnlineUser(nameUser);
+		   	} else{
 		   		findFriendsTableView.data = [];
-		   }
-		   
+		   	}
 		});
 		
 		//search textfield label
@@ -251,20 +280,8 @@ function buildFindFriendsView(){
 		    backgroundColor: 'transparent'
 		});
 		
-		//push every email from work or from home
-		if(people.length != 0){
-			for(j=0;j<people.length;j++){	
-				
-				if(people[j].email.home != null){
-					contactsEmailArray[j] = people[j].email.home[0];
-				}else if(people[j].email.work != null){
-					contactsEmailArray[j] = people[j].email.work[0];
-				}
-			}
-			
-			//find user info via email from the server - to check if he owns the app 
-			doSearchUserByEmail(contactsEmailArray);
-		}
+		//Access contacts
+		getAddressBookContacts();
 	}
 }
 
@@ -321,7 +338,7 @@ function populateFindFriendsFacebookTableView(data){
 			right:9,
 			width:86,
 			height:29,
-			type:TYPE_INVITE_BUTTON
+			type:TYPE_INVITE_FB_BUTTON
 		});
 		row.add(rowInviteButton);
 		
@@ -548,16 +565,16 @@ function handleFindFriendsTabs(e){
 		}
 		
 		
-	}else if(tab == CONTACTS_TAB){
+	} else if(tab == CONTACTS_TAB){
 		findFriendsTabFacebookSelection.hide();
 		findFriendsTabContactsSelection.show();
 		findFriendsTabDogsquareSelection.hide();
 		
-		doSearchUserByEmail(contactsEmailArray);
-		
 		findFriendsTableView.show();
 		findFriendsFacebookView.hide();
-	}else if(tab == DOGSQUARE_TAB){
+		
+		getAddressBookContacts();
+	} else if(tab == DOGSQUARE_TAB){
 		findFriendsTabFacebookSelection.hide();
 		findFriendsTabContactsSelection.hide();
 		findFriendsTabDogsquareSelection.show();
@@ -669,8 +686,6 @@ function doSearchUserByEmail(cEmail){
 			populateFindFriendsContactsTableView(jsonData.data);
 			localDataForContacts = jsonData.data;
 			
-			
-			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;
 			var notifications = jsonData.data.count_notifications;
@@ -748,13 +763,72 @@ function handlefriendsTableViewRows(e){
 			e.source.toggle = true;
 		}
 	}else if(e.source.type == TYPE_INVITE_BUTTON){
-		var smsModule = require("com.omorandi");
-		var smsDialog = smsModule.createSMSDialog({ 
-		    messageBody: 'hey',
-		    barColor: 'black'
-		});
-	
-	    smsDialog.open({animated: true});
+		Ti.API.info('Inviting by SMS - contact index is '+e.index);
+		
+		showContactPhoneNumbersSelection(e.index);
+		
+		
+	} else if(e.source.type == TYPE_INVITE_FB_BUTTON){
+		Ti.API.info('Inviting by FACEBOOK');
+	}
+}
+
+//Brings up the sms dialog for the specified person/number
+function showSMSDialog(recipient, msg){
+	var smsDialog = smsModule.createSMSDialog({ 
+	    messageBody: msg,
+	    recipients:[recipient],
+	    barColor: 'black'
+	});
+
+    smsDialog.open({animated: true});
+}
+
+//Brings up options with all the phone numbers for the specified contact. Input is the index of the sorted array of contacts
+function showContactPhoneNumbersSelection(sortedContactIndex){
+	var phoneOptions = [];
+	var phoneNumbers = [];
+		
+	var person = people[sortedContactIndex];
+	if(person != null){
+		for(var temp in person.phone){
+	        var temp_numbers = person.phone[temp];
+	        for(var k=0;k<temp_numbers.length; k++){
+	            var temp_num = temp_numbers[k] + ' ('+temp+')';
+	            phoneNumbers.push(temp_numbers[k]);
+	            phoneOptions.push(temp_num);
+	        }
+	    }
+	    
+	    Ti.API.info('Found '+phoneOptions.length+' phone numbers');
+	    
+	    if(phoneOptions.length > 0){
+	    	phoneOptions.push('Cancel');
+	    	
+	    	var optionsDialogOpts = {
+				options:phoneOptions,
+				cancel:phoneOptions.length
+			};
+	    	
+	    	//phone number options (for sms sending)
+			findFriendsPhoneDialog = Titanium.UI.createOptionDialog({
+				options:phoneOptions
+			});
+			
+			findFriendsPhoneDialog.addEventListener('click',function(e){
+				Ti.API.info('Clicked on '+phoneNumbers[e.index]);
+				
+				if(phoneNumbers != null && phoneNumbers[e.index] != null){
+					showSMSDialog(phoneNumbers[e.index], INVITE_SMS_MSG);
+				}
+			});
+			
+			findFriendsPhoneDialog.show();
+			
+		
+	    } else {
+	    	alert('No phone numbers found for this contact');
+	    }
 	}
 }
 
@@ -780,8 +854,6 @@ function facebookGetFriendsWithApp(){
 		        		}
 		        	}
 		        	
-		        	//saveFacebookFriends(friendString);
-		        	//getOnlineHighScores(friendString);
 		        	Ti.API.warn('FACEBOOK - Saved the FB friends list as '+friendString);
 		    	} else {
 		        	if (e.error) {
@@ -795,6 +867,7 @@ function facebookGetFriendsWithApp(){
 	}
 }
 
+//Gets all the friends of the currently connected FB account
 function facebookGetAllFriends(){
 	var data = {};
 	
