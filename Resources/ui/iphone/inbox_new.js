@@ -119,7 +119,7 @@ function buildViewInboxNew(){
 			width:320,
 			backgroundColor:'transparent',
 			separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
-			top:39
+			top:44	
 		});
 		inboxNewView.add(inboxNewChatTableView);
 		inboxNewChatTableView.hide();
@@ -276,6 +276,7 @@ function handleNewContactsTableRows(e){
 	inboxNewSendToTextField.hide();
 	inboxNewSendToTextField.value = '';
 	
+	
 	inboxNewContactsTableView.hide();
 	inboxNewChatTableView.show();
 	
@@ -327,12 +328,10 @@ function handleSendToTextFieldChange(e){
 }
 
 function handleSendToTextFieldBlur(e){
-	inboxNewChatTableView.height = IPHONE5 ? 417 : 377;
 	inboxNewContactsTableView.height = IPHONE5 ? 417 : 377;
 }
 
 function handleSendToTextFieldFocus(e){
-	inboxNewChatTableView.height = IPHONE5 ? 249 : 161;
 	inboxNewContactsTableView.height = IPHONE5 ? 249 : 161;
 	
 	if(inboxNewChatTableView.data.length != 0){
@@ -375,6 +374,7 @@ function populateInboxNewChatTableView(mObj, userId){
 		
 		var rowMessageProfileImage = Titanium.UI.createImageView({
 			borderRadius:30,
+			top:16,
 			borderWidth:2,
 			borderColor:'f5a92c',
 			userToggle:false,
@@ -386,9 +386,10 @@ function populateInboxNewChatTableView(mObj, userId){
 		//sender message box background 
 		var senderInboxViewMessageBox = Titanium.UI.createView({
 			backgroundColor:'white',
-			top:12,
-			left:90,
-			width:140,
+			top:15,
+			bottom:15,
+			left:81,
+			width:214,
 			height:Titanium.UI.SIZE,
 			borderWidth:1,
 			borderColor:UI_BACKGROUND_COLOR,
@@ -402,7 +403,7 @@ function populateInboxNewChatTableView(mObj, userId){
 			bottom:10,
 			color:'black',
 			height:'auto',
-			width:119,
+			width:184,
 			textAlign:'left',
 			opacity:0.7,
 			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -411,21 +412,21 @@ function populateInboxNewChatTableView(mObj, userId){
 		
 		var senderInboxViewTimeLabel = Titanium.UI.createLabel({ 
 			text:relativeTime(mObj[i].date),
+			bottom:0,
 			color:'black',
 			height:18,
 			width:70,
-			top:30,
-			right:0,
+			right:28,
 			zIndex:3,
 			opacity:0.6,
-			textAlign:'center',
+			textAlign:'right',
 			font:{fontSize:9, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
 		if(mObj[i].my_message == 0) {
 			if(!inboxNewOtherThumbCreated) {
 				rowMessageProfileImage.image = API+'photo?user_id=' + userId;
-				rowMessageProfileImage.left = 4;
+				rowMessageProfileImage.left = 10;
 				
 				inboxNewOtherThumbCreated = true;
 				inboxNewUserThumbCreated = false;
@@ -433,14 +434,15 @@ function populateInboxNewChatTableView(mObj, userId){
 			
 		}else if(mObj[i].my_message == 1) {
 			rowMessageProfileImage.user_id = userObject.userId;
-			senderInboxViewMessageBox.right = 90;
+			senderInboxViewMessageBox.right = 81;
 			senderInboxViewMessageBox.left = null;
-			senderInboxViewTimeLabel.left = 0;
+			senderInboxViewTimeLabel.left = 28;
+			senderInboxViewTimeLabel.textAlign = 'left';
 			senderInboxViewMessageBox.backgroundColor = UI_COLOR;
 			
 			if(!inboxNewUserThumbCreated) {
 				rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId;
-				rowMessageProfileImage.right = 4;
+				rowMessageProfileImage.right = 10;
 				
 				inboxNewOtherThumbCreated = false;
 				inboxNewUserThumbCreated = true;
@@ -468,7 +470,8 @@ function appendRowInboxNewTableView(date, message){
 	});
 	
 	var rowMessageProfileImage = Titanium.UI.createImageView({
-		right:4,
+		right:10,
+		top:16,
 		borderRadius:30,
 		borderWidth:2,
 		borderColor:'f5a92c',
@@ -479,9 +482,10 @@ function appendRowInboxNewTableView(date, message){
 	//sender message box background 
 	var senderInboxViewMessageBox = Titanium.UI.createView({
 		backgroundColor:UI_COLOR,
-		top:12,
-		right:90,
-		width:140,
+		top:15,
+		bottom:15,
+		right:81,
+		width:214,
 		height:Titanium.UI.SIZE,
 		borderWidth:1,
 		borderColor:UI_BACKGROUND_COLOR,
@@ -495,7 +499,7 @@ function appendRowInboxNewTableView(date, message){
 		bottom:10,
 		color:'black',
 		height:'auto',
-		width:119,
+		width:184,
 		textAlign:'left',
 		opacity:0.7,
 		font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -504,14 +508,14 @@ function appendRowInboxNewTableView(date, message){
 	
 	var senderInboxViewTimeLabel = Titanium.UI.createLabel({ 
 		text:relativeTime(date),
+		bottom:0,
 		color:'black',
 		height:18,
 		width:70,
-		top:30,
-		left:0,
+		left:28,
 		zIndex:3,
 		opacity:0.6,
-		textAlign:'center',
+		textAlign:'left',
 		font:{fontSize:9, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
@@ -560,12 +564,12 @@ function handleInboxNewChatTextFieldBlur(){
 	}
 	inboxNewView.animate({bottom:0, duration:200});
 	inboxNewContactsTableView.animate({height:IPHONE5 ? 417 : 329, duration:200});
-	inboxNewChatTableView.animate({height:IPHONE5 ? 417 : 329, duration:200});
+	inboxNewChatTableView.animate({height:IPHONE5 ? 412 : 329, duration:200});
 }
 
 //handle focus on chat text field
 function handleInboxNewChatTextFieldFocus(){
 	inboxNewView.animate({bottom:215, duration:300});
 	inboxNewContactsTableView.animate({height:IPHONE5 ? 202 : 115, duration:200});
-	inboxNewChatTableView.animate({height:IPHONE5 ? 202 : 115, duration:200});
+	inboxNewChatTableView.animate({height:IPHONE5 ? 197 : 115, duration:200});
 }

@@ -154,22 +154,6 @@ function populateRightMenu(dogObject){
 			type:TYPE_SELECT_ROW
 		});
 		
-		//color bone image inside the dog row - right menu row
-		if(dogObject[i].dogfuel != null && dogObject[i].dogfuel > 0){
-			var croppedDataObject = createCroppedBoneImage(VIEW_RIGHT_MENU,dogObject[i].dogfuel);
-			var rowColorBoneImage = Ti.UI.createImageView({ 
-				image:croppedDataObject.photo,
-				width: croppedDataObject.view_width,
-				height:22,
-				left:239,
-				top:50,
-				type:TYPE_SELECT_ROW,
-				zIndex:2
-			});
-			
-			rightMenuRow.add(rowColorBoneImage);
-		}
-		
 		//check box view inside the dog row - right menu row
 		var rowCheckBox = Titanium.UI.createView({
 			backgroundColor:'454950',
@@ -195,6 +179,22 @@ function populateRightMenu(dogObject){
 		rightMenuRow.add(rowDogNameLabel);
 		rightMenuRow.add(rowDogImage);
 		rightMenuRow.add(rowBorderImage);
+		
+		//color bone image inside the dog row - right menu row
+		if(dogObject[i].dogfuel != null && dogObject[i].dogfuel > 0){
+			var croppedDataObject = createCroppedBoneImage(VIEW_RIGHT_MENU,dogObject[i].dogfuel);
+			var rowColorBoneImage = Ti.UI.createImageView({ 
+				image:croppedDataObject.photo,
+				width: croppedDataObject.view_width,
+				height:22,
+				left:239,
+				top:50,
+				type:TYPE_SELECT_ROW,
+				zIndex:2
+			});
+			
+			rightMenuRow.add(rowColorBoneImage);
+		}
 		
 		rightMenuData.push(rightMenuRow);
 	}

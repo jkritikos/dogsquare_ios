@@ -19,7 +19,7 @@ function buildViewInboxView(messages){
 		
 		inboxViewTableView = Titanium.UI.createTableView({
 			top:5,
-			minRowHeight:71,
+			minRowHeight:60,
 			width:302,
 			backgroundColor:UI_BACKGROUND_COLOR,
 			separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
@@ -108,6 +108,7 @@ function populateInboxViewTableView(mObj, userId){
 		
 		var rowMessageProfileImage = Titanium.UI.createImageView({
 			borderRadius:30,
+			top:16,
 			borderWidth:2,
 			borderColor:'f5a92c',
 			userToggle:false,
@@ -119,9 +120,10 @@ function populateInboxViewTableView(mObj, userId){
 		//sender message box background 
 		var senderInboxViewMessageBox = Titanium.UI.createView({
 			backgroundColor:'white',
-			top:12,
-			left:90,
-			width:140,
+			top:15,
+			bottom:15,
+			left:81,
+			width:214,
 			height:Titanium.UI.SIZE,
 			borderWidth:1,
 			borderColor:UI_BACKGROUND_COLOR,
@@ -135,7 +137,7 @@ function populateInboxViewTableView(mObj, userId){
 			bottom:10,
 			color:'black',
 			height:'auto',
-			width:119,
+			width:184,
 			textAlign:'left',
 			opacity:0.7,
 			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -146,12 +148,12 @@ function populateInboxViewTableView(mObj, userId){
 			text:relativeTime(mObj[i].date),
 			color:'black',
 			height:18,
+			bottom:0,
 			width:70,
-			top:30,
-			right:0,
+			right:10,
 			zIndex:3,
 			opacity:0.6,
-			textAlign:'center',
+			textAlign:'right',
 			font:{fontSize:9, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
@@ -159,7 +161,7 @@ function populateInboxViewTableView(mObj, userId){
 			if(!otherThumbCreated) {
 				rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
 				rowMessageProfileImage.image = API+'photo?user_id=' + userId;
-				rowMessageProfileImage.left = 4;
+				rowMessageProfileImage.left = 10;
 				
 				otherThumbCreated = true;
 				userThumbCreated = false;
@@ -167,15 +169,16 @@ function populateInboxViewTableView(mObj, userId){
 			
 		}else if(mObj[i].my_message == 1) {
 			rowMessageProfileImage.user_id = userObject.userId;
-			senderInboxViewMessageBox.right = 90;
+			senderInboxViewMessageBox.right = 81;
 			senderInboxViewMessageBox.left = null;
-			senderInboxViewTimeLabel.left = 0;
+			senderInboxViewTimeLabel.left = 10;
+			senderInboxViewTimeLabel.textAlign = 'left';
 			senderInboxViewMessageBox.backgroundColor = UI_COLOR;
 			
 			if(!userThumbCreated) {
 				rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
 				rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId;
-				rowMessageProfileImage.right = 4;
+				rowMessageProfileImage.right = 10;
 				
 				otherThumbCreated = false;
 				userThumbCreated = true;
@@ -245,7 +248,8 @@ function appendRowInboxViewTableView(date, message){
 	});
 	
 	var rowMessageProfileImage = Titanium.UI.createImageView({
-		right:4,
+		right:10,
+		top:16,
 		borderRadius:30,
 		borderWidth:2,
 		borderColor:'f5a92c',
@@ -256,9 +260,10 @@ function appendRowInboxViewTableView(date, message){
 	//sender message box background 
 	var senderInboxViewMessageBox = Titanium.UI.createView({
 		backgroundColor:UI_COLOR,
-		top:12,
-		right:90,
-		width:140,
+		top:15,
+		bottom:15,
+		right:81,
+		width:214,
 		height:Titanium.UI.SIZE,
 		borderWidth:1,
 		borderColor:UI_BACKGROUND_COLOR,
@@ -272,7 +277,7 @@ function appendRowInboxViewTableView(date, message){
 		bottom:10,
 		color:'black',
 		height:'auto',
-		width:119,
+		width:184,
 		textAlign:'left',
 		opacity:0.7,
 		font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -283,12 +288,12 @@ function appendRowInboxViewTableView(date, message){
 		text:relativeTime(date),
 		color:'black',
 		height:18,
+		bottom:0,
 		width:70,
-		top:30,
-		left:0,
+		left:10,
 		zIndex:3,
 		opacity:0.6,
-		textAlign:'center',
+		textAlign:'left',
 		font:{fontSize:9, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	
