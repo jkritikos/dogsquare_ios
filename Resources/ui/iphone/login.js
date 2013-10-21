@@ -226,7 +226,7 @@ function handleLoginButton(){
 	}	
 }
 
-//Server call for signup
+//Server call for login
 function checkLoginCredentials(lObj){
 	Ti.API.info('checkLoginCredentials() called with loginObject='+ JSON.stringify(lObj)); 	
 	
@@ -334,9 +334,13 @@ function checkLoginCredentials(lObj){
 			//update menu counts
 			updateLeftMenuCounts(followers, inbox, notifications);
 			
-			//Hide message and close register window
+			//Hide message and close login window
 			progressView.hide();
 			closeLoginWindow();
+			
+			//Init the app
+			window.open(); //init the app
+			window.setParallaxAmount(0.3);
 		} else {
 			
 			//Show the error message we got back from the server

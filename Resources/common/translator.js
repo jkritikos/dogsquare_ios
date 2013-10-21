@@ -1,4 +1,38 @@
-//Error messages
+//Error messages (Local)
+var MSG_ADD_DOG_NO_NAME = 'Missing dog name';
+var MSG_ADD_DOG_NO_BREED = 'Missing dog breed';
+var MSG_ADD_DOG_NO_AGE = 'Invalid/Missing dog age';
+var MSG_ADD_DOG_NO_SIZE = 'Missing dog size';
+var MSG_ADD_DOG_NO_GENDER = 'Missing dog gender';
+var MSG_ADD_DOG_NO_MATING = 'Missing dog mating flag';
+var MSG_ADD_DOG_NO_PHOTO = 'Missing dog photo';
+var MSG_ADD_NOTE_NO_TITLE = 'Missing note title';
+var MSG_ADD_NOTE_NO_DESCRIPTION = 'Missing note description';
+var MSG_ADD_NOTE_NO_DATE = 'Missing note date';
+var MSG_ADD_NOTE_NO_TIME = 'Missing note time';
+var MSG_ADD_PLACE_NO_NAME = 'Missing place name';
+var MSG_ADD_PLACE_NO_CATEGORY = 'Missing place category';
+var MSG_ADD_PLACE_NO_PHOTO = 'Missing place photo';
+var MSG_FIND_FRIENDS_NO_CONTACTS_ACCESS = 'Please enable Dogsquare to access your contacts';
+var MSG_CAMERA_PROBLEM = 'There is a problem with your camera';
+var MSG_PWD_CHANGE_NO_PASSWORD = 'Current password missing';
+var MSG_PWD_CHANGE_NO_NEW_PASSWORD = 'New password missing';
+var MSG_RUN_NO_DOGS = 'No dogs selected';
+var MSG_RUN_END = 'Start your activity first';
+var MSG_REGISTER_NO_NAME = 'Missing first name';
+var MSG_REGISTER_NO_SURNAME = 'Missing surname';
+var MSG_REGISTER_NO_EMAIL = 'Missing email';
+var MSG_REGISTER_NO_PASSWORD = 'Missing password';
+var MSG_REGISTER_NO_DOB = 'Missing date of birth';
+var MSG_REGISTER_NO_COUNTRY = 'Missing country';
+var MSG_REGISTER_NO_GENDER = 'Missing gender';
+var MSG_REGISTER_INVALID_EMAIL = 'Invalid email address';
+var MSG_REGISTER_NO_PHOTO = 'Missing profile photo';
+var MSG_REGISTER_NO_TERMS = 'Please agree to the terms';
+var MSG_RUN_NOT_ENDED = 'Stop your activity first';
+var MSG_NO_MUTUAL_FOLLOWERS = 'You are not mutual followers';
+
+//Error messages (Server)
 var ERROR_EMAIL_TAKEN = -2;
 var ERROR_USER_CREATION = -3;
 var ERROR_USER_PHOTO_UPLOAD = -4;

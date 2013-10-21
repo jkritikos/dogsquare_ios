@@ -909,9 +909,18 @@ function doSignup(uObj){
 			saveUserObject(uObj);
 			updateLeftMenu(uObj);
 			
+			//Save lookup data (breeds, dogfuel rules, place categories)
+			saveDogBreeds(jsonData.data.breeds);
+			saveDogfuelRules(jsonData.data.rules);
+			savePlaceCategories(jsonData.data.categories);
+			
 			//Hide message and close register window
 			progressView.hide();
 			closeRegisterWindow();
+			
+			//Init the app
+			window.open(); //init the app
+			window.setParallaxAmount(0.3);
 		} else {
 			
 			//Show the error message we got back from the server

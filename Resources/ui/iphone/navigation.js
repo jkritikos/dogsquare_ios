@@ -79,6 +79,8 @@ function createCenterNavWindow(){
 		Ti.include('profile.js');
 		navController.getWindow().add(viewProfile);
 		navController.getWindow().setTitle(userObject.name);
+	} else {
+		Ti.API.info('BLACK SCREEN1?');
 	}
 	
 	return navController;

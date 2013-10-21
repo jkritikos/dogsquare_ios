@@ -230,6 +230,57 @@ function buildMapView(windowMode){
 	});
 	
 	viewMap.add(mapview);
+	
+	//Event listener for map annotations
+	mapview.addEventListener('click', handleMapAnnotationClick);
+}
+
+//Event listener for map annotation click events
+function handleMapAnnotationClick(e){
+	var annotation = e.annotation;
+	var source = e.clicksource;
+	
+	if(source == 'rightButton'){
+		if(annotation.place_id){
+			var placeId = annotation.place_id;
+			var placeTitle = annotation.title;
+			
+			Ti.include('ui/iphone/place_view.js');
+			
+			var checkinPlaceWindow = Ti.UI.createWindow({
+				backgroundColor:UI_BACKGROUND_COLOR,
+				translucent:false,
+				//barImage:IMAGE_PATH+'common/bar.png',
+				barColor:UI_COLOR
+			});
+			
+			//back button
+			var checkinPlaceBackButton = Ti.UI.createButton({
+			    backgroundImage: IMAGE_PATH+'common/back_button.png',
+			    width:48,
+			    height:33
+			});
+			
+			checkinPlaceWindow.setLeftNavButton(checkinPlaceBackButton);
+			
+			checkinPlaceBackButton.addEventListener("click", function() {
+			    navController.close(checkinPlaceWindow);
+			});
+			
+			checkinPlaceWindow.setTitle(placeTitle);
+			var checkinPlaceView = buildCheckinPlaceView(CHECKIN_PLACE_VIEW, placeId);
+			
+			checkinPlaceWindow.add(checkinPlaceView);
+			openWindows.push(checkinPlaceWindow);
+			//openWindows[1] = checkinPlaceWindow;
+			navController.open(checkinPlaceWindow);
+		} else if(annotation.user_id){
+			
+		}
+	}
+	
+	
+
 }
 
 function handleMapSearchCategoriesScroll(){
@@ -610,9 +661,9 @@ function updateMapWithAnnotations(places){
 				longitude:places[i].lon,
 				title:places[i].name,
 				animate:true,
-				customView:customPin2
-				//image:customPin2.toImage()
-				//image:IMAGE_PATH+'run_finish/pin.png'
+				customView:customPin2,
+				rightButton:IMAGE_PATH+'map/arrow_icon.png',
+				place_id:places[i].id
 			});
 			
 			annotationArray.push(mapAnnotations);
