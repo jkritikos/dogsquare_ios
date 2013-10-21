@@ -75,8 +75,25 @@ function buildEditProfileView(window){
 	
 	//photo button preview image
 	editProfileThumbnailPreviewImageView = Ti.UI.createImageView({
-		borderRadius:39
+		image:getUserPhoto(userObject.image_path),
+		processed:false
 	});
+	
+	editProfileThumbnailPreviewImageView.addEventListener('load', function(){
+		Ti.API.info('EDIT Profile image loaded event');
+		
+		if(!editProfileThumbnailPreviewImageView.processed){
+			var profileImageViewBlob = profileImageView.toBlob();
+			
+			//Resizing imageAsResized
+			var profileImageBlobCropped = profileImageViewBlob.imageAsThumbnail(94,0,47);
+			editProfileThumbnailPreviewImageView.image = profileImageBlobCropped;
+			
+			editProfileThumbnailPreviewImageView.processed = true;
+			
+			Ti.API.info('EDIT Profile image loaded event processing. Image height:'+profileImageViewBlob.height+' width '+profileImageViewBlob.width + ' cropped to height '+profileImageBlobCropped.height + ' and width '+profileImageBlobCropped.width);
+		}
+});
 	
 	editProfilePhotoButton.add(editProfileThumbnailPreviewImageView);
 	
@@ -839,7 +856,7 @@ function handleEditProfilePhotoSelection(){
 			var compressedImage = jpgcompressor.compress(image);
 			
 			//Preview thumbnail
-			var imageThumbnailPreview = image.imageAsThumbnail(78,0,39);
+			var imageThumbnailPreview = image.imageAsThumbnail(94,0,47);
 			editProfileThumbnailPreviewImageView.image = imageThumbnailPreview;
 			
 			//Create thumbnail
@@ -889,7 +906,7 @@ function handleEditProfileCameraSelection(){
 			var compressedImage = jpgcompressor.compress(image);
 			
 			//Preview thumbnail
-			var imageThumbnailPreview = image.imageAsThumbnail(78,0,39);
+			var imageThumbnailPreview = image.imageAsThumbnail(94,0,47);
 			editProfileThumbnailPreviewImageView.image = imageThumbnailPreview;
 			
 			//Create thumbnail

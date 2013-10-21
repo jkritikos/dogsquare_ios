@@ -54,8 +54,18 @@ function handleSettingsMenuTableRows(e){
 	} else if(selectedItem == MENU_REPORT_PROBLEM){
 		showProblemReportEmailDialog();
 	} else if(selectedItem == MENU_LOGOUT){
-		
+		logout();
 	}
+}
+
+//Disconnects the current user and shows the login screen
+function logout(){
+	//Clear persisted object
+	Ti.App.Properties.removeProperty('user');
+	userObject = getUserObject();
+	
+	//Show login screen
+	showLoginPopup();
 }
 
 //Opens a new window with the change password form

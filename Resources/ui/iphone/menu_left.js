@@ -163,6 +163,12 @@ leftTableView.addEventListener("click", function(e){
 		case MENU_PROFILE:
 			CURRENT_VIEW = VIEW_PROFILE;
 			navController.getWindow().setTitleControl();
+			
+			//Allow non-facebook users to edit their profile
+			if(!userObject.facebook_id){
+				navController.getWindow().rightNavButton = profileRightNavButton;
+			}
+
 			Ti.include('ui/iphone/profile.js');
 			navController.getWindow().add(viewProfile);
 			navController.getWindow().setTitle(userObject.name);

@@ -49,6 +49,47 @@ var leftBtn = Ti.UI.createButton({
 	height:18
 });
 
+//Profile right nav button
+var profileRightNavButton = Ti.UI.createButton({ 
+	backgroundImage:IMAGE_PATH+'common/edit_icon.png',
+	width:24,
+	height:23
+});
+
+//Event listener for profile edit button
+profileRightNavButton.addEventListener('click', function(){
+	Ti.API.info('showEditProfileView() called ');
+	
+	Ti.include('ui/iphone/profile_edit.js');
+	
+	var editProfileView = buildEditProfileView(VIEW_SETTINGS);
+	
+	var editProfileWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
+		barColor:UI_COLOR,
+		title:'Edit profile'
+	});
+	
+	//back button & event listener
+	var editProfileBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	editProfileWindow.setLeftNavButton(editProfileBackButton);
+	editProfileBackButton.addEventListener("click", function() {
+	    navController.close(editProfileWindow);
+	});
+	
+	editProfileWindow.add(editProfileView);
+	
+	openWindows.push(editProfileWindow);
+	navController.open(editProfileWindow);
+});
+
 leftBtn.addEventListener("click", function(){
 	window.toggleLeftView();
 	window.setCenterhiddenInteractivity("TouchEnabled");
@@ -88,6 +129,13 @@ function createCenterNavWindow(){
 	//If we have a persisted user, load the profile view
 	if(userObject.userId){
 		Ti.include('profile.js');
+		
+		//Allow non-facebook users to edit their profile
+		if(!userObject.facebook_id){
+			navController.getWindow().rightNavButton = profileRightNavButton;
+		}
+		
+		
 		navController.getWindow().add(viewProfile);
 		navController.getWindow().setTitle(userObject.name);
 	}

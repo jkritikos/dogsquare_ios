@@ -91,6 +91,8 @@ var REMOTE_USER_IMAGES = SERVER+'uploaded_files/users/';
 var REMOTE_DOG_IMAGES = SERVER+'uploaded_files/dogs/';
 var REMOTE_PLACE_IMAGES = SERVER+'uploaded_files/places/';
 
+var LAST_USER_LOGIN = 'last_login';
+
 //Facebook connectivity (Titanium 3.1 and up)
 var FB_DOG_PWD = 1234;
 var FB_APP_ID = '509577672446427';
@@ -130,9 +132,12 @@ fb.addEventListener('login', function(e) {
     			
     			Ti.API.info('FB callback: name '+fbName+' gender '+gender+' age '+age+' fbId '+fbId+' email '+email);
     			
-    			if(CURRENT_VIEW == VIEW_SIGNUP){
+    			if(CURRENT_VIEW == VIEW_SIGNUP || CURRENT_VIEW == VIEW_LOGIN){
     				Ti.API.info('FB Login from registration view');
-
+					
+					//we'll need this if we are actually at the login view
+					_import('ui/iphone/register.js');
+					
     				//Prepare a signup object from the FB data
     				var signupObject = {
     					name:fbName,
@@ -146,7 +151,9 @@ fb.addEventListener('login', function(e) {
     				};
     				
     				doSignup(signupObject);	
-    			} else if(CURRENT_VIEW == VIEW_LOGIN){
+    			} 
+    			/*
+    			else if(CURRENT_VIEW == VIEW_LOGIN){
     				Ti.API.info('FB Login from login view');
     				
     				var loginObject = {
@@ -157,7 +164,9 @@ fb.addEventListener('login', function(e) {
     				};
     				
     				checkLoginCredentials(loginObject);
-    			} else if(CURRENT_VIEW == VIEW_FIND_FRIENDS){
+    			}
+    			*/
+    			else if(CURRENT_VIEW == VIEW_FIND_FRIENDS){
     				Ti.API.info('FB Login from find friends view');
     				facebookGetAllFriends();
     			}
@@ -378,8 +387,20 @@ function getUserObject(){
 	return obj; 
 }
 
-function hello(){
+//Persists the given username as the latest user login
+function saveUserLogin(u){
+	Ti.App.Properties.setString(LAST_USER_LOGIN, u);
+}
+
+//Returns the persisted last login property, if it exists
+function getLastLogin(){
+	var lastLogin = null;
 	
+	if(Ti.App.Properties.getObject(LAST_USER_LOGIN) != null){
+		lastLogin = Ti.App.Properties.getObject(LAST_USER_LOGIN);
+	}
+	
+	return lastLogin;
 }
 
 //Weather retrieval from Yahoo

@@ -916,11 +916,22 @@ function doSignup(uObj){
 			
 			//Hide message and close register window
 			progressView.hide();
-			closeRegisterWindow();
+			
+			//Only if we really came from the signup view
+			if(!uObj.facebook_id){
+				closeRegisterWindow();
+			}
 			
 			//Init the app
 			window.open(); //init the app
 			window.setParallaxAmount(0.3);
+			
+			if(uObj.facebook_id){
+				_import('ui/iphone/profile.js');
+				navController.getWindow().add(viewProfile);
+				navController.getWindow().setTitle(userObject.name);
+			}
+			
 		} else {
 			
 			//Show the error message we got back from the server

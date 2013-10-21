@@ -484,7 +484,7 @@ function handlePhotoSelection(){
 			var compressedImage = jpgcompressor.compress(image);
 			
 			//Preview thumbnail
-			var imageThumbnailPreview = image.imageAsThumbnail(78,0,39);
+			var imageThumbnailPreview = image.imageAsThumbnail(94,0,47);
 			imageThumbnailPreviewImageView.image = imageThumbnailPreview;
 			
 			//Create thumbnail
@@ -539,6 +539,10 @@ function handleCameraSelection(){
 			jpgcompressor.setWorstCompressQuality(0.40);
 			
 			var compressedImage = jpgcompressor.compress(image);
+			
+			//Preview thumbnail
+			var imageThumbnailPreview = image.imageAsThumbnail(94,0,47);
+			imageThumbnailPreviewImageView.image = imageThumbnailPreview;
 			
 			//Create thumbnail
 			var imageThumbnail = image.imageAsThumbnail(60,0,30);
