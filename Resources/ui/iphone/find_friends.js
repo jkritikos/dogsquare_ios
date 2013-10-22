@@ -315,6 +315,8 @@ function populateFindFriendsFacebookTableView(data){
 			borderRadius:30,
 			borderColor:UI_COLOR,
 			borderWidth:2,
+			width:60,
+			height:60,
 			left:3,
 			type:TYPE_FRIENDS_ROW,
 			button:'invite'
@@ -776,7 +778,9 @@ function handlefriendsTableViewRows(e){
 		
 		
 	} else if(e.source.type == TYPE_INVITE_FB_BUTTON){
-		Ti.API.info('Inviting by FACEBOOK');
+		Ti.API.info('Inviting by FACEBOOK, row is '+e.index);
+		
+		e.row.children[2].hide();
 	}
 }
 

@@ -51,8 +51,10 @@ function buildBadgeDetailView(id, awardBadge){
 		if(awardBadge){
 			badgeDetailLargeBadgeImage = Titanium.UI.createImageView({
 				image:IMAGE_PATH+'badges/big/' + 'badge_' + id + '.png',
-				top:IPHONE5? 55 :100,
-				left:IPHONE5? 4: 49
+				//top:IPHONE5? 55 :100,
+				//left:IPHONE5? 4: 49
+				top:IPHONE5? 55 :55,
+				left:IPHONE5? 4: 4
 			});
 			
 			viewBadgeDetail.add(badgeDetailLargeBadgeImage);
