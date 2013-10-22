@@ -294,9 +294,11 @@ function handleNewContactsTableRows(e){
 	inboxNewSendToChosenLabel.text = e.row.children[1].text;
 	
 	//used setTimeout because sometimes, it wouldn't respond
-	var t = setTimeout(function(){
-		inboxNewChatTableView.scrollToIndex(inboxNewChatTableView.data[0].rows.length - 1);
-	},300);
+	if(inboxNewChatTableView.data.length > 0){
+		var t = setTimeout(function(){
+			inboxNewChatTableView.scrollToIndex(inboxNewChatTableView.data[0].rows.length - 1);
+		},300);
+	}
 }
 
 function updateInboxNewView(userId, name){
