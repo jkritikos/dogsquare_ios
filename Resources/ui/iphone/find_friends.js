@@ -7,6 +7,7 @@ var findFriendsSearchTxtfieldLabel = null;
 var findFriendsFacebookView = null;
 var findFriendsTableView = null;
 var findFriendsPhoneDialog = null;
+var findFriendsSearchContainer = null;
 
 //UI components
 var FACEBOOK_TAB = 1;
@@ -25,6 +26,8 @@ var contactsEmailArray = [];
 
 //temporary variable to store data from server
 var localDataForContacts = null;
+
+CURRENT_VIEW = VIEW_FIND_FRIENDS;
 
 //Gets access to the address book and performs contact retrieval
 function getAddressBookContacts(){
@@ -172,7 +175,7 @@ function buildFindFriendsView(){
 		findFriendsTabDogsquareTransparentView.addEventListener('click', handleFindFriendsTabs);
 		
 		//container for search
-		var findFriendsSearchContainer = Titanium.UI.createView({
+		findFriendsSearchContainer = Titanium.UI.createView({
 			backgroundColor:'white',
 			top:50,
 			width:'100%',
@@ -226,7 +229,7 @@ function buildFindFriendsView(){
 			backgroundColor:'eeeded',
 			bottom:0,
 			width:'100%',
-			height:285
+			height:IPHONE5 ? 460 : 372
 		});
 		viewFindFriends.add(findFriendsFacebookView);
 		
@@ -234,14 +237,15 @@ function buildFindFriendsView(){
 		var findFriendsFacebookConnectLabel = Ti.UI.createLabel({
 			text:'Connect with your Facebook friends \non DOGSQUARE',
 			textAlign:'center',
-			top:10,
+			color:'#756868',
+			top:25,
 			font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
 		//Connect to FB image
 		var findFriendsFacebookConnectImage = Ti.UI.createImageView({
 			image:IMAGE_PATH+'follow_invite/connecting.png',
-			top:40
+			top:88
 		});
 		
 		//Connect to FB button
@@ -249,7 +253,7 @@ function buildFindFriendsView(){
 			backgroundImage:IMAGE_PATH+'follow_invite/Facebook_button.png',
 			width:280,
 			height:52,
-			top:150
+			top:206
 		});
 		
 		//Connect to FB event handler
@@ -549,6 +553,7 @@ function handlefindFriendsTextFieldBlur(e){
 function handleFindFriendsTabs(e){
 	var tab = e.source.tab;
 	if(tab == FACEBOOK_TAB){
+		findFriendsSearchContainer.hide();
 		findFriendsTabFacebookSelection.show();
 		findFriendsTabContactsSelection.hide();
 		findFriendsTabDogsquareSelection.hide();
@@ -566,6 +571,7 @@ function handleFindFriendsTabs(e){
 		
 		
 	} else if(tab == CONTACTS_TAB){
+		findFriendsSearchContainer.show();
 		findFriendsTabFacebookSelection.hide();
 		findFriendsTabContactsSelection.show();
 		findFriendsTabDogsquareSelection.hide();
@@ -575,6 +581,7 @@ function handleFindFriendsTabs(e){
 		
 		getAddressBookContacts();
 	} else if(tab == DOGSQUARE_TAB){
+		findFriendsSearchContainer.show();
 		findFriendsTabFacebookSelection.hide();
 		findFriendsTabContactsSelection.hide();
 		findFriendsTabDogsquareSelection.show();

@@ -41,6 +41,8 @@ var editProfilePickerType = null;
 
 var toEditProfileFromWindow = null;
 
+CURRENT_VIEW = VIEW_PROFILE_EDIT;
+
 //Data components
 //Holds the user data entered through the signup form
 var editProfileObject = {};

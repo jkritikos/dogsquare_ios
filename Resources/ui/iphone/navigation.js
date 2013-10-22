@@ -103,8 +103,27 @@ var navController = createCenterNavWindow();
 function hideTextfields(){
 	Ti.API.info('HIDE THEM!');
 	
-	if(CURRENT_VIEW == VIEW_NOTIFICATIONS){
-	
+	if(CURRENT_VIEW == VIEW_ADD_DOG){
+		addDogFieldName.blur();
+		addDogFieldAge.blur();
+	}else if(CURRENT_VIEW == VIEW_ACTIVITY_NEW){
+		viewActivityCommentsTextArea.blur();
+	}else if(CURRENT_VIEW == VIEW_RUN_FINISH){
+		runfinishCommentsTextArea.blur();
+	}else if(CURRENT_VIEW == VIEW_MAP){
+		mapSearchTxtfield.blur();
+	}else if(CURRENT_VIEW == VIEW_PLACE_VIEW){
+		checkinPlaceCommentsTextArea.blur();
+	}else if(CURRENT_VIEW == VIEW_FIND_FRIENDS){
+		findFriendsSearchTxtfield.blur();
+	}else if(CURRENT_VIEW == VIEW_PASSWORD_EDIT){
+		passwordEditFieldOldPassword.blur();
+		passwordEditFieldNewPassword.blur();
+	}else if(CURRENT_VIEW == VIEW_PROFILE_EDIT){
+		editProfileFieldName.blur();
+		editProfileFieldSurname.blur();
+		editProfileFieldEmail.blur();
+		editProfileFieldAddress.blur();
 	}
 }
 

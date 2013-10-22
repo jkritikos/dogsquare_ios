@@ -1,6 +1,7 @@
 var photoViewImage = null;
 var photoViewDoneButton = null;
 var photoViewWindow = null;
+var photoNavWin = null;
 
 //Build the photo view
 function buildPhotoView(img){
@@ -12,6 +13,14 @@ function buildPhotoView(img){
 		modal:true,
 		title:'Gallery'
 	});
+	
+	//check if version is ios 7 and higher and create new navigationWindow (3.1.3.GA)
+	if(iosVersion[0] >= 7){
+		photoNavWin = Ti.UI.iOS.createNavigationWindow({
+		    modal: true,
+		    window: photoViewWindow
+		});
+	}
 	
 	photoViewImage = Ti.UI.createImageView({
 		image:img
@@ -28,5 +37,11 @@ function buildPhotoView(img){
 }
 
 function handlePhotoViewDoneButton(){
-	photoViewWindow.close();
+	
+	if(iosVersion[0] >= 7){
+		photoNavWin.close();
+	}else{
+		photoViewWindow.close();
+	}
+	
 }

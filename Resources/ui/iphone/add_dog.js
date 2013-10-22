@@ -47,6 +47,8 @@ var viewAddDogTargetMode = null;
 var addDogObject = {};
 var dogBreedIndexes = [];
 
+CURRENT_VIEW = VIEW_ADD_DOG;
+
 function builAddDogView(windowMode){
 	if(viewAddDog == null){
 		viewAddDogTargetMode = windowMode;

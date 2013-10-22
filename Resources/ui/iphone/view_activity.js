@@ -21,6 +21,8 @@ var viewActivityAnnotationEnd = null;
 
 var viewActivityComObject = {};
 
+CURRENT_VIEW = VIEW_ACTIVITY_NEW;
+
 function buildViewActivityView(aId){
 	if(viewActivityView == null){
 		

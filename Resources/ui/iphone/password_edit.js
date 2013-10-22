@@ -8,6 +8,8 @@ var passwordEditButton = null;
 
 var passwordObject = {};
 
+CURRENT_VIEW = VIEW_PASSWORD_EDIT;
+
 function buildPasswordEditView(){
 	if(passwordEditView == null){
 		

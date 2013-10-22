@@ -11,6 +11,8 @@ var COMMENT_ROW = 2;
 var runFinishComObject = {};
 
 var runFinishActivityId = null;
+
+CURRENT_VIEW = VIEW_RUN_FINISH;
 		
 Ti.App.addEventListener('activity', function(data) 
 { 

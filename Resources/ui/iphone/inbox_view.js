@@ -117,13 +117,16 @@ function populateInboxViewTableView(mObj, userId){
 		});
 		rowMessageProfileImage.addEventListener('click', handleInboxViewThumbImage);
 		
+		var maxLabelWidth = 184;
+		var maxBoxWidth = 214;
+		
 		//sender message box background 
 		var senderInboxViewMessageBox = Titanium.UI.createView({
 			backgroundColor:'white',
 			top:15,
 			bottom:15,
 			left:81,
-			width:214,
+			width:Titanium.UI.SIZE,//214
 			height:Titanium.UI.SIZE,
 			borderWidth:1,
 			borderColor:UI_BACKGROUND_COLOR,
@@ -133,16 +136,20 @@ function populateInboxViewTableView(mObj, userId){
 		//sender message label
 		var senderInboxViewMessageLabel = Titanium.UI.createLabel({ 
 			text:mObj[i].message,
-			top:10,
-			bottom:10,
+			top:5,
+			bottom:5,
+			left:10,
+			right:10,
 			color:'black',
 			height:'auto',
-			width:184,
+			width:'auto',//184
 			textAlign:'left',
 			opacity:0.7,
 			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		senderInboxViewMessageBox.add(senderInboxViewMessageLabel);
+		
+		//alert(senderInboxViewMessageLabel.toImage.width);
 		
 		var senderInboxViewTimeLabel = Titanium.UI.createLabel({ 
 			text:relativeTime(mObj[i].date),
@@ -150,10 +157,10 @@ function populateInboxViewTableView(mObj, userId){
 			height:18,
 			bottom:0,
 			width:70,
-			right:10,
+			left:85,
 			zIndex:3,
 			opacity:0.6,
-			textAlign:'right',
+			textAlign:'left',
 			font:{fontSize:9, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		
@@ -171,8 +178,9 @@ function populateInboxViewTableView(mObj, userId){
 			rowMessageProfileImage.user_id = userObject.userId;
 			senderInboxViewMessageBox.right = 81;
 			senderInboxViewMessageBox.left = null;
-			senderInboxViewTimeLabel.left = 10;
-			senderInboxViewTimeLabel.textAlign = 'left';
+			senderInboxViewTimeLabel.right = 85;
+			senderInboxViewTimeLabel.left = null;
+			senderInboxViewTimeLabel.textAlign = 'right';
 			senderInboxViewMessageBox.backgroundColor = UI_COLOR;
 			
 			if(!userThumbCreated) {
@@ -191,6 +199,7 @@ function populateInboxViewTableView(mObj, userId){
 	}
 	
 	inboxViewTableView.setData(tableRows);
+	inboxViewTableView.scrollToIndex(inboxViewTableView.data[0].rows.length - 1);
 }
 
 //handle change on chat text field
@@ -217,6 +226,12 @@ function handleChatTextFieldBlur(){
 function handleChatTextFieldFocus(){
 	viewInboxView.animate({bottom:215, duration:300});
 	inboxViewTableView.animate({height:IPHONE5 ? 236 : 140, duration:200});
+	
+	//used setTimeout because sometimes, it wouldn't respond
+	var t = setTimeout(function(){
+		inboxViewTableView.scrollToIndex(inboxViewTableView.data[0].rows.length - 1);
+	},200);
+	
 }
 
 function handleInboxViewSendButton(){
@@ -263,7 +278,7 @@ function appendRowInboxViewTableView(date, message){
 		top:15,
 		bottom:15,
 		right:81,
-		width:214,
+		width:Titanium.UI.SIZE,
 		height:Titanium.UI.SIZE,
 		borderWidth:1,
 		borderColor:UI_BACKGROUND_COLOR,
@@ -273,11 +288,13 @@ function appendRowInboxViewTableView(date, message){
 	//sender message label
 	var senderInboxViewMessageLabel = Titanium.UI.createLabel({ 
 		text:message,
-		top:10,
-		bottom:10,
+		top:5,
+		bottom:5,
+		left:10,
+		right:10,
 		color:'black',
 		height:'auto',
-		width:184,
+		width:'auto',
 		textAlign:'left',
 		opacity:0.7,
 		font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -290,10 +307,10 @@ function appendRowInboxViewTableView(date, message){
 		height:18,
 		bottom:0,
 		width:70,
-		left:10,
+		right:85,
 		zIndex:3,
 		opacity:0.6,
-		textAlign:'left',
+		textAlign:'right',
 		font:{fontSize:9, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	

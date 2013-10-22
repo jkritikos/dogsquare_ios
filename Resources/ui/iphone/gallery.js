@@ -205,7 +205,11 @@ function handleThumbImageButton(e){
 	
 	buildPhotoView(image);
 	
-	photoViewWindow.open();
+	if(iosVersion[0] >= 7){
+		photoNavWin.open();
+	}else{
+		photoViewWindow.open();
+	}
 }
 
 function handleGalleryCameraButton(){

@@ -643,7 +643,11 @@ function handleTermsLabelLink(){
 	Ti.include('ui/iphone/terms.js');
 	buildTermsView();
 	
-	termsWindow.open();
+	if(iosVersion[0] >= 7){
+		termsNavWin.open();
+	}else{
+		termsWindow.open();
+	}
 }
 
 function handleRegisterDatePickerChange(e){

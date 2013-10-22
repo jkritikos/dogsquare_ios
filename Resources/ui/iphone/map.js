@@ -31,6 +31,8 @@ var mapSearchFilterData = [];
 var mapLatitude = null;
 var mapLongitude = null;
 
+CURRENT_VIEW = VIEW_MAP;
+
 function buildMapView(windowMode){
 	
 	Titanium.Geolocation.getCurrentPosition(function(e){

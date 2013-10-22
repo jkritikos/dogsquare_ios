@@ -15,7 +15,6 @@ function buildPassportView(){
 		//creation of a button
 		addNoteButton = Ti.UI.createButton({
 			backgroundImage:IMAGE_PATH+'common/edit_icon.png',
-			title:'add',
 		    width:24,
 		    height:23
 		});

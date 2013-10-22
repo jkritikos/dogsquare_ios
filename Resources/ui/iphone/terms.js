@@ -1,4 +1,5 @@
 var termsWindow = null;
+var termsNavWin = null;
 
 //Build the terms view
 function buildTermsView(){
@@ -10,9 +11,17 @@ function buildTermsView(){
 		title:'Terms'
 	});
 	
+	//check if version is ios 7 and higher and create new navigationWindow (3.1.3.GA)
+	if(iosVersion[0] >= 7){
+		termsNavWin = Ti.UI.iOS.createNavigationWindow({
+		    modal: true,
+		    window: termsWindow
+		});
+	}
+	
 	var termsScrollView = Ti.UI.createScrollView({
 		backgroundColor:UI_BACKGROUND_COLOR,
-		contentHeight:'800px'
+		contentHeight:'1500px'
 	});
 	termsWindow.add(termsScrollView);
 	
@@ -39,6 +48,10 @@ function buildTermsView(){
 	termsWindow.setRightNavButton(termsDoneButton);
 	
 	termsDoneButton.addEventListener('click', function(e){
-		termsWindow.close();
+		if(iosVersion[0] >= 7){
+			termsNavWin.close();
+		}else{
+			termsWindow.close();
+		}
 	});
 }

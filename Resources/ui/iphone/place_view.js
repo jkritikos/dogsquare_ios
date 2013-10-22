@@ -18,6 +18,8 @@ var addPlaceComObject = {};
 var ADD_COMMENT = 1;
 var COMMENT_ROW = 2;
 
+CURRENT_VIEW = VIEW_PLACE_VIEW;
+
 function buildCheckinPlaceView(view, placeId){
 	checkinPlaceId = placeId;
 	

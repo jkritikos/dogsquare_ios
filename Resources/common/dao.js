@@ -18,6 +18,9 @@ if(!PRODUCTION_MODE){
 	SERVER = 'http://dogsquare.veladia.com/';
 }
 
+//current IOS version
+var iosVersion = Titanium.Platform.version.split(".");
+
 //Determine iPhone5
 var IPHONE5 = false;
 if(Ti.Platform.displayCaps.platformHeight == 568){
@@ -77,6 +80,10 @@ var VIEW_BADGES = 18;
 var VIEW_LOGIN = 19;
 var VIEW_DOG_PROFILE = 20;
 var VIEW_RIGHT_MENU = 21; //needed for cropping images
+var VIEW_ADD_DOG = 22;
+var VIEW_ADD_NOTE = 23;
+var VIEW_PASSWORD_EDIT = 24;
+var VIEW_PROFILE_EDIT = 25;
 
 //our current view
 var CURRENT_VIEW = null;
