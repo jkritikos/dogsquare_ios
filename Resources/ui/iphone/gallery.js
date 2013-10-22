@@ -205,7 +205,7 @@ function handleThumbImageButton(e){
 	
 	buildPhotoView(image);
 	
-	if(iosVersion[0] >= 7){
+	if(iOS7){
 		photoNavWin.open();
 	}else{
 		photoViewWindow.open();

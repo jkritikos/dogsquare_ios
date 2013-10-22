@@ -18,9 +18,6 @@ if(!PRODUCTION_MODE){
 	SERVER = 'http://dogsquare.veladia.com/';
 }
 
-//current IOS version
-var iosVersion = Titanium.Platform.version.split(".");
-
 //Determine iPhone5
 var IPHONE5 = false;
 if(Ti.Platform.displayCaps.platformHeight == 568){

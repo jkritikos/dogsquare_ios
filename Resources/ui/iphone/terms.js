@@ -12,7 +12,7 @@ function buildTermsView(){
 	});
 	
 	//check if version is ios 7 and higher and create new navigationWindow (3.1.3.GA)
-	if(iosVersion[0] >= 7){
+	if(iOS7){
 		termsNavWin = Ti.UI.iOS.createNavigationWindow({
 		    modal: true,
 		    window: termsWindow
@@ -48,7 +48,7 @@ function buildTermsView(){
 	termsWindow.setRightNavButton(termsDoneButton);
 	
 	termsDoneButton.addEventListener('click', function(e){
-		if(iosVersion[0] >= 7){
+		if(iOS7){
 			termsNavWin.close();
 		}else{
 			termsWindow.close();

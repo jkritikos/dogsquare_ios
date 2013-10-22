@@ -643,7 +643,7 @@ function handleTermsLabelLink(){
 	Ti.include('ui/iphone/terms.js');
 	buildTermsView();
 	
-	if(iosVersion[0] >= 7){
+	if(iOS7){
 		termsNavWin.open();
 	}else{
 		termsWindow.open();
