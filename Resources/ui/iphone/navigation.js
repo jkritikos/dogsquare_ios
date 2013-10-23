@@ -93,15 +93,13 @@ profileRightNavButton.addEventListener('click', function(){
 leftBtn.addEventListener("click", function(){
 	window.toggleLeftView();
 	window.setCenterhiddenInteractivity("TouchEnabled");
-	
-	hideTextfields();
 });
 
 var navController = createCenterNavWindow();
 
 //Hides the textfields according to the previous view
 function hideTextfields(){
-	Ti.API.info('HIDE THEM!');
+	Ti.API.info('HIDE THEM! current view is '+CURRENT_VIEW);
 	
 	if(CURRENT_VIEW == VIEW_ADD_DOG){
 		addDogFieldName.blur();
@@ -177,6 +175,6 @@ var window = NappSlideMenu.createSlideMenuWindow({
 });
 
 //Event listener for main window being slided or animated (i.e revealing left/right menu)
-window.addEventListener('viewWillOpen', hideTextfields);
+window.addEventListener('viewDidOpen', hideTextfields);
 
 Ti.include('initial.js');
