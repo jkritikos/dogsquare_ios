@@ -41,7 +41,8 @@ function populateBadgeList(badges){
 			left:leftOffset,
 			top:topOffset,
 			winTitle:badgeObj.title,
-			id:badges[i].id
+			id:badges[i].id,
+			badgeFlag:badges[i].flag
 		});
 		viewBadgeScroll.add(badgeImage);
 		badgeImage.addEventListener('click',handleBadgeButton);
@@ -69,7 +70,6 @@ function populateBadgeList(badges){
 			leftLabelOffset = 4;
 		}
 	}
-	
 }
 
 function getBadgesOnline(userId){
@@ -115,11 +115,12 @@ function getBadgesOnline(userId){
 	});
 }
 
-
+//Opens the badge details view
 function handleBadgeButton(e){
 	
 	var title = e.source.winTitle;
 	var id = e.source.id;
+	var badgeFlag = e.source.badgeFlag;
 	
 	Ti.include('ui/iphone/badge_detail.js');
 	
@@ -146,7 +147,7 @@ function handleBadgeButton(e){
 	});
 	
 	//Build the badge detail view, without the award animation
-	buildBadgeDetailView(id, false);
+	buildBadgeDetailView(id, false, badgeFlag);
 	
 	badgeDetailWindow.add(viewBadgeDetail);
 	

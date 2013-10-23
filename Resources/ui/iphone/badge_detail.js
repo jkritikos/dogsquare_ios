@@ -2,7 +2,7 @@
 var viewBadgeDetail = null;
 var badgeDetailLargeBadgeImage = null;
 
-function buildBadgeDetailView(id, awardBadge){
+function buildBadgeDetailView(id, awardBadge, badgeFlag){
 	if(viewBadgeDetail == null){
 		var badgeObj = getBadgeDetails(id);
 		
@@ -62,7 +62,7 @@ function buildBadgeDetailView(id, awardBadge){
 			awardBadgeAnimation();
 		} else {
 			var badgeDetailBadgeImage = Titanium.UI.createImageView({
-				image:IMAGE_PATH+'badges/color/' + 'badge_' + id + '.png',
+				image:IMAGE_PATH+'badges/'+(badgeFlag ? 'color' : 'grey')+'/' + 'badge_' + id + '.png',
 				top:184,
 				left:133
 			});

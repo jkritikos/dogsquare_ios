@@ -18,6 +18,7 @@ var TYPE_FRIENDS_ROW = 1;
 var TYPE_FOLLOW_BUTTON = 2;
 var TYPE_INVITE_BUTTON = 3;
 var TYPE_INVITE_FB_BUTTON = 4;
+var TYPE_ALREADY_INVITED_BUTTON = 5;
 
 var FIND_FRIENDS_WIN = 1;
 
@@ -780,7 +781,8 @@ function handlefriendsTableViewRows(e){
 	} else if(e.source.type == TYPE_INVITE_FB_BUTTON){
 		Ti.API.info('Inviting by FACEBOOK, row is '+e.index);
 		
-		e.row.children[2].hide();
+		e.row.children[2].backgroundImage = IMAGE_PATH+'follow_invite/invited_button.png';
+		e.row.children[2].type = TYPE_ALREADY_INVITED_BUTTON;
 	}
 }
 
