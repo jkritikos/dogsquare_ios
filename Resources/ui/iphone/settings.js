@@ -66,36 +66,36 @@ function handleSettingsMenuTableRows(e){
 	} else if(selectedItem == MENU_LOGOUT){
 		logout();
 	} else if(selectedItem == MENU_SHARING){
-		openSharingView();
+		openSettingsSharingView();
 	}
 }
 
-function openSharingView(){
-	Ti.include('ui/iphone/sharing.js');
-	buildSharingView();
+function openSettingsSharingView(){
+	Ti.include('ui/iphone/settings_sharing.js');
+	buildSettingsSharingView();
 	
-	var sharingWindow = Ti.UI.createWindow({
+	var settingsSharingWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
 		barColor:UI_COLOR,
 		translucent:false
 	});
 	
 	//back button
-	var sharingBackButton = Ti.UI.createButton({
+	var settingsSharingBackButton = Ti.UI.createButton({
 	    backgroundImage: IMAGE_PATH+'common/back_button.png',
 	    width:48,
 	    height:33
 	});
 	
-	sharingWindow.setLeftNavButton(sharingBackButton);
+	settingsSharingWindow.setLeftNavButton(settingsSharingBackButton);
 	
-	sharingBackButton.addEventListener("click", function() {
-	    navController.close(sharingWindow);
+	settingsSharingBackButton.addEventListener("click", function() {
+	    navController.close(settingsSharingWindow);
 	});
 	
-	sharingWindow.add(viewSharing);
-	openWindows.push(sharingWindow);
-	navController.open(sharingWindow);
+	settingsSharingWindow.add(viewSettingsSharing);
+	openWindows.push(settingsSharingWindow);
+	navController.open(settingsSharingWindow);
 }
 
 //Disconnects the current user and shows the login screen

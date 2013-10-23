@@ -1,34 +1,34 @@
-var viewSharing = null;
-var sharingMenuTable = null;
+var viewSettingsSharing = null;
+var settingsSharingMenuTable = null;
 
 var MENU_FACEBOOK_ACTIVITIES = 0;
 var MENU_FACEBOOK_CHECKINS = 1;
 
-function buildSharingView(){
-	if(viewSharing == null){
-		viewSharing = Ti.UI.createView({
+function buildSettingsSharingView(){
+	if(viewSettingsSharing == null){
+		viewSettingsSharing = Ti.UI.createView({
 			backgroundColor:UI_BACKGROUND_COLOR
 		});
 		
-		sharingMenuTable = Ti.UI.createTableView({
+		settingsSharingMenuTable = Ti.UI.createTableView({
 			backgroundColor:UI_BACKGROUND_COLOR,
 			sepparatorColor:'d3d2d2',
 			top:13,
 			width:293
 		});
-		viewSharing.add(sharingMenuTable);
+		viewSettingsSharing.add(settingsSharingMenuTable);
 		
 		//inbox table view footer
-		sharingMenuTable.footerView = Ti.UI.createView({
+		settingsSharingMenuTable.footerView = Ti.UI.createView({
 		    height: 1,
 		    backgroundColor: 'transparent'
 		});
 		
 		var sharingMenuData = [];
-		sharingMenuData.push(createSharingMenuRow(MENU_FACEBOOK_ACTIVITIES));
 		sharingMenuData.push(createSharingMenuRow(MENU_FACEBOOK_CHECKINS));
+		sharingMenuData.push(createSharingMenuRow(MENU_FACEBOOK_ACTIVITIES));
 		
-		sharingMenuTable.setData(sharingMenuData);
+		settingsSharingMenuTable.setData(sharingMenuData);
 	}
 }
 
@@ -42,9 +42,9 @@ function createSharingMenuRow(menu){
 	});
 		
 	var icon, label;
-	if(menu == MENU_CHANGE_PASSWORD){
+	if(menu == MENU_FACEBOOK_CHECKINS){
 		label = 'My checkins on Facebook';
-	} else if(menu == MENU_EDIT_PROFILE){
+	} else if(menu == MENU_FACEBOOK_ACTIVITIES){
 		label = 'My activities on Facebook';
 	}
 	

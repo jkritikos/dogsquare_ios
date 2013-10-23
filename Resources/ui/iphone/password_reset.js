@@ -84,7 +84,7 @@ function buildPasswordResetView(){
 	
 	//button to change password
 	var passwordResetButton = Ti.UI.createButton({
-		backgroundImage:IMAGE_PATH+'common/update_btn.png',
+		backgroundImage:IMAGE_PATH+'common/reset_btn.png',
 		width:270,
 		height:55,
 		top:200,
