@@ -10,6 +10,7 @@ var UI_FONT_BOLD = {fontSize:25, fontWeight:'bold', fontFamily:'Open Sans'};
 var UI_FONT_SEMIBOLD_NAVBAR = {fontSize:25, fontWeight:'semibold', fontFamily:'Open Sans'};
 var UI_FONT_LEFTMENU = {fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'};
 var UI_FONT_COLOR_TABLE = "#938787";
+var UI_FONT_BARS = {fontSize:16, fontWeight:'semibold', fontFamily:'Open Sans'};
 
 var IMAGE_PATH = 'images/iphone/';
 //End UI properties

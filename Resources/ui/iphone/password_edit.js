@@ -109,7 +109,7 @@ function buildPasswordEditView(){
 		
 		//button to change password
 		passwordEditButton = Ti.UI.createButton({
-			backgroundImage:IMAGE_PATH+'signup/signup_btn.png',
+			backgroundImage:IMAGE_PATH+'common/update_btn.png',
 			width:270,
 			height:55,
 			top:195,

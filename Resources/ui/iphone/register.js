@@ -17,7 +17,7 @@ var registerFieldGenderHintTextLabel = null;
 var registerFieldCountryHintTextLabel = null;
 var registerFieldAddressHintTextLabel = null;
 var registerFieldAddress = null;
-//var registerFacebookButton = null;
+var registerFacebookButton = null;
 var registerSignupButton = null;
 var registerPhotoDialog = null;
 var registerScrollView = null;
@@ -443,7 +443,7 @@ function buildRegisterWindow(){
 	registerTermsLinkLabel.addEventListener('click', handleTermsLabelLink);
 	
 	//Facebook button
-	/*registerFacebookButton = Ti.UI.createButton({
+	registerFacebookButton = Ti.UI.createButton({
 		backgroundImage:IMAGE_PATH+'signup/Facebook_button.png',
 		width:241,
 		height:45,
@@ -461,7 +461,7 @@ function buildRegisterWindow(){
 			window.remove(loginWindow);
 		});
 		
-	});*/
+	});
 
 	//Signup button
 	registerSignupButton = Ti.UI.createButton({

@@ -1,36 +1,37 @@
 //Error messages (Local)
-var MSG_ADD_DOG_NO_NAME = 'Missing dog name';
-var MSG_ADD_DOG_NO_BREED = 'Missing dog breed';
-var MSG_ADD_DOG_NO_AGE = 'Invalid/Missing dog age';
-var MSG_ADD_DOG_NO_SIZE = 'Missing dog size';
-var MSG_ADD_DOG_NO_GENDER = 'Missing dog gender';
-var MSG_ADD_DOG_NO_MATING = 'Missing dog mating flag';
-var MSG_ADD_DOG_NO_PHOTO = 'Missing dog photo';
-var MSG_ADD_NOTE_NO_TITLE = 'Missing note title';
-var MSG_ADD_NOTE_NO_DESCRIPTION = 'Missing note description';
-var MSG_ADD_NOTE_NO_DATE = 'Missing note date';
-var MSG_ADD_NOTE_NO_TIME = 'Missing note time';
-var MSG_ADD_PLACE_NO_NAME = 'Missing place name';
-var MSG_ADD_PLACE_NO_CATEGORY = 'Missing place category';
-var MSG_ADD_PLACE_NO_PHOTO = 'Missing place photo';
-var MSG_FIND_FRIENDS_NO_CONTACTS_ACCESS = 'Please enable Dogsquare to access your contacts';
-var MSG_CAMERA_PROBLEM = 'There is a problem with your camera';
-var MSG_PWD_CHANGE_NO_PASSWORD = 'Current password missing';
-var MSG_PWD_CHANGE_NO_NEW_PASSWORD = 'New password missing';
-var MSG_RUN_NO_DOGS = 'No dogs selected';
-var MSG_RUN_END = 'Start your activity first';
-var MSG_REGISTER_NO_NAME = 'Missing first name';
-var MSG_REGISTER_NO_SURNAME = 'Missing surname';
-var MSG_REGISTER_NO_EMAIL = 'Missing email';
-var MSG_REGISTER_NO_PASSWORD = 'Missing password';
-var MSG_REGISTER_NO_DOB = 'Missing date of birth';
-var MSG_REGISTER_NO_COUNTRY = 'Missing country';
-var MSG_REGISTER_NO_GENDER = 'Missing gender';
-var MSG_REGISTER_INVALID_EMAIL = 'Invalid email address';
-var MSG_REGISTER_NO_PHOTO = 'Missing profile photo';
-var MSG_REGISTER_NO_TERMS = 'Please agree to the terms';
-var MSG_RUN_NOT_ENDED = 'Stop your activity first';
-var MSG_NO_MUTUAL_FOLLOWERS = 'You are not mutual followers';
+var MSG_ADD_DOG_NO_NAME = 1;
+var MSG_ADD_DOG_NO_BREED = 2;
+var MSG_ADD_DOG_NO_AGE = 3;
+var MSG_ADD_DOG_NO_SIZE = 4;
+var MSG_ADD_DOG_NO_GENDER = 5;
+var MSG_ADD_DOG_NO_MATING = 6;
+var MSG_ADD_DOG_NO_PHOTO = 7;
+var MSG_ADD_NOTE_NO_TITLE = 8;
+var MSG_ADD_NOTE_NO_DESCRIPTION = 9;
+var MSG_ADD_NOTE_NO_DATE = 10;
+var MSG_ADD_NOTE_NO_TIME = 11;
+var MSG_ADD_PLACE_NO_NAME = 12;
+var MSG_ADD_PLACE_NO_CATEGORY = 13;
+var MSG_ADD_PLACE_NO_PHOTO = 14;
+var MSG_FIND_FRIENDS_NO_CONTACTS_ACCESS = 15;
+var MSG_CAMERA_PROBLEM = 16;
+var MSG_PWD_CHANGE_NO_PASSWORD = 17;
+var MSG_PWD_CHANGE_NO_NEW_PASSWORD = 18;
+var MSG_RUN_NO_DOGS = 19;
+var MSG_RUN_END = 20;
+var MSG_REGISTER_NO_NAME = 21;
+var MSG_REGISTER_NO_SURNAME = 22;
+var MSG_REGISTER_NO_EMAIL = 23;
+var MSG_REGISTER_NO_PASSWORD = 24;
+var MSG_REGISTER_NO_DOB = 25;
+var MSG_REGISTER_NO_COUNTRY = 26;
+var MSG_REGISTER_NO_GENDER = 27;
+var MSG_REGISTER_INVALID_EMAIL = 28;
+var MSG_REGISTER_NO_PHOTO = 29;
+var MSG_REGISTER_NO_TERMS = 30;
+var MSG_RUN_NOT_ENDED = 31;
+var MSG_NO_MUTUAL_FOLLOWERS = 32;
+var MSG_NOT_AVAILABLE_WITH_FACEBOOK = 33;
 
 //Error messages (Server)
 var ERROR_EMAIL_TAKEN = -2;
@@ -149,5 +150,81 @@ function getErrorMessage(code){
 		msg = 'Invalid username/password.';
 	}
 	
+	return msg;
+}
+
+//Returns the appropriate locally generated message
+function getLocalMessage(code){
+	var currentLanguage = LANGUAGE_ENGLISH;
+	var msg = '';
+	
+	if(code == MSG_ADD_DOG_NO_NAME){
+		msg = 'What a looovely dog!! What’s his name?';
+	} else if(code == MSG_ADD_DOG_NO_BREED){
+		msg = 'Your dog is amaaazing!! What’s his breed?';
+	} else if(code == MSG_ADD_DOG_NO_AGE){
+		msg = 'Your dog is adorable! How old is he?';
+	} else if(code == MSG_ADD_DOG_NO_SIZE){
+		msg = 'Our scientists insist that you must declare your dog’s size as it is crucial for the Dog Fuel results!!';
+	} else if(code == MSG_ADD_DOG_NO_GENDER){
+		msg = 'Hey there Pack leader, is that lovely dog a boy OR a girl?';
+	} else if(code == MSG_ADD_DOG_NO_MATING){
+		msg = 'Love is in the air.. So is your dog in search for a Mate or not?';
+	} else if(code == MSG_ADD_DOG_NO_PHOTO){
+		msg = 'Pack leader, we need a stunning pic of your doggy!';
+	} else if(code == MSG_ADD_NOTE_NO_TITLE){
+		msg = 'Your dog insists that this note should have a tittle!';
+	} else if(code == MSG_ADD_NOTE_NO_DESCRIPTION){
+		msg = 'Shouldn’t this note have a description?';
+	} else if(code == MSG_ADD_NOTE_NO_DATE){
+		msg = 'Hey Pack leader, write down the note’s date please!!';
+	} else if(code == MSG_ADD_NOTE_NO_TIME){
+		msg = 'Hey Pack leader, mark the note’s time please!!';
+	} else if(code == MSG_ADD_PLACE_NO_NAME){
+		msg = 'Wouldn’t it be lovely if you named this place?';
+	} else if(code == MSG_ADD_PLACE_NO_CATEGORY){
+		msg = 'Woof!! Mark the place using the right Category!';
+	} else if(code == MSG_ADD_PLACE_NO_PHOTO){
+		msg = 'Woof!! We need a picture of this place!';
+	} else if(code == MSG_FIND_FRIENDS_NO_CONTACTS_ACCESS){
+		msg = 'Woof! Dogsquare needs your permission to access your contacts. No worries we are not spying on you!';
+	} else if(code == MSG_CAMERA_PROBLEM){
+		msg = 'Ooops! There seems to be a problem with your camera..';
+	} else if(code == MSG_PWD_CHANGE_NO_PASSWORD){
+		msg = 'Hey Pack leader the current password is missing here!';
+	} else if(code == MSG_PWD_CHANGE_NO_NEW_PASSWORD){
+		msg = 'Hey Pack leader,the new password is missing here!';
+	} else if(code == MSG_RUN_NO_DOGS){
+		msg = 'Wouldn’t it be great if you selected at least one dog to go out with you !!';
+	} else if(code == MSG_RUN_END){
+		msg = 'Hey Pack leader, it is important that you Start your activity first!';
+	} else if(code == MSG_REGISTER_NO_NAME){
+		msg = 'Don’t be so shy and tell us your first name..';
+	} else if(code == MSG_REGISTER_NO_SURNAME){
+		msg = 'The Dogsquare Supercomputer says we need your surname too!';
+	} else if(code == MSG_REGISTER_NO_EMAIL){
+		msg = 'Missing email!! The only thing a dog can’t actually find';
+	} else if(code == MSG_REGISTER_NO_PASSWORD){
+		msg = 'Your Dog knows that you forgot to set up the password! But he can’t help us only you can.';
+	} else if(code == MSG_REGISTER_NO_DOB){
+		msg = 'Hey don’t be shy and write down your date of birth..';
+	} else if(code == MSG_REGISTER_NO_COUNTRY){
+		msg = 'Where are you from Pack leader?';
+	} else if(code == MSG_REGISTER_NO_GENDER){
+		msg = 'What’s your Gender Pack Leader?';
+	} else if(code == MSG_REGISTER_INVALID_EMAIL){
+		msg = 'Woof! That email address is wrong!';
+	} else if(code == MSG_REGISTER_NO_PHOTO){
+		msg = 'Your super cool  profile picture is missing!';
+	} else if(code == MSG_REGISTER_NO_TERMS){
+		msg = 'For this relationship to work you must Agree to the Terms of Use & Privacy Policy..';
+	} else if(code == MSG_RUN_NOT_ENDED){
+		msg = 'Hey Pack leader you must STOP your current activity to do that!';
+	} else if(code == MSG_NO_MUTUAL_FOLLOWERS){
+		msg = 'Unfortunately You guys are not mutual followers..who knows things might change..';
+	} else if(code == MSG_NOT_AVAILABLE_WITH_FACEBOOK){
+		msg = 'You can’t do this when logged in with Facebbok.';
+	}
+ 
 	return msg;
 }

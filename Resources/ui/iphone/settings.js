@@ -46,9 +46,17 @@ function handleSettingsMenuTableRows(e){
 	Ti.API.info('Settings clicked on '+selectedItem);
 	
 	if(selectedItem == MENU_CHANGE_PASSWORD){
-		showChangePasswordView();
+		if(!userObject.facebook_id){
+			showChangePasswordView();
+		} else {
+			alert(getLocalMessage(MSG_NOT_AVAILABLE_WITH_FACEBOOK));
+		}
 	} else if(selectedItem == MENU_EDIT_PROFILE){
-		showEditProfileView();
+		if(!userObject.facebook_id){
+			showEditProfileView();
+		} else {
+			alert(getLocalMessage(MSG_NOT_AVAILABLE_WITH_FACEBOOK));
+		}
 	} else if(selectedItem == MENU_TAKE_TOUR){
 		
 	} else if(selectedItem == MENU_REPORT_PROBLEM){

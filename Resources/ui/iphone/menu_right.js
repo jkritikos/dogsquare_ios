@@ -47,7 +47,7 @@ function populateRightMenu(dogObject){
 	//plus image inside button UI
 	var rowPlusImage = Ti.UI.createImageView({ 
 		image:IMAGE_PATH+'menu_right/add_dog_icon.png',
-		left:86
+		left:76
 	});
 	
 	//label inside button UI
@@ -55,10 +55,10 @@ function populateRightMenu(dogObject){
 		text:'Add a new dog',
 		color:'bab9ba',
 		height:27,
-		width:125,
+		width:'auto',
 		textAlign:'left',
-		left:146,
-		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+		left:136,
+		font:{fontSize:18, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	
 	//border inside button UI
