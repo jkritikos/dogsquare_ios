@@ -11,6 +11,7 @@ var FILTER_WORKPLACE = 9;
 var FILTER_RECENTLY_OPEN = 100;
 var FILTER_MATING = 101;
 var FILTER_SAME_BREED = 102;
+var FILTER_LOST_DOG = 103;
 
 //UI components
 var viewMapTargetMode = null;
@@ -154,6 +155,7 @@ function buildMapView(windowMode){
 	mapSearchFilterData.push(createMapFilterRow(FILTER_RECENTLY_OPEN));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_MATING));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_SAME_BREED));
+	mapSearchFilterData.push(createMapFilterRow(FILTER_LOST_DOG));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_PUBLIC_PLACE));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_BEACH));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_WORKPLACE));
@@ -276,8 +278,37 @@ function handleMapAnnotationClick(e){
 			openWindows.push(checkinPlaceWindow);
 			//openWindows[1] = checkinPlaceWindow;
 			navController.open(checkinPlaceWindow);
-		} else if(annotation.user_id){
+		} else if(annotation.activity_id){
+			var activityId = annotation.activity_id;
+			Ti.include('ui/iphone/view_activity.js');
+	
+			var viewActivityView = buildViewActivityView(activityId);
 			
+			var viewActivityWindow = Ti.UI.createWindow({
+				backgroundColor:'white',
+				//barImage:IMAGE_PATH+'common/bar.png',
+				translucent:false,
+				barColor:UI_COLOR,
+				title:'Activity details'
+			});
+			
+			//back button & event listener
+			var viewActivityBackButton = Ti.UI.createButton({
+			    backgroundImage: IMAGE_PATH+'common/back_button.png',
+			    width:48,
+			    height:33
+			});
+			
+			viewActivityWindow.setLeftNavButton(viewActivityBackButton);
+			viewActivityBackButton.addEventListener("click", function() {
+			    navController.close(viewActivityWindow);
+			});
+			
+			viewActivityWindow.add(viewActivityView);
+			
+			openWindows.push(viewActivityWindow);
+			//openWindows[0] = viewActivityWindow;
+			navController.open(viewActivityWindow);
 		}
 	}
 }
@@ -361,6 +392,9 @@ function getMapFilter(filter){
 	} else if(filter == FILTER_PUBLIC_PLACE){
 		icon = IMAGE_PATH+'map_filters/publicplace_icon.png';
 		label = 'Public place';
+	} else if(filter == FILTER_LOST_DOG){
+		icon = IMAGE_PATH+'map_filters/lost_icon.png';
+		label = 'Lost dog';
 	}
 	
 	var obj = {
@@ -609,7 +643,7 @@ function getPlacesByFilterOnline(catId){
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
 			
-			updateMapWithAnnotations(jsonData.data.places);
+			updateMapWithAnnotations(jsonData.data.places, jsonData.data.checkins, jsonData.data.activities);
 		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
 			Ti.API.error('Unauthorised request - need to login again');
 			showLoginPopup();
@@ -627,49 +661,132 @@ function getPlacesByFilterOnline(catId){
 }
 
 //Displays the map annotations
-function updateMapWithAnnotations(places){
+function updateMapWithAnnotations(places, checkins, activities){
 	var annotationArray = [];
+	mapview.annotations = [];
+	var placesAdded = [];
 	
-	if(places.length != 0 && places != null){
-		for(i=0;i<places.length;i++){
-			
-			var customPin2 = Ti.UI.createView({
+	//Show checkins
+	if(checkins != null && checkins.length != 0){
+		for(i=0;i<checkins.length;i++){
+	 		
+	 		placesAdded.push(checkins[i].place_id);
+	 		
+	 		var customPin2 = Ti.UI.createView({
 				backgroundImage:IMAGE_PATH+'map/pin_user.png',
 				width:76,
 				height:86
 			});
 			
-			//Add the place thumb, if available
+			//Add the user thumb, if available
 			var placeImage = Ti.UI.createImageView({
-				image:REMOTE_PLACE_IMAGES + places[i].thumb,
-				defaultImage:IMAGE_PATH+'common/default_place_photo.png',
+				image:getUserPhoto(checkins[i].thumb),
+				defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
+				width:50,
+				height:50,
 				zIndex:2,
-				top:3
+				top:10,
+				left:13
 			});
 			
 			customPin2.add(placeImage);
-			
-			var customView = Ti.UI.createView({
-				backgroundColor:'red',
-				width:50,
-				height:30
-			});
-			
-			var mapAnnotations = Titanium.Map.createAnnotation({
-				latitude:places[i].lat,
-				longitude:places[i].lon,
-				title:places[i].name,
+	 		
+	 		var mapAnnotations = Titanium.Map.createAnnotation({
+				latitude:checkins[i].lat,
+				longitude:checkins[i].lon,
+				title:checkins[i].user_name,
+				subtitle:'Checked in at '+checkins[i].place_name,
 				animate:true,
 				customView:customPin2,
 				rightButton:IMAGE_PATH+'map/arrow_icon.png',
-				place_id:places[i].id
+				place_id:checkins[i].place_id
 			});
 			
 			annotationArray.push(mapAnnotations);
+	 	}
+	 }
+	 
+	 //Show activities
+	if(activities != null && activities.length != 0){
+		for(i=0;i<activities.length;i++){
+	 		
+	 		var customPin2 = Ti.UI.createView({
+				backgroundImage:IMAGE_PATH+'map/pin_user.png',
+				width:76,
+				height:86
+			});
+			
+			//Add the user thumb, if available
+			var placeImage = Ti.UI.createImageView({
+				image:getUserPhoto(activities[i].thumb),
+				defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
+				width:50,
+				height:50,
+				zIndex:2,
+				top:10,
+				left:13
+			});
+			
+			customPin2.add(placeImage);
+	 		
+	 		var mapAnnotations = Titanium.Map.createAnnotation({
+				latitude:activities[i].lat,
+				longitude:activities[i].lon,
+				title:activities[i].user_name,
+				subtitle:'Went on a walk',
+				animate:true,
+				customView:customPin2,
+				rightButton:IMAGE_PATH+'map/arrow_icon.png',
+				user_id:activities[i].id,
+				activity_id:activities[i].activity_id
+			});
+			
+			annotationArray.push(mapAnnotations);
+	 	}
+	 }
+	
+	//Show places
+	if(places != null && places.length != 0){
+		for(i=0;i<places.length;i++){
+			
+			//Only proceed if we havent already added a checkin for the same place
+			if(placesAdded.indexOf(places[i].id) == -1){
+				var customPin2 = Ti.UI.createView({
+					backgroundImage:IMAGE_PATH+'map/pin_user.png',
+					width:76,
+					height:86
+				});
+				
+				//Add the place thumb, if available
+				var placeImage = Ti.UI.createImageView({
+					image:REMOTE_PLACE_IMAGES + places[i].thumb,
+					defaultImage:IMAGE_PATH+'common/default_place_photo.png',
+					zIndex:2,
+					top:3
+				});
+				
+				customPin2.add(placeImage);
+			
+				var mapAnnotations = Titanium.Map.createAnnotation({
+					latitude:places[i].lat,
+					longitude:places[i].lon,
+					title:places[i].name,
+					animate:true,
+					customView:customPin2,
+					rightButton:IMAGE_PATH+'map/arrow_icon.png',
+					place_id:places[i].id
+				});
+				
+				annotationArray.push(mapAnnotations);
+			} else {
+				Ti.API.warn('Not adding place '+places[i].id +' - already added as a checkin');
+			}
+			
+			
 		}
-		
-		mapview.setAnnotations(annotationArray);
-	}else{
-		mapview.annotations = [];
 	}
+	
+	
+	 
+	 mapview.setAnnotations(annotationArray);
 }
