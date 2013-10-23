@@ -299,8 +299,11 @@ function createLeftMenu(){
 	var usernameLabel = Titanium.UI.createLabel({
 		text:userObject.name,
 		color:'#ab7b04',
+		textAlign:'left',
+		height:50,
+		width:155,
 		left:82,
-		top:17,
+		top:0,
 		font:{fontSize:19, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	
@@ -500,6 +503,8 @@ function populateSearchResultsTableView(uObj, pObj){
 		
 		var userRowNameLabel = Titanium.UI.createLabel({
 			text:uObj[i].User.name,
+			height:30,
+			width:200,
 			color:'#ab7b04',
 			left:77,
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
@@ -543,6 +548,8 @@ function populateSearchResultsTableView(uObj, pObj){
 		var placeRowNameLabel = Titanium.UI.createLabel({
 			text:pObj[i].Place.name,
 			color:'#ab7b04',
+			height:30,
+			width:200,
 			left:77,
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
 		});

@@ -293,7 +293,7 @@ function buildViewActivityView(aId){
 			height:20,
 			textAlign:'center',
 			left:18,
-			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:UI_FONT_BARS
 		});
 		viewActivityCommentsButton.add(viewActivityCommentsTitleLabel);
 		
@@ -477,11 +477,11 @@ function populateViewActivityCommentsTableView(comObj){
 		//comment name label
 		var commentNameLabel = Ti.UI.createLabel({
 			text:comObj[i].comm.name,
-			top:6,
+			top:4,
 			textAlign:'left',
-			width:292,
+			width:200,
 			bottom:24,
-			height:'auto',
+			height:30,
 			left:84,
 			color:'black',
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
@@ -876,11 +876,11 @@ function appendCommentActivityTableView(date, message){
 		//comment name label
 		var commentNameLabel = Ti.UI.createLabel({
 			text:userObject.name,
-			top:6,
+			top:4,
 			textAlign:'left',
-			width:292,
+			width:200,
 			bottom:24,
-			height:'auto',
+			height:30,
 			left:84,
 			color:'black',
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}

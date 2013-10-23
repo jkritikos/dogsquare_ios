@@ -492,7 +492,7 @@ function populateFindFriendsDogsquareTableView(uObj){
 			textAlign:'left',
 			width:116,
 			left:72,
-			font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'},
+			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'},
 			type:TYPE_FRIENDS_ROW
 		});
 		row.add(rowNameLabel);

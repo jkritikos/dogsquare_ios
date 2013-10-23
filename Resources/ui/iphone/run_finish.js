@@ -285,7 +285,7 @@ function buildRunFinishView(obj){
 		height:20,
 		textAlign:'center',
 		left:18,
-		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+		font:UI_FONT_BARS
 	});
 	runFinishCommentsButton.add(runFinishCommentsTitleLabel);
 	
@@ -538,11 +538,11 @@ function appendCommentFinishTableView(date, message){
 	//comment name label
 	var commentNameLabel = Ti.UI.createLabel({
 		text:userObject.name,
-		top:6,
+		top:4,
 		textAlign:'left',
-		width:292,
+		width:200,
 		bottom:24,
-		height:'auto',
+		height:30,
 		left:84,
 		color:'black',
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}

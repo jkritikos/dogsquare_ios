@@ -56,7 +56,8 @@ function populateListUsersTableView(uData){
 			text:typeof uData.users != 'undefined' ? uData.users[i].User.name : uData[i].Dog.name,
 			color:'black',
 			height:22,
-			textAlign:'center',
+			textAlign:'left',
+			width:182,
 			opacity:0.6,
 			left:72,
 			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'}

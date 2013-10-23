@@ -151,6 +151,7 @@ function buildLoginWindow(isPopup){
 		font:{fontSize:11, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
 	loginWindow.add(loginForgotPasswordLabel);
+	loginForgotPasswordLabel.addEventListener('click', handleForgotPasswordLabelLink);
 	
 	//login button
 	var loginButton = Ti.UI.createButton({
@@ -179,6 +180,18 @@ function buildLoginWindow(isPopup){
 	});
 	
 	return loginWindow;
+}
+
+function handleForgotPasswordLabelLink(){
+	
+	Ti.include('ui/iphone/password_reset.js');
+	buildPasswordResetView();
+	
+	if(iOS7){
+		passwordResetNavWin.open();
+	}else{
+		passwordResetWindow.open();
+	}
 }
 
 //handle textfield when not focused

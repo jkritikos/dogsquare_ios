@@ -447,7 +447,7 @@ function buildRegisterWindow(){
 		backgroundImage:IMAGE_PATH+'signup/Facebook_button.png',
 		width:241,
 		height:45,
-		top:672,
+		top:737,
 		bottom:30
 	});
 	
@@ -468,8 +468,7 @@ function buildRegisterWindow(){
 		backgroundImage:IMAGE_PATH+'signup/signup_btn.png',
 		width:270,
 		height:55,
-		top:665,
-		bottom:30
+		top:665
 	});
 	
 	registerSignupButton.addEventListener('click', handleSignupClick);

@@ -30,6 +30,7 @@ function buildViewInboxNew(){
 		    backgroundColor:'1c2027',
 		    left:40,
 		    width:Titanium.UI.SIZE,
+		    right:40,
 		    height:25,
 		    borderColor:'white',
 		    borderRadius:10,
@@ -210,6 +211,8 @@ function populateInboxNewContactsTableView(mObject){
 			text:mObject[i].name,
 			color:'#605353',
 			left:72,
+			height:28,
+			width:204,
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
 		});
 		

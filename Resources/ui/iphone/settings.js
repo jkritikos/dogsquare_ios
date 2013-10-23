@@ -7,6 +7,7 @@ var MENU_EDIT_PROFILE = 1;
 var MENU_TAKE_TOUR = 2;
 var MENU_REPORT_PROBLEM = 3;
 var MENU_LOGOUT = 4;
+var MENU_SHARING = 5;
 
 function buildSettingsView(){
 	if(viewSettings == null){
@@ -14,7 +15,7 @@ function buildSettingsView(){
 			backgroundColor:UI_BACKGROUND_COLOR
 		});
 		
-		var settingsMenuTable = Ti.UI.createTableView({
+		settingsMenuTable = Ti.UI.createTableView({
 			backgroundColor:UI_BACKGROUND_COLOR,
 			sepparatorColor:'d3d2d2',
 			top:13,
@@ -32,6 +33,7 @@ function buildSettingsView(){
 		var settingsMenuData = [];
 		settingsMenuData.push(createSettingsMenuRow(MENU_CHANGE_PASSWORD));
 		settingsMenuData.push(createSettingsMenuRow(MENU_EDIT_PROFILE));
+		settingsMenuData.push(createSettingsMenuRow(MENU_SHARING));
 		settingsMenuData.push(createSettingsMenuRow(MENU_TAKE_TOUR));
 		settingsMenuData.push(createSettingsMenuRow(MENU_REPORT_PROBLEM));
 		settingsMenuData.push(createSettingsMenuRow(MENU_LOGOUT));
@@ -63,7 +65,37 @@ function handleSettingsMenuTableRows(e){
 		showProblemReportEmailDialog();
 	} else if(selectedItem == MENU_LOGOUT){
 		logout();
+	} else if(selectedItem == MENU_SHARING){
+		openSharingView();
 	}
+}
+
+function openSharingView(){
+	Ti.include('ui/iphone/sharing.js');
+	buildSharingView();
+	
+	var sharingWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		barColor:UI_COLOR,
+		translucent:false
+	});
+	
+	//back button
+	var sharingBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	sharingWindow.setLeftNavButton(sharingBackButton);
+	
+	sharingBackButton.addEventListener("click", function() {
+	    navController.close(sharingWindow);
+	});
+	
+	sharingWindow.add(viewSharing);
+	openWindows.push(sharingWindow);
+	navController.open(sharingWindow);
 }
 
 //Disconnects the current user and shows the login screen
@@ -180,6 +212,9 @@ function createSettingsMenuRow(menu){
 	} else if(menu == MENU_LOGOUT){
 		icon = IMAGE_PATH+'settings/logout.png';
 		label = 'Logout';
+	} else if(menu == MENU_SHARING){
+		icon = IMAGE_PATH+'settings/profile_edit.png';
+		label = 'Sharing';
 	}
 	
 	var rowIcon = Titanium.UI.createImageView({

@@ -319,7 +319,7 @@ function buildProfileOtherView(uId, name) {
 			height:20,
 			textAlign:'center',
 			left:15,
-			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:UI_FONT_BARS
 		});
 		profileOtherDogBar.add(profileOtherDogBarLabel);
 		profileOtherView.add(profileOtherDogBar);

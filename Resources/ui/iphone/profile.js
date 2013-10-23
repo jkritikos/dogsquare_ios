@@ -211,7 +211,7 @@ var profileActivityLabel = Titanium.UI.createLabel({
 	height:20,
 	textAlign:'center',
 	left:18,
-	font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+	font:UI_FONT_BARS
 });
 profileActivityBar.add(profileActivityLabel);
 

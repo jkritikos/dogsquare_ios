@@ -77,9 +77,9 @@ function populateInboxTableView(mObj) {
 		var rowNameLabel = Titanium.UI.createLabel({ 
 			text:mObj[i].name,
 			color:'black',
-			top:12,
-			height:18,
-			width:'auto',
+			top:8,
+			height:30,
+			width:200,
 			textAlign:'left',
 			left:75,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}

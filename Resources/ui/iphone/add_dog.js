@@ -87,8 +87,24 @@ function builAddDogView(windowMode){
 		
 		//photo button preview image
 		imageThumbnailPreviewImageView = Ti.UI.createImageView({
-			borderRadius:39,
-			zIndex:2
+			processed:false,
+			zIndex:3
+		});
+		
+		imageThumbnailPreviewImageView.addEventListener('load', function(){
+			Ti.API.info('EDIT Profile image loaded event');
+			
+			if(!imageThumbnailPreviewImageView.processed){
+				var dogProfileImageViewBlob = dogProfilePhotoImage.toBlob();
+				
+				//Resizing imageAsResized
+				var dogProfileImageBlobCropped = dogProfileImageViewBlob.imageAsThumbnail(94,0,47);
+				imageThumbnailPreviewImageView.image = dogProfileImageBlobCropped;
+				
+				imageThumbnailPreviewImageView.processed = true;
+				
+				Ti.API.info('EDIT DOg profile image loaded event processing. Image height:'+dogProfileImageViewBlob.height+' width '+dogProfileImageViewBlob.width + ' cropped to height '+dogProfileImageBlobCropped.height + ' and width '+dogProfileImageBlobCropped.width);
+			}
 		});
 		
 		addDogPhotoButton.add(imageThumbnailPreviewImageView);
@@ -764,27 +780,7 @@ function updateAddDogView(id){
 	
 	var dogObj = getDogById(id);
 	
-	//update image thumbnail - TODO get photo from online - it works when we have local filename
-	/*var filename = Titanium.Filesystem.applicationDataDirectory + dogObj[0].photo;
-	addDogObject.photo_filename = dogObj[0].photo;
-	
-	var image = Titanium.Filesystem.getFile(filename);
-	var photo = image.toBlob();
-	
-	//Jpeg compression module
-	var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
-	jpgcompressor.setCompressSize(200000);
-	jpgcompressor.setWorstCompressQuality(0.40);
-	
-	var compressedPhoto = jpgcompressor.compress(photo);
-	addDogObject.photo = compressedPhoto;
-	
-	//Create thumbnail
-	var photoThumbnail = photo.imageAsThumbnail(60,0,30);
-	addDogObject.thumb = photoThumbnail;
-	
-	var photoThumbnailPreview = photo.imageAsThumbnail(78,0,39);
-	imageThumbnailPreviewImageView.image = photoThumbnailPreview;*/
+	imageThumbnailPreviewImageView.image = dogProfilePhotoImage.image;
 	
 	//update name
 	addDogFieldName.value = dogObj[0].name;
