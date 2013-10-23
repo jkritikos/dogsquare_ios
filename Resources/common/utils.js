@@ -11,6 +11,16 @@ function isStringNullOrEmpty(s){
 	return response;
 }
 
+//Returns true if the specified string ends with suffix, false otherwise
+function stringEndsWith(str, suffix) {
+    return str.charAt(str.length) == suffix;
+}
+
+//Returns true if the specified string starts with suffix, false otherwise
+function stringStartsWith(str, prefix) {
+    return str.charAt(0) == suffix;
+}
+
 //String validator for email format
 function isValidEmail(email){
 	Ti.API.info('utils.js isValidEmail() called for email '+email);
