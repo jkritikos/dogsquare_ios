@@ -32,6 +32,8 @@ var MSG_REGISTER_NO_TERMS = 30;
 var MSG_RUN_NOT_ENDED = 31;
 var MSG_NO_MUTUAL_FOLLOWERS = 32;
 var MSG_NOT_AVAILABLE_WITH_FACEBOOK = 33;
+var MSG_NO_INTERNET_CONNECTION = 34;
+var MSG_FACEBOOK_ERROR = 35;
 
 //Error messages (Server)
 var ERROR_EMAIL_TAKEN = -2;
@@ -70,6 +72,8 @@ var ERROR_MSG_REMOVE_TIMEOUT = 1500;
 
 //SMS invite text message
 var INVITE_SMS_MSG = 'Hey there, join me on Dogsquare!';
+//Facebook invite message
+var INVITE_FB_MSG = 'Hey there, join me on dogsquare FB';
 
 function TT(s){
 	var currentLanguage = LANGUAGE_ENGLISH;
@@ -239,6 +243,10 @@ function getLocalMessage(code){
 		msg = 'Unfortunately You guys are not mutual followers..who knows things might change..';
 	} else if(code == MSG_NOT_AVAILABLE_WITH_FACEBOOK){
 		msg = 'You can’t do this when logged in with Facebbok.';
+	} else if(code == MSG_NO_INTERNET_CONNECTION){
+		msg = 'Ooops! There seems to be a problem with your connection to the Internet!';
+	} else if(code == MSG_FACEBOOK_ERROR){
+		msg = 'Ooops! There seems to be a problem with our Facebook access!';
 	}
  
 	return msg;

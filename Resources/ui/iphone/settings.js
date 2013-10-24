@@ -70,6 +70,7 @@ function handleSettingsMenuTableRows(e){
 	}
 }
 
+//Opens the share settings view
 function openSettingsSharingView(){
 	Ti.include('ui/iphone/settings_sharing.js');
 	buildSettingsSharingView();
@@ -77,7 +78,8 @@ function openSettingsSharingView(){
 	var settingsSharingWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
 		barColor:UI_COLOR,
-		translucent:false
+		translucent:false,
+		title:'Sharing settings'
 	});
 	
 	//back button

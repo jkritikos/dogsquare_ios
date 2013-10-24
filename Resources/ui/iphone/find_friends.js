@@ -307,7 +307,8 @@ function populateFindFriendsFacebookTableView(data){
 			backgroundColor:'white',
 			selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 			type:TYPE_FRIENDS_ROW,
-			button:'invite'
+			button:'invite',
+			facebook_id:data[i].id
 		});
 		
 		var rowFriendImage = Titanium.UI.createImageView({
@@ -779,10 +780,9 @@ function handlefriendsTableViewRows(e){
 		
 		
 	} else if(e.source.type == TYPE_INVITE_FB_BUTTON){
-		Ti.API.info('Inviting by FACEBOOK, row is '+e.index);
+		Ti.API.info('Inviting by FACEBOOK, row is '+e.index+' fb id is '+e.row.facebook_id);
 		
-		e.row.children[2].backgroundImage = IMAGE_PATH+'follow_invite/invited_button.png';
-		e.row.children[2].type = TYPE_ALREADY_INVITED_BUTTON;
+		facebookSendInvitation(e.row.facebook_id, e.index);
 	}
 }
 
@@ -922,5 +922,81 @@ function facebookGetAllFriends(){
 		} else {
 			Ti.API.info('FACEBOOK - NOT logged in');
 		}
+	}
+}
+
+//Event handler for FB Invitation sending
+function facebookSendInvitation(targetFacebookId, rowIndex){
+	Ti.API.warn('facebookSendInvitation() called for id '+targetFacebookId);
+	
+	//add to an array so we can easily switch to multiple users in the future
+	var selectedFriendsForFBInvite = [];
+	selectedFriendsForFBInvite.push(targetFacebookId);
+	
+	if (Titanium.Network.online == true){
+		
+		//progress view
+		var progressView = new ProgressView({window:viewFindFriends});
+		progressView.show({
+			text:"Inviting..."
+		});
+		
+		//Prepare json object
+		var batchRequests = [];
+		for(var ele in selectedFriendsForFBInvite){ 
+			Ti.API.warn('adding '+ele+' to batch request');
+			var url = ele + "/feed";
+			var body = "message="+INVITE_FB_MSG;
+			var obj = {
+				"method":"POST",
+				"relative_url":url,
+				"body":body
+			};
+				
+			//Ti.API.warn('adding '+obj.method+' object to batch request');
+			batchRequests.push(obj);
+			//Ti.API.warn('added '+batchRequests[0].method+' object to batch request');
+		}
+		
+		//send FB batch request
+		var fbResult = "";
+		fb.requestWithGraphPath('', {batch:batchRequests}, "POST", function(e) {
+	    	if (e.success) {
+	        	Ti.API.warn('FACEBOOK - Success in posting multi-message! '+JSON.stringify(e));
+	        	
+	        	//Show success
+				progressView.change({
+			        success:true
+			    });
+			    
+			    //Update table view
+			    var theRow = findFriendsTableView.data[0].rows[rowIndex];
+			    theRow.children[2].backgroundImage = IMAGE_PATH+'follow_invite/invited_button.png';
+				theRow.children[2].type = TYPE_ALREADY_INVITED_BUTTON;
+			    
+	    	} else {
+	        	if (e.error) {
+	         	   Ti.API.warn('FACEBOOK - ERROR in posting multi-message '+e.error);
+	        	} else {
+	            	Ti.API.warn('FACEBOOK - UNKNOWN response in posting multi-message');
+	        	}
+	        	
+	        	//Show the error message we got back from the server
+				progressView.change({
+			        error:true,
+			        text:getLocalMessage(MSG_FACEBOOK_ERROR)
+			    });
+		    }
+		    
+		    //and hide it after a while		    
+		    setTimeout(function() {
+			    progressView.hide();
+			}, ERROR_MSG_REMOVE_TIMEOUT);
+		        	
+		});
+		//End FB invitation
+
+	} else {
+		buildAlert(MSG_NO_INTERNET_CONNECTION);
 	}
 }

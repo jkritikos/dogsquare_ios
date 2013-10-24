@@ -242,6 +242,7 @@ function handleLoginButton(){
 //Server call for login
 function checkLoginCredentials(lObj){
 	Ti.API.info('checkLoginCredentials() called with loginObject='+ JSON.stringify(lObj)); 	
+	var erasedDatabase = false;
 	
 	//progress view
 	var progressView = new ProgressView({window:loginWindow});
@@ -294,6 +295,7 @@ function checkLoginCredentials(lObj){
 			if(lastLoginBy != null && lastLoginBy != jsonData.data.user.id){
 				Ti.API.info('last user id logged in was '+lastLoginBy + ' - current user logging in is '+jsonData.data.user.id+' - CLEANING DB');
 				cleanDB();
+				erasedDatabase = true;
 			} else {
 				Ti.API.info('not cleaning db - lastLoginBy '+lastLoginBy+' and current login by '+jsonData.data.user.id);
 			}
@@ -319,7 +321,10 @@ function checkLoginCredentials(lObj){
 				dogObj.dogfuel = jsonData.data.dogs[i].Dog.dogfuel;
 				
 				//Save dog data
-				saveDog(dogObj);
+				if(erasedDatabase){
+					saveDog(dogObj);
+				}
+				
 				dogArray.push(dogObj);
 				dogObj = {};
 			}
