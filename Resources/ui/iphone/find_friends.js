@@ -327,10 +327,9 @@ function populateFindFriendsFacebookTableView(data){
 		//friend's fullname label
 		var rowFullNameLabel = Titanium.UI.createLabel({
 			text:data[i].name,
-			//color:'red',
+			color:UI_FONT_COLOR_LIGHT_BLACK,
 			height:22,
 			textAlign:'left',
-			//opacity:0.6,
 			left:72,
 			width:116,
 			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'},

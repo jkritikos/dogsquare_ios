@@ -33,7 +33,7 @@ var editProfileCountryIndexes = [];
 var editProfileSelectedRowCountry = 0;
 var editProfileSelectedRowGender = 0;
 
-var PICKER_DATE_BIRTH = 1;//same constants as register. Ask what to do? Remove or rename? TODO
+var PICKER_DATE_BIRTH = 1;
 var PICKER_COUNTRY = 2;
 var PICKER_GENDER = 3;
 
@@ -688,29 +688,29 @@ function editProfileShowPhotoOptions(){
 	
 //Validator for signup form
 function validateEditUserForm(){
-	//TODO translator integration here
+	
 	if(isStringNullOrEmpty(editProfileFieldName.value)){
-		alert('NAME IS MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_NAME));
 		return false;
 	} else if(isStringNullOrEmpty(editProfileFieldSurname.value)){
-		alert('SURNAME IS MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_SURNAME));
 		return false;
 	} else if(isStringNullOrEmpty(editProfileFieldEmail.value)){
-		alert('EMAIL IS MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_EMAIL));
 		return false;
 	}else if(typeof editProfileObject.birth_date == 'undefined'){
-		alert('DATE OF BIRTH IS MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_DOB));
 		return false;
 	}else if(typeof editProfileObject.country == 'undefined'){
-		alert('COUNTRY IS MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_COUNTRY));
 		return false;
 	}else if(typeof editProfileObject.gender == 'undefined'){
-		alert('GENDER IS MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_GENDER));
 		return false;
 	}
 	
 	if(!isValidEmail(editProfileFieldEmail.value)){
-		alert('INVALID EMAIL');
+		alert(getLocalMessage(MSG_REGISTER_INVALID_EMAIL));
 		return false;
 	}
 	

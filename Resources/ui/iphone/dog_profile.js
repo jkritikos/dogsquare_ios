@@ -13,6 +13,7 @@ var dogProfileDogId = null;
 var dogProfileEditDialog = null;
 var dogProfileMoodPercentLabel = null;
 var dogProfileBoneImageColor = null;
+var dogProfileLostDogButton = null;
 
 var dogProfileEditButton = null;
 	
@@ -60,7 +61,7 @@ function buildDogProfileView(dogId){
 			cancel:2
 		});
 	
-		dogProfileView = Ti.UI.createView({
+		dogProfileView = Ti.UI.createScrollView({
 			backgroundColor:'#eeeded'
 		});
 		
@@ -102,7 +103,7 @@ function buildDogProfileView(dogId){
 		});
 		
 		dogProfileMatingBackground = Titanium.UI.createImageView({
-			bottom:IPHONE5 ? 55 : 5,
+			bottom:IPHONE5 ? 86 : 100,
 			right:81
 		});
 		dogProfileView.add(dogProfileMatingBackground);
@@ -246,7 +247,7 @@ function buildDogProfileView(dogId){
 			height:'auto',
 			textAlign:'left',
 			left:35,
-			bottom:IPHONE5 ? 114 : 58,
+			bottom:IPHONE5 ? 145 : 159,
 			opacity:0.6,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
@@ -258,7 +259,7 @@ function buildDogProfileView(dogId){
 			height:'auto',
 			textAlign:'left',
 			left:91,
-			bottom:IPHONE5 ? 114 : 58,
+			bottom:IPHONE5 ? 145 : 159,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		dogProfileView.add(dogProfileMoodPercentLabel);
@@ -266,7 +267,7 @@ function buildDogProfileView(dogId){
 		//Empty bone image
 		var dogProfileBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'dog_profile/bone_grey.png',
-			bottom:IPHONE5 ? 96 : 44,
+			bottom:IPHONE5 ? 127 : 142,
 			right:30
 		});
 		dogProfileView.add(dogProfileBoneImage);
@@ -274,7 +275,7 @@ function buildDogProfileView(dogId){
 		
 		dogProfileBoneImageColor = Ti.UI.createImageView({ 
 			//image:croppedDataObject.photo,
-			bottom:IPHONE5 ? 96 : 44,
+			bottom:IPHONE5 ? 127 : 142,
 			//width: croppedDataObject.view_width,
 			height: 45,
 			left:143,
@@ -300,11 +301,21 @@ function buildDogProfileView(dogId){
 			height:'auto',
 			textAlign:'left',
 			left:36,
-			bottom:IPHONE5 ? 64 : 16,
+			bottom:IPHONE5 ? 95 : 110,
 			opacity:0.6,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		dogProfileView.add(dogProfileLikeMeLabel);
+		
+		//Heart image for likes
+		dogProfileLostDogButton = Ti.UI.createButton({ 
+			backgroundImage:IMAGE_PATH+'dog_profile/lost_btn.png',
+			width:270,
+			height:55,
+			top:IPHONE5 ? 436 : 440,
+			bottom:IPHONE5 ? 13 : 13
+		});
+		dogProfileView.add(dogProfileLostDogButton);
 		
 		Ti.API.info('buildDogProfileView has been built');
 	}

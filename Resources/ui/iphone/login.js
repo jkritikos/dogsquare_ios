@@ -230,13 +230,25 @@ function handleLoginTextFieldChange(e){
 function handleLoginButton(){
 	loginFieldEmail.blur();
 	loginFieldPassword.blur();
-	if(loginFieldEmail.value != '' && loginFieldPassword.value != ''){
-		
-		loginObject.password = loginFieldPassword.value;
-		loginObject.email = loginFieldEmail.value;
-		
+	
+	if(validateLoginForm()){
 		checkLoginCredentials(loginObject);
 	}	
+}
+
+function validateLoginForm(){
+	if(isStringNullOrEmpty(loginFieldEmail.value)){
+		alert(getLocalMessage(MSG_REGISTER_NO_EMAIL));
+		return false;
+	}else if(isStringNullOrEmpty(loginFieldPassword.value)){
+		alert(getLocalMessage(MSG_REGISTER_NO_PASSWORD));
+		return false;
+	}
+	
+	loginObject.password = loginFieldPassword.value;
+	loginObject.email = loginFieldEmail.value;
+	
+	return true;
 }
 
 //Server call for login

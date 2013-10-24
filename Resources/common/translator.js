@@ -41,6 +41,7 @@ var ERROR_DOG_CREATION = -5;
 var ERROR_DOG_PHOTO_UPLOAD = -6;
 var ERROR_USER_ALREADY_FOLLOWING = -7;
 var ERROR_USER_NOT_FOLLOWING = -8;
+var ERROR_USER_PASSWORD = -21;
 var ERROR_REQUEST_UNAUTHORISED = -100;
 
 //Photo types
@@ -163,6 +164,8 @@ function getErrorMessage(code){
 		msg = 'Email already in use.';
 	} else if(code == ERROR_REQUEST_UNAUTHORISED){
 		msg = 'Invalid username/password.';
+	} else if(code == ERROR_USER_PASSWORD){
+		msg = 'Old Password is not correct!';
 	}
 	
 	return msg;
@@ -238,7 +241,7 @@ function getLocalMessage(code){
 	} else if(code == MSG_NO_MUTUAL_FOLLOWERS){
 		msg = 'Unfortunately You guys are not mutual followers..who knows things might change..';
 	} else if(code == MSG_NOT_AVAILABLE_WITH_FACEBOOK){
-		msg = 'You can’t do this when logged in with Facebbok.';
+		msg = 'You can’t do this when logged in with Facebook.';
 	}
  
 	return msg;
