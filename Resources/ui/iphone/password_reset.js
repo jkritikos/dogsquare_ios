@@ -8,6 +8,7 @@ function buildPasswordResetView(){
 	passwordResetWindow = Ti.UI.createWindow({
 		backgroundColor:UI_BACKGROUND_COLOR,
 		modal:true,
+		translucent:false,
 		barImage:iOS7 ? IMAGE_PATH+'common/bar7.png' : IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR,
 		title:'Password Reset'
@@ -21,14 +22,14 @@ function buildPasswordResetView(){
 		});
 	}
 	
-	var passwordResetBackButton = Titanium.UI.createButton({
-		backgroundImage:IMAGE_PATH+'common/back_button.png',
+	var passwordResetDoneButton = Titanium.UI.createButton({
+		backgroundImage:IMAGE_PATH+'common/Done_button.png',
 	    width:48,
 	    height:33
 	});
-	passwordResetWindow.setLeftNavButton(passwordResetBackButton);
+	passwordResetWindow.setRightNavButton(passwordResetDoneButton);
 	
-	passwordResetBackButton.addEventListener('click', function(e){
+	passwordResetDoneButton.addEventListener('click', function(e){
 		if(iOS7){
 			passwordResetNavWin.close();
 		}else{
@@ -38,13 +39,13 @@ function buildPasswordResetView(){
 	
 	var passwordResetDogsquareLogo = Ti.UI.createImageView({
 		image:IMAGE_PATH+'signup/dogsquare_logo.png',
-		top:48
+		top:10
 	});
 	passwordResetWindow.add(passwordResetDogsquareLogo);
 	
 	var passwordResetFormBackground = Ti.UI.createView({
 		backgroundColor:'e7e6e6',
-		top:136,
+		top:70,
 		width:262,
 		height:42
 	});
@@ -59,6 +60,7 @@ function buildPasswordResetView(){
 		keyboardType:Ti.UI.KEYBOARD_EMAIL
 	});
 	passwordResetFormBackground.add(passwordResetFieldEmail);
+	passwordResetFieldEmail.addEventListener('change', handlePasswordResetTextFieldChange);
 	
 	passwordResetFieldEmailHintTextLabel = Ti.UI.createLabel({
 		text:'Your Email',
@@ -87,8 +89,34 @@ function buildPasswordResetView(){
 		backgroundImage:IMAGE_PATH+'common/reset_btn.png',
 		width:270,
 		height:55,
-		top:200,
+		top:123,
 		bottom:30
 	});
 	passwordResetWindow.add(passwordResetButton);
+	passwordResetButton.addEventListener('click', handlePasswordResetButton);
+}
+
+function handlePasswordResetTextFieldChange(e){
+	if(passwordResetFieldEmail.value != ''){
+		passwordResetFieldEmailHintTextLabel.hide();
+	}else {
+		passwordResetFieldEmailHintTextLabel.show();
+	}
+}
+
+function handlePasswordResetButton(){
+	passwordResetFieldEmail.blur();
+	
+	if(validatePasswordResetForm()){
+		
+	}	
+}
+
+function validatePasswordResetForm(){
+	if(isStringNullOrEmpty(passwordResetFieldEmail.value)){
+		alert(getLocalMessage(MSG_REGISTER_NO_EMAIL));
+		return false;
+	}
+	
+	return true;
 }
