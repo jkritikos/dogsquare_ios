@@ -91,21 +91,23 @@ function builAddDogView(windowMode){
 			zIndex:3
 		});
 		
-		imageThumbnailPreviewImageView.addEventListener('load', function(){
-			Ti.API.info('EDIT Profile image loaded event');
-			
-			if(!imageThumbnailPreviewImageView.processed){
-				var dogProfileImageViewBlob = dogProfilePhotoImage.toBlob();
+		if(viewAddDogTargetMode == TARGET_MODE_NEW_WINDOW) {
+			imageThumbnailPreviewImageView.addEventListener('load', function(){
+				Ti.API.info('EDIT Profile image loaded event');
 				
-				//Resizing imageAsResized
-				var dogProfileImageBlobCropped = dogProfileImageViewBlob.imageAsThumbnail(94,0,47);
-				imageThumbnailPreviewImageView.image = dogProfileImageBlobCropped;
-				
-				imageThumbnailPreviewImageView.processed = true;
-				
-				Ti.API.info('EDIT DOg profile image loaded event processing. Image height:'+dogProfileImageViewBlob.height+' width '+dogProfileImageViewBlob.width + ' cropped to height '+dogProfileImageBlobCropped.height + ' and width '+dogProfileImageBlobCropped.width);
-			}
-		});
+				if(!imageThumbnailPreviewImageView.processed){
+					var dogProfileImageViewBlob = dogProfilePhotoImage.toBlob();
+					
+					//Resizing imageAsResized
+					var dogProfileImageBlobCropped = dogProfileImageViewBlob.imageAsThumbnail(94,0,47);
+					imageThumbnailPreviewImageView.image = dogProfileImageBlobCropped;
+					
+					imageThumbnailPreviewImageView.processed = true;
+					
+					Ti.API.info('EDIT DOg profile image loaded event processing. Image height:'+dogProfileImageViewBlob.height+' width '+dogProfileImageViewBlob.width + ' cropped to height '+dogProfileImageBlobCropped.height + ' and width '+dogProfileImageBlobCropped.width);
+				}
+			});
+		}
 		
 		addDogPhotoButton.add(imageThumbnailPreviewImageView);
 		

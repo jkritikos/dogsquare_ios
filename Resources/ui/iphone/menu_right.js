@@ -122,10 +122,9 @@ function populateRightMenu(dogObject){
 		
 		//dog mood label inside the dog row - right menu row
 		var rowDogMoodLabel = Titanium.UI.createLabel({ 
-			text:'Happy',
+			text:'Dogfuel',
 			color:'8a8b8c',
 			height:18,
-			width:45,
 			textAlign:'left',
 			left:136,
 			top:50,
@@ -140,7 +139,7 @@ function populateRightMenu(dogObject){
 			height:18,
 			width:35,
 			textAlign:'left',
-			left:184,
+			left:187,
 			top:50,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'},
 			type:TYPE_SELECT_ROW

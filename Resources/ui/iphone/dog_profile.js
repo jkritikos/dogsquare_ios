@@ -13,6 +13,7 @@ var dogProfileDogId = null;
 var dogProfileEditDialog = null;
 var dogProfileMoodPercentLabel = null;
 var dogProfileBoneImageColor = null;
+var dogProfileLostDogButton = null;
 
 var dogProfileEditButton = null;
 	
@@ -60,7 +61,7 @@ function buildDogProfileView(dogId){
 			cancel:2
 		});
 	
-		dogProfileView = Ti.UI.createView({
+		dogProfileView = Ti.UI.createScrollView({
 			backgroundColor:'#eeeded'
 		});
 		
@@ -102,7 +103,7 @@ function buildDogProfileView(dogId){
 		});
 		
 		dogProfileMatingBackground = Titanium.UI.createImageView({
-			bottom:IPHONE5 ? 55 : 5,
+			bottom:IPHONE5 ? 86 : 100,
 			right:81
 		});
 		dogProfileView.add(dogProfileMatingBackground);
@@ -241,24 +242,24 @@ function buildDogProfileView(dogId){
 		dogProfileView.add(dogProfilePhotoImage);
 		
 		var dogProfileMoodLabel = Titanium.UI.createLabel({ 
-			text:'Happy',
+			text:'Dogfuel',
 			color:'black',
 			height:'auto',
 			textAlign:'left',
-			left:35,
-			bottom:IPHONE5 ? 114 : 58,
+			left:39,
+			bottom:IPHONE5 ? 144 : 158,
 			opacity:0.6,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		dogProfileView.add(dogProfileMoodLabel);
 		
 		dogProfileMoodPercentLabel = Titanium.UI.createLabel({ 
-			text:'53%',
+			text:'0%',
 			color:'999900',
 			height:'auto',
 			textAlign:'left',
-			left:91,
-			bottom:IPHONE5 ? 114 : 58,
+			left:100,
+			bottom:IPHONE5 ? 145 : 159,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		dogProfileView.add(dogProfileMoodPercentLabel);
@@ -266,7 +267,7 @@ function buildDogProfileView(dogId){
 		//Empty bone image
 		var dogProfileBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'dog_profile/bone_grey.png',
-			bottom:IPHONE5 ? 96 : 44,
+			bottom:IPHONE5 ? 127 : 142,
 			right:30
 		});
 		dogProfileView.add(dogProfileBoneImage);
@@ -274,7 +275,7 @@ function buildDogProfileView(dogId){
 		
 		dogProfileBoneImageColor = Ti.UI.createImageView({ 
 			//image:croppedDataObject.photo,
-			bottom:IPHONE5 ? 96 : 44,
+			bottom:IPHONE5 ? 127 : 142,
 			//width: croppedDataObject.view_width,
 			height: 45,
 			left:143,
@@ -300,11 +301,21 @@ function buildDogProfileView(dogId){
 			height:'auto',
 			textAlign:'left',
 			left:36,
-			bottom:IPHONE5 ? 64 : 16,
+			bottom:IPHONE5 ? 95 : 110,
 			opacity:0.6,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		dogProfileView.add(dogProfileLikeMeLabel);
+		
+		//Heart image for likes
+		dogProfileLostDogButton = Ti.UI.createButton({ 
+			backgroundImage:IMAGE_PATH+'dog_profile/lost_btn.png',
+			width:270,
+			height:55,
+			top:IPHONE5 ? 436 : 440,
+			bottom:IPHONE5 ? 13 : 13
+		});
+		dogProfileView.add(dogProfileLostDogButton);
 		
 		Ti.API.info('buildDogProfileView has been built');
 	}
@@ -370,6 +381,12 @@ function dogProfilePhotoView(){
 function deleteDogOnline(dogId){
 	Ti.API.info('deleteDogOnline() called ');
 	
+	//progress view
+	var progressView = new ProgressView({window:dogProfileView});
+	progressView.show({
+		text:"Deleting..."
+	});
+	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
@@ -388,7 +405,15 @@ function deleteDogOnline(dogId){
 			var dogObj = getDogs();
 			populateRightMenu(dogObj);
 			
-			openAddDogView();
+			//Show success
+			progressView.change({
+		        success:true
+		    });
+		    
+		    //Hide progress view
+			progressView.hide();
+			
+			openProfileView();
 			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;
@@ -879,24 +904,23 @@ function handleDogLikesButton(e){
 }
 
 //open add dog view after the dog is deleted by user's choise
-function openAddDogView(){
-	Ti.include('ui/iphone/add_dog.js');
+function openProfileView(){
+	Ti.include('ui/iphone/profile.js');
 	
-	var addDogWindow = Ti.UI.createWindow({
+	var profileWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
 		//barImage:IMAGE_PATH+'common/bar.png',
 		translucent:false,
 		barColor:UI_COLOR,
-		title:'Add new dog'
+		title:userObject.name
 	});
 	
 	//Revert to the standard right window button
-	addDogWindow.leftNavButton = leftBtn;
+	profileWindow.leftNavButton = leftBtn;
+	profileWindow.rightNavButton = rightBtn;
 	
-	openWindows.push(addDogWindow);
+	profileWindow.add(viewProfile);
 	
-	builAddDogView(TARGET_MODE_NEW_WINDOW);
-	addDogWindow.add(viewAddDog);
-	
-	navController.open(addDogWindow);
+	openWindows.push(profileWindow);
+	navController.open(profileWindow);
 }
