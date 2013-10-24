@@ -392,7 +392,7 @@ function populateViewActivityDogsTableView(dogObj){
 		
 		//mood label
 		var rowMoodLabel = Titanium.UI.createLabel({ 
-			text:'Happy',
+			text:'Dogfuel',
 			color:'#afaeae',
 			height:15,
 			textAlign:'center',
@@ -408,7 +408,7 @@ function populateViewActivityDogsTableView(dogObj){
 			color:'999900',
 			height:15,
 			textAlign:'center',
-			right:24,
+			left:271,
 			bottom:13,
 			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
