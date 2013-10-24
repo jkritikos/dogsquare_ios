@@ -307,7 +307,7 @@ profileMapButton.addEventListener('click', function(){
 
 function handleRunBackButton() {
 	if(runningMode){
-		alert('STOP RUNNING FIRST');
+		alert(getLocalMessage(MSG_RUN_NOT_ENDED));
 	} else {
 		navController.close(runWindow);
 	}
@@ -614,6 +614,7 @@ function profilePhotoTakeNew(){
 	
 		},
 		error:function(error){
+			alert(getLocalMessage(MSG_CAMERA_PROBLEM));
 		},
 		allowEditing:true
 	});

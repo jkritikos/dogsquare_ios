@@ -257,13 +257,13 @@ function handleTextFieldNameBlur(){
 
 function validatePlaceForm(){
 	if(isStringNullOrEmpty(addPlaceTxtFieldName.value)){
-		alert('NAME IS MISSING');
+		alert(getLocalMessage(MSG_ADD_PLACE_NO_NAME));
 		return false;
 	}else if(addPlaceCategoryLabel.id == null){
-		alert('CATEGORY IS MISSING');
+		alert(getLocalMessage(MSG_ADD_PLACE_NO_CATEGORY));
 		return false;
 	}else if(addPlaceObject.photo == null){
-		alert('PLACE PHOTO MISSING');
+		alert(getLocalMessage(MSG_ADD_PLACE_NO_PHOTO));
 		return false;
 	}
 	

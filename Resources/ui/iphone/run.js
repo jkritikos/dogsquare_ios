@@ -305,7 +305,7 @@ function handleStartRunButton(e){
 			window.setPanningMode("NoPanning");
 			
 		} else {
-			alert('NO DOGS SELECTED');
+			alert(getLocalMessage(MSG_RUN_NO_DOGS));
 		}
 	} else {
 		handleRunUIButtons();
@@ -422,7 +422,7 @@ function handleEndRunButton(){
 		
 		Ti.API.info('OPENED run finish');
 	} else {
-		alert('START RUNNING FIRST');
+		alert(getLocalMessage(MSG_RUN_END));
 	}
 }
 

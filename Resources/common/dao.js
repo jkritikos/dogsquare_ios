@@ -136,11 +136,8 @@ fb.addEventListener('login', function(e) {
     			
     			Ti.API.info('FB callback: name '+fbName+' gender '+gender+' age '+age+' fbId '+fbId+' email '+email);
     			
-    			if(CURRENT_VIEW == VIEW_SIGNUP || CURRENT_VIEW == VIEW_LOGIN){
+    			if(CURRENT_VIEW == VIEW_SIGNUP){
     				Ti.API.info('FB Login from registration view');
-					
-					//we'll need this if we are actually at the login view
-					_import('ui/iphone/register.js');
 					
     				//Prepare a signup object from the FB data
     				var signupObject = {
@@ -155,9 +152,7 @@ fb.addEventListener('login', function(e) {
     				};
     				
     				doSignup(signupObject);	
-    			} 
-    			/*
-    			else if(CURRENT_VIEW == VIEW_LOGIN){
+    			} else if(CURRENT_VIEW == VIEW_LOGIN){
     				Ti.API.info('FB Login from login view');
     				
     				var loginObject = {
@@ -168,9 +163,7 @@ fb.addEventListener('login', function(e) {
     				};
     				
     				checkLoginCredentials(loginObject);
-    			}
-    			*/
-    			else if(CURRENT_VIEW == VIEW_FIND_FRIENDS){
+    			} else if(CURRENT_VIEW == VIEW_FIND_FRIENDS){
     				Ti.API.info('FB Login from find friends view');
     				facebookGetAllFriends();
     			}

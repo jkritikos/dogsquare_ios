@@ -40,7 +40,7 @@ function getAddressBookContacts(){
 		    if (e.success) {
 		       readContacts();
 		    } else {
-		       alert('PLEASE ENABLE CONTACTS ACCESS');
+		       alert(getLocalMessage(MSG_FIND_FRIENDS_NO_CONTACTS_ACCESS));
 		    }
 		});	
 	}

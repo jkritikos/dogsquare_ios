@@ -230,7 +230,7 @@ function getLocalMessage(code){
 	} else if(code == MSG_REGISTER_INVALID_EMAIL){
 		msg = 'Woof! That email address is wrong!';
 	} else if(code == MSG_REGISTER_NO_PHOTO){
-		msg = 'Your super cool  profile picture is missing!';
+		msg = 'Your super cool profile picture is missing!';
 	} else if(code == MSG_REGISTER_NO_TERMS){
 		msg = 'For this relationship to work you must Agree to the Terms of Use & Privacy Policy..';
 	} else if(code == MSG_RUN_NOT_ENDED){

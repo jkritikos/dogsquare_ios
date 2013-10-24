@@ -937,6 +937,7 @@ function handleEditProfileCameraSelection(){
 	
 		},
 		error:function(error){
+			alert(getLocalMessage(MSG_CAMERA_PROBLEM));
 		},
 		allowEditing:true
 	});

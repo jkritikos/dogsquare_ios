@@ -150,10 +150,10 @@ function handlePasswordEditTextFieldChange(e){
 //Validator for edit password form
 function validatePasswordEditForm(){
 	if(isStringNullOrEmpty(passwordEditFieldOldPassword.value)){
-		alert('PROVIDE YOUR OLD PASSWORD');
+		alert(getLocalMessage(MSG_PWD_CHANGE_NO_PASSWORD));
 		return false;
 	} else if(isStringNullOrEmpty(passwordEditFieldNewPassword.value)){
-		alert('PROVIDE A NEW PASSWORD');
+		alert(getLocalMessage(MSG_PWD_CHANGE_NO_NEW_PASSWORD));
 		return false;
 	}
 	

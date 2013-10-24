@@ -597,6 +597,7 @@ function handleCameraSelection(){
 	
 		},
 		error:function(error){
+			alert(getLocalMessage(MSG_CAMERA_PROBLEM));
 		},
 		allowEditing:true
 	});
@@ -722,28 +723,28 @@ function doSaveDogOnline(dObj){
 
 function validateDogForm(){
 	if(isStringNullOrEmpty(addDogFieldName.value)){
-		alert('NAME IS MISSING');
+		alert(getLocalMessage(MSG_ADD_DOG_NO_NAME));
 		return false;
 	}else if(addDogFieldDogBreedHintTextLabel.id == null){
-		alert('DOG BREED IS MISSING');
+		alert(getLocalMessage(MSG_ADD_DOG_NO_BREED));
 		return false;
 	}else if(isStringNullOrEmpty(addDogFieldAge.value) || isNaN(addDogFieldAge.value)){
-		alert('AGE IS MISSING OR NOT A NUMBER');
+		alert(getLocalMessage(MSG_ADD_DOG_NO_AGE));
 		return false;
 	}else if(addDogFieldSizeHintTextLabel.id == null){
-		alert('SIZE IS MISSING');
+		alert(getLocalMessage(MSG_ADD_DOG_NO_SIZE));
 		return false;
 	}else if(addDogFieldGenderHintTextLabel.id == null){
-		alert('GENDER IS MISSING');
+		alert(getLocalMessage(MSG_ADD_DOG_NO_GENDER));
 		return false;
 	}else if(addDogFieldMattingHintTextLabel.id == null){
-		alert('MATTING IS MISSING');
+		alert(getLocalMessage(MSG_ADD_DOG_NO_MATING));
 		return false;
 	}
 	
 	if(addDogInteractionType == ADD_DOG_USE){
 		if(addDogObject.photo == null){
-			alert('PROFILE PHOTO MISSING');
+			alert(getLocalMessage(MSG_ADD_DOG_NO_PHOTO));
 			return false;
 		}
 	}

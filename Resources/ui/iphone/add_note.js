@@ -480,16 +480,16 @@ function handleDatePickerChange(e) {
 //validate form 
 function validateNoteForm(){
 	if(isStringNullOrEmpty(addNoteTitleTextField.value)){
-		alert('TITLE IS MISSING');
+		alert(getLocalMessage(MSG_ADD_NOTE_NO_TITLE));
 		return false;
 	}else if(isStringNullOrEmpty(addNoteDescriptionTextArea.value)){
-		alert('DESCRIPTION IS MISSING');
+		alert(getLocalMessage(MSG_ADD_NOTE_NO_DESCRIPTION));
 		return false;
 	}else if(addNoteDateLabel.text == 'Date'){
-		alert('DATE IS MISSING');
+		alert(getLocalMessage(MSG_ADD_NOTE_NO_DATE));
 		return false;
 	}else if(addNoteTimeLabel.text == 'Time'){
-		alert('TIME IS MISSING');
+		alert(getLocalMessage(MSG_ADD_NOTE_NO_TIME));
 		return false;
 	}
 	

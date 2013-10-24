@@ -330,7 +330,7 @@ function handleGalleryCameraSelection(){
 	
 		},
 		error:function(error){
-			alert('Camera problem');
+			alert(getLocalMessage(MSG_CAMERA_PROBLEM));
 		},
 		allowEditing:true
 	});

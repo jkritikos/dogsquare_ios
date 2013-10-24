@@ -777,8 +777,8 @@ function handleProfileOtherChatButton(e){
 		openWindows.push(inboxNewWindow);
 		navController.open(inboxNewWindow);
 		
-	}else{
-		alert('You are not mutual followers');
+	} else{
+		alert(getLocalMessage(MSG_NO_MUTUAL_FOLLOWERS));
 	}
 	
 }

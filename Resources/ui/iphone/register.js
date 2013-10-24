@@ -445,8 +445,8 @@ function buildRegisterWindow(){
 	//Facebook button
 	registerFacebookButton = Ti.UI.createButton({
 		backgroundImage:IMAGE_PATH+'signup/Facebook_button.png',
-		width:241,
-		height:45,
+		width:270,
+		height:55,
 		top:737,
 		bottom:30
 	});
@@ -456,11 +456,12 @@ function buildRegisterWindow(){
 	registerFacebookButton.addEventListener('click', function(){
 		fb.authorize();
 		
-		w.close();
+		//w.close();
+		/*
 		loginWindow.animate({opacity:0, duration:1}, function(){
 			window.remove(loginWindow);
 		});
-		
+		*/
 	});
 
 	//Signup button
@@ -788,40 +789,40 @@ function registerShowPhotoOptions(){
 function validateSignupForm(){
 	//TODO translator integration here
 	if(isStringNullOrEmpty(registerFieldName.value)){
-		alert('NAME IS MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_NAME));
 		return false;
 	} else if(isStringNullOrEmpty(registerFieldSurname.value)){
-		alert('SURNAME IS MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_SURNAME));
 		return false;
 	} else if(isStringNullOrEmpty(registerFieldEmail.value)){
-		alert('EMAIL IS MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_EMAIL));
 		return false;
 	} else if(isStringNullOrEmpty(registerFieldPassword.value)){
-		alert('PASSWORD IS MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_PASSWORD));
 		return false;
 	}else if(typeof signupUserObject.birth_date == 'undefined'){
-		alert('DATE OF BIRTH IS MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_DOB));
 		return false;
 	}else if(typeof signupUserObject.country == 'undefined'){
-		alert('COUNTRY IS MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_COUNTRY));
 		return false;
 	}else if(typeof signupUserObject.gender == 'undefined'){
-		alert('GENDER IS MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_GENDER));
 		return false;
 	}
 	
 	if(!isValidEmail(registerFieldEmail.value)){
-		alert('INVALID EMAIL');
+		alert(getLocalMessage(MSG_REGISTER_INVALID_EMAIL));
 		return false;
 	}
 	
 	if(signupUserObject.image == null){
-		alert('PROFILE PHOTO MISSING');
+		alert(getLocalMessage(MSG_REGISTER_NO_PHOTO));
 		return false;
 	}
 	
 	if(!registerFormTermsCheckBox.active){
-		alert('Please agree to the terms!');
+		alert(getLocalMessage(MSG_REGISTER_NO_TERMS));
 		return false;
 	}
 	
@@ -880,7 +881,7 @@ function doSignup(uObj){
 	//progress view
 	var progressView = new ProgressView({window:registerWindow});
 	progressView.show({
-		text:"Saving data..."
+		text:"Please wait..."
 	});
 	
 	var xhr = Ti.Network.createHTTPClient();
@@ -919,11 +920,7 @@ function doSignup(uObj){
 			
 			//Hide message and close register window
 			progressView.hide();
-			
-			//Only if we really came from the signup view
-			if(!uObj.facebook_id){
-				closeRegisterWindow();
-			}
+			closeRegisterWindow();
 			
 			//Init the app
 			window.open(); //init the app
@@ -1071,6 +1068,7 @@ function handleCameraSelection(){
 	
 		},
 		error:function(error){
+			alert(getLocalMessage(MSG_CAMERA_PROBLEM));
 		},
 		allowEditing:true
 	});
