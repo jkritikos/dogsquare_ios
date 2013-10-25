@@ -781,7 +781,8 @@ function handlefriendsTableViewRows(e){
 	} else if(e.source.type == TYPE_INVITE_FB_BUTTON){
 		Ti.API.info('Inviting by FACEBOOK, row is '+e.index+' fb id is '+e.row.facebook_id);
 		
-		facebookPost(INVITE_FB_MSG, e.row.facebook_id, e.index);
+		//facebookPost(INVITE_FB_MSG, e.row.facebook_id, e.index);
+		facebookPostImage('test', e.row.facebook_id);
 	}
 }
 
