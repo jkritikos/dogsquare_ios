@@ -781,7 +781,7 @@ function handlefriendsTableViewRows(e){
 	} else if(e.source.type == TYPE_INVITE_FB_BUTTON){
 		Ti.API.info('Inviting by FACEBOOK, row is '+e.index+' fb id is '+e.row.facebook_id);
 		
-		facebookSendInvitation(e.row.facebook_id, e.index);
+		facebookPost(INVITE_FB_MSG, e.row.facebook_id, e.index);
 	}
 }
 
@@ -997,5 +997,60 @@ function facebookSendInvitation(targetFacebookId, rowIndex){
 
 	} else {
 		buildAlert(MSG_NO_INTERNET_CONNECTION);
+	}
+}
+
+/*Posts to the current (or another) user's facebook wall*/
+function facebookPost(msg, otherUserId, rowIndex){
+	
+	var url = otherUserId != null ? otherUserId+'/feed' : 'me/feed';
+	
+	if (Titanium.Network.online == true){
+		if(fb.loggedIn){
+			
+			//progress view
+			var progressView = new ProgressView({window:viewFindFriends});
+			progressView.show({
+				text:"Inviting..."
+			});
+			
+			fb.requestWithGraphPath(url, {message: msg}, "POST", function(e) {
+		    	if (e.success) {
+		        	Ti.API.info('FACEBOOK - Success in posting message');
+		        	
+		        	//Show success
+					progressView.change({
+				        success:true
+				    });
+				    
+				    //Update table view
+				    var theRow = findFriendsTableView.data[0].rows[rowIndex];
+				    theRow.children[2].backgroundImage = IMAGE_PATH+'follow_invite/invited_button.png';
+					theRow.children[2].type = TYPE_ALREADY_INVITED_BUTTON;
+		        	
+		    	} else {
+		        	if (e.error) {
+		         	   Ti.API.info('FACEBOOK - ERROR in posting message');
+		        	} else {
+		            	Ti.API.info('FACEBOOK - UNKNOWN response in posting message');
+		        	}
+		        	
+		        	//Show the error message we got back from the server
+					progressView.change({
+				        error:true,
+				        text:getLocalMessage(MSG_FACEBOOK_ERROR)
+				    });
+		        	
+		    	}
+			});
+			
+			//and hide it after a while		    
+		    setTimeout(function() {
+			    progressView.hide();
+			}, ERROR_MSG_REMOVE_TIMEOUT);
+			
+		} else {
+			Ti.API.info('FACEBOOK - NOT logged in');
+		}
 	}
 }

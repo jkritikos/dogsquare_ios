@@ -751,6 +751,13 @@ function updateLeftMenuCounts(cFollowers, cInbox, cNotifications){
 	var notifLabel = leftTableView.data[0].rows[5].children[0].children[0];
 	var followersLabel = leftTableView.data[0].rows[0].children[1];
 	
+	//set badge icon
+	if(cNotifications > 0){
+		Titanium.UI.iPhone.appBadge = cNotifications;
+	} else {
+		Titanium.UI.iPhone.appBadge = null;
+	}
+	
 	followersLabel.text = cFollowers +' followers';
 	if(cNotifications != 0){
 		notifLabel.text = cNotifications;

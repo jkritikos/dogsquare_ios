@@ -185,30 +185,6 @@ fb.addEventListener('login', function(e) {
 	}	
 });
 
-/*Posts to the current (or another) user's facebook wall*/
-function facebookPost(msg, otherUserId){
-	
-	var url = otherUserId != null ? otherUserId+'/feed' : 'me/feed';
-	
-	if (Titanium.Network.online == true){
-		if(fb.loggedIn){
-			fb.requestWithGraphPath(url, {message: msg}, "POST", function(e) {
-		    	if (e.success) {
-		        	Ti.API.info('FACEBOOK - Success in posting message');
-		    	} else {
-		        	if (e.error) {
-		         	   Ti.API.info('FACEBOOK - ERROR in posting message');
-		        	} else {
-		            	Ti.API.info('FACEBOOK - UNKNOWN response in posting message');
-		        	}
-		    	}
-			});
-		} else {
-			Ti.API.info('FACEBOOK - NOT logged in');
-		}
-	}
-}
-
 function sortFBFriends(a, b){
 	var aName = a.name.toLowerCase();
 	var bName = b.name.toLowerCase();
