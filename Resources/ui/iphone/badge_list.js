@@ -12,10 +12,7 @@ function buildBadgeListView(user_id){
 		});
 		
 		viewBadgeScroll = Ti.UI.createScrollView({
-			backgroundColor:'white',
-			top:17,
-			bottom:0,
-			width:270
+			backgroundColor:'white'
 		});
 		viewBadgeList.add(viewBadgeScroll);
 	}
@@ -26,7 +23,7 @@ function buildBadgeListView(user_id){
 function populateBadgeList(badges){
 	
 	var leftOffset = 9;
-	var leftLabelOffset = 4;
+	var leftLabelOffset = 9;
 	var topOffset = 9;
 	var rowBadges = 0;
 	
@@ -35,9 +32,9 @@ function populateBadgeList(badges){
 		var badgeObj = getBadgeDetails(badges[i].id);
 		
 		var badgeImage = Titanium.UI.createButton({
-			backgroundImage:IMAGE_PATH+'badges/' + (badges[i].flag ? 'color/' : 'grey/') + 'badge_' + badges[i].id + '.png',
-			width:56,
-			height:56,
+			backgroundImage:IMAGE_PATH+'badges/' + (badges[i].flag ? 'new/color/' : 'new/grey/') + 'badge_' + badges[i].id + '.png',
+			width:90,
+			height:90,
 			left:leftOffset,
 			top:topOffset,
 			winTitle:badgeObj.title,
@@ -51,23 +48,28 @@ function populateBadgeList(badges){
 			text:badgeObj.title,
 			color:'black',
 			textAlign:'center',
-			width:65,
+			width:90,
 			left:leftLabelOffset,
-			top:topOffset + 55,
-			font:{fontSize:9, fontWeight:'regular', fontFamily:'Open Sans'}
+			top:topOffset + 94,
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		viewBadgeScroll.add(badgeTitleLabel);
 		
 		rowBadges++;
-		leftOffset += 65;
-		leftLabelOffset += 65;
+		leftOffset += 103;
+		leftLabelOffset += 103;
 		
-		if(rowBadges == 4){
-			topOffset += 80; 
+		if(rowBadges == 3){
+			topOffset += 124; 
 			rowBadges = 0;
 			leftOffset = 9;
-			leftLabelOffset = 4;
+			leftLabelOffset = 9;
+		}
+		
+		if(i == badges.length - 1){
+			
+			badgeImage.bottom = 28;
 		}
 	}
 }

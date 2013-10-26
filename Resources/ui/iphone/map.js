@@ -33,6 +33,7 @@ var mapLatitude = null;
 var mapLongitude = null;
 
 CURRENT_VIEW = VIEW_MAP;
+CLICKED_FILTER = null;
 
 function buildMapView(windowMode){
 	
@@ -232,11 +233,40 @@ function buildMapView(windowMode){
 	    userLocation:true,
 	    visible:true
 	});
-	
 	viewMap.add(mapview);
+	
+	mapview.addEventListener('regionChanged', handleMapViewChange);
 	
 	//Event listener for map annotations
 	mapview.addEventListener('click', handleMapAnnotationClick);
+}
+
+function handleMapViewChange(e){
+
+	mapLatitude = e.latitude; 
+	mapLongitude = e.longitude; 
+	var accuracy = e.accuracy; 
+	var timestamp = e.timestamp;
+	
+	Ti.API.info('latitude:' + mapLatitude + ' and longitude:' + mapLongitude);
+	
+	//map region object
+	var mapRegion = {
+		latitude: mapLatitude,
+		longitude: mapLongitude,
+		animate:true
+	};
+		
+	mapview.setLocation(mapRegion);
+	
+	if(CLICKED_FILTER == null){
+		//Get all nearby places
+		getPlacesByFilterOnline(null);
+	}else{
+		//get places by filter
+		getPlacesByFilterOnline(CLICKED_FILTER);
+	}
+	
 }
 
 //Event listener for map annotation click events
@@ -464,6 +494,7 @@ function handleMapSearchCategoriesRows(e){
 	if(e.row.filter){
 		Ti.API.info('MapTable click on a FILTER');
 		var filter = e.row.filter;
+		CLICKED_FILTER = filter;
 		getPlacesByFilterOnline(filter);
 	} else if(e.row.searchResultId){
 		Ti.API.info('MapTable click on a RESULT');

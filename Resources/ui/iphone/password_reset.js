@@ -105,10 +105,11 @@ function handlePasswordResetTextFieldChange(e){
 }
 
 function handlePasswordResetButton(){
+	
 	passwordResetFieldEmail.blur();
 	
 	if(validatePasswordResetForm()){
-		
+		resetPasswordOnline();
 	}	
 }
 
@@ -119,4 +120,56 @@ function validatePasswordResetForm(){
 	}
 	
 	return true;
+}
+
+
+function resetPasswordOnline(){
+	Ti.API.info('resetPasswordOnline() called'); 	
+	
+	//progress view
+	var progressView = new ProgressView({window:passwordResetWindow});
+	progressView.show({
+		text:"Reseting..."
+	});
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('resetPasswordOnline() got back from server '+this.responseText); 	
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			//Show success
+			progressView.change({
+		        success:true
+		    });
+			
+			//Hide progress view
+			progressView.hide();
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+		} else {
+			//Show success
+			progressView.change({
+		        success:true
+		    });
+		    
+			//Hide progress view
+			progressView.hide();
+		}
+	};
+	xhr.open('POST',API+'resetPassword');
+	xhr.send({
+		email:passwordResetFieldEmail.value
+	});
 }
