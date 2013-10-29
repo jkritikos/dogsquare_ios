@@ -14,6 +14,7 @@ var checkinPlaceSaveCommentButton = null;
 var checkinPlaceId = null;
 var checkinNumberLabel = null;
 var checkinNumberOfHeartsLabel = null;
+var checkinPlaceLikesHeartImage = null;
 var checkinPlaceButton = null;
 var checkinLabel = null;
 
@@ -141,11 +142,10 @@ function buildCheckinPlaceView(placeId){
 		checkinNumberLabel = Ti.UI.createLabel({
 			textAlign:'left',
 			width:'auto',
-			top:48,
+			top:47,
 			right:223,
-			color:'black',
-			opacity:0.8,
-			font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
+			color:'#6f6262',
+			font:{fontSize:17, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		checkinPlaceButtonBarView.add(checkinNumberLabel);
 		checkinNumberLabel.hide();
@@ -157,11 +157,11 @@ function buildCheckinPlaceView(placeId){
 			width:'auto',
 			top:48,
 			right:150,
-			color:'black',
-			opacity:0.8,
-			font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
+			color:'#6f6262',
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
-		checkinPlaceButtonBarView.add(checkinLabel);
+		checkinPlaceButtonBarView.add(checkinLabel); 
+		checkinLabel.addEventListener('click', handlePlaceCheckinsLabel);
 		checkinLabel.hide();
 		
 		//checkin number of hearts label 
@@ -169,10 +169,9 @@ function buildCheckinPlaceView(placeId){
 			textAlign:'right',
 			width:'auto',
 			right:100,
-			top:48,
-			color:'black',
-			opacity:0.8,
-			font:{fontSize:15, fontWeight:'regular', fontFamily:'Open Sans'}
+			top:47,
+			color:'#6f6262',
+			font:{fontSize:17, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		checkinPlaceButtonBarView.add(checkinNumberOfHeartsLabel);
 		checkinNumberOfHeartsLabel.hide();
@@ -200,6 +199,17 @@ function buildCheckinPlaceView(placeId){
 		});
 		checkinPlaceButtonBarView.add(checkinPlaceHeartImage);
 		checkinPlaceHeartImage.addEventListener('click', handlePlaceLikeButton);
+		checkinPlaceHeartImage.hide();
+		
+		//small heart image
+		checkinPlaceLikesHeartImage = Ti.UI.createImageView({
+			image:IMAGE_PATH+'dog_profile/best_icon_selected.png',
+			right:73,
+			top:48
+		});
+		checkinPlaceButtonBarView.add(checkinPlaceLikesHeartImage);
+		checkinPlaceLikesHeartImage.addEventListener('click', handlePlaceLikesButton);
+		checkinPlaceLikesHeartImage.hide();
 		
 		//background for comments
 		checkinPlaceCommentsBackgroundView = Ti.UI.createView({
@@ -326,6 +336,71 @@ function handlePlaceGallery(){
 	navController.open(galleryWindow);
 }
 
+//handle likes heart button
+function handlePlaceLikesButton(e){
+	Ti.include('ui/iphone/list_users.js');
+	
+	var listUsersView = buildListUsersView();
+	
+	getPlaceLikedUsersOnline(checkinPlaceId);
+	
+	var listUsersWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		translucent:false,
+		barColor:UI_COLOR,
+		title:'Likes'
+	});
+	
+	//back button & event listener
+	var listUsersBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	listUsersWindow.setLeftNavButton(listUsersBackButton);
+	listUsersBackButton.addEventListener("click", function() {
+	    navController.close(listUsersWindow);
+	});
+	
+	listUsersWindow.add(listUsersView);
+	
+	openWindows.push(listUsersWindow);
+	navController.open(listUsersWindow);
+}
+
+//handle checkins label 
+function handlePlaceCheckinsLabel(e){
+	Ti.include('ui/iphone/list_users.js');
+	
+	var listUsersView = buildListUsersView();
+	
+	getPlaceCheckinUsersOnline(checkinPlaceId);
+	
+	var listUsersWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		translucent:false,
+		barColor:UI_COLOR
+	});
+	
+	//back button & event listener
+	var listUsersBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	listUsersWindow.setLeftNavButton(listUsersBackButton);
+	listUsersBackButton.addEventListener("click", function() {
+	    navController.close(listUsersWindow);
+	});
+	
+	listUsersWindow.add(listUsersView);
+	
+	openWindows.push(listUsersWindow);
+	navController.open(listUsersWindow);
+}
+
 //Uploads the specified photo for the current place
 function uploadPlacePhoto(photoObject){
 	Ti.API.info('uploadPlacePhoto() called'); 	
@@ -375,6 +450,86 @@ function uploadPlacePhoto(photoObject){
 	xhr.setRequestHeader("Content-Type", "multipart/form-data");
 	xhr.open('POST',API+'addPlacePhoto');
 	xhr.send(photoObject);
+}
+
+//get all the users who liked this place
+function getPlaceLikedUsersOnline(pId){
+	
+	Ti.API.info('getPlaceLikedUsersOnline() called for place_id: '+pId);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in getPlaceLikedUsersOnline() '+e);
+	};
+	
+	xhr.onload = function(e) {
+		Ti.API.info('getPlaceLikedUsersOnline() got back from server '+this.responseText); 
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			populateListUsersTableView(jsonData.data);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+		} else if (jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
+			alert(getErrorMessage(jsonData.data.response));
+		}
+	};
+	xhr.open('GET',API+'getPlaceLikedUsers');
+	xhr.send({
+		user_id:userObject.userId,
+		place_id:pId,
+		token:userObject.token
+	});
+}
+
+//get all the users who did a checkin in this place
+function getPlaceCheckinUsersOnline(pId){
+	
+	Ti.API.info('getPlaceCheckinUsersOnline() called for place_id: '+pId);
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in getPlaceCheckinUsersOnline() '+e);
+	};
+	
+	xhr.onload = function(e) {
+		Ti.API.info('getPlaceCheckinUsersOnline() got back from server '+this.responseText); 
+		var jsonData = JSON.parse(this.responseText);
+		
+		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+			populateListUsersTableView(jsonData.data);
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+		} else if (jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		} else{
+			alert(getErrorMessage(jsonData.data.response));
+		}
+	};
+	xhr.open('GET',API+'getPlaceCheckinUsers');
+	xhr.send({
+		user_id:userObject.userId,
+		place_id:pId,
+		token:userObject.token
+	});
 }
 
 //Selects and uploads a photo from the camera roll
@@ -717,7 +872,7 @@ function getOnlinePlace(pId){
 			//Hide progress view
 			progressView.hide();
 			
-			updateCheckinPlace(jsonData.data.place);
+			updateCheckinPlace(jsonData.data.place, jsonData.data.checkins, jsonData.data.likes);
 			populateCheckinPlaceCommentsTableView(jsonData.data.comments);
 			
 			var followers = jsonData.data.count_followers;
@@ -751,7 +906,7 @@ function getOnlinePlace(pId){
 }
 
 //update checkin place UI
-function updateCheckinPlace(placeObj){
+function updateCheckinPlace(placeObj, checkins, likes){
 	Ti.API.info('place_view.js shows '+placeObj.name+' at latitude '+placeObj.latitude+' and longitude '+placeObj.longitude);
 	
 	var distance = null;
@@ -760,11 +915,13 @@ function updateCheckinPlace(placeObj){
 	
 	if(distance < CHECKIN_ALLOWED_DISTANCE){
 		checkinPlaceButton.show();
-		checkinNumberLabel.text = placeObj.checkins;
-		checkinNumberOfHeartsLabel.text = placeObj.likes;
+		checkinPlaceHeartImage.show();
+		checkinNumberLabel.text = checkins;
+		checkinNumberOfHeartsLabel.text = likes;
 	}else{
-		checkinNumberLabel.text = placeObj.checkins;
-		checkinNumberOfHeartsLabel.text = placeObj.likes;
+		checkinNumberLabel.text = checkins;
+		checkinNumberOfHeartsLabel.text = likes;
+		checkinPlaceLikesHeartImage.show();
 		checkinNumberLabel.show();
 		checkinLabel.show();
 		checkinNumberOfHeartsLabel.show();
@@ -956,8 +1113,10 @@ function checkinPlaceOnline(placeId){
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			checkinNumberLabel.show();
 			checkinNumberOfHeartsLabel.show();
+			checkinPlaceLikesHeartImage.show();
 			checkinLabel.show();
 			checkinPlaceButton.hide();
+			checkinPlaceHeartImage.hide();
 			checkinNumberLabel.text++;
 			
 			var followers = jsonData.data.count_followers;
