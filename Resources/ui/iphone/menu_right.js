@@ -111,8 +111,8 @@ function populateRightMenu(dogObject){
 		var rowDogNameLabel = Titanium.UI.createLabel({ 
 			text:dogObject[i].name,
 			color:'ab7b04',
-			height:31,
-			width:'auto',
+			width:106,
+			height:35,
 			textAlign:'left',
 			left:134,
 			top:14,

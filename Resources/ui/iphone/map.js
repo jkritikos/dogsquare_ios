@@ -13,6 +13,8 @@ var FILTER_MATING = 101;
 var FILTER_SAME_BREED = 102;
 var FILTER_LOST_DOG = 103;
 
+var CATEGORY_LOST_DOG = 10;
+
 //UI components
 var viewMapTargetMode = null;
 var viewMap = null;
@@ -273,9 +275,10 @@ function handleMapViewChange(e){
 function handleMapAnnotationClick(e){
 	var annotation = e.annotation;
 	var source = e.clicksource;
+	var category_id = annotation.category_id;
 	
 	if(source == 'rightButton'){
-		if(annotation.place_id){
+		if(annotation.place_id && category_id != CATEGORY_LOST_DOG){
 			var placeId = annotation.place_id;
 			var placeTitle = annotation.title;
 			
@@ -302,7 +305,7 @@ function handleMapAnnotationClick(e){
 			});
 			
 			checkinPlaceWindow.setTitle(placeTitle);
-			var checkinPlaceView = buildCheckinPlaceView(CHECKIN_PLACE_VIEW, placeId);
+			var checkinPlaceView = buildCheckinPlaceView(placeId);
 			
 			checkinPlaceWindow.add(checkinPlaceView);
 			openWindows.push(checkinPlaceWindow);
@@ -339,6 +342,68 @@ function handleMapAnnotationClick(e){
 			openWindows.push(viewActivityWindow);
 			//openWindows[0] = viewActivityWindow;
 			navController.open(viewActivityWindow);
+		}else if(category_id == CATEGORY_LOST_DOG){
+			var user_id = annotation.user_id;
+			
+			if(user_id != userObject.userId){
+				Ti.include('ui/iphone/profile_other.js');
+				
+				var user_name = annotation.user_name;
+				
+				var profileOtherView = buildProfileOtherView(user_id, user_name);
+		
+				var profileOtherWindow = Ti.UI.createWindow({
+					backgroundColor:'white',
+					//barImage:IMAGE_PATH+'common/bar.png',
+					translucent:false,
+					barColor:UI_COLOR,
+					title:user_name
+				});
+				
+				//back button & event listener
+				var profileOtherBackButton = Ti.UI.createButton({
+				    backgroundImage: IMAGE_PATH+'common/back_button.png',
+				    width:48,
+				    height:33
+				});
+				
+				profileOtherWindow.setLeftNavButton(profileOtherBackButton);
+				profileOtherBackButton.addEventListener("click", function() {
+				    navController.close(profileOtherWindow);
+				});
+				
+				profileOtherWindow.add(profileOtherView);
+				
+				openWindows.push(profileOtherWindow);
+				navController.open(profileOtherWindow);
+			}else{
+				Ti.include('ui/iphone/profile.js');
+		
+				var profileWindow = Ti.UI.createWindow({
+					backgroundColor:'white',
+					//barImage:IMAGE_PATH+'common/bar.png',
+					translucent:false,
+					barColor:UI_COLOR,
+					title:userObject.name
+				});
+				
+				//back button & event listener
+				var profileBackButton = Ti.UI.createButton({
+				    backgroundImage: IMAGE_PATH+'common/back_button.png',
+				    width:48,
+				    height:33
+				});
+				
+				profileWindow.setLeftNavButton(profileBackButton);
+				profileBackButton.addEventListener("click", function() {
+				    navController.close(profileWindow);
+				});
+				
+				profileWindow.add(viewProfile);
+				
+				openWindows.push(profileWindow);
+				navController.open(profileWindow);
+			}
 		}
 	}
 }
@@ -525,7 +590,7 @@ function handleMapSearchCategoriesRows(e){
 		});
 		
 		checkinPlaceWindow.setTitle(placeTitle);
-		var checkinPlaceView = buildCheckinPlaceView(CHECKIN_PLACE_VIEW, placeId);
+		var checkinPlaceView = buildCheckinPlaceView(placeId);
 		
 		checkinPlaceWindow.add(checkinPlaceView);
 		openWindows.push(checkinPlaceWindow);
@@ -805,9 +870,11 @@ function updateMapWithAnnotations(places, checkins, activities){
 					animate:true,
 					customView:customPin2,
 					rightButton:IMAGE_PATH+'map/arrow_icon.png',
-					place_id:places[i].id
+					place_id:places[i].id,
+					category_id:places[i].category_id,
+					user_id:places[i].user_id,
+					user_name:places[i].user_name
 				});
-				
 				annotationArray.push(mapAnnotations);
 			} else {
 				Ti.API.warn('Not adding place '+places[i].id +' - already added as a checkin');

@@ -721,7 +721,7 @@ function handleLeftSearchResultRows(e){
 	}else if (type == 'place'){
 		Ti.include('ui/iphone/place_view.js');
 		
-		var checkinPlaceView = buildCheckinPlaceView(CHECKIN_PLACE_VIEW, placeId);
+		var checkinPlaceView = buildCheckinPlaceView(placeId);
 		var namePlace = e.row.children[1].text;
 		
 		navController.getWindow().add(checkinPlaceView);

@@ -47,6 +47,9 @@ var WINDOW_TOP = iOS7 ? 20 : 0;
 //Language constants
 var LANGUAGE_ENGLISH = 1;
 
+//distance for checkin constant
+var CHECKIN_ALLOWED_DISTANCE = 5;
+
 //Server constants
 var NETWORK_TIMEOUT = 20000;
 var NETWORK_RESPONSE_OK = 1;

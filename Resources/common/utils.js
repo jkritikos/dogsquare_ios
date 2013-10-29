@@ -131,6 +131,22 @@ function rad(x){
 	return x*Math.PI/180;
 }
 
+//calculate distance in kilometers between tow fixed locations
+function calculateCoordinateDistance(lat1,lon1, lat2,lon2){
+	var R     = 6371.0090667;                          
+	var dLat  = rad( lat2 - lat1 );
+	var dLong = rad( lon2 - lon1 );
+	
+	var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLong/2) * Math.sin(dLong/2);
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	var d = R * c;
+	
+	var runningDistanceKm = parseFloat(d);
+	var runningDistanceKmLabelValue = runningDistanceKm.toFixed(2);
+	
+	return runningDistanceKmLabelValue;
+}
+
 function relativeTime(eventTime){
 	var nowTime = new Date().getTime();
 	var t = '';

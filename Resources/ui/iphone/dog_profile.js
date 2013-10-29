@@ -307,21 +307,27 @@ function buildDogProfileView(dogId){
 		});
 		dogProfileView.add(dogProfileLikeMeLabel);
 		
-		//Heart image for likes
-		dogProfileLostDogButton = Ti.UI.createButton({ 
-			backgroundImage:IMAGE_PATH+'dog_profile/lost_btn.png',
-			width:270,
-			height:55,
-			top:IPHONE5 ? 436 : 440,
-			bottom:IPHONE5 ? 13 : 13
-		});
-		dogProfileView.add(dogProfileLostDogButton);
+		if(dogProfileMyDog){
+			dogProfileLostDogButton = Ti.UI.createButton({ 
+				backgroundImage:IMAGE_PATH+'dog_profile/found_btn.png',
+				width:270,
+				height:55,
+				top:IPHONE5 ? 436 : 440,
+				bottom:IPHONE5 ? 13 : 13
+			});
+			dogProfileView.add(dogProfileLostDogButton);
+			dogProfileLostDogButton.addEventListener('click', handleLostDogButton);
+		}
 		
 		Ti.API.info('buildDogProfileView has been built');
 	}
 	getOnlineDog(dogId);
 	
 	return dogProfileView;
+}
+
+function handleLostDogButton(){
+	lostDogOnline();
 }
 
 function deleteDogProfile(){
@@ -375,6 +381,60 @@ function dogProfilePhotoView(){
 	Ti.include('ui/iphone/photo_view.js');
 	buildPhotoView(image);
 	photoViewWindow.open();
+}
+
+function lostDogOnline(){
+	Ti.API.info('lostDogOnline() called for dog with id ' + dogProfileDogId);
+	
+	//progress view
+	var progressView = new ProgressView({window:dogProfileView});
+	progressView.show({
+		text:"Sending..."
+	});
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in lostDogOnline() '+e);
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('lostDogOnline() got back from server '+this.responseText);
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			//Show success
+			progressView.change({
+		        success:true
+		    });
+		    
+		    dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/lost_btn.png';
+		    
+			//Hide progress view
+			progressView.hide();
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		}
+	};
+	
+	xhr.open('POST',API+'lostDog');
+	xhr.send({
+		user_id:userObject.userId,
+		dog_id:dogProfileDogId,
+		lat:23,
+		lon:32,
+		token:userObject.token
+	});
 }
 
 //delete dog in online server by the user's choise
@@ -864,6 +924,10 @@ function updateDogProfile(dogObj){
 			dogProfileBoneImageColor.image = croppedDataObject.photo;
 			dogProfileBoneImageColor.show();	
 		}
+	}
+	
+	if(dogObj.lost != null){
+		dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/lost_btn.png';
 	}
 }
 
