@@ -64,7 +64,7 @@ function populateRightMenu(dogObject){
 	//border inside button UI
 	var rowBorderImage1 = Ti.UI.createImageView({ 
 		image:IMAGE_PATH+'menu_right/border.png',
-		bottom:IPHONE5 ? -5 : 0,
+		bottom:-5,
 		width:319
 	});
 	
@@ -92,7 +92,7 @@ function populateRightMenu(dogObject){
 		//border image inside the dog row - right menu row
 		var rowBorderImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'menu_right/border.png',
-			bottom:IPHONE5 ? -5 : 0,
+			bottom:-5,
 			width:319
 		});
 		

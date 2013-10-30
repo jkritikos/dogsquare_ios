@@ -16,6 +16,9 @@ var dogProfileBoneImageColor = null;
 var dogProfileLostDogButton = null;
 
 var dogProfileEditButton = null;
+
+var BUTTON_LOST_DOG = 1;
+var BUTTON_FOUND_DOG = 2;
 	
 function buildDogProfileView(dogId){
 	if(dogProfileView == null){
@@ -291,7 +294,7 @@ function buildDogProfileView(dogId){
 		dogProfileHeartImage.addEventListener('click', handleDogLikeButton);
 		
 		var dogProfileLikeMeLabel = Titanium.UI.createLabel({ 
-			text:'Mating?',
+			text:'Mating',
 			color:'black',
 			height:'auto',
 			textAlign:'left',
@@ -320,7 +323,6 @@ function buildDogProfileView(dogId){
 		
 		if(dogProfileMyDog){
 			dogProfileLostDogButton = Ti.UI.createButton({ 
-				backgroundImage:IMAGE_PATH+'dog_profile/lost_btn.png',
 				width:270,
 				height:55,
 				top:IPHONE5 ? 436 : 440,
@@ -338,7 +340,13 @@ function buildDogProfileView(dogId){
 }
 
 function handleLostDogButton(){
-	lostDogOnline();
+	var button = dogProfileLostDogButton.button;
+	if(button == BUTTON_LOST_DOG){
+		lostDogOnline();
+	}else if(button == BUTTON_FOUND_DOG){
+		foundDogOnline();
+	}
+	
 }
 
 function deleteDogProfile(){
@@ -422,6 +430,7 @@ function lostDogOnline(){
 		    });
 		    
 		    dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/found_btn.png';
+		    dogProfileLostDogButton.button = BUTTON_FOUND_DOG;
 		    
 			//Hide progress view
 			progressView.hide();
@@ -444,6 +453,59 @@ function lostDogOnline(){
 		dog_id:dogProfileDogId,
 		lat:23,
 		lon:32,
+		token:userObject.token
+	});
+}
+
+function foundDogOnline(){
+	Ti.API.info('foundDogOnline() called for dog with id ' + dogProfileDogId);
+	
+	//progress view
+	var progressView = new ProgressView({window:dogProfileView});
+	progressView.show({
+		text:"Sending..."
+	});
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in foundDogOnline() '+e);
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('foundDogOnline() got back from server '+this.responseText);
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			//Show success
+			progressView.change({
+		        success:true
+		    });
+		    
+		    dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/lost_btn.png';
+		    dogProfileLostDogButton.button = BUTTON_LOST_DOG;
+		    
+			//Hide progress view
+			progressView.hide();
+			
+			var followers = jsonData.data.count_followers;
+			var inbox = jsonData.data.count_inbox;
+			var notifications = jsonData.data.count_notifications;
+			
+			updateLeftMenuCounts(followers, inbox, notifications);
+			
+		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
+			Ti.API.error('Unauthorised request - need to login again');
+			showLoginPopup();
+		}
+	};
+	
+	xhr.open('POST',API+'foundDog');
+	xhr.send({
+		user_id:userObject.userId,
+		dog_id:dogProfileDogId,
 		token:userObject.token
 	});
 }
@@ -939,6 +1001,10 @@ function updateDogProfile(dogObj){
 	
 	if(dogObj.lost != null){
 		dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/found_btn.png';
+		dogProfileLostDogButton.button = BUTTON_FOUND_DOG;
+	}else{
+		dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/lost_btn.png';
+		dogProfileLostDogButton.button = BUTTON_LOST_DOG;
 	}
 }
 
