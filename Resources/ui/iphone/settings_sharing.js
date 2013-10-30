@@ -32,6 +32,10 @@ function buildSettingsSharingView(){
 	}
 }
 
+function handleSharingTableSelection(){
+	
+}
+
 function createSharingMenuRow(menu){
 	var row = Ti.UI.createTableViewRow({
 		height:47,

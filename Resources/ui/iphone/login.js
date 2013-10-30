@@ -332,8 +332,8 @@ function checkLoginCredentials(lObj){
 				dogObj.size = jsonData.data.dogs[i].Dog.size;
 				dogObj.dogfuel = jsonData.data.dogs[i].Dog.dogfuel;
 				
-				//Save dog data
-				if(erasedDatabase){
+				//Save dog data if we have cleared the database OR this is the first time someone logs in
+				if(erasedDatabase || lastLoginBy == null){
 					saveDog(dogObj);
 				}
 				
