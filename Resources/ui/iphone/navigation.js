@@ -99,26 +99,35 @@ leftBtn.addEventListener("click", function(){
 var navController = createCenterNavWindow();
 
 //Hides the textfields according to the previous view
-function hideTextfields(){
-	Ti.API.info('HIDE THEM! current view is '+CURRENT_VIEW);
+function hideTextfields(e){
+	//Ti.API.info('HIDE THEM! current view is '+CURRENT_VIEW+' and e is '+e.view);
+	
+	//Update dogfuel values
+	if(e.view != null && e.view == 'right'){
+		//sweet anti-flooding approach
+		clearTimeout(timers['update_dogfuel']);
+		timers['update_dogfuel'] = setTimeout(function(){
+        	updateDogfuelValues();
+      	}, 300);
+	}
 	
 	if(CURRENT_VIEW == VIEW_ADD_DOG){
 		addDogFieldName.blur();
 		addDogFieldAge.blur();
-	}else if(CURRENT_VIEW == VIEW_ACTIVITY_NEW){
+	} else if(CURRENT_VIEW == VIEW_ACTIVITY_NEW){
 		viewActivityCommentsTextArea.blur();
-	}else if(CURRENT_VIEW == VIEW_RUN_FINISH){
+	} else if(CURRENT_VIEW == VIEW_RUN_FINISH){
 		runfinishCommentsTextArea.blur();
-	}else if(CURRENT_VIEW == VIEW_MAP){
+	} else if(CURRENT_VIEW == VIEW_MAP){
 		mapSearchTxtfield.blur();
-	}else if(CURRENT_VIEW == VIEW_PLACE_VIEW){
+	} else if(CURRENT_VIEW == VIEW_PLACE_VIEW){
 		checkinPlaceCommentsTextArea.blur();
-	}else if(CURRENT_VIEW == VIEW_FIND_FRIENDS){
+	} else if(CURRENT_VIEW == VIEW_FIND_FRIENDS){
 		findFriendsSearchTxtfield.blur();
-	}else if(CURRENT_VIEW == VIEW_PASSWORD_EDIT){
+	} else if(CURRENT_VIEW == VIEW_PASSWORD_EDIT){
 		passwordEditFieldOldPassword.blur();
 		passwordEditFieldNewPassword.blur();
-	}else if(CURRENT_VIEW == VIEW_PROFILE_EDIT){
+	} else if(CURRENT_VIEW == VIEW_PROFILE_EDIT){
 		editProfileFieldName.blur();
 		editProfileFieldSurname.blur();
 		editProfileFieldEmail.blur();
@@ -179,3 +188,32 @@ var window = NappSlideMenu.createSlideMenuWindow({
 window.addEventListener('viewDidOpen', hideTextfields);
 
 Ti.include('initial.js');
+
+function updateDogfuelValues(){
+	Ti.API.info('updateDogfuelValues() called');
+	
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(NETWORK_TIMEOUT);
+	
+	xhr.onerror = function(e){
+		Ti.API.error('Error in updateDogfuelValues() '+e);
+	};
+	
+	xhr.onload = function(e){
+		Ti.API.info('updateDogfuelValues() got back from server '+this.responseText);
+		var jsonData = JSON.parse(this.responseText);
+		
+		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			
+			
+		} 
+	};
+	
+	/*
+	xhr.open('GET',API+'getDogfuel');
+	xhr.send({
+		user_id:userObject.userId,
+		token:userObject.token
+	});
+	*/
+}

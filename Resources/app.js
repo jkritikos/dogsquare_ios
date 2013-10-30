@@ -23,7 +23,7 @@ Ti.include('common/translator.js');
 //Progress view component
 Ti.include("modules/progress.view.js");
 //Date manipulations
-var momentModule = require('modules/moment.min');
+//var momentModule = require('modules/moment.min');
 //Local notifications
 var notifyModule = require('bencoding.localnotify');
 //SMS module
@@ -41,3 +41,6 @@ if(!userObject.userId){
 }
 
 Ti.include('ui/iphone/run.js');
+
+var testDate = new Date();
+Ti.API.warn(testDate + ' is ' + testDate.getTimezoneOffset() + ' minutes from Local');

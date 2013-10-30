@@ -16,6 +16,7 @@ function buildSettingsSharingView(){
 			top:13,
 			width:293
 		});
+		
 		viewSettingsSharing.add(settingsSharingMenuTable);
 		
 		//inbox table view footer
@@ -32,8 +33,16 @@ function buildSettingsSharingView(){
 	}
 }
 
-function handleSharingTableSelection(){
-	
+//Event handler for checkin switch clicks
+function handleFBCheckinSharingSelection(e){
+	Ti.API.info('Switch value: ' + e.value+' for option CHECKIN');
+	Ti.App.Properties.setBoolean(SHARING_CHECKIN_FACEBOOK, e.value);
+}
+
+//Event handler for checkin switch clicks
+function handleFBCActivitySharingSelection(e){
+	Ti.API.info('Switch value: ' + e.value+' for option ACTIVITY');
+	Ti.App.Properties.setBoolean(SHARING_ACTIVITY_FACEBOOK, e.value);
 }
 
 function createSharingMenuRow(menu){
@@ -60,9 +69,15 @@ function createSharingMenuRow(menu){
 	});
 	
 	var rowSwitch = Ti.UI.createSwitch({
-	  value:true, // mandatory property for iOS
-	  right:10 
+		value:true, // mandatory property for iOS
+		right:10
 	});
+	
+	if(menu == MENU_FACEBOOK_CHECKINS){
+		rowSwitch.addEventListener('change', handleFBCheckinSharingSelection);
+	} else if(menu == MENU_FACEBOOK_ACTIVITIES){
+		rowSwitch.addEventListener('change', handleFBCActivitySharingSelection);
+	}
 	
 	row.add(rowLabel);
 	row.add(rowSwitch);
