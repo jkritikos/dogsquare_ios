@@ -23,6 +23,10 @@ function buildPhotoView(img){
 	}
 	
 	photoViewImage = Ti.UI.createImageView({
+		image:IMAGE_PATH+'common/black_default',
+		defaultImage:IMAGE_PATH+'common/black_default.png',
+		height:320,
+		width:320,
 		image:img
 	});
 	photoViewWindow.add(photoViewImage);

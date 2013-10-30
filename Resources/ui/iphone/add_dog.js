@@ -886,10 +886,9 @@ function doEditDogOnline(dObj){
 			
 			navController.getWindow().setRightNavButton(rightBtn);
 			
-			Ti.include('ui/iphone/dog_profile.js');
-			var dogProfileView = buildDogProfileView(dObj.dog_id);
+			Ti.include('ui/iphone/profile.js');
 		
-			navController.getWindow().add(dogProfileView);
+			navController.getWindow().add(viewProfile);
 			closeOpenWindows();
 		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
 			Ti.API.error('Unauthorised request - need to login again');

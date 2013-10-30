@@ -7,6 +7,7 @@ var TAB_FOLLOWING = 2;
 
 var profileImageView = Titanium.UI.createImageView({
 	image:getUserPhoto(userObject.image_path),
+	defaultImage:IMAGE_PATH+'common/white_default.png',
 	top:0,
 	height:320,
 	width:320,
@@ -337,7 +338,7 @@ function populateProfileTableView(activities){
 			
 			var activityRow = Ti.UI.createTableViewRow({
 				className:'activityRow',
-				height:'auto',
+				height:71,
 				width:'100%',
 				backgroundColor:'white',
 				selectedBackgroundColor:'transparent',
@@ -348,17 +349,20 @@ function populateProfileTableView(activities){
 				image:REMOTE_DOG_IMAGES + activities[i].Activity.thumb,
 				defaultImage:IMAGE_PATH+'common/default_dog_photo.png',
 				left:15,
-				top:8,
 				borderRadius:30,
 				borderWidth:2,
 				borderColor:'f5a92c'
 			});	
 			
+			//Wrapper view with vertical layout for the text in each row
+			var activityWrapperView = Ti.UI.createView({
+				layout:'vertical'
+			});
+			
 			//activity label
 			var activityLabel = Ti.UI.createLabel({
 				text:'Gone for a walk with '+activities[i].Activity.dogs,
-				top:20,
-				bottom:30,
+				top:10,
 				textAlign:'left',
 				width:211,
 				height:'auto',
@@ -370,7 +374,6 @@ function populateProfileTableView(activities){
 			//time label
 			var timeLabel = Ti.UI.createLabel({
 				text:relativeTime(activities[i].Activity.created * 1000),
-				bottom:13,
 				textAlign:'left',
 				width:'auto',
 				height:'auto',
@@ -379,9 +382,11 @@ function populateProfileTableView(activities){
 				font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 			});
 			
+			activityWrapperView.add(activityLabel);
+			activityWrapperView.add(timeLabel);
+			
 			activityRow.add(rowActivityImage);
-			activityRow.add(activityLabel);
-			activityRow.add(timeLabel);
+			activityRow.add(activityWrapperView);
 			
 			tableRows.push(activityRow);
 		}

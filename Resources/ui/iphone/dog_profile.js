@@ -66,6 +66,8 @@ function buildDogProfileView(dogId){
 		});
 		
 		dogProfilePhotoImage = Ti.UI.createImageView({ 
+			image:IMAGE_PATH+'common/white_default',
+			defaultImage:IMAGE_PATH+'common/white_default.png',
 			height:320,
 			top:0,
 			width:320

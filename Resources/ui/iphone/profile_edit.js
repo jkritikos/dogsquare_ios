@@ -802,7 +802,12 @@ function editUserProfile(uObj){
 				profileImageView.image = getUserPhoto(userObject.image_path);
 			}
 			
-			navController.close(openWindows[openWindows.length-1]);
+			Ti.include('ui/iphone/profile.js');
+			
+			navController.getWindow().setTitle(userObject.name);
+			navController.getWindow().add(viewProfile);
+			closeOpenWindows();
+			
 			//Hide message and close edit Profile window
 			progressView.hide();
 		}else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){

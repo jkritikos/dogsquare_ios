@@ -34,6 +34,8 @@ function buildProfileOtherView(uId, name) {
 		
 		//photo image
 		profileOtherPhotoImage = Titanium.UI.createImageView({ 
+			image:IMAGE_PATH+'common/white_default',
+			defaultImage:IMAGE_PATH+'common/white_default.png',
 			top:0,
 			height:320,
 			width:320,

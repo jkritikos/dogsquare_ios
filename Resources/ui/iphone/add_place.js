@@ -143,39 +143,45 @@ addPlaceTxtFieldName.addEventListener('blur', handleTextFieldNameBlur);
 //textfield label
 var addPlaceTxtFieldNameLabel = Ti.UI.createLabel({
 	text:'Name',
-	color:'black',
+	color:'999999',
 	textAlign:'left',
 	left:0,
-	opacity:0.8,
 	width:80,
 	height:30,
-	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+	font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 });
 addPlaceTxtFieldName.add(addPlaceTxtFieldNameLabel);
+
+//category background
+var addPlaceCategoryBackground = Ti.UI.createView({
+	backgroundColor:'transparent',
+	height:30,
+	top:28
+});
+addPlaceFieldsBackground.add(addPlaceCategoryBackground);
+addPlaceCategoryBackground.addEventListener('click', handleCategoryButton);
 
 //category label
 var addPlaceCategoryLabel = Ti.UI.createLabel({
 	text:'Category',
-	color:'black',
+	color:'999999',
 	textAlign:'left',
 	left:13,
-	top:28,
-	opacity:0.8,
 	width:80,
 	height:30,
-	font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
+	font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 });
-addPlaceFieldsBackground.add(addPlaceCategoryLabel);
+addPlaceCategoryBackground.add(addPlaceCategoryLabel);
 
 //button to show 
 var addPlaceCategoryButton = Ti.UI.createButton({
-	top:29,
-	right:0,	
-    width:43,
-    height:31
+	backgroundImage:IMAGE_PATH+'add_place/arrow.png',
+	top:10,
+	right:13,	
+    width:13,
+    height:13
 });
-addPlaceFieldsBackground.add(addPlaceCategoryButton);
-addPlaceCategoryButton.addEventListener('click', handleCategoryButton);
+addPlaceCategoryBackground.add(addPlaceCategoryButton);
 
 //picker data
 var pickerCategories = [];
@@ -233,6 +239,7 @@ function handlePickerDoneButton(){
 	addPlaceCategoryLabel.text = addPlacePicker.getSelectedRow(0).title;
 	addPlaceCategoryLabel.id = addPlacePicker.getSelectedRow(0).id;
 	addPlaceCategoryLabel.font = {fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'};
+	addPlaceCategoryLabel.color = 'black';
 	addPlaceCategoryLabel.opacity = 1;
 }
 
