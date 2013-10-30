@@ -781,8 +781,8 @@ function handlefriendsTableViewRows(e){
 	} else if(e.source.type == TYPE_INVITE_FB_BUTTON){
 		Ti.API.info('Inviting by FACEBOOK, row is '+e.index+' fb id is '+e.row.facebook_id);
 		
-		//facebookPost(INVITE_FB_MSG, e.row.facebook_id, e.index);
-		facebookPostImage('test', e.row.facebook_id);
+		facebookInvitePost(e.row.facebook_id, e.index);
+		//facebookPostImage('test', e.row.facebook_id);
 	}
 }
 
@@ -1002,9 +1002,18 @@ function facebookSendInvitation(targetFacebookId, rowIndex){
 }
 
 /*Posts to the current (or another) user's facebook wall*/
-function facebookPost(msg, otherUserId, rowIndex){
+function facebookInvitePost(otherUserId, rowIndex){
 	
 	var url = otherUserId != null ? otherUserId+'/feed' : 'me/feed';
+	
+	var data = {
+	    link : "http://www.dogsquareapp.com",
+	    name : "Dogsquare",
+	    message : "Hey Pack Leader!! You are invited to experience Dogsquare: the first Dog-social app that will drastically improve your loyal friend’s life. Your dog will be grateful every time you touch phone.",
+	    //caption : "The ",
+	    picture : SERVER+'fb_icon5.png',
+	    description : "Woof your Dog!"
+	};
 	
 	if (Titanium.Network.online == true){
 		if(fb.loggedIn){
@@ -1015,7 +1024,7 @@ function facebookPost(msg, otherUserId, rowIndex){
 				text:"Inviting..."
 			});
 			
-			fb.requestWithGraphPath(url, {message: msg}, "POST", function(e) {
+			fb.requestWithGraphPath(url, data, "POST", function(e) {
 		    	if (e.success) {
 		        	Ti.API.info('FACEBOOK - Success in posting message');
 		        	
@@ -1043,13 +1052,12 @@ function facebookPost(msg, otherUserId, rowIndex){
 				    });
 		        	
 		    	}
+		    	
+		    	//and hide it after a while		    
+			    setTimeout(function() {
+				    progressView.hide();
+				}, ERROR_MSG_REMOVE_TIMEOUT);
 			});
-			
-			//and hide it after a while		    
-		    setTimeout(function() {
-			    progressView.hide();
-			}, ERROR_MSG_REMOVE_TIMEOUT);
-			
 		} else {
 			Ti.API.info('FACEBOOK - NOT logged in');
 		}

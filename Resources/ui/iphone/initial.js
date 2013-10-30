@@ -1,13 +1,23 @@
 var initialWindow = Ti.UI.createWindow({
-	backgroundImage:IMAGE_PATH+'intro_login/Default.png'
+	backgroundImage:IPHONE5? IMAGE_PATH+'intro_login/Default-568h@2x.png' : IMAGE_PATH+'intro_login/Default.png'
 });
+
+var graphicPeopleImage = Ti.UI.createImageView({
+	image:IMAGE_PATH+'intro_login/graphic_people.png',
+	bottom:32,
+	zIndex:0
+});
+
+initialWindow.add(graphicPeopleImage);
 
 var registerButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'intro_login/register_btn.png',
-	width:156,
-	height:50,
+	width:134,
+	height:52,
 	top:230,
-	right:2
+	right:25,
+	visible:false,
+	zIndex:1
 });
 
 initialWindow.add(registerButton);
@@ -27,10 +37,12 @@ registerButton.addEventListener('click', function(){
 
 var loginButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'intro_login/login_btn.png',
-	width:156,
-	height:50,
+	width:134,
+	height:52,
 	top:230,
-	left:1
+	left:25,
+	visible:false,
+	zIndex:1
 });
 
 initialWindow.add(loginButton);
@@ -47,9 +59,11 @@ loginButton.addEventListener('click', function(){
 
 var takeTourButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'intro_login/takeTheTour.png',
-	width:320,
-	height:49,
-	top:285
+	width:272,
+	height:52,
+	top:285,
+	visible:false,
+	zIndex:1
 });
 initialWindow.add(takeTourButton);
 
@@ -57,12 +71,30 @@ takeTourButton.addEventListener('click', function(){
 	
 });
 
-var gradientImage = Ti.UI.createImageView({
-	image:IMAGE_PATH+'intro_login/gradient.png',
+var barImages = [];
+for(var tt=1; tt <= 57; tt++){
+	var targetSlice = IMAGE_PATH+'intro_login/bar/'+tt+'.png';
+	barImages.push(targetSlice);
+}
+var loadingBarImage = Ti.UI.createImageView({
+	//image:IMAGE_PATH+'intro_login/bar/1.png',
+	images:barImages,
+	playcount:1,
+	duration:15,
 	bottom:0,
-	width:320,
-	right:320
+	zIndex:0
 });
-initialWindow.add(gradientImage);
 
-gradientImage.animate({right:0, duration:800});
+loadingBarImage.addEventListener('change', handleTimebarChange);
+
+loadingBarImage.start();
+initialWindow.add(loadingBarImage);
+
+function handleTimebarChange(e){
+	if(e.index == 56){
+		loadingBarImage.pause();
+		registerButton.show();
+		loginButton.show();
+		takeTourButton.show();
+	}
+}

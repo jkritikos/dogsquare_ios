@@ -194,12 +194,12 @@ function facebookPostImage(msg, otherUserId){
 	var url = otherUserId != null ? otherUserId+'/feed' : 'me/feed';
 	
 	var data = {
-	    link : "http://www.appcelerator.com",
-	    name : "This is the name",
-	    message : "This is the message, which can be as long as you want..It could also link to http://www.google.com",
-	    caption : "My super cool caption",
+	    link : "http://www.dogsquareapp.com",
+	    name : "Dogsquare",
+	    message : "Hey Pack Leader!! You are invited to experience Dogsquare",
+	    caption : "The first Dog-social app that will drastically improve your loyal friend’s life. Your dog will be grateful every time you touch phone.",
 	    picture : "http://developer.appcelerator.com/assets/img/DEV_titmobile_image.png",
-	    description : "And a description for the image "
+	    description : "So Woof your Dog!!"
 	};
 	
 	if (Titanium.Network.online == true){

@@ -8,12 +8,10 @@ var FILTER_DOG_HOSPITAL = 6;
 var FILTER_PUBLIC_PLACE = 7;
 var FILTER_BEACH = 8;
 var FILTER_WORKPLACE = 9;
+var FILTER_LOST_DOG = 10;
 var FILTER_RECENTLY_OPEN = 100;
 var FILTER_MATING = 101;
 var FILTER_SAME_BREED = 102;
-var FILTER_LOST_DOG = 103;
-
-var CATEGORY_LOST_DOG = 10;
 
 //UI components
 var viewMapTargetMode = null;
@@ -34,10 +32,11 @@ var mapSearchFilterData = [];
 var mapLatitude = null;
 var mapLongitude = null;
 
-CURRENT_VIEW = VIEW_MAP;
-CLICKED_FILTER = null;
+
+var CLICKED_FILTER = null;
 
 function buildMapView(windowMode){
+	CURRENT_VIEW = VIEW_MAP;
 	
 	Titanium.Geolocation.getCurrentPosition(function(e){
 	//Ti.Geolocation.addEventListener('location', function(e) {
@@ -72,8 +71,7 @@ function buildMapView(windowMode){
 			
 		mapview.setLocation(mapRegion);
 		
-		//Get all nearby places
-		getPlacesByFilterOnline(null);
+		mapview.addEventListener('regionChanged', handleMapViewChange);
 	});
 	
 	viewMapTargetMode = windowMode;
@@ -237,8 +235,6 @@ function buildMapView(windowMode){
 	});
 	viewMap.add(mapview);
 	
-	mapview.addEventListener('regionChanged', handleMapViewChange);
-	
 	//Event listener for map annotations
 	mapview.addEventListener('click', handleMapAnnotationClick);
 }
@@ -250,7 +246,7 @@ function handleMapViewChange(e){
 	var accuracy = e.accuracy; 
 	var timestamp = e.timestamp;
 	
-	Ti.API.info('latitude:' + mapLatitude + ' and longitude:' + mapLongitude);
+	Ti.API.info('MAP REGION CHANGE EVENT latitude:' + mapLatitude + ' and longitude:' + mapLongitude);
 	
 	//map region object
 	var mapRegion = {
@@ -278,7 +274,7 @@ function handleMapAnnotationClick(e){
 	var category_id = annotation.category_id;
 	
 	if(source == 'rightButton'){
-		if(annotation.place_id && category_id != CATEGORY_LOST_DOG){
+		if(annotation.place_id && category_id != FILTER_LOST_DOG){
 			var placeId = annotation.place_id;
 			var placeTitle = annotation.title;
 			
@@ -342,7 +338,7 @@ function handleMapAnnotationClick(e){
 			openWindows.push(viewActivityWindow);
 			//openWindows[0] = viewActivityWindow;
 			navController.open(viewActivityWindow);
-		}else if(category_id == CATEGORY_LOST_DOG){
+		}else if(category_id == FILTER_LOST_DOG){
 			var user_id = annotation.user_id;
 			
 			if(user_id != userObject.userId){
@@ -792,7 +788,7 @@ function updateMapWithAnnotations(places, checkins, activities){
 				longitude:checkins[i].lon,
 				title:checkins[i].user_name,
 				subtitle:'Checked in at '+checkins[i].place_name,
-				animate:true,
+				animate:false,
 				customView:customPin2,
 				rightButton:IMAGE_PATH+'map/arrow_icon.png',
 				place_id:checkins[i].place_id
@@ -830,7 +826,7 @@ function updateMapWithAnnotations(places, checkins, activities){
 				longitude:activities[i].lon,
 				title:activities[i].user_name,
 				subtitle:'Went on a walk',
-				animate:true,
+				animate:false,
 				customView:customPin2,
 				rightButton:IMAGE_PATH+'map/arrow_icon.png',
 				user_id:activities[i].id,
@@ -867,7 +863,7 @@ function updateMapWithAnnotations(places, checkins, activities){
 					latitude:places[i].lat,
 					longitude:places[i].lon,
 					title:places[i].name,
-					animate:true,
+					animate:false,
 					customView:customPin2,
 					rightButton:IMAGE_PATH+'map/arrow_icon.png',
 					place_id:places[i].id,
