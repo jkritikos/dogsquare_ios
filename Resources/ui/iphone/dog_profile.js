@@ -108,7 +108,6 @@ function buildDogProfileView(dogId){
 			bottom:IPHONE5 ? 86 : 100,
 			right:81
 		});
-		dogProfileView.add(dogProfileMatingBackground);
 	
 		//opacity bar for info
 		var dogProfileOpacityInfoBar = Titanium.UI.createView({ 
@@ -248,23 +247,21 @@ function buildDogProfileView(dogId){
 			color:'black',
 			height:'auto',
 			textAlign:'left',
-			left:39,
+			left:36,
 			bottom:IPHONE5 ? 144 : 158,
 			opacity:0.6,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
-		dogProfileView.add(dogProfileMoodLabel);
 		
 		dogProfileMoodPercentLabel = Titanium.UI.createLabel({ 
 			text:'0%',
 			color:'999900',
 			height:'auto',
 			textAlign:'left',
-			left:100,
+			left:97,
 			bottom:IPHONE5 ? 145 : 159,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
-		dogProfileView.add(dogProfileMoodPercentLabel);
 		
 		//Empty bone image
 		var dogProfileBoneImage = Ti.UI.createImageView({ 
@@ -272,8 +269,6 @@ function buildDogProfileView(dogId){
 			bottom:IPHONE5 ? 127 : 142,
 			right:30
 		});
-		dogProfileView.add(dogProfileBoneImage);
-		
 		
 		dogProfileBoneImageColor = Ti.UI.createImageView({ 
 			//image:croppedDataObject.photo,
@@ -284,8 +279,6 @@ function buildDogProfileView(dogId){
 			zIndex:2,
 			visible:false
 		});
-		
-		dogProfileView.add(dogProfileBoneImageColor);
 		
 		//Heart image for likes
 		dogProfileHeartImage = Ti.UI.createImageView({ 
@@ -307,11 +300,27 @@ function buildDogProfileView(dogId){
 			opacity:0.6,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
+		
+		//if not my dog change the position os some images and labels
+		if(!dogProfileMyDog){
+			dogProfileMatingBackground.bottom = IPHONE5 ? 86 : 8;
+			dogProfileMoodLabel.bottom = IPHONE5 ? 144 : 66;
+			dogProfileMoodPercentLabel.bottom = IPHONE5 ? 145 : 67;
+			dogProfileBoneImage.bottom = IPHONE5 ? 127 : 50;
+			dogProfileBoneImageColor.bottom = IPHONE5 ? 127 : 50;
+			dogProfileLikeMeLabel.bottom = IPHONE5 ? 95 : 17;
+		}
+		
+		dogProfileView.add(dogProfileMatingBackground);
+		dogProfileView.add(dogProfileMoodLabel);
+		dogProfileView.add(dogProfileMoodPercentLabel);
+		dogProfileView.add(dogProfileBoneImage);
+		dogProfileView.add(dogProfileBoneImageColor);
 		dogProfileView.add(dogProfileLikeMeLabel);
 		
 		if(dogProfileMyDog){
 			dogProfileLostDogButton = Ti.UI.createButton({ 
-				backgroundImage:IMAGE_PATH+'dog_profile/found_btn.png',
+				backgroundImage:IMAGE_PATH+'dog_profile/lost_btn.png',
 				width:270,
 				height:55,
 				top:IPHONE5 ? 436 : 440,
@@ -412,7 +421,7 @@ function lostDogOnline(){
 		        success:true
 		    });
 		    
-		    dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/lost_btn.png';
+		    dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/found_btn.png';
 		    
 			//Hide progress view
 			progressView.hide();
@@ -929,7 +938,7 @@ function updateDogProfile(dogObj){
 	}
 	
 	if(dogObj.lost != null){
-		dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/lost_btn.png';
+		dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/found_btn.png';
 	}
 }
 
@@ -948,7 +957,8 @@ function handleDogLikesButton(e){
 		backgroundColor:'white',
 		translucent:false,
 		//barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR
+		barColor:UI_COLOR,
+		title:'Likes'
 	});
 	
 	//back button & event listener

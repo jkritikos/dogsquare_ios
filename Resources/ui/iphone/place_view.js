@@ -380,7 +380,8 @@ function handlePlaceCheckinsLabel(e){
 	var listUsersWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
 		translucent:false,
-		barColor:UI_COLOR
+		barColor:UI_COLOR,
+		title:'Checkins'
 	});
 	
 	//back button & event listener
@@ -1099,6 +1100,12 @@ function handleCheckinPlaceButton(e){
 function checkinPlaceOnline(placeId){
 	Ti.API.info('checkinPlaceOnline() called for place:' + placeId);
 	
+	//progress view
+	var progressView = new ProgressView({window:checkinPlaceView});
+	progressView.show({
+		text:"Sending..."
+	});
+	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
@@ -1111,6 +1118,11 @@ function checkinPlaceOnline(placeId){
 		var jsonData = JSON.parse(this.responseText);
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			//Show success
+			progressView.change({
+		        success:true
+		    });
+		    
 			checkinNumberLabel.show();
 			checkinNumberOfHeartsLabel.show();
 			checkinPlaceLikesHeartImage.show();
@@ -1118,6 +1130,9 @@ function checkinPlaceOnline(placeId){
 			checkinPlaceButton.hide();
 			checkinPlaceHeartImage.hide();
 			checkinNumberLabel.text++;
+			
+			//Hide message and close register window
+			progressView.hide();
 			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;

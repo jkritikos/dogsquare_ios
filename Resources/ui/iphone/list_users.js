@@ -52,19 +52,65 @@ function populateListUsersTableView(uData){
 			borderColor:'#f9bf30'
 		});
 		
-		var rowUserNameLabel = Titanium.UI.createLabel({
-			text:typeof uData.users != 'undefined' ? uData.users[i].User.name : uData[i].Dog.name,
-			color:'black',
-			height:22,
-			textAlign:'left',
-			width:182,
-			opacity:0.6,
-			left:72,
-			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'}
-		});
-		
 		userRow.add(rowUserImage);
-		userRow.add(rowUserNameLabel);
+		
+		if(uData.users){
+			if(uData.users[i].User.time){
+				//name of the user and time
+				var rowUserNameLabel = Titanium.UI.createLabel({
+					text:uData.users[i].User.name,
+					color:'black',
+					height:22,
+					top:15,
+					textAlign:'left',
+					width:182,
+					opacity:0.6,
+					left:72,
+					font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'}
+				});
+				userRow.add(rowUserNameLabel);
+				
+				var rowUserTimeLabel = Titanium.UI.createLabel({
+					text:relativeTime(uData.users[i].User.time),
+					color:'#938787',
+					height:22,
+					textAlign:'left',
+					width:182,
+					bottom:15,
+					left:72,
+					font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
+				});
+				userRow.add(rowUserTimeLabel);
+			}else{
+				//name for users
+				var rowUserNameLabel = Titanium.UI.createLabel({
+					text:uData.users[i].User.name,
+					color:'black',
+					height:22,
+					textAlign:'left',
+					width:182,
+					opacity:0.6,
+					left:72,
+					font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'}
+				});
+				userRow.add(rowUserNameLabel);
+				
+			}
+		}else{
+			//name for dogs
+			var rowUserNameLabel = Titanium.UI.createLabel({
+				text:uData[i].Dog.name,
+				color:'black',
+				height:22,
+				textAlign:'left',
+				width:182,
+				opacity:0.6,
+				left:72,
+				font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'}
+			});
+			userRow.add(rowUserNameLabel);
+			
+		}
 		tableRows.push(userRow);
 	}
 	listUsersTableView.setData(tableRows);

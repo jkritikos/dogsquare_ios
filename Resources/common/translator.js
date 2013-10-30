@@ -108,17 +108,17 @@ function getSize(size){
 	var sizeObj = {};
 	
 	if(size == 1){
-		sizeObj.label = "Small";
-		sizeObj.left = 180;
+		sizeObj.label = "small";
+		sizeObj.left = 179;
 	} else if(size == 2){
-		sizeObj.label = "Medium";
-		sizeObj.left = 169;
+		sizeObj.label = "medium";
+		sizeObj.left = 168;
 	} else if(size == 3){
-		sizeObj.label = "Large";
-		sizeObj.left = 177;
+		sizeObj.label = "large";
+		sizeObj.left = 180;
 	} else if(size == 4){
-		sizeObj.label = "X-Large";	
-		sizeObj.left = 171;
+		sizeObj.label = "x-Large";	
+		sizeObj.left = 173;
 	}
 	
 	return sizeObj;
