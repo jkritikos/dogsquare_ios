@@ -109,7 +109,7 @@ var FB_APP_ID = '509577672446427';
 var FB_API_KEY = '667843a07b0ab0bd71aaa4c91c5ec2af';
 var FB_READ_PERMISSIONS = ['read_stream'];
 var FB_WRITE_PERMISSIONS = ['publish_actions','publish_stream'];
-//var FB_SESSION_PROXY = 'http://api.appcelerator.net/p/fbconnect/';
+
 var fb = require('facebook');
 fb.appid = FB_APP_ID;
 fb.forceDialogAuth = false;
@@ -256,6 +256,43 @@ function facebookPostImage(msg, otherUserId){
 	}
 }
 
+//Checks if activities should be posted to facebook
+function shouldFacebookPostActivity(){
+	var response = true;
+	var sharingFlag = true;
+	if(Ti.App.Properties.getBoolean(SHARING_ACTIVITY_FACEBOOK) != null){
+		sharingFlag = Ti.App.Properties.getBoolean(SHARING_ACTIVITY_FACEBOOK);
+	}
+	
+	if(fb.loggedIn && sharingFlag){
+		response = true;
+	} else {
+		response = false;
+	}
+	
+	Ti.API.info('shouldFacebookPostActivity returns '+response);
+	return response;
+}
+
+//Checks if checkins should be posted to facebook
+function shouldFacebookPostCheckin(){
+	var response = true;
+	var sharingFlag = true;
+	if(Ti.App.Properties.getBoolean(SHARING_CHECKIN_FACEBOOK) != null){
+		sharingFlag = Ti.App.Properties.getBoolean(SHARING_CHECKIN_FACEBOOK);
+	}
+	
+	if(fb.loggedIn && sharingFlag){
+		response = true;
+	} else {
+		response = false;
+	}
+	
+	Ti.API.info('shouldFacebookPostCheckin returns '+response);
+	return response;
+}
+
+//Sorting function for facebook friends
 function sortFBFriends(a, b){
 	var aName = a.name.toLowerCase();
 	var bName = b.name.toLowerCase();
@@ -508,6 +545,13 @@ var weather = ( function() {
 function editDog(dogObject){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	db.execute('update dogs set photo=?, thumb=? where dog_id=?', dogObject.photo_filename, dogObject.thumb_path,dogObject.dog_id);
+	db.close();
+}
+
+//Updates the dogfuel value for the specified dog id
+function updateDogfuelLocal(dog_id, value){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	db.execute('update dogs set dogfuel=? where dog_id=?', value, dog_id);
 	db.close();
 }
 

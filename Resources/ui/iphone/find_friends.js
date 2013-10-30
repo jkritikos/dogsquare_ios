@@ -1011,7 +1011,7 @@ function facebookInvitePost(otherUserId, rowIndex){
 	    name : "Dogsquare",
 	    message : "Hey Pack Leader!! You are invited to experience Dogsquare: the first Dog-social app that will drastically improve your loyal friend’s life. Your dog will be grateful every time you touch phone.",
 	    //caption : "The ",
-	    picture : SERVER+'fb_icon5.png',
+	    picture : SERVER+'fb_icon6.png',
 	    description : "Woof your Dog!"
 	};
 	

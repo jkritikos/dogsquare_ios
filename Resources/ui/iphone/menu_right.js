@@ -57,7 +57,7 @@ function populateRightMenu(dogObject){
 		height:27,
 		width:'auto',
 		textAlign:'left',
-		left:136,
+		left:132,
 		font:{fontSize:18, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	
@@ -99,7 +99,7 @@ function populateRightMenu(dogObject){
 		var rowDogImage = Titanium.UI.createImageView({
 			image:REMOTE_DOG_IMAGES + dogObject[i].thumb_path,
 			defaultImage:IMAGE_PATH+'common/default_dog_photo.png',
-			left:58,
+			left:55,
 			top:13,
 			borderRadius:30,
 			borderWidth:2,
@@ -114,9 +114,9 @@ function populateRightMenu(dogObject){
 			width:106,
 			height:35,
 			textAlign:'left',
-			left:134,
+			left:130,
 			top:14,
-			font:{fontSize:24, fontWeight:'semibold', fontFamily:'Open Sans'},
+			font:{fontSize:22, fontWeight:'semibold', fontFamily:'Open Sans'},
 			type:TYPE_SELECT_ROW
 		});
 		
@@ -126,7 +126,7 @@ function populateRightMenu(dogObject){
 			color:'8a8b8c',
 			height:18,
 			textAlign:'left',
-			left:136,
+			left:132,
 			top:50,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'},
 			type:TYPE_SELECT_ROW
@@ -139,7 +139,7 @@ function populateRightMenu(dogObject){
 			height:18,
 			width:35,
 			textAlign:'left',
-			left:187,
+			left:185,
 			top:50,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'},
 			type:TYPE_SELECT_ROW
