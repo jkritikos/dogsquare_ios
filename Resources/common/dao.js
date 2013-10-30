@@ -548,6 +548,13 @@ function editDog(dogObject){
 	db.close();
 }
 
+//Updates the dogfuel value for the specified dog id
+function updateDogfuelLocal(dog_id, value){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	db.execute('update dogs set dogfuel=? where dog_id=?', value, dog_id);
+	db.close();
+}
+
 //Saves a dog object in the local db
 function saveDog(dogObject){
 	Ti.API.info('saveDog() called');

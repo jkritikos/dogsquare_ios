@@ -267,7 +267,7 @@ function buildDogProfileView(dogId){
 		var dogProfileBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'dog_profile/bone_grey.png',
 			bottom:IPHONE5 ? 127 : 142,
-			right:30
+			left:143
 		});
 		
 		dogProfileBoneImageColor = Ti.UI.createImageView({ 
@@ -291,7 +291,7 @@ function buildDogProfileView(dogId){
 		dogProfileHeartImage.addEventListener('click', handleDogLikeButton);
 		
 		var dogProfileLikeMeLabel = Titanium.UI.createLabel({ 
-			text:'Mating?',
+			text:'Dog mating',
 			color:'black',
 			height:'auto',
 			textAlign:'left',

@@ -204,16 +204,39 @@ function updateDogfuelValues(){
 		var jsonData = JSON.parse(this.responseText);
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			var dogfuelValues = jsonData.data.values;
+			var foundValue = false;
+			var indexToUpdate = 0;
 			
-			
+			//go through the right menu dogs table
+			for (i=1; i<rightTableView.data[0].rows.length;i++){
+				var dogIdInRightMenu = rightTableView.data[0].rows[i].dogId;
+				
+				//see if we have a value for this dog
+				for(z=0; z<dogfuelValues.length; z++){
+					if(dogfuelValues[z].dog_id == dogIdInRightMenu){
+						indexToUpdate = z;
+						rightTableView.data[0].rows[i].children[2].text = dogfuelValues[z].dogfuel + '%';
+						updateDogfuelLocal(dogIdInRightMenu, dogfuelValues[z].dogfuel);
+						foundValue = true;
+						break;
+					}
+				}
+				
+				if(!foundValue){
+					rightTableView.data[0].rows[i].children[2].text = '0%';
+					updateDogfuelLocal(dogIdInRightMenu, 0);
+				}
+				
+				foundValue = false;
+			}
+				
 		} 
 	};
 	
-	/*
 	xhr.open('GET',API+'getDogfuel');
 	xhr.send({
 		user_id:userObject.userId,
 		token:userObject.token
 	});
-	*/
 }
