@@ -782,7 +782,6 @@ function handlefriendsTableViewRows(e){
 		Ti.API.info('Inviting by FACEBOOK, row is '+e.index+' fb id is '+e.row.facebook_id);
 		
 		facebookInvitePost(e.row.facebook_id, e.index);
-		//facebookPostImage('test', e.row.facebook_id);
 	}
 }
 

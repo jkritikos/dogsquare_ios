@@ -127,8 +127,6 @@ fb.addEventListener('login', function(e) {
 	
 	if(fb.loggedIn){
 		
-		//fb.reauthorize(FB_WRITE_PERMISSIONS, "friends");
-		
 		fb.requestWithGraphPath('me', {}, 'GET', function(e) {
     		if (e.success) {
     			Ti.API.info(e.result);
@@ -224,34 +222,42 @@ function facebookPost(msg, otherUserId){
 }
 
 /*Posts an image to the current (or another) user's facebook wall*/
-function facebookPostImage(msg, otherUserId){
+function facebookPostImage(blob, otherUserId){
 	
 	var url = otherUserId != null ? otherUserId+'/feed' : 'me/feed';
 	
 	var data = {
-	    link : "http://www.dogsquareapp.com",
+	    //link : "http://www.dogsquareapp.com",
 	    name : "Dogsquare",
 	    message : "Hey Pack Leader!! You are invited to experience Dogsquare",
 	    caption : "The first Dog-social app that will drastically improve your loyal friend’s life. Your dog will be grateful every time you touch phone.",
-	    picture : "http://developer.appcelerator.com/assets/img/DEV_titmobile_image.png",
+	    picture : blob,
 	    description : "So Woof your Dog!!"
 	};
 	
 	if (Titanium.Network.online == true){
 		if(fb.loggedIn){
-		
-			fb.requestWithGraphPath(url, data, "POST", function(e) {
-		    	if (e.success) {
-		        	Ti.API.info('FACEBOOK - Success in posting image');
-		        	
-		    	} else {
-		        	if (e.error) {
-		         	   Ti.API.info('FACEBOOK - ERROR in posting image');
-		        	} else {
-		            	Ti.API.info('FACEBOOK - UNKNOWN response in posting image');
-		        	}
-		    	}
+			
+			fb.reauthorize(FB_WRITE_PERMISSIONS, "everyone", function(e){
+				if(e.success){
+					fb.requestWithGraphPath(url, data, "POST", function(e) {
+				    	if (e.success) {
+				        	Ti.API.info('FACEBOOK - Success in posting image');
+				        	
+				    	} else {
+				        	if (e.error) {
+				         	   Ti.API.info('FACEBOOK - ERROR in posting image');
+				        	} else {
+				            	Ti.API.info('FACEBOOK - UNKNOWN response in posting image');
+				        	}
+				    	}
+					});
+				} else {
+					Ti.API.error('Error getting write permissions to FB');	
+				}
+				
 			});
+			
 		} else {
 			Ti.API.info('FACEBOOK - NOT logged in');
 		}

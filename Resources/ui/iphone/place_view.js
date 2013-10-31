@@ -1142,8 +1142,8 @@ function checkinPlaceOnline(placeId){
 			
 			//Post to facebook if we must
 			if(shouldPostCheckinFacebook()){
-				var fbPost = 'Checked in at '+checkinPlaceTitleLabel.text;
-				facebookPost(msg, null);	
+				var fbPost = 'I just checked in at '+checkinPlaceTitleLabel.text;
+				facebookPost(fbPost, null);	
 			}
 			
 		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
