@@ -257,7 +257,7 @@ function facebookPostImage(msg, otherUserId){
 }
 
 //Checks if activities should be posted to facebook
-function shouldFacebookPostActivity(){
+function shouldPostActivityFacebook(){
 	var response = true;
 	var sharingFlag = true;
 	if(Ti.App.Properties.getBoolean(SHARING_ACTIVITY_FACEBOOK) != null){
@@ -275,7 +275,7 @@ function shouldFacebookPostActivity(){
 }
 
 //Checks if checkins should be posted to facebook
-function shouldFacebookPostCheckin(){
+function shouldPostCheckinFacebook(){
 	var response = true;
 	var sharingFlag = true;
 	if(Ti.App.Properties.getBoolean(SHARING_CHECKIN_FACEBOOK) != null){

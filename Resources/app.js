@@ -41,6 +41,3 @@ if(!userObject.userId){
 }
 
 Ti.include('ui/iphone/run.js');
-
-var testDate = new Date();
-Ti.API.warn(testDate + ' is ' + testDate.getTimezoneOffset() + ' minutes from Local');

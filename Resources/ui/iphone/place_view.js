@@ -1139,6 +1139,12 @@ function checkinPlaceOnline(placeId){
 			var notifications = jsonData.data.count_notifications;
 			
 			updateLeftMenuCounts(followers, inbox, notifications);
+			
+			//Post to facebook if we must
+			if(shouldPostCheckinFacebook()){
+				
+			}
+			
 		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
 			Ti.API.error('Unauthorised request - need to login again');
 			showLoginPopup();

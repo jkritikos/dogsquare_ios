@@ -23,6 +23,8 @@ var TARGET_MODE_NEW_WINDOW = 2;
 Ti.include('menu_left.js');
 Ti.include('menu_right.js');
 
+Ti.include('initial.js');
+
 function closeOpenWindows(){
 	Ti.API.info('closeOpenWindows() closed '+openWindows.length+' windows');
 	for(var i=0; i < openWindows.length; i++){
@@ -162,7 +164,6 @@ function createCenterNavWindow(){
 			navController.getWindow().rightNavButton = profileRightNavButton;
 		}
 		
-		
 		navController.getWindow().add(viewProfile);
 		navController.getWindow().setTitle(userObject.name);
 	}
@@ -186,8 +187,6 @@ var window = NappSlideMenu.createSlideMenuWindow({
 
 //Event listener for main window being slided or animated (i.e revealing left/right menu)
 window.addEventListener('viewDidOpen', hideTextfields);
-
-Ti.include('initial.js');
 
 function updateDogfuelValues(){
 	Ti.API.info('updateDogfuelValues() called');

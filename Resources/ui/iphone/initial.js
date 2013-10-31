@@ -10,6 +10,26 @@ var graphicPeopleImage = Ti.UI.createImageView({
 
 initialWindow.add(graphicPeopleImage);
 
+//Set up the loading bar frames for animation
+var barImages = [];
+for(var tt=1; tt <= 57; tt++){
+	var targetSlice = IMAGE_PATH+'intro_login/bar/'+tt+'.png';
+	barImages.push(targetSlice);
+}
+var loadingBarImage = Ti.UI.createImageView({
+	//image:IMAGE_PATH+'intro_login/bar/1.png',
+	images:barImages,
+	playcount:1,
+	duration:15,
+	bottom:0,
+	zIndex:0
+});
+
+loadingBarImage.addEventListener('change', handleTimebarChange);
+
+initialWindow.add(loadingBarImage);
+loadingBarImage.start();
+
 var registerButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'intro_login/register_btn.png',
 	width:134,
@@ -70,25 +90,6 @@ initialWindow.add(takeTourButton);
 takeTourButton.addEventListener('click', function(){
 	
 });
-
-var barImages = [];
-for(var tt=1; tt <= 57; tt++){
-	var targetSlice = IMAGE_PATH+'intro_login/bar/'+tt+'.png';
-	barImages.push(targetSlice);
-}
-var loadingBarImage = Ti.UI.createImageView({
-	//image:IMAGE_PATH+'intro_login/bar/1.png',
-	images:barImages,
-	playcount:1,
-	duration:15,
-	bottom:0,
-	zIndex:0
-});
-
-loadingBarImage.addEventListener('change', handleTimebarChange);
-
-loadingBarImage.start();
-initialWindow.add(loadingBarImage);
 
 function handleTimebarChange(e){
 	if(e.index == 56){
