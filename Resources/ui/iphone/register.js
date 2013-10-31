@@ -435,7 +435,7 @@ function buildRegisterWindow(){
 	var registerTermsLinkLabel = Titanium.UI.createLabel({
 		text:'TERMS OF USE',
 		textAlign:'left',
-		top:618,
+		top:617,
 		left:178,
 		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});

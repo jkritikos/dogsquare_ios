@@ -7,6 +7,7 @@ function buildTermsView(){
 		backgroundColor:'black',
 		barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR,
+		translucent:false,
 		modal:true,
 		title:'Terms'
 	});
@@ -21,23 +22,29 @@ function buildTermsView(){
 	
 	var termsScrollView = Ti.UI.createScrollView({
 		backgroundColor:UI_BACKGROUND_COLOR,
-		contentHeight:'1500px'
+		height:'auto'
 	});
 	termsWindow.add(termsScrollView);
 	
 	var file = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory,'terms.txt');
 	var contents = file.read();
 	
+	var termsTransparentView = Ti.UI.createScrollView({
+		backgroundColor:'transparent',
+		height:'auto',
+		bottom:30,
+		top:30
+	});
+	termsScrollView.add(termsTransparentView);
+	
 	var termsTextLabel = Ti.UI.createLabel({
 		text:contents,
 		color:'black',
 		textAlign:'center',
 		width:280,
-		bottom:30,
-		top:30,
 		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
-	termsScrollView.add(termsTextLabel);
+	termsTransparentView.add(termsTextLabel);
 	
 	var termsDoneButton = Titanium.UI.createButton({
 		backgroundImage:IMAGE_PATH+'common/Done_button.png',
