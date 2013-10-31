@@ -14,7 +14,7 @@ var dogProfileEditDialog = null;
 var dogProfileMoodPercentLabel = null;
 var dogProfileBoneImageColor = null;
 var dogProfileLostDogButton = null;
-
+var dogProgileProgressView = null;
 var dogProfileEditButton = null;
 
 var BUTTON_LOST_DOG = 1;
@@ -22,6 +22,8 @@ var BUTTON_FOUND_DOG = 2;
 	
 function buildDogProfileView(dogId){
 	if(dogProfileView == null){
+		dogProgileProgressView = new ProgressView({window:dogProfileView});
+		
 		dogProfileDogId = dogId;
 		
 		//Check if this is our dog or not
@@ -339,14 +341,15 @@ function buildDogProfileView(dogId){
 	return dogProfileView;
 }
 
+//Event handler for the lost/found dog button
 function handleLostDogButton(){
 	var button = dogProfileLostDogButton.button;
 	if(button == BUTTON_LOST_DOG){
-		lostDogOnline();
+		//Start location tracking
+		Titanium.Geolocation.addEventListener('location',trackLocationForLostDog);
 	}else if(button == BUTTON_FOUND_DOG){
 		foundDogOnline();
 	}
-	
 }
 
 function deleteDogProfile(){
@@ -402,12 +405,42 @@ function dogProfilePhotoView(){
 	photoViewWindow.open();
 }
 
-function lostDogOnline(){
+//Gets an accurate position of the current location and posts the lost dog event
+function trackLocationForLostDog(){
+	Titanium.Geolocation.getCurrentPosition(function(e){
+		if (e.error){
+			//alert('Se ha perdido la señal GPS. Sal a cielo abierto ...');
+			return;
+		}
+		
+		var coordinates = {
+			latitude: e.coords.latitude,
+			longitude: e.coords.longitude,
+			animate:true,
+			latitudeDelta:0.001,
+			longitudeDelta:0.001
+		};
+		
+		//only use accurate coordinates
+		if(e.coords.accuracy <= 15){
+			Ti.API.info('trackLocationForLostDog() got accurate coordinates - processing');
+			//Clear location tracking
+			Titanium.Geolocation.removeEventListener('location',trackLocationForLostDog);
+			
+			lostDogOnline(e.coords.latitude, e.coords.longitude);
+			
+		} else {
+			Ti.API.info('trackLocationForLostDog() got inaccurate coordinates - ignoring (accuracy '+ e.coords.accuracy+')');
+		}
+	});
+}
+
+//Posts a lost dog place on the server
+function lostDogOnline(dogLat, dogLon){
 	Ti.API.info('lostDogOnline() called for dog with id ' + dogProfileDogId);
-	
+			
 	//progress view
-	var progressView = new ProgressView({window:dogProfileView});
-	progressView.show({
+	dogProgileProgressView.show({
 		text:"Sending..."
 	});
 	
@@ -425,7 +458,7 @@ function lostDogOnline(){
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			
 			//Show success
-			progressView.change({
+			dogProgileProgressView.change({
 		        success:true
 		    });
 		    
@@ -433,7 +466,7 @@ function lostDogOnline(){
 		    dogProfileLostDogButton.button = BUTTON_FOUND_DOG;
 		    
 			//Hide progress view
-			progressView.hide();
+			dogProgileProgressView.hide();
 			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;
@@ -451,8 +484,8 @@ function lostDogOnline(){
 	xhr.send({
 		user_id:userObject.userId,
 		dog_id:dogProfileDogId,
-		lat:23,
-		lon:32,
+		lat:dogLat,
+		lon:dogLon,
 		token:userObject.token
 	});
 }
@@ -769,6 +802,7 @@ function handleDogLikeButton(e){
 	}
 }
 
+//Creates a like for the specified dog
 function likeDog(dId){
 	Ti.API.info('likeDog() with id: ' + dId);
 	
@@ -808,7 +842,7 @@ function likeDog(dId){
 	});
 }
 
-
+//Removes the like on the specified dog
 function unlikeDog(dId){
 	Ti.API.info('unlikeDog() with id: ' + dId);
 	

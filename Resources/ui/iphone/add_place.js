@@ -6,6 +6,16 @@ var addPlaceWindow = Ti.UI.createWindow({
 	title:'Add Place'
 });
 
+//image view for previewing the place image
+var addPlaceImagePreview = Ti.UI.createImageView({
+	width:320,
+	height:320,
+	top:160,
+	zIndex:1
+});
+
+addPlaceWindow.add(addPlaceImagePreview);
+
 var addPlaceObject = {};
 
 //save button
@@ -60,11 +70,12 @@ var addPlacePhotoAreaButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'add_place/photo_area.png',
 	top:IPHONE5 ? 246 : 158,
 	height:138,
-	width:320
+	width:320,
+	zIndex:0
 });
 addPlaceWindow.add(addPlacePhotoAreaButton);
 addPlacePhotoAreaButton.addEventListener('click', addPlaceShowPhotoOptions);
-
+addPlaceImagePreview.addEventListener('click', addPlaceShowPhotoOptions);
 //photo icon
 var addPlacePhotoIcon = Ti.UI.createImageView({ 
 	image:IMAGE_PATH+'add_place/photo_icon.png',
@@ -105,7 +116,8 @@ var addPlaceFieldsBackground = Ti.UI.createView({
 	backgroundColor:'e7e6e6',
 	bottom:0,
 	width:320,
-	height:124
+	height:124,
+	zIndex:2
 });
 addPlaceWindow.add(addPlaceFieldsBackground);
 
@@ -118,6 +130,7 @@ for(var i=0; i<2; i++) {
 		backgroundColor:'dcdcdc',
 		width:320,
 		height:1,
+		zIndex:2,
 		top:29 + sepparatorOffset
 	});
 	addPlaceFieldsBackground.add(addPlaceSepparator);
@@ -126,11 +139,12 @@ for(var i=0; i<2; i++) {
 }
 
 //text field name
-var  addPlaceTxtFieldName = Ti.UI.createTextField({
+var addPlaceTxtFieldName = Ti.UI.createTextField({
 	top:0,
 	width:294,
 	height:28,
 	left:13,
+	zIndex:2,
 	returnKeyType: Ti.UI.RETURNKEY_NEXT,
 	font:{fontSize:16, fontWeight:'regular', fontFamily:'Open Sans'}
 });
@@ -148,6 +162,7 @@ var addPlaceTxtFieldNameLabel = Ti.UI.createLabel({
 	left:0,
 	width:80,
 	height:30,
+	zIndex:2,
 	font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 });
 addPlaceTxtFieldName.add(addPlaceTxtFieldNameLabel);
@@ -156,7 +171,8 @@ addPlaceTxtFieldName.add(addPlaceTxtFieldNameLabel);
 var addPlaceCategoryBackground = Ti.UI.createView({
 	backgroundColor:'transparent',
 	height:30,
-	top:28
+	top:28,
+	zIndex:2
 });
 addPlaceFieldsBackground.add(addPlaceCategoryBackground);
 addPlaceCategoryBackground.addEventListener('click', handleCategoryButton);
@@ -167,8 +183,9 @@ var addPlaceCategoryLabel = Ti.UI.createLabel({
 	color:'999999',
 	textAlign:'left',
 	left:13,
-	width:80,
+	width:180,
 	height:30,
+	zIndex:2,
 	font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 });
 addPlaceCategoryBackground.add(addPlaceCategoryLabel);
@@ -212,14 +229,16 @@ var addPlaceToolbar = Titanium.UI.iOS.createToolbar({
     barColor:'999999',
     bottom:-44,
     borderTop:true,
-    borderBottom:false
+    borderBottom:false,
+    zIndex:2
 }); 
 addPlaceWindow.add(addPlaceToolbar);
 
 //picker
 var addPlacePicker = Ti.UI.createPicker({
-  bottom:-216,
-  selectionIndicator:true
+	bottom:-216,
+  	selectionIndicator:true,
+  	zIndex:2
 });
 addPlacePicker.add(pickerCategories);
 
@@ -289,7 +308,40 @@ function addPlaceShowPhotoOptions(){
 
 //handle camera selection
 function handlePlaceCameraSelection(){
+	Titanium.Media.showCamera({	
+		
+		success:function(event){
+			var image = event.media;
+			
+			//Jpeg compression module
+			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
+			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setWorstCompressQuality(0.40);
+			
+			var compressedImage = jpgcompressor.compress(image);
+			
+			//Preview thumbnail
+			var imageThumbnailPreview = image.imageAsResized(320,320);
+			addPlaceImagePreview.image = imageThumbnailPreview;
+			
+			//Create thumbnail
+			var imageThumbnail = image.imageAsThumbnail(60,0,30);
+			
+			addPlaceObject.photo = compressedImage;
+			addPlaceObject.thumb = imageThumbnail;
+			
+			var uniquePlaceFilename = new Date().getTime() + '.jpg';
+			addPlaceObject.photo_filename = uniquePlaceFilename;
+			
+			
+		},
+		cancel:function(){
 	
+		},
+		error:function(error){
+		},
+		allowEditing:true
+	});
 }	
 
 //handle photo selection
@@ -305,6 +357,10 @@ function handlePlacePhotoSelection(){
 			jpgcompressor.setWorstCompressQuality(0.40);
 			
 			var compressedImage = jpgcompressor.compress(image);
+			
+			//Preview thumbnail
+			var imageThumbnailPreview = image.imageAsResized(320,320);
+			addPlaceImagePreview.image = imageThumbnailPreview;
 			
 			//Create thumbnail
 			var imageThumbnail = image.imageAsThumbnail(60,0,30);

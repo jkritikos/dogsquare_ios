@@ -27,16 +27,58 @@ var mapCheckInButton = null;
 var mapview = null;
 var mapSearchLastValue = "";
 var mapSearchFilterData = [];
+var mapRegion = null;
 
 //Map coordinates
 var mapLatitude = null;
 var mapLongitude = null;
 
-
 var CLICKED_FILTER = null;
+
+//Updates the map location until accurate enough
+function updateLocationOnMap(){
+	Titanium.Geolocation.getCurrentPosition(function(e){
+	
+		if (e.error) {
+			Ti.API.error('map.js : geo - position' + e.error); 
+			return;
+		} 
+		 
+		var accuracy = e.coords.accuracy; 
+		var timestamp = e.coords.timestamp;
+		
+		var locationObject = {
+			lat:e.coords.latitude,
+			lon:e.coords.longitude
+		};
+		
+		//Persist our location for use in other views
+		saveUserObject(locationObject);
+		
+		//update map
+		mapRegion = {
+			latitude: e.coords.latitude,
+			longitude: e.coords.longitude,
+			animate:true,
+			latitudeDelta:0.003,
+			longitudeDelta:0.003
+		};
+		mapview.setLocation(mapRegion); 
+		
+		//Stop location tracking once the accuracy is ok
+		if(accuracy <= 15){
+			Ti.API.info('Map stopping location tracking');
+			Titanium.Geolocation.removeEventListener('location',updateLocationOnMap);
+		}
+	});
+}
 
 function buildMapView(windowMode){
 	CURRENT_VIEW = VIEW_MAP;
+	
+	//Start location tracking
+	Ti.API.info('Map starting location tracking');
+	Titanium.Geolocation.addEventListener('location',updateLocationOnMap);
 	
 	Titanium.Geolocation.getCurrentPosition(function(e){
 	//Ti.Geolocation.addEventListener('location', function(e) {
@@ -61,7 +103,7 @@ function buildMapView(windowMode){
 		Ti.API.info('Got position lat '+mapLatitude+' lon '+mapLongitude+' with accuracy '+accuracy);
 		 
 		//map region object
-		var mapRegion = {
+		mapRegion = {
 			latitude: mapLatitude,
 			longitude: mapLongitude,
 			animate:true,
@@ -593,6 +635,13 @@ function handleMapSearchCategoriesRows(e){
 		//openWindows[1] = checkinPlaceWindow;
 		navController.open(checkinPlaceWindow);		
 	}
+	
+	//remove the cancel button
+	if(viewMapTargetMode == TARGET_MODE_REUSE){
+		navController.getWindow().setRightNavButton(null);
+	} else if(viewMapTargetMode == TARGET_MODE_NEW_WINDOW){
+		openWindows[openWindows.length-1].setRightNavButton(null);
+	}
 }
 
 //Searches for nearby places according to the user input from the searchfield on the navbar
@@ -704,10 +753,12 @@ function getPlacesByFilterOnline(catId){
 	
 	//progress view
 	if(catId != null){
+		/*
 		var progressView = new ProgressView({window:viewMap});
 		progressView.show({
 			text:"Loading..."
 		});
+		*/
 	}
 	
 	
@@ -724,7 +775,7 @@ function getPlacesByFilterOnline(catId){
 		
 		//Hide progress view
 		if(catId != null){
-			progressView.hide();
+			//progressView.hide();
 		}
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
@@ -853,6 +904,9 @@ function updateMapWithAnnotations(places, checkins, activities){
 				var placeImage = Ti.UI.createImageView({
 					image:places[i].dog_id ? REMOTE_DOG_IMAGES + places[i].thumb : REMOTE_PLACE_IMAGES + places[i].thumb,
 					defaultImage:IMAGE_PATH+'common/default_place_photo.png',
+					borderRadius:30,
+					borderWidth:2,
+					borderColor:'#f9bf30',
 					zIndex:2,
 					top:3
 				});
@@ -863,6 +917,7 @@ function updateMapWithAnnotations(places, checkins, activities){
 					latitude:places[i].lat,
 					longitude:places[i].lon,
 					title:places[i].name,
+					subtitle:places[i].category,
 					animate:false,
 					customView:customPin2,
 					rightButton:IMAGE_PATH+'map/arrow_icon.png',
@@ -874,13 +929,9 @@ function updateMapWithAnnotations(places, checkins, activities){
 				annotationArray.push(mapAnnotations);
 			} else {
 				Ti.API.warn('Not adding place '+places[i].id +' - already added as a checkin');
-			}
-			
-			
+			}		
 		}
 	}
-	
-	
 	 
-	 mapview.setAnnotations(annotationArray);
+	mapview.setAnnotations(annotationArray);
 }
