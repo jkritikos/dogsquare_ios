@@ -1,9 +1,11 @@
+//UI components
 var runFinishCommentsBackgroundView = null;
 var runfinishCommentsTextArea = null;
 var runFinishCommentsTableView = null;
 var runFinishCommentsButton = null;
-
+var viewRunFinishMap = null;
 var runFinishSaveCommentButton = null;
+var viewRunSummary = null;
 
 var ADD_COMMENT = 1;
 var COMMENT_ROW = 2;
@@ -14,15 +16,14 @@ var runFinishActivityId = null;
 
 CURRENT_VIEW = VIEW_RUN_FINISH;
 		
-Ti.App.addEventListener('activity', function(data) 
-{ 
+Ti.App.addEventListener('activity', function(data) { 
      runFinishActivityId =  data.activityId; 
 });
 
 function buildRunFinishView(obj){
 
 	//run finish View
-	var viewRunSummary = Ti.UI.createView({
+	viewRunSummary = Ti.UI.createView({
 		backgroundColor:UI_BACKGROUND_COLOR
 	});
 	
@@ -44,8 +45,17 @@ function buildRunFinishView(obj){
 		image:IMAGE_PATH+'run_finish/pin.png'
 	});
 	
+	//map region object
+	var runSummaryRegion = {
+		latitude: obj.coordinates[0].latitude,
+		longitude: obj.coordinates[0].longitude,
+		animate:true,
+		latitudeDelta:0.002,
+		longitudeDelta:0.002
+	};
+	
 	//the map
-	var viewRunFinishMap = Titanium.Map.createView({ 
+	viewRunFinishMap = Titanium.Map.createView({ 
 		width:'100%',
 		top:0,
 		height:214,
@@ -57,6 +67,9 @@ function buildRunFinishView(obj){
 	    annotations:[runFinishAnnotationStart,runFinishAnnotationEnd]
 	});
 	viewRunSummary.add(viewRunFinishMap);
+	
+	//set location
+	viewRunFinishMap.setLocation(runSummaryRegion);
 	
 	//opacity bar
 	var runFinishOpacityBar = Titanium.UI.createView({ 
@@ -222,17 +235,6 @@ function buildRunFinishView(obj){
 	
 	viewRunSummary.add(runFinishTableView);
 
-	//map region object
-	var runSummaryRegion = {
-		latitude: obj.coordinates[0].latitude,
-		longitude: obj.coordinates[0].longitude,
-		animate:true,
-		latitudeDelta:0.001,
-		longitudeDelta:0.001
-	};
-	
-	viewRunFinishMap.setLocation(runSummaryRegion);
-
 	//route object
 	var route = {
 	    name:"Your path",
@@ -244,6 +246,7 @@ function buildRunFinishView(obj){
  
 	// add the route
 	viewRunFinishMap.addRoute(route);
+	viewRunFinishMap.addEventListener('complete', shareActivity);
 	
 	//background for comments
 	runFinishCommentsBackgroundView = Ti.UI.createView({
@@ -319,6 +322,19 @@ function buildRunFinishView(obj){
 	});
 
 	return viewRunSummary;
+}
+
+function shareActivity(){
+	//Post activity on facebook if we must
+	if(shouldPostActivityFacebook()){
+		//crap way of giving time to the map view to load..
+		setTimeout(function(){
+			//create map image
+			var blob = viewRunFinishMap.toImage();
+			var msg = 'I just finished an activity with my dog!';
+			facebookPostImage(blob, msg, null);	
+		}, 2000);
+	}
 }
 
 function populateRunFinishTableView(o){

@@ -360,13 +360,6 @@ function handleEndRunButton(){
 		//Update our activity object
 		endActivity(runObject);
 		
-		//Post activity on facebook if we must
-		if(shouldPostActivityFacebook()){
-			//create map image
-			var blob = createActivityImage();
-			facebookPostImage(blob, null);
-		}
-		
 		Ti.include('ui/iphone/run_finish.js');
 		
 		var runFinishView = buildRunFinishView(runObject);
@@ -431,22 +424,6 @@ function handleEndRunButton(){
 	} else {
 		alert(getLocalMessage(MSG_RUN_END));
 	}
-}
-
-//Creates and returns a blog with the activity related data to be posted on facebook
-function createActivityImage(){
-	var viewRunFinishMap = Titanium.Map.createView({ 
-		width:200,
-		height:200,
-	    mapType:Titanium.Map.STANDARD_TYPE,
-	    animate:true,
-	    regionFit:true,
-	    userLocation:false,
-	    visible:true
-	});
-	
-	var blob = viewRunFinishMap.toImage();
-	return blob;
 }
 
 function handleRunFinishBackButton() {
