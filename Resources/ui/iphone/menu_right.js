@@ -47,7 +47,7 @@ function populateRightMenu(dogObject){
 	//plus image inside button UI
 	var rowPlusImage = Ti.UI.createImageView({ 
 		image:IMAGE_PATH+'menu_right/add_dog_icon.png',
-		left:76
+		left:71
 	});
 	
 	//label inside button UI
@@ -134,7 +134,7 @@ function populateRightMenu(dogObject){
 		
 		//dog percent label inside the dog row - right menu row
 		var rowDogPercentLabel = Titanium.UI.createLabel({ 
-			text:dogObject[i].dogfuel+'%',
+			text:dogObject[i].dogfuel != null ? dogObject[i].dogfuel+'%' : '0%',
 			color:'ab7b04',
 			height:18,
 			width:35,
@@ -157,7 +157,7 @@ function populateRightMenu(dogObject){
 		var rowCheckBox = Titanium.UI.createView({
 			backgroundColor:'454950',
 			top:20,
-			right:34,
+			right:31,
 			width: 23,
 			height:23,
 			type:TYPE_SELECT_ROW

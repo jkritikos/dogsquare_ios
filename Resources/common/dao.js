@@ -189,6 +189,41 @@ fb.addEventListener('login', function(e) {
 });
 
 /*Posts to the current (or another) user's facebook wall*/
+function facebookPost(msg, otherUserId){
+	
+	var url = otherUserId != null ? otherUserId+'/feed' : 'me/feed';
+	
+	var data = {
+	    //link : "http://www.dogsquareapp.com",
+	    //name : "Dogsquare",
+	    message : msg,
+	    //caption : "The first Dog-social app that will drastically improve your loyal friend’s life. Your dog will be grateful every time you touch phone.",
+	    //picture : "http://developer.appcelerator.com/assets/img/DEV_titmobile_image.png",
+	    //description : "So Woof your Dog!!"
+	};
+	
+	if (Titanium.Network.online == true){
+		if(fb.loggedIn){
+		
+			fb.requestWithGraphPath(url, data, "POST", function(e) {
+		    	if (e.success) {
+		        	Ti.API.info('FACEBOOK - Success in posting message');
+		        	
+		    	} else {
+		        	if (e.error) {
+		         	   Ti.API.info('FACEBOOK - ERROR in posting message');
+		        	} else {
+		            	Ti.API.info('FACEBOOK - UNKNOWN response in posting message');
+		        	}
+		    	}
+			});
+		} else {
+			Ti.API.info('FACEBOOK - NOT logged in');
+		}
+	}
+}
+
+/*Posts an image to the current (or another) user's facebook wall*/
 function facebookPostImage(msg, otherUserId){
 	
 	var url = otherUserId != null ? otherUserId+'/feed' : 'me/feed';
@@ -204,52 +239,19 @@ function facebookPostImage(msg, otherUserId){
 	
 	if (Titanium.Network.online == true){
 		if(fb.loggedIn){
-			
-			//progress view
-			/*
-			var progressView = new ProgressView({window:viewFindFriends});
-			progressView.show({
-				text:"Inviting..."
-			});
-			*/
+		
 			fb.requestWithGraphPath(url, data, "POST", function(e) {
 		    	if (e.success) {
-		        	Ti.API.info('FACEBOOK - Success in posting message');
+		        	Ti.API.info('FACEBOOK - Success in posting image');
 		        	
-		        	/*
-		        	//Show success
-					progressView.change({
-				        success:true
-				    });
-				    
-				    //Update table view
-				    var theRow = findFriendsTableView.data[0].rows[rowIndex];
-				    theRow.children[2].backgroundImage = IMAGE_PATH+'follow_invite/invited_button.png';
-					theRow.children[2].type = TYPE_ALREADY_INVITED_BUTTON;
-		        	*/
 		    	} else {
 		        	if (e.error) {
-		         	   Ti.API.info('FACEBOOK - ERROR in posting message');
+		         	   Ti.API.info('FACEBOOK - ERROR in posting image');
 		        	} else {
-		            	Ti.API.info('FACEBOOK - UNKNOWN response in posting message');
+		            	Ti.API.info('FACEBOOK - UNKNOWN response in posting image');
 		        	}
-		        	
-		        	/*
-		        	//Show the error message we got back from the server
-					progressView.change({
-				        error:true,
-				        text:getLocalMessage(MSG_FACEBOOK_ERROR)
-				    });
-		        	*/
 		    	}
 			});
-			
-			/*
-			//and hide it after a while		    
-		    setTimeout(function() {
-			    progressView.hide();
-			}, ERROR_MSG_REMOVE_TIMEOUT);
-			*/
 		} else {
 			Ti.API.info('FACEBOOK - NOT logged in');
 		}

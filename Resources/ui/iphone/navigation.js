@@ -22,7 +22,6 @@ var TARGET_MODE_NEW_WINDOW = 2;
 //Left & right menus
 Ti.include('menu_left.js');
 Ti.include('menu_right.js');
-
 Ti.include('initial.js');
 
 function closeOpenWindows(){
