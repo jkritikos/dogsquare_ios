@@ -30,17 +30,24 @@ loadingBarImage.addEventListener('change', handleTimebarChange);
 initialWindow.add(loadingBarImage);
 loadingBarImage.start();
 
+var initialButtonsBackground = Ti.UI.createView({
+	width:272,
+	height:107,
+	top:230,
+	visible:false,
+	zIndex:1
+});
+initialWindow.add(initialButtonsBackground);
+
 var registerButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'intro_login/register_btn.png',
 	width:134,
 	height:52,
-	top:230,
-	right:25,
-	visible:false,
-	zIndex:1
+	top:0,
+	right:1
 });
 
-initialWindow.add(registerButton);
+initialButtonsBackground.add(registerButton);
 
 registerButton.addEventListener('click', function(){
 	
@@ -59,13 +66,11 @@ var loginButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'intro_login/login_btn.png',
 	width:134,
 	height:52,
-	top:230,
-	left:25,
-	visible:false,
-	zIndex:1
+	top:0,
+	left:1
 });
 
-initialWindow.add(loginButton);
+initialButtonsBackground.add(loginButton);
 
 loginButton.addEventListener('click', function(){
 	
@@ -81,11 +86,9 @@ var takeTourButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'intro_login/takeTheTour.png',
 	width:272,
 	height:52,
-	top:285,
-	visible:false,
-	zIndex:1
+	bottom:0
 });
-initialWindow.add(takeTourButton);
+initialButtonsBackground.add(takeTourButton);
 
 takeTourButton.addEventListener('click', function(){
 	
@@ -94,8 +97,6 @@ takeTourButton.addEventListener('click', function(){
 function handleTimebarChange(e){
 	if(e.index == 56){
 		loadingBarImage.pause();
-		registerButton.show();
-		loginButton.show();
-		takeTourButton.show();
+		initialButtonsBackground.show();
 	}
 }

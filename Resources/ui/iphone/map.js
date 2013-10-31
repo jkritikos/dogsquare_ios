@@ -851,7 +851,7 @@ function updateMapWithAnnotations(places, checkins, activities){
 				
 				//Add the place thumb, if available
 				var placeImage = Ti.UI.createImageView({
-					image:REMOTE_PLACE_IMAGES + places[i].thumb,
+					image:places[i].dog_id ? REMOTE_DOG_IMAGES + places[i].thumb : REMOTE_PLACE_IMAGES + places[i].thumb,
 					defaultImage:IMAGE_PATH+'common/default_place_photo.png',
 					zIndex:2,
 					top:3

@@ -71,6 +71,9 @@ var FEED_CHECKIN = 7;
 //Remove error messages after a while
 var ERROR_MSG_REMOVE_TIMEOUT = 1500;
 
+//Remove error messages after a while
+var RESET_PASSWORD_SUCCESS = 'reset successfull';
+
 //SMS invite text message
 var INVITE_SMS_MSG = 'Hey there, join me on Dogsquare!';
 //Facebook invite message

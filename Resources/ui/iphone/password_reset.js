@@ -119,6 +119,11 @@ function validatePasswordResetForm(){
 		return false;
 	}
 	
+	if(!isValidEmail(passwordResetFieldEmail.value)){
+		alert(getLocalMessage(MSG_REGISTER_INVALID_EMAIL));
+		return false;
+	}
+	
 	return true;
 }
 
@@ -152,6 +157,8 @@ function resetPasswordOnline(){
 			//Hide progress view
 			progressView.hide();
 			
+			alert(RESET_PASSWORD_SUCCESS);
+			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;
 			var notifications = jsonData.data.count_notifications;
@@ -166,6 +173,8 @@ function resetPasswordOnline(){
 		    
 			//Hide progress view
 			progressView.hide();
+			
+			alert(RESET_PASSWORD_SUCCESS);
 		}
 	};
 	xhr.open('POST',API+'resetPassword');
