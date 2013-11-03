@@ -200,7 +200,7 @@ function createSettingsMenuRow(menu){
 		
 	var icon, label;
 	if(menu == MENU_CHANGE_PASSWORD){
-		icon = IMAGE_PATH+'settings/profile_edit.png';
+		icon = IMAGE_PATH+'settings/Lock_icon.png';
 		label = 'Change password';
 	} else if(menu == MENU_EDIT_PROFILE){
 		icon = IMAGE_PATH+'settings/profile_edit.png';
