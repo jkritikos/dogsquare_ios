@@ -315,6 +315,7 @@ function appendRowInboxViewTableView(date, message){
 	});
 	
 	if(!userThumbCreated) {
+		rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
 		rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId;
 		
 		otherThumbCreated = false;

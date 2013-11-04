@@ -284,7 +284,7 @@ function handleNewContactsTableRows(e){
 	inboxNewContactsTableView.hide();
 	inboxNewChatTableView.show();
 	
-	inboxNewSendToChosenBackgroundView.show();
+	
 	
 	toUserId = e.row.user_id;
 	
@@ -295,6 +295,8 @@ function handleNewContactsTableRows(e){
 	}
 	
 	inboxNewSendToChosenLabel.text = e.row.children[1].text;
+	
+	inboxNewSendToChosenBackgroundView.show();
 	
 	//used setTimeout because sometimes, it wouldn't respond
 	if(inboxNewChatTableView.data.length > 0){
@@ -434,6 +436,7 @@ function populateInboxNewChatTableView(mObj, userId){
 		
 		if(mObj[i].my_message == 0) {
 			if(!inboxNewOtherThumbCreated) {
+				rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
 				rowMessageProfileImage.image = API+'photo?user_id=' + userId;
 				rowMessageProfileImage.left = 10;
 				
@@ -451,6 +454,7 @@ function populateInboxNewChatTableView(mObj, userId){
 			senderInboxViewMessageBox.backgroundColor = UI_COLOR;
 			
 			if(!inboxNewUserThumbCreated) {
+				rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
 				rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId;
 				rowMessageProfileImage.right = 10;
 				
