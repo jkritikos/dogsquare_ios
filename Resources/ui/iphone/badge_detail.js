@@ -18,14 +18,14 @@ function buildBadgeDetailView(id, awardBadge, badgeFlag){
 		var badgeDetailTitleBar = Ti.UI.createView({
 			backgroundColor:'white',
 			top:10,
-			height:23
+			height:30
 		});
 		badgeDetailBackground.add(badgeDetailTitleBar);
 		
 		var badgeDetailTitleLabel = Titanium.UI.createLabel({
 			text:'The ' + badgeObj.title +' badge',
 			color:'black',
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:20, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		badgeDetailTitleBar.add(badgeDetailTitleLabel);
 		
@@ -34,8 +34,8 @@ function buildBadgeDetailView(id, awardBadge, badgeFlag){
 			color:'black',
 			textAlign:'center',
 			width:253,
-			top:40,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			top:50,
+			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		badgeDetailBackground.add(badgeDetailDescriptionLabel);
 		

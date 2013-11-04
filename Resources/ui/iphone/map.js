@@ -314,12 +314,10 @@ function handleMapAnnotationClick(e){
 	var source = e.clicksource;
 	var category_id = annotation.category_id;
 	
-	Ti.API.info('annotation clicked, source is '+source);
-	
 	if(source == 'rightButton'){
 		if(annotation.place_id && category_id != FILTER_LOST_DOG){
 			var placeId = annotation.place_id;
-			var placeTitle = annotation.title;
+			var placeTitle = annotation.place_title ? annotation.place_title : annotation.title;
 			
 			Ti.include('ui/iphone/place_view.js');
 			
@@ -829,6 +827,9 @@ function updateMapWithAnnotations(places, checkins, activities){
 				defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 				width:50,
 				height:50,
+				borderRadius:25,
+				borderWidth:2,
+				borderColor:'#f9bf30',
 				zIndex:2,
 				top:10,
 				left:13
@@ -844,7 +845,8 @@ function updateMapWithAnnotations(places, checkins, activities){
 				animate:false,
 				customView:customPin2,
 				rightButton:IMAGE_PATH+'map/arrow_icon.png',
-				place_id:checkins[i].place_id
+				place_id:checkins[i].place_id,
+				place_title:checkins[i].place_name
 			});
 			
 			annotationArray.push(mapAnnotations);
@@ -897,7 +899,7 @@ function updateMapWithAnnotations(places, checkins, activities){
 			//Only proceed if we havent already added a checkin for the same place
 			if(placesAdded.indexOf(places[i].id) == -1){
 				var customPin2 = Ti.UI.createView({
-					backgroundImage:IMAGE_PATH+'map/pin_user.png',
+					backgroundImage:places[i].dog_id ? IMAGE_PATH+'map/pin_user_red.png' : IMAGE_PATH+'map/pin_user.png',
 					width:76,
 					height:86
 				});
@@ -908,7 +910,7 @@ function updateMapWithAnnotations(places, checkins, activities){
 					defaultImage:IMAGE_PATH+'common/default_place_photo.png',
 					borderRadius:30,
 					borderWidth:2,
-					borderColor:'#f9bf30',
+					borderColor:places[i].dog_id ? '#ec1818' : '#f9bf30',
 					zIndex:2,
 					top:3
 				});
