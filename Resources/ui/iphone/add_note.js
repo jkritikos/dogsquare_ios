@@ -568,6 +568,12 @@ function updateNoteView(nObj, id){
 function doSaveNoteOnline(){
 	Ti.API.info('doSaveNoteOnline() called with date '+noteObject.date+ ' and completed flag '+noteObject.completed+ ' and remind flag '+noteObject.remind_flag); 	
 	
+	//progress view
+	var progressView = new ProgressView({window:addNoteView});
+	progressView.show({
+		text:"Saving..."
+	});
+	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
@@ -582,6 +588,11 @@ function doSaveNoteOnline(){
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			//var date = new Date(jsonData.data.date * 1000);
 			//noteObject.date = date;
+			
+			//Show success
+			progressView.change({
+		        success:true
+		    });
 			
 			//Save the entire date object
 			noteObject.date = noteObject.dateObject;
@@ -602,6 +613,9 @@ function doSaveNoteOnline(){
 			if(noteObject.remind_flag == 1 && noteObject.completed == 0){
 				scheduleNotification(noteObject.title, noteObject.dateObject, noteObject.note_id);
 			}
+			
+			//Hide message and close register window
+			progressView.hide();
 			
 			navController.close(openWindows[openWindows.length - 1]);
 			

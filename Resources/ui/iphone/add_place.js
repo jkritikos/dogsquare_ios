@@ -396,6 +396,12 @@ function handleAddPlaceSaveButton(){
 function doSavePlaceOnline(pObj){
 	Ti.API.info('doSavePlaceOnline() called with userObject='+JSON.stringify(userObject) + ' and place '+JSON.stringify(pObj)); 	
 	
+	//progress view
+	var progressView = new ProgressView({window:addPlaceWindow});
+	progressView.show({
+		text:"Saving..."
+	});
+	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
@@ -409,8 +415,17 @@ function doSavePlaceOnline(pObj){
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			Ti.API.info('doSavePlaceOnline() got back place id from server '+jsonData.data.place_id);
+			
+			//Show success
+			progressView.change({
+		        success:true
+		    });
+			
 			//Add the server place id to the object
 			pObj.place_id = jsonData.data.place_id;
+			
+			//Hide message and close register window
+			progressView.hide();
 			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;
