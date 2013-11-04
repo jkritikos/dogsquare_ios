@@ -31,7 +31,7 @@ var timestampPrevious = 0;
 var tick = 0;
 
 function buildRunView(){
-	var iphone5Offset = 30;
+	var iphone5Offset = 40;
 	
 	//Reset cronometer
 	horas = 0, minutos = 0, segundos = 0, total_seconds = 0;

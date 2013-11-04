@@ -158,11 +158,6 @@ function createCenterNavWindow(){
 	if(userObject.userId){
 		Ti.include('profile.js');
 		
-		//Allow non-facebook users to edit their profile
-		if(!userObject.facebook_id){
-			navController.getWindow().rightNavButton = profileRightNavButton;
-		}
-		
 		navController.getWindow().add(viewProfile);
 		navController.getWindow().setTitle(userObject.name);
 	}

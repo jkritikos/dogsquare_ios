@@ -983,7 +983,7 @@ function handlePhotoSelection(){
 			
 			//Jpeg compression module
 			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
-			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setCompressSize(100000);
 			jpgcompressor.setWorstCompressQuality(0.40);
 			
 			var compressedImage = jpgcompressor.compress(image);
@@ -1033,7 +1033,7 @@ function handleCameraSelection(){
 			
 			//Jpeg compression module
 			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
-			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setCompressSize(100000);
 			jpgcompressor.setWorstCompressQuality(0.40);
 			
 			var compressedImage = jpgcompressor.compress(image);

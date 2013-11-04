@@ -267,6 +267,8 @@ profileStartButton.addEventListener('click', function(){
 	});
 	
 	runWindow.setLeftNavButton(runBackButton);
+	runWindow.setRightNavButton(rightBtn);
+	
 	runBackButton.addEventListener("click", handleRunBackButton);
 	
 	runWindow.add(buildRunView());
@@ -573,7 +575,7 @@ function profilePhotoTakeNew(){
 			
 			//Jpeg compression module
 			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
-			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setCompressSize(100000);
 			jpgcompressor.setWorstCompressQuality(0.40);
 			
 			var compressedImage = jpgcompressor.compress(image);
@@ -627,7 +629,7 @@ function profilePhotoChooseExisting(){
 			
 			//Jpeg compression module
 			var jpgcompressor = require('com.sideshowcoder.jpgcompressor');
-			jpgcompressor.setCompressSize(200000);
+			jpgcompressor.setCompressSize(100000);
 			jpgcompressor.setWorstCompressQuality(0.40);
 			
 			var compressedImage = jpgcompressor.compress(image);

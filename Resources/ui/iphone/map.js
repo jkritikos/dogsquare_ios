@@ -29,10 +29,6 @@ var mapSearchLastValue = "";
 var mapSearchFilterData = [];
 var mapRegion = null;
 
-//Map coordinates
-var mapLatitude = null;
-var mapLongitude = null;
-
 var CLICKED_FILTER = null;
 
 //Updates the map location until accurate enough
@@ -66,9 +62,17 @@ function updateLocationOnMap(){
 		mapview.setLocation(mapRegion); 
 		
 		//Stop location tracking once the accuracy is ok
-		if(accuracy <= 15){
+		if(accuracy <= 10){
 			Ti.API.info('Map stopping location tracking');
 			Titanium.Geolocation.removeEventListener('location',updateLocationOnMap);
+			
+			if(CLICKED_FILTER == null){
+				//Get all nearby places
+				getPlacesByFilterOnline(null, e.coords.latitude, e.coords.longitude);
+			} else{
+				//get places by filter
+				getPlacesByFilterOnline(CLICKED_FILTER, e.coords.latitude, e.coords.longitude);
+			}
 		}
 	});
 }
@@ -86,9 +90,7 @@ function buildMapView(windowMode){
 			Ti.API.error('map.js : geo - position' + e.error); 
 			return;
 		} 
-		 
-		mapLatitude = e.coords.latitude; 
-		mapLongitude = e.coords.longitude; 
+		  
 		var accuracy = e.coords.accuracy; 
 		var timestamp = e.coords.timestamp;
 		
@@ -100,12 +102,12 @@ function buildMapView(windowMode){
 		//Persist our location for use in other views
 		saveUserObject(locationObject); 
 		 
-		Ti.API.info('Got position lat '+mapLatitude+' lon '+mapLongitude+' with accuracy '+accuracy);
+		Ti.API.info('Got position lat '+e.coords.latitude+' lon '+e.coords.longitude+' with accuracy '+accuracy);
 		 
 		//map region object
 		mapRegion = {
-			latitude: mapLatitude,
-			longitude: mapLongitude,
+			latitude: e.coords.latitude,
+			longitude: e.coords.longitude,
 			animate:true,
 			latitudeDelta:0.003,
 			longitudeDelta:0.003
@@ -113,7 +115,7 @@ function buildMapView(windowMode){
 			
 		mapview.setLocation(mapRegion);
 		
-		mapview.addEventListener('regionChanged', handleMapViewChange);
+		//mapview.addEventListener('regionChanged', handleMapViewChange);
 	});
 	
 	viewMapTargetMode = windowMode;
@@ -208,7 +210,7 @@ function buildMapView(windowMode){
 	viewMap.add(mapSearchCategoriesBackground);
 	
 	mapCheckInButton = Ti.UI.createButton({
-		backgroundImage:IMAGE_PATH+'map/pin_checkIn.png',
+		backgroundImage:IMAGE_PATH+'map/pin_checkIn_newC.png',
 		bottom:0,
 		width:67,
 		height:67,
@@ -282,18 +284,15 @@ function buildMapView(windowMode){
 }
 
 function handleMapViewChange(e){
-
-	mapLatitude = e.latitude; 
-	mapLongitude = e.longitude; 
 	var accuracy = e.accuracy; 
 	var timestamp = e.timestamp;
 	
-	Ti.API.info('MAP REGION CHANGE EVENT latitude:' + mapLatitude + ' and longitude:' + mapLongitude);
+	Ti.API.info('MAP REGION CHANGE EVENT latitude:' + e.latitude + ' and longitude:' + e.longitude);
 	
 	//map region object
 	var mapRegion = {
-		latitude: mapLatitude,
-		longitude: mapLongitude,
+		latitude: e.latitude,
+		longitude: e.longitude,
 		animate:true
 	};
 		
@@ -301,10 +300,10 @@ function handleMapViewChange(e){
 	
 	if(CLICKED_FILTER == null){
 		//Get all nearby places
-		getPlacesByFilterOnline(null);
+		getPlacesByFilterOnline(null, e.latitude, e.longitude);
 	}else{
 		//get places by filter
-		getPlacesByFilterOnline(CLICKED_FILTER);
+		getPlacesByFilterOnline(CLICKED_FILTER, e.latitude, e.longitude);
 	}
 	
 }
@@ -314,6 +313,8 @@ function handleMapAnnotationClick(e){
 	var annotation = e.annotation;
 	var source = e.clicksource;
 	var category_id = annotation.category_id;
+	
+	Ti.API.info('annotation clicked, source is '+source);
 	
 	if(source == 'rightButton'){
 		if(annotation.place_id && category_id != FILTER_LOST_DOG){
@@ -598,8 +599,9 @@ function handleMapSearchCategoriesRows(e){
 		Ti.API.info('MapTable click on a FILTER');
 		var filter = e.row.filter;
 		CLICKED_FILTER = filter;
-		getPlacesByFilterOnline(filter);
+		getPlacesByFilterOnline(filter, userObject.lat, userObject.lon);
 	} else if(e.row.searchResultId){
+		CLICKED_FILTER = null;
 		Ti.API.info('MapTable click on a RESULT');
 		
 		var placeId = e.row.searchResultId;
@@ -735,9 +737,9 @@ function showMapSearchResults(data){
 }
 
 //get places by filter 
-function getPlacesByFilterOnline(catId){
+function getPlacesByFilterOnline(catId, mapLatitude, mapLongitude){
 	var currentUser = getUserObject();
-	Ti.API.info('getPlacesByFilterOnline() called for user '+currentUser.userId+' with lat '+mapLatitude+' and lon '+mapLongitude);
+	Ti.API.info('getPlacesByFilterOnline() called for user '+currentUser.userId+' with category '+catId+' lat '+mapLatitude+' and lon '+mapLongitude);
 	
 	var dogBreeds = [];
 	
