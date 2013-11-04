@@ -135,12 +135,16 @@ function populatecheckinPlacesTableView(places){
 				width:'100%',
 				backgroundColor:'white',
 				selectedBackgroundColor:'transparent',
-				placeId:places[i].id
+				placeId:places[i].id,
+				dogId:places[i].dog_id,
+				userId:places[i].user_id,
+				categoryId:places[i].category_id,
+				userName:places[i].user_name
 			});
 			
 			//place image
 			var rowPlaceImage = Titanium.UI.createImageView({
-				image:REMOTE_PLACE_IMAGES + places[i].thumb,
+				image:places[i].dog_id ? API+'photo_dog?dog_id='+places[i].dog_id : REMOTE_PLACE_IMAGES + places[i].thumb,
 				defaultImage:IMAGE_PATH+'common/default_place_photo.png',
 				left:10,
 				top:5,
@@ -225,36 +229,104 @@ function populatecheckinPlacesTableView(places){
 function handleCheckinPlacesTableViewRow(e){
 	var placeId = e.row.placeId;
 	var placeTitle = e.row.children[0].text;
+	var categoryId = e.row.categoryId;
 	
-	Ti.include('ui/iphone/place_view.js');
+	if(categoryId == FILTER_LOST_DOG){
+		var userId = e.row.userId;
+		
+		if(userId != userObject.userId){
+			Ti.include('ui/iphone/profile_other.js');
+			
+			var user_name = e.row.userName;
+			
+			var profileOtherView = buildProfileOtherView(userId, user_name);
 	
-	var checkinPlaceWindow = Ti.UI.createWindow({
-		backgroundColor:UI_BACKGROUND_COLOR,
-		translucent:false,
-		//barImage:IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR
-	});
+			var profileOtherWindow = Ti.UI.createWindow({
+				backgroundColor:'white',
+				//barImage:IMAGE_PATH+'common/bar.png',
+				translucent:false,
+				barColor:UI_COLOR,
+				title:user_name
+			});
+			
+			//back button & event listener
+			var profileOtherBackButton = Ti.UI.createButton({
+			    backgroundImage: IMAGE_PATH+'common/back_button.png',
+			    width:48,
+			    height:33
+			});
+			
+			profileOtherWindow.setLeftNavButton(profileOtherBackButton);
+			profileOtherBackButton.addEventListener("click", function() {
+			    navController.close(profileOtherWindow);
+			});
+			
+			profileOtherWindow.add(profileOtherView);
+			
+			openWindows.push(profileOtherWindow);
+			navController.open(profileOtherWindow);
+		} else{
+			Ti.include('ui/iphone/profile.js');
 	
-	//back button
-	var checkinPlaceBackButton = Ti.UI.createButton({
-	    backgroundImage: IMAGE_PATH+'common/back_button.png',
-	    width:48,
-	    height:33
-	});
+			var profileWindow = Ti.UI.createWindow({
+				backgroundColor:'white',
+				//barImage:IMAGE_PATH+'common/bar.png',
+				translucent:false,
+				barColor:UI_COLOR,
+				title:userObject.name
+			});
+			
+			//back button & event listener
+			var profileBackButton = Ti.UI.createButton({
+			    backgroundImage: IMAGE_PATH+'common/back_button.png',
+			    width:48,
+			    height:33
+			});
+			
+			profileWindow.setLeftNavButton(profileBackButton);
+			profileBackButton.addEventListener("click", function() {
+			    navController.close(profileWindow);
+			});
+			
+			profileWindow.add(viewProfile);
+			
+			openWindows.push(profileWindow);
+			navController.open(profileWindow);
+		}
+		
+	} else {
+		Ti.include('ui/iphone/place_view.js');
 	
-	checkinPlaceWindow.setLeftNavButton(checkinPlaceBackButton);
+		var checkinPlaceWindow = Ti.UI.createWindow({
+			backgroundColor:UI_BACKGROUND_COLOR,
+			translucent:false,
+			//barImage:IMAGE_PATH+'common/bar.png',
+			barColor:UI_COLOR
+		});
+		
+		//back button
+		var checkinPlaceBackButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'common/back_button.png',
+		    width:48,
+		    height:33
+		});
+		
+		checkinPlaceWindow.setLeftNavButton(checkinPlaceBackButton);
+		
+		checkinPlaceBackButton.addEventListener("click", function() {
+		    navController.close(checkinPlaceWindow);
+		});
+		
+		checkinPlaceWindow.setTitle(placeTitle);
+		var checkinPlaceView = buildCheckinPlaceView(placeId);
+		
+		checkinPlaceWindow.add(checkinPlaceView);
+		openWindows.push(checkinPlaceWindow);
+		//openWindows[1] = checkinPlaceWindow;
+		navController.open(checkinPlaceWindow);
+	}
 	
-	checkinPlaceBackButton.addEventListener("click", function() {
-	    navController.close(checkinPlaceWindow);
-	});
 	
-	checkinPlaceWindow.setTitle(placeTitle);
-	var checkinPlaceView = buildCheckinPlaceView(placeId);
-	
-	checkinPlaceWindow.add(checkinPlaceView);
-	openWindows.push(checkinPlaceWindow);
-	//openWindows[1] = checkinPlaceWindow;
-	navController.open(checkinPlaceWindow);
 }
 
 function handleNearbyPlacesButton(e){
