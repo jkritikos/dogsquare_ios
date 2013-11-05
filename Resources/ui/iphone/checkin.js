@@ -39,7 +39,7 @@ var checkinTitleBar = Ti.UI.createButton({
 
 //checkin title label of the bar
 var checkinBarTitleLabel = Titanium.UI.createLabel({ 
-	text:'Nearby places',
+	text:'Near me',
 	color:'white',
 	top:15,
 	height:20,

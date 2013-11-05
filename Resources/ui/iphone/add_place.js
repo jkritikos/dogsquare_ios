@@ -3,7 +3,7 @@ var addPlaceWindow = Ti.UI.createWindow({
 	//barImage:IMAGE_PATH+'common/bar.png',
 	translucent:false,
 	barColor:UI_COLOR,
-	title:'Add Place'
+	title:'Add Place / Incident'
 });
 
 //image view for previewing the place image

@@ -158,7 +158,7 @@ leftTableView.addEventListener("click", function(e){
 			Ti.include('ui/iphone/feeds.js');
 			buildFeedsView();
 			navController.getWindow().add(viewFeeds);
-			navController.getWindow().setTitle('Feed');
+			navController.getWindow().setTitle('Dog Feed');
 			break;
 		case MENU_PROFILE:
 			CURRENT_VIEW = VIEW_PROFILE;
@@ -199,7 +199,7 @@ leftTableView.addEventListener("click", function(e){
 			Ti.include('ui/iphone/passport.js');
 			buildPassportView();
 			navController.getWindow().add(viewPassport);
-			navController.getWindow().setTitle('Passport');
+			navController.getWindow().setTitle('Health Book');
 			break;
 		
 		case MENU_FIND_FRIENDS:
@@ -350,7 +350,7 @@ function createLeftMenuRow(menuItem){
 	var icon, label;
 	if(menuItem == MENU_FEED){
 		icon = IMAGE_PATH+'menu_left/newsFeed_menu.png';
-		label = 'Feed';
+		label = 'Dog Feed';
 	} else if(menuItem == MENU_PROFILE){
 		icon = IMAGE_PATH+'menu_left/Home_icon.png';
 		label = 'Profile';
@@ -365,7 +365,7 @@ function createLeftMenuRow(menuItem){
 		label = 'Inbox';
 	} else if(menuItem == MENU_PASSPORT){
 		icon = IMAGE_PATH+'menu_left/Passport_icon.png';
-		label = 'Passport';
+		label = 'Health Book';
 	} else if(menuItem == MENU_FIND_FRIENDS){
 		icon = IMAGE_PATH+'menu_left/Friends_icon.png';
 		label = 'Find friends';

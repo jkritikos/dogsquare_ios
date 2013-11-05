@@ -809,6 +809,17 @@ function updateMapWithAnnotations(places, checkins, activities){
 	mapview.annotations = [];
 	var placesAdded = [];
 	
+	//Get total counts for checkins
+	var checkinTotals = [];
+	for(i=0;i<checkins.length;i++){
+		if(!checkins[i].totals){
+			checkins[i].totals = 1;
+		} else {
+			checkins[i].totals++;
+		}
+		Ti.API.info('Total checkins for place '+checkins[i].place_id+' = '+checkins[i].totals);
+	}
+	
 	//Show checkins
 	if(checkins != null && checkins.length != 0){
 		for(i=0;i<checkins.length;i++){

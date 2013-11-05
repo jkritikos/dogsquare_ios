@@ -374,7 +374,7 @@ function getBadgeDetails(id){
 	} else if(id == 7){
 		badge = {
 			title:'Savior',
-			description:'Unlocked when ￼tagging a homeless dog.',
+			description:'Unlocked when tagging a homeless dog.',
 			award:'You are an Angel for the homeless! Adopt one you\'re gonna lovit!'
 		};
 	} else if(id == 8){

@@ -65,6 +65,7 @@ function buildCheckinPlaceView(placeId){
 		
 		//photo image
 		checkinPlacePhotoImage = Ti.UI.createImageView({
+			defaultImage:IMAGE_PATH+'common/white_top_default.png',
 			width:320,
 			height:320,
 			top:120,
@@ -144,7 +145,7 @@ function buildCheckinPlaceView(placeId){
 			width:'auto',
 			top:47,
 			right:223,
-			color:'#6f6262',
+			color:'#f99e30',
 			font:{fontSize:17, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		checkinPlaceButtonBarView.add(checkinNumberLabel);
@@ -157,7 +158,7 @@ function buildCheckinPlaceView(placeId){
 			width:'auto',
 			top:48,
 			right:150,
-			color:'#6f6262',
+			color:'#f99e30',
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		checkinPlaceButtonBarView.add(checkinLabel); 
@@ -170,7 +171,7 @@ function buildCheckinPlaceView(placeId){
 			width:'auto',
 			right:100,
 			top:47,
-			color:'#6f6262',
+			color:'#f99e30',
 			font:{fontSize:17, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		checkinPlaceButtonBarView.add(checkinNumberOfHeartsLabel);
@@ -938,6 +939,7 @@ function updateCheckinPlace(placeObj, checkins, likes){
             				  latitudeDelta:0.01, longitudeDelta:0.01};
     //update other info
 	checkinPlaceMap.longitude = placeObj.longitude;
+	checkinPlacePhotoImage.defaultImage = IMAGE_PATH+'common/white_top_default.png';
     checkinPlacePhotoImage.image = REMOTE_PLACE_IMAGES + placeObj.photo;
     checkinPlaceTitleLabel.text = placeObj.name;
     checkinPlaceDescriptionLabel.text = placeObj.category;

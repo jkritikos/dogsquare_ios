@@ -233,7 +233,7 @@ function handleNotificationsTableView(e){
 	} else if(notType == NOTIFICATION_AWARD_BADGE){
 		Ti.include('ui/iphone/badge_detail.js');
 
-		buildBadgeDetailView(badgeId, true);
+		buildBadgeDetailView(badgeId, true, true);
 	
 		notificationRowWindow.add(viewBadgeDetail);
 		notificationRowWindow.setTitle(getBadgeDetails(badgeId).title);
