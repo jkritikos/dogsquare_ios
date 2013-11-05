@@ -619,6 +619,8 @@ function doSaveNoteOnline(){
 			
 			navController.close(openWindows[openWindows.length - 1]);
 			
+			passportTableView.show();
+			
 			passportTableView.data = [];
 
 			var noteData = null;

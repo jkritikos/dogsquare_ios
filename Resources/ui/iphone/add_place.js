@@ -127,22 +127,22 @@ var sepparatorOffset = 0;
 for(var i=0; i<2; i++) {
 	//sepparator
 	var addPlaceSepparator = Ti.UI.createView({
-		backgroundColor:'dcdcdc',
+		backgroundColor:'CCCCCC',
 		width:320,
-		height:1,
+		height:2,
 		zIndex:2,
-		top:29 + sepparatorOffset
+		top:40 + sepparatorOffset
 	});
 	addPlaceFieldsBackground.add(addPlaceSepparator);
 	
-	sepparatorOffset += 30;
+	sepparatorOffset += 41;
 }
 
 //text field name
 var addPlaceTxtFieldName = Ti.UI.createTextField({
 	top:0,
 	width:294,
-	height:28,
+	height:39,
 	left:13,
 	zIndex:2,
 	returnKeyType: Ti.UI.RETURNKEY_NEXT,
@@ -161,7 +161,7 @@ var addPlaceTxtFieldNameLabel = Ti.UI.createLabel({
 	textAlign:'left',
 	left:0,
 	width:80,
-	height:30,
+	height:39,
 	zIndex:2,
 	font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 });
@@ -170,8 +170,8 @@ addPlaceTxtFieldName.add(addPlaceTxtFieldNameLabel);
 //category background
 var addPlaceCategoryBackground = Ti.UI.createView({
 	backgroundColor:'transparent',
-	height:30,
-	top:28,
+	height:39,
+	top:42,
 	zIndex:2
 });
 addPlaceFieldsBackground.add(addPlaceCategoryBackground);
@@ -184,7 +184,7 @@ var addPlaceCategoryLabel = Ti.UI.createLabel({
 	textAlign:'left',
 	left:13,
 	width:180,
-	height:30,
+	height:39,
 	zIndex:2,
 	font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 });
@@ -193,7 +193,6 @@ addPlaceCategoryBackground.add(addPlaceCategoryLabel);
 //button to show 
 var addPlaceCategoryButton = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'add_place/arrow.png',
-	top:10,
 	right:13,	
     width:13,
     height:13
@@ -273,7 +272,7 @@ function handleTextFieldNameChange(){
 
 //handle textfield focus
 function handleTextFieldNameFocus(){
-	addPlaceFieldsBackground.animate({bottom:122, duration:200});
+	addPlaceFieldsBackground.animate({bottom:132, duration:200});
 }
 
 //handle textfield blur

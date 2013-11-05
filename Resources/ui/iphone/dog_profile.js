@@ -402,7 +402,12 @@ function dogProfilePhotoView(){
 		
 	Ti.include('ui/iphone/photo_view.js');
 	buildPhotoView(image);
-	photoViewWindow.open();
+	
+	if(iOS7){
+		photoNavWin.open();
+	}else{
+		photoViewWindow.open();
+	}
 }
 
 //Gets an accurate position of the current location and posts the lost dog event

@@ -363,6 +363,25 @@ function createLeftMenuRow(menuItem){
 	} else if(menuItem == MENU_INBOX){
 		icon = IMAGE_PATH+'menu_left/Inbox_icon.png';
 		label = 'Inbox';
+		
+		var inboxCountBackground = Titanium.UI.createImageView({
+			image:IMAGE_PATH+'menu_left/input_numbers_field.png',
+			right:82,
+			height:28,
+			width:30,
+			bottom:10
+		});
+		row.add(inboxCountBackground);
+		inboxCountBackground.hide();
+		
+		var inboxCountLabel = Titanium.UI.createLabel({
+			width:'auto',
+			height:15,
+			bottom:7,
+			color:'white',
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		inboxCountBackground.add(inboxCountLabel);
 	} else if(menuItem == MENU_PASSPORT){
 		icon = IMAGE_PATH+'menu_left/Passport_icon.png';
 		label = 'Health Book';
@@ -393,7 +412,7 @@ function createLeftMenuRow(menuItem){
 			width:'auto',
 			height:15,
 			bottom:7,
-			color:'#ab7b04',
+			color:'white',
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		notificationCountBackground.add(notificationCountLabel);
@@ -744,6 +763,8 @@ function updateLeftMenuCounts(cFollowers, cInbox, cNotifications){
 	
 	var notifBackground = leftTableView.data[0].rows[5].children[0];
 	var notifLabel = leftTableView.data[0].rows[5].children[0].children[0];
+	var inboxBackground = leftTableView.data[0].rows[4].children[0];
+	var inboxLabel = leftTableView.data[0].rows[4].children[0].children[0];
 	var followersLabel = leftTableView.data[0].rows[0].children[1];
 	
 	//set badge icon
@@ -763,6 +784,17 @@ function updateLeftMenuCounts(cFollowers, cInbox, cNotifications){
 		}, 100);
 	}else{
 		notifBackground.hide();
+	}
+	
+	if(cInbox != 0){
+		inboxLabel.text = cInbox;
+		//need to put a setTimeout because it searches the label width while it is not yet created
+		var t = setTimeout(function(){
+			inboxBackground.width = inboxLabel.toImage().width + 20;
+			inboxBackground.show();
+		}, 100);
+	}else{
+		inboxBackground.hide();
 	}
 }
 
