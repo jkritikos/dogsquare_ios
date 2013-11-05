@@ -774,7 +774,7 @@ function updateActivityView(activityObj){
 	viewActivityLikesNumberLabel.text = activityObj.likes;
 	
     
-    if(activityObj.liked == null){
+    if(activityObj.liked == 0){
 		viewActivityHeartImage.image = IMAGE_PATH+'common/best_icon_default.png';
 		viewActivityHeartImage.toggle = false;
 	} else{

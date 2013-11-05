@@ -823,23 +823,23 @@ function updateMapWithAnnotations(places, checkins, activities){
 	 		placesAdded.push(checkins[i].place_id);
 	 		
 	 		var customPin2 = Ti.UI.createView({
-				backgroundImage:IMAGE_PATH+'map/pin_user.png',
-				width:76,
-				height:86
+				backgroundImage:IMAGE_PATH+'map/pin_user_small.png',
+				width:38,
+				height:43
 			});
 			
 			//Add the user thumb, if available
 			var placeImage = Ti.UI.createImageView({
 				image:getUserPhoto(checkins[i].thumb),
 				defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
-				width:50,
-				height:50,
-				borderRadius:25,
+				width:25,
+				height:25,
+				borderRadius:12,
 				borderWidth:2,
 				borderColor:'#f9bf30',
 				zIndex:2,
-				top:10,
-				left:13
+				top:5,
+				left:6
 			});
 			
 			customPin2.add(placeImage);
@@ -865,20 +865,23 @@ function updateMapWithAnnotations(places, checkins, activities){
 		for(i=0;i<activities.length;i++){
 	 		
 	 		var customPin2 = Ti.UI.createView({
-				backgroundImage:IMAGE_PATH+'map/pin_user.png',
-				width:76,
-				height:86
+				backgroundImage:IMAGE_PATH+'map/pin_user_small.png',
+				width:38,
+				height:43
 			});
 			
 			//Add the user thumb, if available
 			var placeImage = Ti.UI.createImageView({
 				image:getUserPhoto(activities[i].thumb),
 				defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
-				width:50,
-				height:50,
+				width:25,
+				height:25,
+				borderRadius:12,
+				borderWidth:2,
+				borderColor:'#f9bf30',
 				zIndex:2,
-				top:10,
-				left:13
+				top:5,
+				left:6
 			});
 			
 			customPin2.add(placeImage);
@@ -906,20 +909,22 @@ function updateMapWithAnnotations(places, checkins, activities){
 			//Only proceed if we havent already added a checkin for the same place
 			if(placesAdded.indexOf(places[i].id) == -1){
 				var customPin2 = Ti.UI.createView({
-					backgroundImage:places[i].dog_id ? IMAGE_PATH+'map/pin_user_red.png' : IMAGE_PATH+'map/pin_user.png',
-					width:76,
-					height:86
+					backgroundImage:places[i].dog_id ? IMAGE_PATH+'map/pin_user_red_small.png' : IMAGE_PATH+'map/pin_user_small.png',
+					width:38,
+					height:43
 				});
 				
 				//Add the place thumb, if available
 				var placeImage = Ti.UI.createImageView({
 					image:places[i].dog_id ? REMOTE_DOG_IMAGES + places[i].thumb : REMOTE_PLACE_IMAGES + places[i].thumb,
 					defaultImage:IMAGE_PATH+'common/default_place_photo.png',
-					borderRadius:30,
+					width:25,
+					height:25,
+					borderRadius:12,
 					borderWidth:2,
 					borderColor:places[i].dog_id ? '#ec1818' : '#f9bf30',
 					zIndex:2,
-					top:3
+					top:5
 				});
 				
 				customPin2.add(placeImage);
