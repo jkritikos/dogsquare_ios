@@ -808,21 +808,17 @@ function updateMapWithAnnotations(places, checkins, activities){
 	var annotationArray = [];
 	mapview.annotations = [];
 	var placesAdded = [];
-	
-	//Get total counts for checkins
-	var checkinTotals = [];
-	for(i=0;i<checkins.length;i++){
-		if(!checkins[i].totals){
-			checkins[i].totals = 1;
-		} else {
-			checkins[i].totals++;
-		}
-		Ti.API.info('Total checkins for place '+checkins[i].place_id+' = '+checkins[i].totals);
-	}
+	var checkinTitle = '';
 	
 	//Show checkins
 	if(checkins != null && checkins.length != 0){
 		for(i=0;i<checkins.length;i++){
+	 		
+	 		if(checkins[i].total_checkins == 1){
+	 			checkinTitle = checkins[i].user_name;
+	 		} else {
+	 			checkinTitle = checkins[i].total_checkins + ' people';
+	 		}
 	 		
 	 		placesAdded.push(checkins[i].place_id);
 	 		
@@ -851,8 +847,8 @@ function updateMapWithAnnotations(places, checkins, activities){
 	 		var mapAnnotations = Titanium.Map.createAnnotation({
 				latitude:checkins[i].lat,
 				longitude:checkins[i].lon,
-				title:checkins[i].user_name,
-				subtitle:'Checked in at '+checkins[i].place_name,
+				title:checkinTitle,
+				subtitle:'checked in at '+checkins[i].place_name,
 				animate:false,
 				customView:customPin2,
 				rightButton:IMAGE_PATH+'map/arrow_icon.png',
