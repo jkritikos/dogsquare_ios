@@ -434,7 +434,7 @@ function doSavePlaceOnline(pObj){
 			
 			//Open the place view
 			Ti.include('ui/iphone/place_view.js');
-			var placeCheckinView = buildCheckinPlaceView(jsonData.data.place_id);
+			var placeCheckinView = buildCheckinPlaceView(jsonData.data.place_id, true);
 			var placeCheckinWindow = Ti.UI.createWindow({
 				backgroundColor:'white',
 				//barImage:IMAGE_PATH+'common/bar.png',

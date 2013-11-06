@@ -34,6 +34,7 @@ var MSG_NO_MUTUAL_FOLLOWERS = 32;
 var MSG_NOT_AVAILABLE_WITH_FACEBOOK = 33;
 var MSG_NO_INTERNET_CONNECTION = 34;
 var MSG_FACEBOOK_ERROR = 35;
+var MSG_APP_REMINDER = 36;
 
 //Error messages (Server)
 var ERROR_EMAIL_TAKEN = -2;
@@ -157,7 +158,7 @@ function getFeedMessage(obj){
 		
 		msg = obj.Feed.user_from_name + ' commented on '+targetUser+' activity';
 	} else if(obj.Feed.type_id == FEED_CHECKIN){
-		msg = obj.Feed.user_from_name + ' checked in at ' + obj.Feed.target_place_name;
+		msg = obj.Feed.user_from_name + ' at ' + obj.Feed.target_place_name;
 	}
 	
 	return msg;
@@ -210,7 +211,7 @@ function getLocalMessage(code){
 	} else if(code == MSG_ADD_PLACE_NO_CATEGORY){
 		msg = 'Woof!! Mark the place using the right Category!';
 	} else if(code == MSG_ADD_PLACE_NO_PHOTO){
-		msg = 'Woof!! We need a picture of this place!';
+		msg = 'Woof! We need a picture of this place / incident!';
 	} else if(code == MSG_FIND_FRIENDS_NO_CONTACTS_ACCESS){
 		msg = 'Woof! Dogsquare needs your permission to access your contacts. No worries we are not spying on you!';
 	} else if(code == MSG_CAMERA_PROBLEM){
@@ -253,6 +254,8 @@ function getLocalMessage(code){
 		msg = 'Ooops! There seems to be a problem with your connection to the Internet!';
 	} else if(code == MSG_FACEBOOK_ERROR){
 		msg = 'Ooops! There seems to be a problem with our Facebook access!';
+	} else if(code == MSG_APP_REMINDER){
+		msg = 'LAZY';
 	}
  
 	return msg;

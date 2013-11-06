@@ -544,6 +544,26 @@ function getLastLogin(){
 	return lastLogin;
 }
 
+//Event handler for when the app starts/resumes
+function appLaunchOrResume(){
+	var reminderId = 111;
+	//Cancel the app reminder
+	var canceledCount =  notifyModule.cancelLocalNotificationByKey(reminderId,"APP_REMINDER");
+	Ti.API.info('Cancelled '+canceledCount+' notification for app reminder');
+	
+	//remind us in 5 days
+	var now = new Date();
+	var dueDate = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 5));
+	
+	//Set up a new one
+	notifyModule.scheduleLocalNotification({
+	    alertBody:getLocalMessage(MSG_APP_REMINDER),
+	    alertAction:"get active",
+	    userInfo:{"APP_REMINDER":reminderId,"hello":"world"},
+	    date:dueDate 
+	});	
+}
+
 //Weather retrieval from Yahoo
 var weather = ( function() {
     var api = {};

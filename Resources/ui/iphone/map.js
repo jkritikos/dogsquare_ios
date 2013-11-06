@@ -62,7 +62,7 @@ function updateLocationOnMap(){
 		mapview.setLocation(mapRegion); 
 		
 		//Stop location tracking once the accuracy is ok
-		if(accuracy <= 10){
+		if(accuracy <= 15){
 			Ti.API.info('Map stopping location tracking');
 			Titanium.Geolocation.removeEventListener('location',updateLocationOnMap);
 			
@@ -116,6 +116,7 @@ function buildMapView(windowMode){
 		mapview.setLocation(mapRegion);
 		
 		//mapview.addEventListener('regionChanged', handleMapViewChange);
+		getPlacesByFilterOnline(null, e.coords.latitude, e.coords.longitude);
 	});
 	
 	viewMapTargetMode = windowMode;
@@ -237,7 +238,7 @@ function buildMapView(windowMode){
 			//barImage:IMAGE_PATH+'common/bar.png',
 			translucent:false,
 			barColor:UI_COLOR,
-			title:'Check in'
+			title:'Woof-in'
 		});
 		
 		checkinWindow.setTitle('Check in');
@@ -342,7 +343,7 @@ function handleMapAnnotationClick(e){
 			});
 			
 			checkinPlaceWindow.setTitle(placeTitle);
-			var checkinPlaceView = buildCheckinPlaceView(placeId);
+			var checkinPlaceView = buildCheckinPlaceView(placeId, false);
 			
 			checkinPlaceWindow.add(checkinPlaceView);
 			openWindows.push(checkinPlaceWindow);
@@ -628,7 +629,7 @@ function handleMapSearchCategoriesRows(e){
 		});
 		
 		checkinPlaceWindow.setTitle(placeTitle);
-		var checkinPlaceView = buildCheckinPlaceView(placeId);
+		var checkinPlaceView = buildCheckinPlaceView(placeId, false);
 		
 		checkinPlaceWindow.add(checkinPlaceView);
 		openWindows.push(checkinPlaceWindow);

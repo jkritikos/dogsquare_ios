@@ -10,6 +10,8 @@ var openWindows = [];
 //holds global timers for various async tasks
 var timers = [];
 
+//Local notifications BEFORE dao
+var notifyModule = require('bencoding.localnotify');
 Ti.include('common/dao.js');
 
 var userObject = getUserObject();
@@ -24,8 +26,6 @@ Ti.include('common/translator.js');
 Ti.include("modules/progress.view.js");
 //Date manipulations
 //var momentModule = require('modules/moment.min');
-//Local notifications
-var notifyModule = require('bencoding.localnotify');
 //SMS module
 var smsModule = require("com.omorandi");
 //Left & center windows
@@ -39,5 +39,14 @@ if(!userObject.userId){
 	window.open(); //init the app
 	window.setParallaxAmount(0.3);
 }
+
+//App launch
+appLaunchOrResume();
+
+//App resume
+Titanium.App.addEventListener('resume', function(e){
+	Ti.API.info('APP resumes');
+	appLaunchOrResume();
+});
 
 Ti.include('ui/iphone/run.js');

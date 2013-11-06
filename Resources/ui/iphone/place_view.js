@@ -26,9 +26,11 @@ var placeViewLongitude = null;
 
 var ADD_COMMENT = 1;
 var COMMENT_ROW = 2;
+var viewPlaceWithCheckin = false;
 
-function buildCheckinPlaceView(placeId){
+function buildCheckinPlaceView(placeId, allowCheckin){
 	checkinPlaceId = placeId;
+	viewPlaceWithCheckin = allowCheckin;
 	
 	if(checkinPlaceView == null){
 		Titanium.Geolocation.getCurrentPosition(function(e){
@@ -913,9 +915,10 @@ function updateCheckinPlace(placeObj, checkins, likes){
 	
 	var distance = null;
 	
-	distance = calculateCoordinateDistance(placeObj.latitude,placeObj.longitude, placeViewLatitude,placeViewLongitude);
+	//distance = calculateCoordinateDistance(placeObj.latitude,placeObj.longitude, placeViewLatitude,placeViewLongitude);
 	
-	if(distance < CHECKIN_ALLOWED_DISTANCE){
+	//if(distance < CHECKIN_ALLOWED_DISTANCE){
+	if(viewPlaceWithCheckin){
 		checkinPlaceButton.show();
 		checkinPlaceHeartImage.show();
 		checkinNumberLabel.text = checkins;
