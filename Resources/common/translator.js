@@ -196,7 +196,7 @@ function getLocalMessage(code){
 	} else if(code == MSG_ADD_DOG_NO_MATING){
 		msg = 'Love is in the air.. So is your dog in search for a Mate or not?';
 	} else if(code == MSG_ADD_DOG_NO_PHOTO){
-		msg = 'Pack leader, we need a stunning pic of your doggy!';
+		msg = 'Pack leader, we need a stunning pic of your doggie!';
 	} else if(code == MSG_ADD_NOTE_NO_TITLE){
 		msg = 'Your dog insists that this note should have a tittle!';
 	} else if(code == MSG_ADD_NOTE_NO_DESCRIPTION){

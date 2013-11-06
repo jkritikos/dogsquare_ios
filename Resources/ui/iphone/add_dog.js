@@ -183,7 +183,7 @@ function builAddDogView(windowMode){
 		
 		//Dog Breed textfield label
 		addDogFieldDogBreedHintTextLabel = Ti.UI.createLabel({
-			text:'Dog Breed*',
+			text:'Dog Breed or Stray*',
 			picker:DOG_BREED_PICKER,
 			color:'999999',
 			textAlign:'left',

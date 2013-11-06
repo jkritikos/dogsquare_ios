@@ -197,6 +197,12 @@ function updateDogfuelValues(){
 		var jsonData = JSON.parse(this.responseText);
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
+			//save lookup data
+			saveDogBreeds(jsonData.data.breeds);
+			saveDogfuelRules(jsonData.data.rules);
+			//save place categories
+			savePlaceCategories(jsonData.data.categories);
+			
 			var dogfuelValues = jsonData.data.values;
 			var foundValue = false;
 			var indexToUpdate = 0;

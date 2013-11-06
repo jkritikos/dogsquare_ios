@@ -848,7 +848,7 @@ function updateMapWithAnnotations(places, checkins, activities){
 				latitude:checkins[i].lat,
 				longitude:checkins[i].lon,
 				title:checkinTitle,
-				subtitle:'checked in at '+checkins[i].place_name,
+				subtitle:'@ '+checkins[i].place_name,
 				animate:false,
 				customView:customPin2,
 				rightButton:IMAGE_PATH+'map/arrow_icon.png',

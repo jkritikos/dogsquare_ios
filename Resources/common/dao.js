@@ -16,6 +16,7 @@ if(!PRODUCTION_MODE){
 	//UrbanAirship.master_secret='0louzaRKRLmStWwb0qEHjw';
 	//UrbanAirship.baseurl = 'https://go.urbanairship.com';
 	SERVER = 'http://dogsquare.veladia.com/';
+	//SERVER = 'http://admin.dogsquareapp.com/';
 }
 
 //Determine iPhone5
@@ -779,7 +780,7 @@ function scheduleNotification(title, dueDate, noteId){
 	if(dueDateMinus3 > now){
 		notifyModule.scheduleLocalNotification({
 		    alertBody:title,
-		    alertAction:"Just a test",
+		    alertAction:"view reminder",
 		    userInfo:{"note":noteId,"hello":"world"},
 		    date:dueDateMinus3 
 		});
@@ -792,7 +793,7 @@ function scheduleNotification(title, dueDate, noteId){
 	if(dueDateMinus1 > now){
 		notifyModule.scheduleLocalNotification({
 		    alertBody:title,
-		    alertAction:"Just a test",
+		    alertAction:"view reminder",
 		    userInfo:{"note":noteId,"hello":"world"},
 		    date:dueDateMinus1 
 		});
