@@ -793,8 +793,8 @@ function scheduleNotification(title, dueDate, noteId){
 	Ti.API.info('scheduleNotification called for dueDate '+dueDate);
 	
 	var now = new Date();
-	//Check if 3 days before the dueDate is in the future and schedule the notification
-	var dueDateMinus3 = new Date(dueDate.getTime() - (1000 * 60 * 60 * 24 * 3));
+	//Check if 1 days before the dueDate is in the future and schedule the notification
+	var dueDateMinus3 = new Date(dueDate.getTime() - (1000 * 60 * 60 * 24 * 1));
 	//dueDateMinus3.setDate(dueDate.getDate() - 3);
 	Ti.API.info('scheduleNotification -3 notification is '+dueDateMinus3);
 	if(dueDateMinus3 > now){
@@ -808,8 +808,8 @@ function scheduleNotification(title, dueDate, noteId){
 		Ti.API.info('scheduleNotification NOT scheduling -3 notification for '+dueDateMinus3);
 	}
 	
-	//Check if 1 day1 before the dueDate is in the future and schedule the notification
-	var dueDateMinus1 = new Date(dueDate.getTime() - (1000 * 60 * 60 * 24 * 1));
+	//Check if 1 hour before the dueDate is in the future and schedule the notification
+	var dueDateMinus1 = new Date(dueDate.getTime() - (1000 * 60 * 60 * 1));
 	if(dueDateMinus1 > now){
 		notifyModule.scheduleLocalNotification({
 		    alertBody:title,

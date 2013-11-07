@@ -35,6 +35,7 @@ var MSG_NOT_AVAILABLE_WITH_FACEBOOK = 33;
 var MSG_NO_INTERNET_CONNECTION = 34;
 var MSG_FACEBOOK_ERROR = 35;
 var MSG_APP_REMINDER = 36;
+var MSG_APP_PASSPORT_REMINDER = 37;
 
 //Error messages (Server)
 var ERROR_EMAIL_TAKEN = -2;
@@ -256,6 +257,8 @@ function getLocalMessage(code){
 		msg = 'Ooops! There seems to be a problem with our Facebook access!';
 	} else if(code == MSG_APP_REMINDER){
 		msg = 'Hey Pack Leader dont be Lazy! Move your Dog and go for a walk! DOG FUEL IS EARNED NOT GIVEN !!';
+	} else if(code == MSG_APP_PASSPORT_REMINDER){
+		msg = 'Pack Leader you will be notified 24hours\n in advance and in case you forget there\n is a second reminder 1 hour before the\n event takes place';
 	}
  
 	return msg;

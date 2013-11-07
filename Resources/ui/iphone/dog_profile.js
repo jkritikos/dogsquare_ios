@@ -248,12 +248,12 @@ function buildDogProfileView(dogId){
 		dogProfileView.add(dogProfilePhotoImage);
 		
 		var dogProfileMoodLabel = Titanium.UI.createLabel({ 
-			text:'Dogfuel',
+			text:'24h Dogfuel',
 			color:'black',
 			height:'auto',
 			textAlign:'left',
 			left:36,
-			bottom:IPHONE5 ? 144 : 158,
+			bottom:IPHONE5 ? 146 : 160,
 			opacity:0.6,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
@@ -262,9 +262,10 @@ function buildDogProfileView(dogId){
 			text:'0%',
 			color:'999900',
 			height:'auto',
-			textAlign:'left',
-			left:97,
-			bottom:IPHONE5 ? 145 : 159,
+			width:87,
+			textAlign:'center',
+			left:36,
+			bottom:IPHONE5 ? 130 : 144,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		

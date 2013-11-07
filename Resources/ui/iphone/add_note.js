@@ -260,6 +260,24 @@ function buildAddNoteView(){
 		    width:54,
 		    height:34
 		});
+		
+		var addNoteReminderBackground = Ti.UI.createView({
+			backgroundColor:'#fc3535',
+			width:'95%',
+			bottom:10,
+			height:85
+		});
+		
+		var addNoteReminderLabel = Ti.UI.createLabel({
+			textAlign:'center',
+			color:'white',
+			text:getLocalMessage(MSG_APP_PASSPORT_REMINDER),
+			font:{fontSize:14, fontWeight:'regular', fontFamily:'Open Sans'},
+			zIndex:1
+		});
+		
+		addNoteReminderBackground.add(addNoteReminderLabel);
+		addNoteView.add(addNoteReminderBackground);
 	}
 }
 
