@@ -91,16 +91,18 @@ function populateFeedsTableView(data) {
 		var id = null;
 		var type = null;
 		var name = null;
-		
+		var placeId = null;
+		var type = data[i].Feed.type_id;
+	
 		if(data[i].Feed.activity_id != null){
-			var type = data[i].Feed.type_id;
+			
 			var id = data[i].Feed.activity_id;
 		}else if(data[i].Feed.target_user_id != null){
-			var type = data[i].Feed.type_id;
+			
 			var id = data[i].Feed.target_user_id;
 			var name = data[i].Feed.target_user_name;
 		}else if(data[i].Feed.target_dog_id != null){
-			var type = data[i].Feed.type_id;
+			
 			var id = data[i].Feed.target_dog_id;
 			var name = data[i].Feed.target_dog_name;
 		}
@@ -114,7 +116,9 @@ function populateFeedsTableView(data) {
 			selectedBackgroundColor:'transparent',
 			feedType:type,
 			id:id,
-			name:name
+			name:name,
+			placeId:data[i].Feed.target_place_id,
+			placeName:data[i].Feed.target_place_name
 		});
 		
 		//profile image
@@ -223,6 +227,26 @@ function handleFeedsTableViewRows(e){
 		
 		feedsRowWindow.add(profileOtherView);
 		feedsRowWindow.setTitle(name);
+		
+		openWindows.push(feedsRowWindow);
+		navController.open(feedsRowWindow);
+	} else if(feedType == FEED_CHECKIN){
+		var placeId = e.row.placeId;
+		var placeTitle = e.row.placeName;
+		Ti.API.info('show place id '+placeId);
+		
+		Ti.include('ui/iphone/place_view.js');
+		
+		var checkinPlaceWindow = Ti.UI.createWindow({
+			backgroundColor:UI_BACKGROUND_COLOR,
+			translucent:false,
+			//barImage:IMAGE_PATH+'common/bar.png',
+			barColor:UI_COLOR
+		});
+		
+		feedsRowWindow.setTitle(placeTitle);
+		var checkinPlaceView = buildCheckinPlaceView(placeId, false);
+		feedsRowWindow.add(checkinPlaceView);
 		
 		openWindows.push(feedsRowWindow);
 		navController.open(feedsRowWindow);

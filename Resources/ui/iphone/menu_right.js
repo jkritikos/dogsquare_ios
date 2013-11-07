@@ -193,6 +193,17 @@ function populateRightMenu(dogObject){
 			});
 			
 			rightMenuRow.add(rowColorBoneImage);
+		} else {
+			//if we fell to 0 dogfuel show the grey image
+			var rowColorBoneImage = Ti.UI.createImageView({ 
+				image:IMAGE_PATH+'menu_right/bone_grey.png',
+				left:239,
+				top:50,
+				type:TYPE_SELECT_ROW,
+				zIndex:2
+			});
+			
+			rightMenuRow.add(rowColorBoneImage);
 		}
 		
 		rightMenuData.push(rightMenuRow);

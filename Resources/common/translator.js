@@ -255,7 +255,7 @@ function getLocalMessage(code){
 	} else if(code == MSG_FACEBOOK_ERROR){
 		msg = 'Ooops! There seems to be a problem with our Facebook access!';
 	} else if(code == MSG_APP_REMINDER){
-		msg = 'LAZY';
+		msg = 'Hey Pack Leader dont be Lazy! Move your Dog and go for a walk! DOG FUEL IS EARNED NOT GIVEN !!';
 	}
  
 	return msg;

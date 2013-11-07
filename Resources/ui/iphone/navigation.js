@@ -34,13 +34,36 @@ function closeOpenWindows(){
 
 ////////////////////////////////////////////////
 // CENTER MAIN WINDOW
-var rightBtn = Ti.UI.createButton({
+var rightBtn2 = Ti.UI.createButton({
 	backgroundImage:IMAGE_PATH+'common/menu_dog.png',
 	width:35,
+	right:0,
 	height:23
 });
 
-rightBtn.addEventListener("click", function(){
+var rightBadge = Ti.UI.createLabel({
+	width:20,
+	borderRadius:10,
+	backgroundColor:'red',
+	color:'white',
+	textAlign:'center',
+	text:2,
+	left:14
+});
+
+var rightBtn = Ti.UI.createView({
+	width:80
+});
+
+rightBtn.add(rightBtn2);
+rightBtn.add(rightBadge);
+
+
+rightBadge.addEventListener("click", function(){
+	alert('show notifications');
+});
+
+rightBtn2.addEventListener("click", function(){
 	window.toggleRightView();
 	window.setCenterhiddenInteractivity("TouchEnabled");
 });
