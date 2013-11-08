@@ -27,6 +27,9 @@
     <property name="ti.facebook.appid">509577672446427</property>
     <property name="ti.ui.defaultunit" type="string">system</property>
     <iphone>
+    	<backgroundModes>
+          <mode>location</mode>
+        </backgroundModes>
         <orientations device="iphone">
             <orientation>Ti.UI.PORTRAIT</orientation>
         </orientations>

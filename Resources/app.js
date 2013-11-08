@@ -49,4 +49,6 @@ Titanium.App.addEventListener('resume', function(e){
 	appLaunchOrResume();
 });
 
+//var service = Ti.App.iOS.registerBackgroundService({url:'common/service.js'});
+
 Ti.include('ui/iphone/run.js');
