@@ -1,6 +1,22 @@
 //Import files
 var FILES_IMPORTED = [];
 
+//Returns the timezone offset formatted for MySQL use
+function getUTCOffset(){
+	var utcTime = new Date();
+	var offset = utcTime.getTimezoneOffset();
+	var tmpString = utcTime.toString();
+	var gmtLocation = tmpString.indexOf('GMT');
+	var tzOffset = tmpString.substr(gmtLocation+3, 5);
+	
+	var partA = tzOffset.substr(0,3);
+	var partB = tzOffset.substr(3,2);
+	var tzOffsetMysql = partA + ":" + partB;	
+	
+	Ti.API.info('-=-=-=- ' + tzOffset + ' becomes '+tzOffsetMysql);
+	return tzOffsetMysql;
+}
+
 //String validator for empty/null
 function isStringNullOrEmpty(s){
 	var response = false;

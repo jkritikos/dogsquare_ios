@@ -241,7 +241,7 @@ function buildMapView(windowMode){
 			title:'Woof-in'
 		});
 		
-		checkinWindow.setTitle('Check in');
+		checkinWindow.setTitle('Woof-in');
 		
 		//back button
 		var checkinBackButton = Ti.UI.createButton({

@@ -346,6 +346,11 @@ function buildDogProfileView(dogId){
 function handleLostDogButton(){
 	var button = dogProfileLostDogButton.button;
 	if(button == BUTTON_LOST_DOG){
+		//progress view
+		dogProgileProgressView.show({
+			text:"Locating..."
+		});
+		
 		//Start location tracking
 		Titanium.Geolocation.addEventListener('location',trackLocationForLostDog);
 	}else if(button == BUTTON_FOUND_DOG){

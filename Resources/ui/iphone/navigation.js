@@ -208,6 +208,8 @@ function updateDogfuelValues(){
 			var foundValue = false;
 			var indexToUpdate = 0;
 			
+			//TODO this is a bug as it only updates the percentage values and not the image - we need to call populate() AFTER saving the
+			//dogfuel value locally
 			//go through the right menu dogs table
 			for (i=1; i<rightTableView.data[0].rows.length;i++){
 				var dogIdInRightMenu = rightTableView.data[0].rows[i].dogId;
