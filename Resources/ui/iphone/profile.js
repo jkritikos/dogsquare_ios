@@ -509,6 +509,8 @@ function getOnlineUser(){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('getOnlineUser() got back error '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 		navController.getWindow().setTitle('');
 	};
 	
@@ -692,6 +694,8 @@ function changeProfilePhoto(obj){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('changeProfilePhoto() got back error '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){

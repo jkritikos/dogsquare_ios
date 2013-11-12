@@ -420,6 +420,8 @@ function uploadPlacePhoto(photoObject){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in uploadPlacePhoto() '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){
@@ -466,6 +468,7 @@ function getPlaceLikedUsersOnline(pId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in getPlaceLikedUsersOnline() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -506,6 +509,7 @@ function getPlaceCheckinUsersOnline(pId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in getPlaceCheckinUsersOnline() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -780,6 +784,7 @@ function likePlace(pId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in likePlace() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -820,6 +825,7 @@ function unlikePlace(pId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in unlikePlace() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -866,6 +872,8 @@ function getOnlinePlace(pId){
 	
 	xhr.onerror = function(e){
 		navController.getWindow().setTitle('');
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){
@@ -980,6 +988,7 @@ function doSavePlaceCommentOnline(comObj){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in doSavePlaceCommentOnline() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){
@@ -1116,6 +1125,8 @@ function checkinPlaceOnline(placeId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in checkinPlaceOnline() '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){

@@ -107,6 +107,8 @@ function getUserPhotosOnline(method , targetId, photoType){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in getUserPhotosOnline() '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){
@@ -156,6 +158,8 @@ function savePhotoOnline(){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in savePhotoOnline() '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){

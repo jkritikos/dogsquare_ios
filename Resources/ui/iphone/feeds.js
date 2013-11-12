@@ -47,6 +47,8 @@ function doGetFeeds(){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in doGetFeeds() '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){

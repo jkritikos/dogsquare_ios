@@ -348,6 +348,7 @@ function deleteNoteOnline(noteId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in deleteNoteOnline() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){

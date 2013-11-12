@@ -232,6 +232,7 @@ function getMutualFollowers(){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in getMutualFollowers() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	xhr.onload = function(e) {
 		Ti.API.info('getMutualFollowers() got back from server '+this.responseText);

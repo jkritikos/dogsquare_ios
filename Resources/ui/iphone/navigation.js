@@ -190,7 +190,8 @@ function updateDogfuelValues(){
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-		Ti.API.error('Error in updateDogfuelValues() '+e);
+		Ti.API.error('Error in updateDogfuelValues() '+JSON.stringify(e));
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){

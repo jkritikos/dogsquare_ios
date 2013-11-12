@@ -52,7 +52,7 @@ var LANGUAGE_ENGLISH = 1;
 var CHECKIN_ALLOWED_DISTANCE = 5;
 
 //Server constants
-var NETWORK_TIMEOUT = 20000;
+var NETWORK_TIMEOUT = 8000;
 var NETWORK_RESPONSE_OK = 1;
 var NETWORK_RESPONSE_ERROR = -1;
 
@@ -851,6 +851,7 @@ function followUser(uId, button, win){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in followUser() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -895,6 +896,7 @@ function sendMessageToUser(id, name, message, view){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in sendMessageToUser() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){
@@ -946,6 +948,7 @@ function unfollowUser(uId, button, win){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in unfollowUser() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -988,6 +991,7 @@ function getFollowers(uId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in getFollowers() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
@@ -1025,6 +1029,7 @@ function getFollowing(uId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in getFollowing() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -1114,6 +1119,7 @@ function saveActivityOnline(id){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('ERROR in saveActivityOnline()');
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){
@@ -1274,6 +1280,7 @@ function doSaveActivityCommentOnline(comObj, view){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in doSaveActivityCommentOnline() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){

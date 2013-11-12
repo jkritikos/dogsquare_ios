@@ -365,6 +365,7 @@ function sendWalkRequest(){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('sendWalkRequest() got an error');
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -568,6 +569,8 @@ function getOnlineOtherUser(uId){
 	
 	xhr.onerror = function(e){
 		navController.getWindow().setTitle('');
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){

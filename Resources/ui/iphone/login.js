@@ -267,6 +267,8 @@ function checkLoginCredentials(lObj){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in checkLoginCredentials() '+JSON.stringify(e));
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){

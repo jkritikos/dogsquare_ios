@@ -772,6 +772,8 @@ function editUserProfile(uObj){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in editUserProfile() '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){

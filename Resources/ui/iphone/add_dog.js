@@ -658,6 +658,8 @@ function doSaveDogOnline(dObj){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in doSaveDogOnline() '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){
@@ -860,6 +862,7 @@ function doEditDogOnline(dObj){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in doEditDogOnline() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){

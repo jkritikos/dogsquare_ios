@@ -652,6 +652,7 @@ function searchNearbyPlaces(placeName){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in searchNearbyPlaces() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){
@@ -664,8 +665,8 @@ function searchNearbyPlaces(placeName){
 	xhr.open('GET',API+'getPlaces');
 	xhr.send({
 		user_id:userObject.userId,
-		lat:mapLatitude,
-		lon:mapLongitude,
+		lat:userObject.lat,
+		lon:userObject.lon,
 		name:placeName,
 		breed_list:[]
 	});
@@ -768,6 +769,7 @@ function getPlacesByFilterOnline(catId, mapLatitude, mapLongitude){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in getPlacesByFilterOnline() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){

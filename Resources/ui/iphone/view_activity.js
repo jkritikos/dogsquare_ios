@@ -586,6 +586,7 @@ function likeActivity(aId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in likeActivity() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -626,6 +627,7 @@ function unlikeActivity(aId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in unlikeActivity() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -688,6 +690,8 @@ function getActivityOnline(aId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in getActivityOnline()');
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -736,6 +740,7 @@ function getActivityLikedUsersOnline(aId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in getActivityLikedUsersOnline() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {

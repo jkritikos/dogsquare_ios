@@ -49,6 +49,8 @@ function doGetNotifications(){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in doGetNotifications() '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){
@@ -255,6 +257,7 @@ function setOnlineNotificationsToRead(list){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in setOnlineNotificationsToRead() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {

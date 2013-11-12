@@ -311,7 +311,7 @@ function buildDogProfileView(dogId){
 		if(!dogProfileMyDog){
 			dogProfileMatingBackground.bottom = IPHONE5 ? 86 : 8;
 			dogProfileMoodLabel.bottom = IPHONE5 ? 144 : 66;
-			dogProfileMoodPercentLabel.bottom = IPHONE5 ? 145 : 67;
+			dogProfileMoodPercentLabel.bottom = IPHONE5 ? 130 : 67;
 			dogProfileBoneImage.bottom = IPHONE5 ? 127 : 50;
 			dogProfileBoneImageColor.bottom = IPHONE5 ? 127 : 50;
 			dogProfileLikeMeLabel.bottom = IPHONE5 ? 95 : 17;
@@ -460,6 +460,7 @@ function lostDogOnline(dogLat, dogLon){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in lostDogOnline() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){
@@ -515,6 +516,8 @@ function foundDogOnline(){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in foundDogOnline() '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){
@@ -569,6 +572,8 @@ function deleteDogOnline(dogId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in deleteDogOnline() '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -752,6 +757,8 @@ function changeDogProfilePhoto(obj){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('changeDogProfilePhoto() got back error '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){
@@ -822,6 +829,7 @@ function likeDog(dId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in likeDog() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -862,6 +870,7 @@ function unlikeDog(dId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in unlikeDog() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -908,6 +917,8 @@ function getOnlineDog(dId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in getOnlineDog() '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 		navController.getWindow().setTitle('');
 	};
 	
@@ -963,6 +974,7 @@ function getDogLikedUsersOnline(dId){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in getDogLikedUsersOnline() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -1044,13 +1056,16 @@ function updateDogProfile(dogObj){
 		}
 	}
 	
-	if(dogObj.lost != null){
-		dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/found_btn.png';
-		dogProfileLostDogButton.button = BUTTON_FOUND_DOG;
-	}else{
-		dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/lost_btn.png';
-		dogProfileLostDogButton.button = BUTTON_LOST_DOG;
+	if(dogProfileMyDog){
+		if(dogObj.lost != null){
+			dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/found_btn.png';
+			dogProfileLostDogButton.button = BUTTON_FOUND_DOG;
+		} else{
+			dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/lost_btn.png';
+			dogProfileLostDogButton.button = BUTTON_LOST_DOG;
+		}
 	}
+	
 }
 
 function handleDogLikesButton(e){

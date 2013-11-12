@@ -613,6 +613,8 @@ function getOnlineUser(n){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in getOnlineUser() '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -680,6 +682,8 @@ function doSearchUserByEmail(cEmail){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in doSearchUserByEmail() '+e);
+		progressView.hide();
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {

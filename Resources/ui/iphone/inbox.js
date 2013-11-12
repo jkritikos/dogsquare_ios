@@ -116,6 +116,7 @@ function getUnreadInboxMessages(){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in getUnreadInboxMessages() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -178,6 +179,7 @@ function setOnlineMessagesIntoRead(list){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in setOnlineMessagesIntoRead() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
@@ -219,6 +221,7 @@ function deleteOnlineMessages(target_id){
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in deleteOnlineMessages() '+e);
+		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e) {
