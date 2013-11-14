@@ -233,6 +233,10 @@ function updateDogfuelValues(){
 				
 				foundValue = false;
 			}
+			
+			//Repopulate the right menu
+			var dRows = getDogs();
+			populateRightMenu(dRows);
 				
 		} 
 	};

@@ -1035,7 +1035,7 @@ function updateDogProfile(dogObj){
     dogProfileDogGenderLabel.text = dogGender;
     dogProfileDogGenderLabel.left = dogGenderLeft;
     
-    if(dogObj.liked == null){
+    if(dogObj.liked == false){
 		dogProfileHeartImage.image = IMAGE_PATH+'common/best_icon_default.png';
 		dogProfileHeartImage.toggle = false;
 	} else{
