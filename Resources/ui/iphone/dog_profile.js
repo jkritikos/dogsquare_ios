@@ -1006,7 +1006,7 @@ function getDogLikedUsersOnline(dId){
 
 //update dog profile UI
 function updateDogProfile(dogObj){
-	navController.getWindow().setTitle(dogObj.name);
+	//navController.getWindow().setTitle(dogObj.name);
 	
 	dogProfileBreedTypeLabel.text = dogObj.dog_breed;
     dogProfilePhotoImage.image = REMOTE_DOG_IMAGES + dogObj.photo;

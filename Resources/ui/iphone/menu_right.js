@@ -234,7 +234,8 @@ function handleTableViewRows(e){
 			e.row.active = true;
 		} else if(e.source.type == TYPE_IMAGE) {
 			closeOpenWindows();
-			navController.getWindow().setTitleControl();
+			navController.getWindow().setTitle(rowDogNameLabel.text);
+			Ti.API.info('RIGHT MENU Opening dog profile for dog '+rowDogNameLabel.text);
 			
 			//Revert to the standard right window button
 			navController.getWindow().rightNavButton = rightBtn;
