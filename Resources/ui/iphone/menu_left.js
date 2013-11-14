@@ -616,7 +616,7 @@ function handleLeftMenuTextFieldChange(e){
 			leftmenuEraseIcon.hide();
 			//if textfield empty, reset search view
 			leftmenuSearchActivityIndicator.hide();
-			leftmenuSearchBackgroundView.opacity = 0.5;
+			leftmenuSearchBackgroundView.opacity = 0;
 			menuLeftSearchResultsTableView.data = [];
 		}
 		
