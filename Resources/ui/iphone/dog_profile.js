@@ -21,10 +21,10 @@ var BUTTON_LOST_DOG = 1;
 var BUTTON_FOUND_DOG = 2;
 	
 function buildDogProfileView(dogId){
+	dogProfileDogId = dogId;
+	
 	if(dogProfileView == null){
 		dogProgileProgressView = new ProgressView({window:dogProfileView});
-		
-		dogProfileDogId = dogId;
 		
 		//Check if this is our dog or not
 		dogProfileMyDog = false;

@@ -454,7 +454,7 @@ function trackLocation(){
 		}
 		
 		//only use accurate coordinates
-		if(e.coords.accuracy <= 15){
+		if(e.coords.accuracy <= 10){
 			Ti.API.info('trackLocation() got coordinates - processing');
 			tick++;
 			
