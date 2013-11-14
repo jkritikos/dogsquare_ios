@@ -24,6 +24,8 @@ var viewActivityComObject = {};
 CURRENT_VIEW = VIEW_ACTIVITY_NEW;
 
 function buildViewActivityView(aId){
+	Ti.API.info('buildViewActivityView() called for activity '+aId);
+	
 	if(viewActivityView == null){
 		
 		//activity View

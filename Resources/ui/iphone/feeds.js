@@ -210,7 +210,7 @@ function handleFeedsTableViewRows(e){
 		
 		openWindows.push(feedsRowWindow);
 		navController.open(feedsRowWindow);
-	} else if(feedType == FEED_NEW_DOG || feedType == FEED_FRIEND_LIKE_DOG){
+	} else if(feedType == FEED_NEW_DOG || feedType == FEED_FRIEND_LIKE_DOG || feedType == FEED_DOG_LOST || feedType == FEED_DOG_FOUND){
 		
 		Ti.include('ui/iphone/dog_profile.js');
 		

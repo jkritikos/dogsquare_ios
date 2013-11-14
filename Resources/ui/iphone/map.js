@@ -1,4 +1,5 @@
 //Map filters
+var FILTER_REMOVE_FILTERS = -1;
 var FILTER_PARK = 1;
 var FILTER_HOMELESS = 2;
 var FILTER_CRUELTY = 3;
@@ -66,7 +67,7 @@ function updateLocationOnMap(){
 			Ti.API.info('Map stopping location tracking');
 			Titanium.Geolocation.removeEventListener('location',updateLocationOnMap);
 			
-			if(CLICKED_FILTER == null){
+			if(CLICKED_FILTER == null || CLICKED_FILTER == FILTER_REMOVE_FILTERS){
 				//Get all nearby places
 				getPlacesByFilterOnline(null, e.coords.latitude, e.coords.longitude);
 			} else{
@@ -192,6 +193,7 @@ function buildMapView(windowMode){
 	});
 	
 	//Prepare filters table
+	mapSearchFilterData.push(createMapFilterRow(FILTER_REMOVE_FILTERS));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_PARK));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_HOMELESS));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_CRUELTY));
@@ -299,7 +301,7 @@ function handleMapViewChange(e){
 		
 	mapview.setLocation(mapRegion);
 	
-	if(CLICKED_FILTER == null){
+	if(CLICKED_FILTER == null || CLICKED_FILTER == FILTER_REMOVE_FILTERS){
 		//Get all nearby places
 		getPlacesByFilterOnline(null, e.latitude, e.longitude);
 	}else{
@@ -489,7 +491,10 @@ function handleMapSearchTextFieldBlur(e){
 
 //Returns the filter object according to the specified id
 function getMapFilter(filter){
-	if(filter == FILTER_PARK){
+	if(filter == FILTER_REMOVE_FILTERS){
+		icon = IMAGE_PATH+'map_filters/recentlyOpened_icon.png';
+		label = 'All';
+	} else if(filter == FILTER_PARK){
 		icon = IMAGE_PATH+'map_filters/park_icon.png';
 		label = 'Park';
 	} else if(filter == FILTER_HOMELESS){
@@ -598,7 +603,13 @@ function handleMapSearchCategoriesRows(e){
 		Ti.API.info('MapTable click on a FILTER');
 		var filter = e.row.filter;
 		CLICKED_FILTER = filter;
-		getPlacesByFilterOnline(filter, userObject.lat, userObject.lon);
+		
+		if(CLICKED_FILTER == FILTER_REMOVE_FILTERS){
+			getPlacesByFilterOnline(null, userObject.lat, userObject.lon);
+		} else {
+			getPlacesByFilterOnline(filter, userObject.lat, userObject.lon);
+		}
+		
 	} else if(e.row.searchResultId){
 		CLICKED_FILTER = null;
 		Ti.API.info('MapTable click on a RESULT');

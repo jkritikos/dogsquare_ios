@@ -128,7 +128,8 @@ function populateNotificationsTableView(data) {
 			notification_type:data[i].type_id,
 			fromUserId:data[i].user_from,
 			fromUserName:data[i].name,
-			badge_id:data[i].badge_id
+			badge_id:data[i].badge_id,
+			activity_id:data[i].activity_id
 		});
 		
 		//Wrapper view with vertical layout for the text in each row
@@ -187,6 +188,7 @@ function handleNotificationsTableView(e){
 	var name = e.row.fromUserName;
 	var notificationId = e.row.id;
 	var badgeId = e.row.badge_id;
+	var activity_id = e.row.activity_id;
 	
 	setNotificationToRead(notificationId);
 	
@@ -214,7 +216,7 @@ function handleNotificationsTableView(e){
 		
 		Ti.include('ui/iphone/view_activity.js');
 	
-		var viewActivityView = buildViewActivityView(userId);
+		var viewActivityView = buildViewActivityView(activity_id);
 		
 		notificationRowWindow.add(viewActivityView);
 		notificationRowWindow.setTitle('Activity');

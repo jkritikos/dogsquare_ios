@@ -69,6 +69,8 @@ var FEED_FRIEND_LIKE_DOG = 4;
 var FEED_FRIEND_LIKE_ACTIVITY = 5;
 var FEED_FRIEND_COMMENT_ACTIVITY = 6;
 var FEED_CHECKIN = 7;
+var FEED_DOG_LOST = 8;
+var FEED_DOG_FOUND = 9;
 
 //Remove error messages after a while
 var ERROR_MSG_REMOVE_TIMEOUT = 1500;
@@ -142,6 +144,22 @@ function getFeedMessage(obj){
 		msg = obj.Feed.user_from_name + ' is now following ' + obj.Feed.target_user_name;
 	} else if(obj.Feed.type_id == FEED_FRIEND_LIKE_DOG){
 		msg = obj.Feed.user_from_name + ' likes ' + obj.Feed.target_dog_name;
+	} else if(obj.Feed.type_id == FEED_DOG_LOST){
+		//Add 's to the target name if needed
+		var targetUser = obj.Feed.user_from_name;
+		if(!stringEndsWith(targetUser, 's')){
+			targetUser += '\'s';
+		}
+		
+		msg = 'Oh no! ' + targetUser + ' dog ' + obj.Feed.target_dog_name +' is now missing! Can you help?';
+	} else if(obj.Feed.type_id == FEED_DOG_FOUND){
+		//Add 's to the target name if needed
+		var targetUser = obj.Feed.user_from_name;
+		if(!stringEndsWith(targetUser, 's')){
+			targetUser += '\'s';
+		}
+		
+		msg = 'Yay! ' + targetUser + ' dog ' + obj.Feed.target_dog_name +' has been found!';
 	} else if(obj.Feed.type_id == FEED_FRIEND_LIKE_ACTIVITY){
 		//Add 's to the target name if needed
 		var targetUser = obj.Feed.target_user_name;
