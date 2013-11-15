@@ -957,11 +957,21 @@ function getOnlineDog(dId){
 		}
 		
 	};
+	
+	var date = new Date();
+	var dateDay = date.getDate();
+	var dateMonth = date.getMonth() + 1;
+	var dateYear = date.getFullYear();
+	
 	xhr.open('GET',API+'getDog');
 	xhr.send({
 		user_id:userObject.userId,
 		dog_id:dId,
-		token:userObject.token
+		token:userObject.token,
+		timezone:getUTCOffset(),
+		month:dateMonth,
+		day:dateDay,
+		year:dateYear
 	});
 }
 

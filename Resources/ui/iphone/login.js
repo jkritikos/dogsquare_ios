@@ -398,12 +398,21 @@ function checkLoginCredentials(lObj){
 		}
 	};
 	
+	var date = new Date();
+	var dateDay = date.getDate();
+	var dateMonth = date.getMonth() + 1;
+	var dateYear = date.getFullYear();
+	
 	xhr.open('POST',API+'login');
 	xhr.send({
 		password:lObj.password,
 		email:lObj.email,
 		facebook_id:lObj.facebook_id,
-		f:lObj.f
+		f:lObj.f,
+		timezone:getUTCOffset(),
+		month:dateMonth,
+		day:dateDay,
+		year:dateYear
 	});
 }
 

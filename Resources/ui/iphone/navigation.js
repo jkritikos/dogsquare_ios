@@ -241,9 +241,18 @@ function updateDogfuelValues(){
 		} 
 	};
 	
+	var date = new Date();
+	var dateDay = date.getDate();
+	var dateMonth = date.getMonth() + 1;
+	var dateYear = date.getFullYear();
+	
 	xhr.open('GET',API+'getDogfuel');
 	xhr.send({
 		user_id:userObject.userId,
-		token:userObject.token
+		token:userObject.token,
+		timezone:getUTCOffset(),
+		month:dateMonth,
+		day:dateDay,
+		year:dateYear
 	});
 }
