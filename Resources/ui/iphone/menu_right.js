@@ -20,11 +20,13 @@ rightTableView.addEventListener('click', handleTableViewRows);
 function getSelectedDogs(){
 	var selected = [];
 	
-	for (i=0; i<rightTableView.data[0].rows.length;i++){
-	    if (rightTableView.data[0].rows[i].active) {
-	        Ti.API.info('Found selected dog '+rightTableView.data[0].rows[i].dogId);
-	        selected.push(rightTableView.data[0].rows[i].dogId);
-	    }
+	if(rightTableView != null && rightTableView.data != null && rightTableView.data[0] != null && rightTableView.data[0].rows != null){
+		for (i=0; i<rightTableView.data[0].rows.length;i++){
+		    if (rightTableView.data[0].rows[i].active) {
+		        Ti.API.info('Found selected dog '+rightTableView.data[0].rows[i].dogId);
+		        selected.push(rightTableView.data[0].rows[i].dogId);
+		    }
+		}
 	}
 	
 	return selected;
@@ -32,6 +34,7 @@ function getSelectedDogs(){
 
 //Creates and populates the right menu
 function populateRightMenu(dogObject){
+	var selectedDogs = getSelectedDogs();
 	
 	var rightMenuData = [];
 	
@@ -75,7 +78,8 @@ function populateRightMenu(dogObject){
 	rightMenuData.push(rightMenuAddDogRow);
 	
 	for(var i=0;i<dogObject.length;i++){
-		Ti.API.info('right menu dog rows are being populated with dog id '+dogObject[i].dog_id);
+		var autoSelect = selectedDogs.indexOf(dogObject[i].dog_id) != -1;
+		Ti.API.info('right menu dog rows are being populated with dog id '+dogObject[i].dog_id+' autoSelect='+autoSelect);
 
 		//all dog rows
 		var rightMenuRow = Ti.UI.createTableViewRow({
@@ -84,7 +88,7 @@ function populateRightMenu(dogObject){
 			selectedBackgroundColor:'transparent',
 			backgroundColor:'1c2027',
 			selectionStyle:0,
-			active:false,
+			active:autoSelect,
 			type:TYPE_SELECT_ROW,
 			dogId:dogObject[i].dog_id
 		});
@@ -168,7 +172,21 @@ function populateRightMenu(dogObject){
 			image:IMAGE_PATH+'menu_right/check_mark.png',
 			type:TYPE_SELECT_ROW
 		});
-		rowCheckImage.hide();
+		
+		//Handle auto selection
+		if(!autoSelect){
+			rowCheckImage.hide();
+			rowDogNameLabel.color = 'ab7b04';
+			rowDogPercentLabel.color = 'ab7b04';
+			rowDogImage.borderColor = '454950';
+			rightMenuRow.backgroundColor = '1c2027';
+		} else {
+			rowCheckImage.show();
+			rowDogNameLabel.color = 'f9bf30';
+			rowDogPercentLabel.color = 'f9bf30';
+			rowDogImage.borderColor = 'f9bf30';
+			rightMenuRow.backgroundColor = UI_MENU_BACKGROUND_COLOR;
+		}
 		
 		rowCheckBox.add(rowCheckImage);
 		rightMenuRow.add(rowCheckBox);
