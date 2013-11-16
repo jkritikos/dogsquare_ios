@@ -270,7 +270,7 @@ function getLocalMessage(code){
 	} else if(code == MSG_NOT_AVAILABLE_WITH_FACEBOOK){
 		msg = 'You can’t do this when logged in with Facebook.';
 	} else if(code == MSG_NO_INTERNET_CONNECTION){
-		msg = 'Ooops! There seems to be a problem with your connection to the Internet!';
+		msg = 'Ooops! There seems to be a problem with your Internet connection!';
 	} else if(code == MSG_FACEBOOK_ERROR){
 		msg = 'Ooops! There seems to be a problem with our Facebook access!';
 	} else if(code == MSG_APP_REMINDER){

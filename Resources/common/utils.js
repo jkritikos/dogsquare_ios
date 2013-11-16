@@ -112,9 +112,9 @@ function createCroppedBoneImage(view, dogfuelValue){
 
 //Custom import function imports only ONCE
 function _import(file){
-	if(!FILES_IMPORTED[file]){
+	if(!FILESTi.includeED[file]){
 		Ti.include(file);
-		FILES_IMPORTED[file] = true;
+		FILESTi.includeED[file] = true;
 		Ti.API.info('Importing '+file);
 	} else {
 		Ti.API.info('NOT importing '+file+' - already imported');

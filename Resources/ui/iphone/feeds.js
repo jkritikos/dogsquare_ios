@@ -112,7 +112,7 @@ function populateFeedsTableView(data) {
 		//feed row
 		var feedRow = Ti.UI.createTableViewRow({
 			className:'notificationRow',
-			height:71,
+			height:data[i].Feed.type_id == FEED_DOG_LOST ? 85 : 71,
 			width:'100%',
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',

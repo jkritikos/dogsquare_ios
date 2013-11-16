@@ -170,7 +170,6 @@ leftTableView.addEventListener("click", function(e){
 			break;
 			
 		case MENU_MAP:
-			closeOpenWindows();
 			CURRENT_VIEW = VIEW_MAP;
 			Ti.include('ui/iphone/map.js');
 			
@@ -221,7 +220,7 @@ leftTableView.addEventListener("click", function(e){
 			
 		case MENU_NOTIFICATIONS:
 			navController.getWindow().setTitleControl();
-			_import('ui/iphone/notifications.js');
+			Ti.include('ui/iphone/notifications.js');
 			buildNotificationsView();
 			navController.getWindow().add(viewNotifications);
 			navController.getWindow().setTitle('Notifications');

@@ -251,6 +251,8 @@ getOnlineUser();
 var runWindow = null;
 
 profileStartButton.addEventListener('click', function(){
+	Ti.include('ui/iphone/run.js');
+	
 	runWindow = Ti.UI.createWindow({
 		backgroundColor:UI_BACKGROUND_COLOR,
 		//barImage:IMAGE_PATH+'common/bar.png',

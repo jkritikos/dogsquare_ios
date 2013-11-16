@@ -929,7 +929,7 @@ function doSignup(uObj){
 			window.setParallaxAmount(0.3);
 			
 			if(uObj.facebook_id){
-				_import('ui/iphone/profile.js');
+				Ti.include('ui/iphone/profile.js');
 				navController.getWindow().add(viewProfile);
 				navController.getWindow().setTitle(userObject.name);
 			}

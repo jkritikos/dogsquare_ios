@@ -51,7 +51,7 @@ initialButtonsBackground.add(registerButton);
 
 registerButton.addEventListener('click', function(){
 	
-	_import('ui/iphone/register.js');
+	Ti.include('ui/iphone/register.js');
 	var w = buildRegisterWindow();
 	
 	initialWindow.add(w);
