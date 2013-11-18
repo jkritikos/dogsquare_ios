@@ -1652,6 +1652,7 @@ function saveDogBreeds(obj){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
 	if(obj !=  null && obj.length > 0){
+		db.execute('BEGIN');
 		db.execute('delete from DOG_BREEDS');
 		
 		for(i=0; i < obj.length; i++){
@@ -1664,6 +1665,7 @@ function saveDogBreeds(obj){
 		}
 	
 		Ti.API.info('saveDogBreeds() saved '+obj.length+' rows');
+		db.execute('COMMIT');
 	} else {
 		Ti.API.info('saveDogBreeds() NO data to save');
 	}
@@ -1701,6 +1703,7 @@ function savePlaceCategories(obj){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
 	if(obj !=  null && obj.length > 0){
+		db.execute('BEGIN');
 		db.execute('delete from PLACE_CATEGORIES');
 		
 		for(i=0; i < obj.length; i++){
@@ -1708,6 +1711,7 @@ function savePlaceCategories(obj){
 			db.execute('insert into PLACE_CATEGORIES (id, name, active) values (?,?,?)', obj[i].PlaceCategory.id, obj[i].PlaceCategory.name, obj[i].PlaceCategory.active);
 		}
 	
+		db.execute('COMMIT');
 		Ti.API.info('savePlaceCategories() saved '+obj.length+' rows');
 	} else {
 		Ti.API.info('savePlaceCategories() NO data to save');
@@ -1802,6 +1806,7 @@ function saveDogfuelRules(obj){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
 	if(obj !=  null && obj.length > 0){
+		db.execute('BEGIN');
 		db.execute('delete from DOGFUEL_RULES');
 		
 		for(i=0; i < obj.length; i++){
@@ -1812,6 +1817,7 @@ function saveDogfuelRules(obj){
 			}
 		}
  	
+ 		db.execute('COMMIT');
 		Ti.API.info('saveDogfuelRules() saved '+obj.length+' rows');
 	} else {
 		Ti.API.info('saveDogfuelRules() NO data to save');
@@ -1823,7 +1829,7 @@ function saveDogfuelRules(obj){
 //Cleans the local database
 function cleanDB(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
-	
+	db.execute('BEGIN');
 	db.execute('delete from DOGS');
 	db.execute('delete from ACTIVITIES');
 	db.execute('delete from ACTIVITY_DOGS');
@@ -1834,7 +1840,7 @@ function cleanDB(){
 	db.execute('delete from DOGFUEL_RULES');
 	db.execute('delete from MUTUAL_FOLLOWERS');
 	db.execute('delete from NOTIFICATIONS');
-	
+	db.execute('COMMIT');
 	db.close();
 	Ti.API.info('cleanDB() ends');
 }
@@ -1843,6 +1849,7 @@ function cleanDB(){
 function createDB(){
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
+	db.execute('BEGIN');
 	db.execute('create table if not exists DOGFUEL_RULES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"user_id\" integer,\"walk_distance\" integer, \"playtime\" integer )');
 	db.execute('create table if not exists DOGS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"breed_id\" integer, \"dog_id\" integer, \"name\" varchar(128), \"age\" integer, \"weight\" integer, \"size\" integer, \"mating\" integer, \"gender\" integer, \"photo\" varchar(128), \"thumb\" varchar(128), \"dogfuel\" integer)');
 	db.execute('create table if not exists ACTIVITIES (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"start_date\" real, \"start_time\" real, \"end_time\" real, \"type_id\" integer, \"temperature\" integer, \"pace\" real, \"distance\" real, \"activity_id\" integer, \"sync\" integer)');
@@ -1855,7 +1862,7 @@ function createDB(){
 	db.execute('create table if not exists PLACE_CATEGORIES (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"active\" integer)');
 	//db.execute('create table if not exists COUNTRIES (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"active\" integer)');
 	db.execute('create table if not exists NOTIFICATIONS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from_id\" integer, \"user_from_name\" varchar(256), \"type_id\" integer, \"read\" integer, \"activity_id\" integer, \"badge_id\" integer, \"date\" real, \"user_from_thumb\" varchar(128))');
-	
+	db.execute('COMMIT');
 	db.close();
 	Ti.API.info('createDB() ends');
 }
