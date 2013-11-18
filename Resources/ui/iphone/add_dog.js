@@ -15,6 +15,7 @@ var addDogToolbar = null;
 var addDogPicker = null;
 var addDogPhotoDialog = null;
 var addDogPickerBackground = null;
+var addDogToolbarLabel = null;
 
 //picker data
 var genderPicker = [];
@@ -298,8 +299,13 @@ function builAddDogView(windowMode){
 		}); 
 		viewAddDog.add(addDogPickerBackground);
 		
+		addDogToolbarLabel = Ti.UI.createLabel({
+		    color:'black',
+		    left:16
+		}); 
+		
 		addDogToolbar = Titanium.UI.iOS.createToolbar({
-		    items:[addDogFlexSpace, addDogPickerDoneButton],
+		    items:[addDogToolbarLabel, addDogFlexSpace, addDogPickerDoneButton],
 		    barColor:'999999',
 		    top:0,
 		    borderTop:true,
@@ -393,21 +399,25 @@ function addDogHandlePicker(e){
     var picker = e.source.picker;
     //add data for specified picker
 	if(picker === DOG_BREED_PICKER){
+		addDogToolbarLabel.text = 'Dog Breed or Stray';
 		addDogScrollBackground.scrollTo(0,IPHONE5 ?  0 : 60);
 		addDogPicker.add(dogBreedPicker);
 		
 		addDogPicker.setSelectedRow(0, dogBreedIndexes[selectedPickerDogBreed], false);
 	}else if(picker === GENDER_PICKER){
+		addDogToolbarLabel.text = 'Gender';
 		addDogPicker.add(genderPicker);
 		addDogScrollBackground.scrollTo(0,IPHONE5 ?  95 : 183);
 		
 		addDogPicker.setSelectedRow(0, selectedPickerGender-1, false);
 	}else if(picker === MATTING_PICKER){
+		addDogToolbarLabel.text = 'Mating';
 		addDogPicker.add(mattingPicker);
 		addDogScrollBackground.scrollTo(0,IPHONE5 ?  136 : 224);
 		
 		addDogPicker.setSelectedRow(0, selectedPickerMating-1, false);
 	}else if(picker === SIZE_PICKER){
+		addDogToolbarLabel.text = 'Size';
 		addDogPicker.add(sizePicker);
 		addDogScrollBackground.scrollTo(0,IPHONE5 ?  54 : 142);
 		
