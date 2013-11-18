@@ -311,7 +311,7 @@ function buildDogProfileView(dogId){
 		if(!dogProfileMyDog){
 			dogProfileMatingBackground.bottom = IPHONE5 ? 86 : 8;
 			dogProfileMoodLabel.bottom = IPHONE5 ? 144 : 66;
-			dogProfileMoodPercentLabel.bottom = IPHONE5 ? 130 : 67;
+			dogProfileMoodPercentLabel.bottom = IPHONE5 ? 130 : 50;
 			dogProfileBoneImage.bottom = IPHONE5 ? 127 : 50;
 			dogProfileBoneImageColor.bottom = IPHONE5 ? 127 : 50;
 			dogProfileLikeMeLabel.bottom = IPHONE5 ? 95 : 17;
