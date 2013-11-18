@@ -546,6 +546,8 @@ function getLastLogin(){
 
 //Event handler for when the app starts/resumes
 function appLaunchOrResume(){
+	var notifyModule = require('bencoding.localnotify');
+	
 	var reminderId = 111;
 	//Cancel the app reminder
 	var canceledCount =  notifyModule.cancelLocalNotificationByKey(reminderId,"APP_REMINDER");
@@ -790,6 +792,7 @@ function getNote(id){
 
 //Schedules a local notification
 function scheduleNotification(title, dueDate, noteId){
+	var notifyModule = require('bencoding.localnotify');
 	Ti.API.info('scheduleNotification called for dueDate '+dueDate);
 	
 	var now = new Date();

@@ -791,6 +791,9 @@ function handlefriendsTableViewRows(e){
 
 //Brings up the sms dialog for the specified person/number
 function showSMSDialog(recipient, msg){
+	//SMS module
+	var smsModule = require("com.omorandi");
+	
 	var smsDialog = smsModule.createSMSDialog({ 
 	    messageBody: msg,
 	    recipients:[recipient],

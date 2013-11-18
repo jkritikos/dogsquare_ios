@@ -47,8 +47,10 @@ function buildRunView(){
 
 	runDistanceValueLabel = Ti.UI.createLabel({
 		text:'0.00',
+		width:230,
+		textAlign:'center',
 		top:IPHONE5 ? 115+iphone5Offset : 115,
-		left:33,
+		left:5,
 		color:UI_COLOR_RUN,
 		font:{fontSize:82, fontWeight:'bold', fontFamily:'Open Sans'}
 	});
@@ -56,7 +58,7 @@ function buildRunView(){
 	runDistanceUnitLabel = Ti.UI.createLabel({
 		text:'km',
 		top:IPHONE5 ? 156+iphone5Offset : 156,
-		right:40,
+		right:22,
 		color:UI_COLOR_RUN,
 		font:{fontSize:41, fontWeight:'bold', fontFamily:'Open Sans'}
 	});

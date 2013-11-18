@@ -1,4 +1,4 @@
-Ti.API.info('debug iOS7');
+Ti.API.info('debug iOS7 for iphone4');
 
 Ti.Geolocation.purpose = "Retrieve user location";
 Ti.Geolocation.accuracy = Ti.Geolocation.ACCURACY_BEST_FOR_NAVIGATION;
@@ -11,7 +11,6 @@ var openWindows = [];
 var timers = [];
 
 //Local notifications BEFORE dao
-var notifyModule = require('bencoding.localnotify');
 Ti.include('common/dao.js');
 
 var userObject = getUserObject();
@@ -26,8 +25,6 @@ Ti.include('common/translator.js');
 Ti.include("modules/progress.view.js");
 //Date manipulations
 //var momentModule = require('modules/moment.min');
-//SMS module
-var smsModule = require("com.omorandi");
 //Left & center windows
 Ti.include('ui/iphone/navigation.js');
 

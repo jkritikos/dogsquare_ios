@@ -250,7 +250,8 @@ function buildAddNoteView(){
 		
 		addNoteDateTimePicker = Ti.UI.createPicker({
 			type: Ti.UI.PICKER_TYPE_TIME,
-			bottom:-219
+			bottom:-219,
+			zIndex:5
 		});
 		addNoteView.add(addNoteDateTimePicker);
 		addNoteDateTimePicker.addEventListener('change', handleDatePickerChange);
@@ -627,6 +628,7 @@ function doSaveNoteOnline(){
 			}
 			
 			//Clear notifications
+			var notifyModule = require('bencoding.localnotify');
 			var canceledCount =  notifyModule.cancelLocalNotificationByKey(noteObject.note_id,"note");
 			Ti.API.info('Cancelled '+canceledCount+' notifications for note id '+noteObject.note_id);
 			//Schedule notification
