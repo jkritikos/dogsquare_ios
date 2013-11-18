@@ -75,7 +75,9 @@ function populateTableViewSection(nData) {
 				previousMonth = month;
 				
 				var rowDate = formatDate(date);
-				var rowTime = date.getHours() + ':' + date.getMinutes();
+				var rowMinutes = date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes();
+				var rowHours = date.getHours() < 10 ? '0'+date.getHours() : date.getHours();
+				var rowTime = rowHours + ':' + rowMinutes;
 				var monthName = getMonthName(date);
 				
 				Ti.API.info('passport date '+date + ' hours '+date.getHours() + ' minutes '+date.getMinutes());
@@ -220,7 +222,9 @@ function populateTableViewSection(nData) {
 				
 				var date = new Date(nData[i].date*1000);
 				var rowDate = formatDate(date);
-				var rowTime = date.getHours() + ':' + date.getMinutes();
+				var rowMinutes = date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes();
+				var rowHours = date.getHours() < 10 ? '0'+date.getHours() : date.getHours();
+				var rowTime = rowHours + ':' + rowMinutes;
 				
 				var rowDateLabel = Titanium.UI.createLabel({ 
 					text:rowDate + ' ' + rowTime,
