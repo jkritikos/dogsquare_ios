@@ -251,6 +251,7 @@ getOnlineUser();
 var runWindow = null;
 
 profileStartButton.addEventListener('click', function(){
+	CURRENT_VIEW = VIEW_RUN;
 	Ti.include('ui/iphone/run.js');
 	
 	runWindow = Ti.UI.createWindow({

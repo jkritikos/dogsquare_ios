@@ -85,6 +85,7 @@ var VIEW_ADD_DOG = 22;
 var VIEW_ADD_NOTE = 23;
 var VIEW_PASSWORD_EDIT = 24;
 var VIEW_PROFILE_EDIT = 25;
+var VIEW_RUN = 26;
 
 //our current view
 var CURRENT_VIEW = null;

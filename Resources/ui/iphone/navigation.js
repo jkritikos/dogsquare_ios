@@ -42,8 +42,12 @@ var rightBtn = Ti.UI.createButton({
 });
 
 rightBtn.addEventListener("click", function(){
-	window.toggleRightView();
-	window.setCenterhiddenInteractivity("TouchEnabled");
+	if(CURRENT_VIEW == VIEW_RUN && runningMode){
+		alert(getLocalMessage(MSG_RUN_NOT_ENDED));
+	} else {
+		window.toggleRightView();
+		window.setCenterhiddenInteractivity("TouchEnabled");
+	}
 });
 
 var leftBtn = Ti.UI.createButton({
