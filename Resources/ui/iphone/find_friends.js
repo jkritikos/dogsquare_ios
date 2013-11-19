@@ -970,7 +970,7 @@ function facebookInvitePost(otherUserId, rowIndex){
 		        	
 		    	} else {
 		        	if (e.error) {
-		         	   Ti.API.info('FACEBOOK - ERROR in posting message');
+		         	   Ti.API.info('FACEBOOK - ERROR in posting message '+JSON.stringify(e));
 		        	} else {
 		            	Ti.API.info('FACEBOOK - UNKNOWN response in posting message');
 		        	}

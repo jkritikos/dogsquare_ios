@@ -109,7 +109,7 @@ var SHARING_CHECKIN_FACEBOOK = 'share_checkin_fb';
 var FB_DOG_PWD = 1234;
 var FB_APP_ID = '509577672446427';
 var FB_API_KEY = '667843a07b0ab0bd71aaa4c91c5ec2af';
-var FB_READ_PERMISSIONS = ['read_stream'];
+var FB_READ_PERMISSIONS = ['read_stream', 'publish_actions','publish_stream'];
 var FB_WRITE_PERMISSIONS = ['publish_actions','publish_stream'];
 
 var fb = require('facebook');
