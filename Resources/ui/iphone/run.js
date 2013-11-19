@@ -260,6 +260,12 @@ function clockTick(){
 	tmpLabel = tmpLabel + segundos;
 	
 	runDurationValueLabel.text = tmpLabel;
+	
+	//Calculate playing time
+	if(currentActivityMode == ACTIVITY_MODE_PLAYING){
+		runObject.playtime++;
+	}
+	
 }
 
 //Changes and enables/disables the walk/play buttons
@@ -285,6 +291,7 @@ function handleStartRunButton(e){
 	if(!runningMode){
 		var selectedDogs = getSelectedDogs();
 		if(selectedDogs.length > 0){
+			runObject.playtime = 0;
 			cronometerInterval = setInterval(clockTick,1000);
 			
 			//Save activity locally
@@ -355,7 +362,7 @@ function handleEndRunButton(){
 		}
 		
 		//Calculate the total distance, playtime
-		var activityTotals = calculateDogfuel(runObject.activity_id);
+		var activityTotals = calculateDogfuel(runObject.activity_id, runObject.playtime);
 		runObject.walk = activityTotals.walk;
 		runObject.play = activityTotals.play;
 		

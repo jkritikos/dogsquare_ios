@@ -1328,8 +1328,8 @@ function doSaveActivityCommentOnline(comObj, view){
 }
 
 //Calculates the dogfuel earned by the specified activity
-function calculateDogfuel(activityId){
-	Ti.API.info('calculateDogfuel() called for activity '+activityId);
+function calculateDogfuel(activityId, totalPlaytimeSeconds){
+	Ti.API.info('calculateDogfuel() called for activity '+activityId+' with totalPlaytimeSeconds='+totalPlaytimeSeconds);
 	
 	//10 meters
 	var PLAYTIME_THRESHOLD = 0.002;
@@ -1364,7 +1364,11 @@ function calculateDogfuel(activityId){
 	}
 	
 	//Convert to minutes
-	totalPlaytime = (totalPlaytime / 1000) / 60;
+	//totalPlaytime = (totalPlaytime / 1000) / 60;
+	
+	//NEW playtime implementation
+	totalPlaytime = totalPlaytimeSeconds / 60;
+	
 	
 	Ti.API.info(' *** totalWalkDistance '+totalWalkDistance+' Km, totalPlaytime '+totalPlaytime+' minutes');
 	
@@ -1388,7 +1392,7 @@ function calculateDogfuel(activityId){
 		totalDogfuel = Math.round(earnedFromPlay + earnedFromWalk);
 		totalDogfuel = totalDogfuel > 100 ? 100 : totalDogfuel;
 		
-		Ti.API.info(' ::::: dog id  '+activityDogs[i].dog_id+' needs '+activityDogs[i].rule_playtime+' playtime OR '+activityDogs[i].rule_walk_distance+' km. Earned '+totalDogfuel+' dogfuel');
+		Ti.API.info(' ::::: dog id  '+activityDogs[i].dog_id+' with breed '+activityDogs[i].breed_id+' needs '+activityDogs[i].rule_playtime+' playtime OR '+activityDogs[i].rule_walk_distance+' km. Earned '+totalDogfuel+' dogfuel');
 		
 		//Save dogfuel value
 		saveDogfuelCalculation(activityId, activityDogs[i].dog_id, totalDogfuel, totalWalkDistance, totalPlaytime);
@@ -1690,6 +1694,8 @@ function getDogBreeds(){
 			kennel_club:rows.field(5),
 			active:rows.field(6)
 		};
+		
+		//Ti.API.info('DOG BREED '+rows.field(0) + ' IS '+rows.field(1));
 		
 	  	breedRows.push(obj);	
 	  	rows.next();
