@@ -26,8 +26,8 @@ function buildTermsView(){
 	});
 	termsWindow.add(termsScrollView);
 	
-	var file = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory,'terms.txt');
-	var contents = file.read();
+	//var file = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory,'terms.txt');
+	//var contents = file.read();
 	
 	var termsTransparentView = Ti.UI.createScrollView({
 		backgroundColor:'transparent',
@@ -37,14 +37,20 @@ function buildTermsView(){
 	});
 	termsScrollView.add(termsTransparentView);
 	
-	var termsTextLabel = Ti.UI.createLabel({
+	/*var termsTextLabel = Ti.UI.createLabel({
 		text:contents,
 		color:'black',
 		textAlign:'center',
 		width:280,
 		font:{fontSize:13, fontWeight:'regular', fontFamily:'Open Sans'}
 	});
-	termsTransparentView.add(termsTextLabel);
+	termsTransparentView.add(termsTextLabel);*/
+	
+	var termsPdfView = Ti.UI.createWebView({
+		url:'http://dogsquare/files/terms.pdf',
+		height:'auto'
+	});
+	termsScrollView.add(termsPdfView);
 	
 	var termsDoneButton = Titanium.UI.createButton({
 		backgroundImage:IMAGE_PATH+'common/Done_button.png',
