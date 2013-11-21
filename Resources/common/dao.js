@@ -52,7 +52,7 @@ var LANGUAGE_ENGLISH = 1;
 var CHECKIN_ALLOWED_DISTANCE = 5;
 
 //Server constants
-var NETWORK_TIMEOUT = 8000;
+var NETWORK_TIMEOUT = 14000;
 var NETWORK_RESPONSE_OK = 1;
 var NETWORK_RESPONSE_ERROR = -1;
 
@@ -294,8 +294,8 @@ function facebookPostImage(blob, msg, otherUserId){
 function shouldPostActivityFacebook(){
 	var response = true;
 	var sharingFlag = true;
-	if(Ti.App.Properties.getBoolean(SHARING_ACTIVITY_FACEBOOK) != null){
-		sharingFlag = Ti.App.Properties.getBoolean(SHARING_ACTIVITY_FACEBOOK);
+	if(Ti.App.Properties.getBool(SHARING_ACTIVITY_FACEBOOK) != null){
+		sharingFlag = Ti.App.Properties.getBool(SHARING_ACTIVITY_FACEBOOK);
 	}
 	
 	if(fb.loggedIn && sharingFlag){
@@ -312,8 +312,8 @@ function shouldPostActivityFacebook(){
 function shouldPostCheckinFacebook(){
 	var response = true;
 	var sharingFlag = true;
-	if(Ti.App.Properties.getBoolean(SHARING_CHECKIN_FACEBOOK) != null){
-		sharingFlag = Ti.App.Properties.getBoolean(SHARING_CHECKIN_FACEBOOK);
+	if(Ti.App.Properties.getBool(SHARING_CHECKIN_FACEBOOK) != null){
+		sharingFlag = Ti.App.Properties.getBool(SHARING_CHECKIN_FACEBOOK);
 	}
 	
 	if(fb.loggedIn && sharingFlag){
@@ -376,7 +376,7 @@ function getBadgeDetails(id){
 	} else if(id == 7){
 		badge = {
 			title:'Savior',
-			description:'Unlocked when tagging a homeless dog.',
+			description:'Unlocked when tagging 3 homeless dogs.',
 			award:'You are an Angel for the homeless! Adopt one you\'re gonna lovit!'
 		};
 	} else if(id == 8){

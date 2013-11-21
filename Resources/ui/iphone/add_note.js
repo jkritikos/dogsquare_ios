@@ -178,9 +178,9 @@ function buildAddNoteView(){
 		addNoteRemindBackground = Ti.UI.createView({
 			backgroundColor:UI_BACKGROUND_COLOR,
 			top:220,
-			width:105,
+			width:125,
 			height:30,
-			right:5,
+			right:15,
 			active:false
 		});
 		
@@ -192,7 +192,7 @@ function buildAddNoteView(){
 			height:20,
 			width:'auto',
 			textAlign:'left',
-			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'bold', fontFamily:'Open Sans'}
 		});
 		addNoteRemindBackground.add(addNoteRemindLabel);
 		
@@ -210,7 +210,7 @@ function buildAddNoteView(){
 		addNoteCompletedBackground = Ti.UI.createView({
 			backgroundColor:UI_BACKGROUND_COLOR,
 			top:220,
-			width:105,
+			width:125,
 			height:30,
 			left:5,
 			active:false
@@ -223,14 +223,14 @@ function buildAddNoteView(){
 			color:'black',
 			width:'auto',
 			textAlign:'left',
-			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:14, fontWeight:'bold', fontFamily:'Open Sans'}
 		});
 		addNoteCompletedBackground.add(addNoteCompletedLabel);
 		
 		//comleted check box 
 		var addNoteCheckBox = Titanium.UI.createView({
 			backgroundColor:'a5a5a5',
-			right:5,
+			right:8,
 			width: 23,
 			height:23
 		});

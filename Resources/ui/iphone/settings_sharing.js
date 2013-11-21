@@ -36,13 +36,13 @@ function buildSettingsSharingView(){
 //Event handler for checkin switch clicks
 function handleFBCheckinSharingSelection(e){
 	Ti.API.info('Switch value: ' + e.value+' for option CHECKIN');
-	Ti.App.Properties.setBoolean(SHARING_CHECKIN_FACEBOOK, e.value);
+	Ti.App.Properties.setBool(SHARING_CHECKIN_FACEBOOK, e.value);
 }
 
 //Event handler for checkin switch clicks
 function handleFBCActivitySharingSelection(e){
 	Ti.API.info('Switch value: ' + e.value+' for option ACTIVITY');
-	Ti.App.Properties.setBoolean(SHARING_ACTIVITY_FACEBOOK, e.value);
+	Ti.App.Properties.setBool(SHARING_ACTIVITY_FACEBOOK, e.value);
 }
 
 function createSharingMenuRow(menu){
@@ -53,12 +53,16 @@ function createSharingMenuRow(menu){
 		selectedBackgroundColor:'transparent',
 		menu:menu
 	});
+	
+	var switchValue = false;
 		
 	var icon, label;
 	if(menu == MENU_FACEBOOK_CHECKINS){
 		label = 'My checkins on Facebook';
+		switchValue = Ti.App.Properties.getBool(SHARING_CHECKIN_FACEBOOK);
 	} else if(menu == MENU_FACEBOOK_ACTIVITIES){
 		label = 'My activities on Facebook';
+		switchValue = Ti.App.Properties.getBool(SHARING_ACTIVITY_FACEBOOK);
 	}
 	
 	var rowLabel = Titanium.UI.createLabel({
@@ -69,7 +73,7 @@ function createSharingMenuRow(menu){
 	});
 	
 	var rowSwitch = Ti.UI.createSwitch({
-		value:true, // mandatory property for iOS
+		value:switchValue != null ? switchValue : false, // mandatory property for iOS
 		right:10
 	});
 	
