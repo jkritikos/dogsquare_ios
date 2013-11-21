@@ -47,7 +47,7 @@ function buildTermsView(){
 	termsTransparentView.add(termsTextLabel);*/
 	
 	var termsPdfView = Ti.UI.createWebView({
-		url:'http://dogsquare/files/terms.pdf',
+		url:SERVER+'files/terms.pdf',
 		height:'auto'
 	});
 	termsScrollView.add(termsPdfView);
