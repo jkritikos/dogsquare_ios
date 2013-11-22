@@ -2,7 +2,7 @@ var termsWindow = null;
 var termsNavWin = null;
 
 //Build the terms view
-function buildTermsView(){
+function buildTermsView(type){
 	termsWindow = Ti.UI.createWindow({
 		backgroundColor:'black',
 		barImage:IMAGE_PATH+'common/bar.png',
@@ -47,10 +47,15 @@ function buildTermsView(){
 	termsTransparentView.add(termsTextLabel);*/
 	
 	var termsPdfView = Ti.UI.createWebView({
-		url:SERVER+'files/terms.pdf',
 		height:'auto'
 	});
 	termsScrollView.add(termsPdfView);
+	
+	if(type == VIEW_TERMS){
+		termsPdfView.url = SERVER+'files/terms.pdf';
+	}else if(type == VIEW_PRIVACY){
+		termsPdfView.url = SERVER+'files/privacy.pdf';
+	}
 	
 	var termsDoneButton = Titanium.UI.createButton({
 		backgroundImage:IMAGE_PATH+'common/Done_button.png',

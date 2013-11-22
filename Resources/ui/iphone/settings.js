@@ -72,31 +72,20 @@ function handleSettingsMenuTableRows(e){
 	} else if(selectedItem == MENU_SHARING){
 		openSettingsSharingView();
 	} else if(selectedItem == MENU_TERMS){
-		openSettingsTermsView();
+		openSettingsTermsPrivacyView(VIEW_TERMS);
 	} else if(selectedItem == MENU_PRIVACY){
-		openSettingsPrivacyView();
+		openSettingsTermsPrivacyView(VIEW_PRIVACY);
 	}
 }
 
-function openSettingsTermsView(){
+function openSettingsTermsPrivacyView(type){
 	Ti.include('ui/iphone/terms.js');
-	buildTermsView();
+	buildTermsView(type);
 	
 	if(iOS7){
 		termsNavWin.open();
 	}else{
 		termsWindow.open();
-	}
-}
-
-function openSettingsPrivacyView(){
-	Ti.include('ui/iphone/privacy.js');
-	buildPrivacyView();
-	
-	if(iOS7){
-		privacyNavWin.open();
-	}else{
-		privacyWindow.open();
 	}
 }
 

@@ -86,6 +86,8 @@ var VIEW_ADD_NOTE = 23;
 var VIEW_PASSWORD_EDIT = 24;
 var VIEW_PROFILE_EDIT = 25;
 var VIEW_RUN = 26;
+var VIEW_TERMS = 27;
+var VIEW_PRIVACY = 28;
 
 //our current view
 var CURRENT_VIEW = null;
