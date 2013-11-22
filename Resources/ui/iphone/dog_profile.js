@@ -195,34 +195,41 @@ function buildDogProfileView(dogId){
 		});
 		dogProfileOpacityInfoBar.add(dogProfileSizeNumberLabel);
 		
+		var dogProfileLikesTransparentView = Ti.UI.createView({
+			right:0,
+			color:'transparent',
+			width:80
+		});
+		dogProfileLikesTransparentView.addEventListener('click', handleDogLikesButton);
+		
 		var dogProfileLikesLabel = Titanium.UI.createLabel({ 
 			text:'likes',
 			height:19,
 			textAlign:'center',
-			left:266,
 			bottom:4,
 			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
-		dogProfileOpacityInfoBar.add(dogProfileLikesLabel);
+		dogProfileLikesTransparentView.add(dogProfileLikesLabel);
 		
 		dogProfileLikesNumberLabel = Titanium.UI.createLabel({
 			text:'',
 			height:21,
 			textAlign:'center',
-			left:270,
+			right:40,
 			top:10,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
-		dogProfileOpacityInfoBar.add(dogProfileLikesNumberLabel);
+		dogProfileLikesTransparentView.add(dogProfileLikesNumberLabel);
 		
 		var dogProfileLikesIcon = Ti.UI.createImageView({
 			image:IMAGE_PATH+'dog_profile/best_icon_selected.png',
-			left:287,
+			right:9,
 			top:11,
 			dogId:dogId
 		});
-		dogProfileLikesIcon.addEventListener('click', handleDogLikesButton);
-		dogProfileOpacityInfoBar.add(dogProfileLikesIcon);
+		dogProfileLikesTransparentView.add(dogProfileLikesIcon);
+		
+		dogProfileOpacityInfoBar.add(dogProfileLikesTransparentView);
 		
 		dogProfileView.add(dogProfileOpacityInfoBar);
 		

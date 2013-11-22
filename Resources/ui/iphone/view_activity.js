@@ -191,34 +191,41 @@ function buildViewActivityView(aId){
 		});
 		viewActivityOpacityBar.add(viewActivityWeatherLabel);
 		
+		var viewActivityLikesTransparentView = Ti.UI.createView({
+			right:0,
+			color:'transparent',
+			width:80
+		});
+		viewActivityLikesTransparentView.addEventListener('click', handleActivityLikesButton);
+		
 		//number of the Likes label
 		viewActivityLikesNumberLabel = Titanium.UI.createLabel({
 			height:21,
 			textAlign:'center',
-			left:269,
+			right:40,
 			top:10,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
-		viewActivityOpacityBar.add(viewActivityLikesNumberLabel);
+		viewActivityLikesTransparentView.add(viewActivityLikesNumberLabel);
 		
 		var viewActivityLikesIcon = Ti.UI.createImageView({
 			image:IMAGE_PATH+'dog_profile/best_icon_selected.png',
-			left:287,
+			right:9,
 			top:11,
 			actId:aId
 		});
-		viewActivityLikesIcon.addEventListener('click', handleActivityLikesButton);
-		viewActivityOpacityBar.add(viewActivityLikesIcon);
+		viewActivityLikesTransparentView.add(viewActivityLikesIcon);
 		
 		var viewActivityLikesLabel = Titanium.UI.createLabel({ 
 			text:'Likes',
 			height:19,
 			textAlign:'center',
-			left:266,
 			bottom:4,
 			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
-		viewActivityOpacityBar.add(viewActivityLikesLabel);
+		viewActivityLikesTransparentView.add(viewActivityLikesLabel);
+		
+		viewActivityOpacityBar.add(viewActivityLikesTransparentView);
 		
 		viewActivityView.add(viewActivityMap);
 		

@@ -8,6 +8,8 @@ var MENU_TAKE_TOUR = 2;
 var MENU_REPORT_PROBLEM = 3;
 var MENU_LOGOUT = 4;
 var MENU_SHARING = 5;
+var MENU_TERMS = 6;
+var MENU_PRIVACY = 7;
 
 function buildSettingsView(){
 	if(viewSettings == null){
@@ -37,6 +39,8 @@ function buildSettingsView(){
 		settingsMenuData.push(createSettingsMenuRow(MENU_TAKE_TOUR));
 		settingsMenuData.push(createSettingsMenuRow(MENU_REPORT_PROBLEM));
 		settingsMenuData.push(createSettingsMenuRow(MENU_LOGOUT));
+		settingsMenuData.push(createSettingsMenuRow(MENU_TERMS));
+		settingsMenuData.push(createSettingsMenuRow(MENU_PRIVACY));
 		
 		settingsMenuTable.setData(settingsMenuData);
 	}
@@ -67,6 +71,32 @@ function handleSettingsMenuTableRows(e){
 		logout();
 	} else if(selectedItem == MENU_SHARING){
 		openSettingsSharingView();
+	} else if(selectedItem == MENU_TERMS){
+		openSettingsTermsView();
+	} else if(selectedItem == MENU_PRIVACY){
+		openSettingsPrivacyView();
+	}
+}
+
+function openSettingsTermsView(){
+	Ti.include('ui/iphone/terms.js');
+	buildTermsView();
+	
+	if(iOS7){
+		termsNavWin.open();
+	}else{
+		termsWindow.open();
+	}
+}
+
+function openSettingsPrivacyView(){
+	Ti.include('ui/iphone/privacy.js');
+	buildPrivacyView();
+	
+	if(iOS7){
+		privacyNavWin.open();
+	}else{
+		privacyWindow.open();
 	}
 }
 
@@ -217,6 +247,12 @@ function createSettingsMenuRow(menu){
 	} else if(menu == MENU_SHARING){
 		icon = IMAGE_PATH+'settings/profile_edit.png';
 		label = 'Sharing';
+	} else if(menu == MENU_TERMS){
+		icon = IMAGE_PATH+'settings/profile_edit.png';
+		label = 'Terms & Conditions';
+	} else if(menu == MENU_PRIVACY){
+		icon = IMAGE_PATH+'settings/profile_edit.png';
+		label = 'Privacy Policy';
 	}
 	
 	var rowIcon = Titanium.UI.createImageView({
