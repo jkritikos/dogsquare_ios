@@ -867,7 +867,11 @@ function followUser(uId, button, win){
 			if(win == 1){
 				button.backgroundImage = IMAGE_PATH+'follow_invite/Unfollow_btn.png';
 			}else if(win == 2){
+				//Profile_other.js
 				button.backgroundImage = IMAGE_PATH+'profile_other/Unfollow_button.png';
+				
+				//Update the mutual followership flag
+				handleMutualFollowerCallback(jsonData.data.mutual_followers);
 			}
 			
 			var followers = jsonData.data.count_followers;
@@ -965,6 +969,9 @@ function unfollowUser(uId, button, win){
 				button.backgroundImage = IMAGE_PATH+'follow_invite/Follow_btn.png';
 			}else if(win == 2){
 				button.backgroundImage = IMAGE_PATH+'profile_other/Follow_button.png';
+				
+				//Update the mutual followership flag
+				handleMutualFollowerCallback(jsonData.data.mutual_followers);
 			}
 			
 			var followers = jsonData.data.count_followers;

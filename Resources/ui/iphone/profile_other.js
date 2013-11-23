@@ -358,6 +358,12 @@ function buildProfileOtherView(uId, name) {
 	return profileOtherView;
 }
 
+//Updates the control flag for mutual followership - essentially blocking/unblocking certain actions on the UI, e.g. messaging
+function handleMutualFollowerCallback(currentValue){
+	Ti.API.info('handleMutualFollowerCallback() called with value '+currentValue);
+	profileOtherChatButton.mutual = currentValue;
+}
+
 //Event handler for the walk with me button - sends a walk request to this user
 function sendWalkRequest(){
 	var xhr = Ti.Network.createHTTPClient();
