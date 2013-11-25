@@ -174,6 +174,8 @@ fb.addEventListener('login', function(e) {
     			} else if(CURRENT_VIEW == VIEW_FIND_FRIENDS){
     				Ti.API.info('FB Login from find friends view');
     				facebookGetAllFriends();
+    			} else {
+    				Ti.API.info('Other view: '+CURRENT_VIEW+' not doing something..');
     			}
     			
     		} else if (e.error) {

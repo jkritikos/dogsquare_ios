@@ -3,12 +3,27 @@ var termsNavWin = null;
 
 //Build the terms view
 function buildTermsView(type){
+	
+	var theTitle = null;
+	var termsPdfView = Ti.UI.createWebView({
+		height:'auto'
+	});
+	
+	if(type == VIEW_TERMS){
+		termsPdfView.url = SERVER+'files/terms.pdf';
+		theTitle = 'Terms & Conditions';
+	} else if(type == VIEW_PRIVACY){
+		theTitle = 'Privacy Policy';
+		termsPdfView.url = SERVER+'files/privacy.pdf';
+	}
+	
 	termsWindow = Ti.UI.createWindow({
 		backgroundColor:'black',
 		barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR,
 		translucent:false,
-		modal:true
+		modal:true,
+		title:theTitle
 	});
 	
 	//check if version is ios 7 and higher and create new navigationWindow (3.1.3.GA)
@@ -45,18 +60,7 @@ function buildTermsView(type){
 	});
 	termsTransparentView.add(termsTextLabel);*/
 	
-	var termsPdfView = Ti.UI.createWebView({
-		height:'auto'
-	});
 	termsScrollView.add(termsPdfView);
-	
-	if(type == VIEW_TERMS){
-		termsPdfView.url = SERVER+'files/terms.pdf';
-		termsWindow.title = 'Terms & Conditions';
-	}else if(type == VIEW_PRIVACY){
-		termsPdfView.url = SERVER+'files/privacy.pdf';
-		termsWindow.title = 'Privacy Policy';
-	}
 	
 	var termsDoneButton = Titanium.UI.createButton({
 		backgroundImage:IMAGE_PATH+'common/Done_button.png',

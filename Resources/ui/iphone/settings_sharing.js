@@ -37,12 +37,22 @@ function buildSettingsSharingView(){
 function handleFBCheckinSharingSelection(e){
 	Ti.API.info('Switch value: ' + e.value+' for option CHECKIN');
 	Ti.App.Properties.setBool(SHARING_CHECKIN_FACEBOOK, e.value);
+	
+	//Login to FB if needed
+	if(e.value && !fb.loggedIn){
+		fb.authorize();
+	}
 }
 
 //Event handler for checkin switch clicks
 function handleFBCActivitySharingSelection(e){
 	Ti.API.info('Switch value: ' + e.value+' for option ACTIVITY');
 	Ti.App.Properties.setBool(SHARING_ACTIVITY_FACEBOOK, e.value);
+	
+	//Login to FB if needed
+	if(e.value && !fb.loggedIn){
+		fb.authorize();
+	}
 }
 
 function createSharingMenuRow(menu){

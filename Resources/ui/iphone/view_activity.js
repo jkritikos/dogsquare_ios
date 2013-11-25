@@ -819,6 +819,8 @@ function updateActivityCoordinates(coordsObj){
 			longitudeDelta:0.004
 		};
 		
+		Ti.API.warn('OLD '+JSON.stringify(viewActivityRegion));
+		
 		//map region object
 		var runSummaryRegion = {
 			latitude: centeredMarkersInfo != null ? centeredMarkersInfo.latitude : coordsObj[0].latitude,
@@ -828,6 +830,7 @@ function updateActivityCoordinates(coordsObj){
 			longitudeDelta:centeredMarkersInfo != null ? centeredMarkersInfo.delta : 0.002
 		};
 		
+		Ti.API.warn('NEW '+JSON.stringify(runSummaryRegion));
 		viewActivityMap.setLocation(runSummaryRegion);
 		
 		//route object
@@ -859,7 +862,8 @@ function handleActivityLikesButton(e){
 		backgroundColor:'white',
 		//barImage:IMAGE_PATH+'common/bar.png',
 		translucent:false,
-		barColor:UI_COLOR
+		barColor:UI_COLOR,
+		title:'Likes'
 	});
 	
 	//back button & event listener
