@@ -6,6 +6,7 @@ var runFinishCommentsButton = null;
 var viewRunFinishMap = null;
 var runFinishSaveCommentButton = null;
 var viewRunSummary = null;
+var runFinishRunObject = null;
 
 var ADD_COMMENT = 1;
 var COMMENT_ROW = 2;
@@ -21,7 +22,8 @@ Ti.App.addEventListener('activity', function(data) {
 });
 
 function buildRunFinishView(obj){
-
+	runFinishRunObject = obj;
+	
 	//run finish View
 	viewRunSummary = Ti.UI.createView({
 		backgroundColor:UI_BACKGROUND_COLOR
@@ -331,9 +333,9 @@ function shareActivity(){
 		setTimeout(function(){
 			//create map image
 			var blob = viewRunFinishMap.toImage();
-			var msg = 'I just finished an activity with my dog!';
+			var msg = 'I just finished an activity with my dog: we walked for '+runFinishRunObject.walk +' Km and played for '+runFinishRunObject.play+' minutes!';
 			facebookPostImage(blob, msg, null);	
-		}, 2000);
+		}, 2500);
 	}
 }
 
