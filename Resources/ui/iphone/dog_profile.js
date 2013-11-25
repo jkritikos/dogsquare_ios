@@ -198,7 +198,8 @@ function buildDogProfileView(dogId){
 		var dogProfileLikesTransparentView = Ti.UI.createView({
 			right:0,
 			color:'transparent',
-			width:80
+			width:80,
+			dogId:dogId
 		});
 		dogProfileLikesTransparentView.addEventListener('click', handleDogLikesButton);
 		
@@ -207,7 +208,8 @@ function buildDogProfileView(dogId){
 			height:19,
 			textAlign:'center',
 			bottom:4,
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'},
+			dogId:dogId
 		});
 		dogProfileLikesTransparentView.add(dogProfileLikesLabel);
 		
@@ -217,7 +219,8 @@ function buildDogProfileView(dogId){
 			textAlign:'center',
 			right:40,
 			top:10,
-			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'},
+			dogId:dogId
 		});
 		dogProfileLikesTransparentView.add(dogProfileLikesNumberLabel);
 		

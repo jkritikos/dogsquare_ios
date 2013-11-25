@@ -194,7 +194,8 @@ function buildViewActivityView(aId){
 		var viewActivityLikesTransparentView = Ti.UI.createView({
 			right:0,
 			color:'transparent',
-			width:80
+			width:80,
+			actId:aId
 		});
 		viewActivityLikesTransparentView.addEventListener('click', handleActivityLikesButton);
 		
@@ -204,7 +205,8 @@ function buildViewActivityView(aId){
 			textAlign:'center',
 			right:40,
 			top:10,
-			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'},
+			actId:aId
 		});
 		viewActivityLikesTransparentView.add(viewActivityLikesNumberLabel);
 		
@@ -221,7 +223,8 @@ function buildViewActivityView(aId){
 			height:19,
 			textAlign:'center',
 			bottom:4,
-			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'},
+			actId:aId
 		});
 		viewActivityLikesTransparentView.add(viewActivityLikesLabel);
 		
