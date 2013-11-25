@@ -1,6 +1,56 @@
 //Import files
 var FILES_IMPORTED = [];
 
+function getMarkersWithCenter(coordinates){
+    
+    var total_locations = coordinates.length;
+    var minLongi = null, minLati = null, maxLongi = null, maxLati = null;
+    var totalLongi = 0.0, totalLati = 0.0;
+
+    for(var i = 0; i < total_locations; i++) 
+    {
+        if(minLati == null || minLati > coordinates[i].latitude) {
+            minLati = coordinates[i].latitude;
+        }
+        if(minLongi == null || minLongi > coordinates[i].longitude) {
+            minLongi = coordinates[i].longitude;
+        }
+        if(maxLati == null || maxLati < coordinates[i].latitude) {
+            maxLati = coordinates[i].latitude;
+        }
+        if(maxLongi == null || maxLongi < coordinates[i].longitude) {
+            maxLongi = coordinates[i].longitude;
+        }
+    }
+
+    var ltDiff = maxLati-minLati;
+    var lgDiff = maxLongi-minLongi;
+    var delta = ltDiff>lgDiff ? ltDiff : lgDiff;
+	Ti.API.warn('minLati '+minLati+' maxLati '+maxLati+' minLongi '+minLongi+' maxLongi '+maxLongi+' delta '+delta);
+    
+    //untested, leave in case we need it
+    /*
+    if(delta > 5){
+    	Ti.API.warn('DELTA > 5');
+        delta = 0.5;
+        maxLati = coordinates[coordinates.length-1].latitude;
+        minLati = coordinates[coordinates.length-1].latitude;
+        maxLongi = coordinates[coordinates.length -1].longitude;
+        minLongi = coordinates[coordinates.length -1].longitude;
+    }*/
+    
+    var results = null;
+    if(total_locations>0 && delta>0){
+    	results = {
+    		delta:delta,
+    		latitude:((maxLati+minLati+ 0.00015)/2),
+    		longitude:((maxLongi+minLongi)/2)
+    	};
+    }
+    
+    return results;
+}
+
 //Returns the timezone offset formatted for MySQL use
 function getUTCOffset(){
 	var utcTime = new Date();

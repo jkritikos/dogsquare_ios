@@ -805,6 +805,8 @@ function updateActivityCoordinates(coordsObj){
 		viewActivityAnnotationEnd.latitude = coordsObj[coordsObj.length - 1].latitude;
 		viewActivityAnnotationEnd.longitude = coordsObj[coordsObj.length - 1].longitude;
 		
+		var centeredMarkersInfo = getMarkersWithCenter(coordsObj);
+		
 		//map region object
 		var viewActivityRegion = {
 			latitude: coordsObj[0].latitude,
@@ -814,7 +816,16 @@ function updateActivityCoordinates(coordsObj){
 			longitudeDelta:0.004
 		};
 		
-		viewActivityMap.setLocation(viewActivityRegion);
+		//map region object
+		var runSummaryRegion = {
+			latitude: centeredMarkersInfo != null ? centeredMarkersInfo.latitude : coordsObj[0].latitude,
+			longitude: centeredMarkersInfo != null ? centeredMarkersInfo.longitude : coordsObj[0].longitude,
+			animate:true,
+			latitudeDelta:centeredMarkersInfo != null ? centeredMarkersInfo.delta : 0.002,
+			longitudeDelta:centeredMarkersInfo != null ? centeredMarkersInfo.delta : 0.002
+		};
+		
+		viewActivityMap.setLocation(runSummaryRegion);
 		
 		//route object
 		var route = {

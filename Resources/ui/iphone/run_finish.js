@@ -47,13 +47,15 @@ function buildRunFinishView(obj){
 		image:IMAGE_PATH+'run_finish/pin.png'
 	});
 	
+	var centeredMarkersInfo = getMarkersWithCenter(obj.coordinates);
+	
 	//map region object
 	var runSummaryRegion = {
-		latitude: obj.coordinates[0].latitude,
-		longitude: obj.coordinates[0].longitude,
+		latitude: centeredMarkersInfo != null ? centeredMarkersInfo.latitude : obj.coordinates[0].latitude,
+		longitude: centeredMarkersInfo != null ? centeredMarkersInfo.longitude : obj.coordinates[0].longitude,
 		animate:true,
-		latitudeDelta:0.002,
-		longitudeDelta:0.002
+		latitudeDelta:centeredMarkersInfo != null ? centeredMarkersInfo.delta : 0.002,
+		longitudeDelta:centeredMarkersInfo != null ? centeredMarkersInfo.delta : 0.002
 	};
 	
 	//the map
