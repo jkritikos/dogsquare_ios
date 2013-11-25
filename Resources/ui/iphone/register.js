@@ -641,7 +641,7 @@ function handleRegisterFormNewsCheckBox(e){
 
 function handleTermsLabelLink(){
 	Ti.include('ui/iphone/terms.js');
-	buildTermsView();
+	buildTermsView(VIEW_TERMS);
 	
 	if(iOS7){
 		termsNavWin.open();

@@ -8,8 +8,7 @@ function buildTermsView(type){
 		barImage:IMAGE_PATH+'common/bar.png',
 		barColor:UI_COLOR,
 		translucent:false,
-		modal:true,
-		title:'Terms'
+		modal:true
 	});
 	
 	//check if version is ios 7 and higher and create new navigationWindow (3.1.3.GA)
@@ -53,8 +52,10 @@ function buildTermsView(type){
 	
 	if(type == VIEW_TERMS){
 		termsPdfView.url = SERVER+'files/terms.pdf';
+		termsWindow.title = 'Terms & Conditions';
 	}else if(type == VIEW_PRIVACY){
 		termsPdfView.url = SERVER+'files/privacy.pdf';
+		termsWindow.title = 'Privacy Policy';
 	}
 	
 	var termsDoneButton = Titanium.UI.createButton({
