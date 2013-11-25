@@ -316,6 +316,7 @@ function handleMapAnnotationClick(e){
 	var annotation = e.annotation;
 	var source = e.clicksource;
 	var category_id = annotation.category_id;
+	var showUser = annotation.show_user;
 	
 	if(source == 'rightButton'){
 		if(annotation.place_id && category_id != FILTER_LOST_DOG){
@@ -382,7 +383,7 @@ function handleMapAnnotationClick(e){
 			openWindows.push(viewActivityWindow);
 			//openWindows[0] = viewActivityWindow;
 			navController.open(viewActivityWindow);
-		}else if(category_id == FILTER_LOST_DOG){
+		}else if(category_id == FILTER_LOST_DOG || showUser){
 			var user_id = annotation.user_id;
 			
 			if(user_id != userObject.userId){
@@ -866,8 +867,11 @@ function updateMapWithAnnotations(places, checkins, activities){
 				animate:false,
 				customView:customPin2,
 				rightButton:IMAGE_PATH+'map/arrow_icon.png',
-				place_id:checkins[i].place_id,
-				place_title:checkins[i].place_name
+				//place_id:checkins[i].place_id,
+				place_title:checkins[i].place_name,
+				user_id:checkins[i].id,
+				user_name:checkins[i].user_name,
+				show_user:true
 			});
 			
 			annotationArray.push(mapAnnotations);

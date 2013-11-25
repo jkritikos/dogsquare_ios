@@ -240,7 +240,7 @@ function createSettingsMenuRow(menu){
 		icon = IMAGE_PATH+'settings/profile_edit.png';
 		label = 'Terms & Conditions';
 	} else if(menu == MENU_PRIVACY){
-		icon = IMAGE_PATH+'settings/profile_edit.png';
+		icon = IMAGE_PATH+'settings/Lock_icon.png';
 		label = 'Privacy Policy';
 	}
 	

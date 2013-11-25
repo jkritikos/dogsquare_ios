@@ -862,7 +862,8 @@ function handleActivityLikesButton(e){
 		backgroundColor:'white',
 		//barImage:IMAGE_PATH+'common/bar.png',
 		translucent:false,
-		barColor:UI_COLOR
+		barColor:UI_COLOR,
+		title:'Likes'
 	});
 	
 	//back button & event listener
