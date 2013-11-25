@@ -2,7 +2,7 @@
 var FILES_IMPORTED = [];
 
 function getMarkersWithCenter(coordinates){
-    
+    Ti.API.info('getMarkersWithCenter() called with '+JSON.stringify(coordinates));
     var total_locations = coordinates.length;
     var minLongi = null, minLati = null, maxLongi = null, maxLati = null;
     var totalLongi = 0.0, totalLati = 0.0;
@@ -10,16 +10,16 @@ function getMarkersWithCenter(coordinates){
     for(var i = 0; i < total_locations; i++) 
     {
         if(minLati == null || minLati > coordinates[i].latitude) {
-            minLati = coordinates[i].latitude;
+            minLati = parseFloat(coordinates[i].latitude);
         }
         if(minLongi == null || minLongi > coordinates[i].longitude) {
-            minLongi = coordinates[i].longitude;
+            minLongi = parseFloat(coordinates[i].longitude);
         }
         if(maxLati == null || maxLati < coordinates[i].latitude) {
-            maxLati = coordinates[i].latitude;
+            maxLati = parseFloat(coordinates[i].latitude);
         }
         if(maxLongi == null || maxLongi < coordinates[i].longitude) {
-            maxLongi = coordinates[i].longitude;
+            maxLongi = parseFloat(coordinates[i].longitude);
         }
     }
 
@@ -46,6 +46,8 @@ function getMarkersWithCenter(coordinates){
     		latitude:((maxLati+minLati+ 0.00015)/2),
     		longitude:((maxLongi+minLongi)/2)
     	};
+    	
+    	Ti.API.warn('Returning lat '+results.latitude+' and lon '+results.longitude);
     }
     
     return results;
