@@ -15,8 +15,8 @@ if(!PRODUCTION_MODE){
 	//UrbanAirship.secret ='KBiUUr_mQwKYNmTXX5oVpQ';
 	//UrbanAirship.master_secret='0louzaRKRLmStWwb0qEHjw';
 	//UrbanAirship.baseurl = 'https://go.urbanairship.com';
-	SERVER = 'http://dogsquare.veladia.com/';
-	//SERVER = 'http://admin.dogsquareapp.com/';
+	//SERVER = 'http://dogsquare.veladia.com/';
+	SERVER = 'http://admin.dogsquareapp.com/';
 }
 
 //Determine iPhone5
