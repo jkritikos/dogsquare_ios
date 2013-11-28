@@ -233,11 +233,10 @@ function buildRunFinishView(obj){
 		backgroundColor:'transparent',
 		separatorStyle:Ti.UI.iPhone.TableViewSeparatorStyle.NONE,
 		top:240,
-		bottom:39,
-		allowsSelection:false
+		bottom:39
 	});
-	
 	viewRunSummary.add(runFinishTableView);
+	runFinishTableView.addEventListener('click', handleRunFinishTableRows);
 
 	//route object
 	var route = {
@@ -328,6 +327,39 @@ function buildRunFinishView(obj){
 	return viewRunSummary;
 }
 
+function handleRunFinishTableRows(e){
+	var dogId = e.row.dogId;
+	
+	Ti.include('ui/iphone/dog_profile.js');
+		
+	var dogProfileView = buildDogProfileView(dogId);
+	
+	var dogProfileWindow = Ti.UI.createWindow({
+		backgroundColor:UI_BACKGROUND_COLOR,
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
+		barColor:UI_COLOR,
+		title:e.row.children[1].text
+	});
+	
+	//back button
+	var dogProfileBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+ 	});
+ 	
+	dogProfileWindow.setLeftNavButton(dogProfileBackButton);
+	
+	dogProfileBackButton.addEventListener("click", function() {
+	    navController.close(dogProfileWindow);
+	});	
+	
+	dogProfileWindow.add(dogProfileView);
+	openWindows.push(dogProfileWindow);
+	navController.open(dogProfileWindow);
+}
+
 function shareActivity(){
 	Ti.API.info('shareActivity() called and runFinishFBPosted='+runFinishFBPosted);
 	//Post activity on facebook if we must
@@ -356,7 +388,8 @@ function populateRunFinishTableView(o){
 			className:'runFinishRow',
 			height:79,
 			backgroundColor:UI_BACKGROUND_COLOR,
-			selectedBackgroundColor:'transparent'
+			selectedBackgroundColor:'transparent',
+			dogId:data.dogs[i].dog_id
 		});
 		
 		var rowDogImage = Titanium.UI.createImageView({ 
@@ -365,7 +398,8 @@ function populateRunFinishTableView(o){
 			left:14,
 			borderRadius:30,
 			borderWidth:2,
-			borderColor:'#f9bf30'
+			borderColor:'#f9bf30',
+			dogId:data.dogs[i].dog_id
 		});
 		row.add(rowDogImage);
 		
@@ -377,7 +411,8 @@ function populateRunFinishTableView(o){
 			textAlign:'center',
 			left:91,
 			opacity:0.7,
-			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'},
+			dogId:data.dogs[i].dog_id
 		});
 		row.add(rowDogNameLabel);
 		
@@ -385,7 +420,8 @@ function populateRunFinishTableView(o){
 		var rowBoneImage = Ti.UI.createImageView({ 
 			image:IMAGE_PATH+'run_finish/bone_grey.png',
 			left:210,
-			top:20
+			top:20,
+			dogId:data.dogs[i].dog_id
 		});
 		
 		row.add(rowBoneImage);
@@ -399,7 +435,8 @@ function populateRunFinishTableView(o){
 				height:30,
 				left:210,
 				top:20,
-				zIndex:2
+				zIndex:2,
+				dogId:data.dogs[i].dog_id
 			}); 
 			
 			row.add(rowBoneFillImage);	
@@ -414,7 +451,8 @@ function populateRunFinishTableView(o){
 			right:52,
 			bottom:13,
 			opacity:0.3,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
+			dogId:data.dogs[i].dog_id
 		});
 		row.add(rowMoodLabel);
 		
@@ -426,7 +464,8 @@ function populateRunFinishTableView(o){
 			textAlign:'center',
 			left:271,
 			bottom:13,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
+			dogId:data.dogs[i].dog_id
 		});
 		row.add(rowMoodPercentLabel);
 		

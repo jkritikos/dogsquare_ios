@@ -259,11 +259,10 @@ function buildViewActivityView(aId){
 			backgroundColor:'transparent',
 			top:240,
 			bottom:39,
-			allowsSelection:false,
 			height:140
 		});
-		
 		viewActivityView.add(viewActivityTableView);
+		viewActivityTableView.addEventListener('click', handleViewActivityTableRows);
 		
 		//background for comments
 		viewActivityCommentsBackgroundView = Ti.UI.createView({
@@ -344,6 +343,39 @@ function buildViewActivityView(aId){
 	Ti.API.info('buildActivityView() created');
 }
 
+function handleViewActivityTableRows(e){
+	var dogId = e.row.dogId;
+	
+	Ti.include('ui/iphone/dog_profile.js');
+		
+	var dogProfileView = buildDogProfileView(dogId);
+	
+	var dogProfileWindow = Ti.UI.createWindow({
+		backgroundColor:UI_BACKGROUND_COLOR,
+		//barImage:IMAGE_PATH+'common/bar.png',
+		translucent:false,
+		barColor:UI_COLOR,
+		title:e.row.children[1].text
+	});
+	
+	//back button
+	var dogProfileBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+ 	});
+ 	
+	dogProfileWindow.setLeftNavButton(dogProfileBackButton);
+	
+	dogProfileBackButton.addEventListener("click", function() {
+	    navController.close(dogProfileWindow);
+	});	
+	
+	dogProfileWindow.add(dogProfileView);
+	openWindows.push(dogProfileWindow);
+	navController.open(dogProfileWindow);
+}
+
 function populateViewActivityDogsTableView(dogObj){
 	var tableRows = [];
 	
@@ -353,7 +385,8 @@ function populateViewActivityDogsTableView(dogObj){
 			className:'runFinishRow',
 			height:79,
 			backgroundColor:UI_BACKGROUND_COLOR,
-			selectedBackgroundColor:'transparent'
+			selectedBackgroundColor:'transparent',
+			dogId:dogObj[i].Dog.id
 		});
 		
 		var rowDogImage = Titanium.UI.createImageView({ 
@@ -362,7 +395,8 @@ function populateViewActivityDogsTableView(dogObj){
 			left:14,
 			borderRadius:30,
 			borderWidth:2,
-			borderColor:'#f9bf30'
+			borderColor:'#f9bf30',
+			dogId:dogObj[i].Dog.id
 		});
 		row.add(rowDogImage);
 		
@@ -373,7 +407,8 @@ function populateViewActivityDogsTableView(dogObj){
 			height:65,
 			textAlign:'center',
 			left:91,
-			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'},
+			dogId:dogObj[i].Dog.id
 		});
 		row.add(rowDogNameLabel);
 		
@@ -382,7 +417,8 @@ function populateViewActivityDogsTableView(dogObj){
 			image:IMAGE_PATH+'run_finish/bone_grey.png',
 			left:210,
 			top:20,
-			height:30
+			height:30,
+			dogId:dogObj[i].Dog.id
 		});
 		
 		row.add(rowBoneImage);
@@ -396,7 +432,8 @@ function populateViewActivityDogsTableView(dogObj){
 				height:30,
 				left:210,
 				top:20,
-				zIndex:2
+				zIndex:2,
+				dogId:dogObj[i].Dog.id
 			});
 			
 			row.add(rowBoneFillImage);
@@ -410,7 +447,8 @@ function populateViewActivityDogsTableView(dogObj){
 			textAlign:'center',
 			right:52,
 			bottom:13,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
+			dogId:dogObj[i].Dog.id
 		});
 		row.add(rowMoodLabel);
 		
@@ -422,7 +460,8 @@ function populateViewActivityDogsTableView(dogObj){
 			textAlign:'center',
 			left:271,
 			bottom:13,
-			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'},
+			dogId:dogObj[i].Dog.id
 		});
 		row.add(rowMoodPercentLabel);
 		
