@@ -236,7 +236,8 @@ function buildRunFinishView(obj){
 		bottom:39
 	});
 	viewRunSummary.add(runFinishTableView);
-	runFinishTableView.addEventListener('click', handleRunFinishTableRows);
+	
+	//runFinishTableView.addEventListener('click', handleRunFinishTableRows);
 
 	//route object
 	var route = {

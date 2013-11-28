@@ -34,7 +34,7 @@ var initialButtonsBackground = Ti.UI.createView({
 	width:272,
 	height:107,
 	top:230,
-	visible:false,
+	opacity:0,
 	zIndex:1
 });
 initialWindow.add(initialButtonsBackground);
@@ -97,6 +97,6 @@ takeTourButton.addEventListener('click', function(){
 function handleTimebarChange(e){
 	if(e.index == 56){
 		loadingBarImage.pause();
-		initialButtonsBackground.show();
+		initialButtonsBackground.animate({opacity:1,duration:230});
 	}
 }
