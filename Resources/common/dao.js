@@ -1413,8 +1413,8 @@ function calculateDogfuel(activityId, totalPlaytimeSeconds){
 	}
 	
 	var obj = {
-		walk:totalWalkDistance,
-		play:totalPlaytime
+		walk:totalWalkDistance > 0 ? totalWalkDistance.toFixed(2) :totalWalkDistance ,
+		play:totalPlaytime > 0 ? totalPlaytime.toFixed(2) : totalPlaytime
 	};
 	
 	return obj;

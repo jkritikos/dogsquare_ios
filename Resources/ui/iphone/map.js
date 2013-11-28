@@ -352,7 +352,7 @@ function handleMapAnnotationClick(e){
 			openWindows.push(checkinPlaceWindow);
 			//openWindows[1] = checkinPlaceWindow;
 			navController.open(checkinPlaceWindow);
-		} else if(annotation.activity_id){
+		} else if(annotation.activity_id && !showUser){
 			var activityId = annotation.activity_id;
 			Ti.include('ui/iphone/view_activity.js');
 	
@@ -867,11 +867,10 @@ function updateMapWithAnnotations(places, checkins, activities){
 				animate:false,
 				customView:customPin2,
 				rightButton:IMAGE_PATH+'map/arrow_icon.png',
-				//place_id:checkins[i].place_id,
+				place_id:checkins[i].place_id,
 				place_title:checkins[i].place_name,
 				user_id:checkins[i].id,
-				user_name:checkins[i].user_name,
-				show_user:true
+				user_name:checkins[i].user_name
 			});
 			
 			annotationArray.push(mapAnnotations);
@@ -913,7 +912,9 @@ function updateMapWithAnnotations(places, checkins, activities){
 				customView:customPin2,
 				rightButton:IMAGE_PATH+'map/arrow_icon.png',
 				user_id:activities[i].id,
-				activity_id:activities[i].activity_id
+				user_name:activities[i].user_name,
+				activity_id:activities[i].activity_id,
+				show_user:true
 			});
 			
 			annotationArray.push(mapAnnotations);

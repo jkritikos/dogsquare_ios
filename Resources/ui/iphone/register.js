@@ -915,6 +915,26 @@ function doSignup(uObj){
 			saveUserObject(uObj);
 			updateLeftMenu(uObj);
 			
+			//Clear the local db if this is a new user logging in
+			var lastLoginBy = getLastLogin();
+			if(lastLoginBy != null && lastLoginBy != jsonData.data.user_id){
+				Ti.API.info('last user id logged in was '+lastLoginBy + ' - current user logging in is '+jsonData.data.user_id+' - CLEANING DB');
+				cleanDB();
+				erasedDatabase = true;
+			} else {
+				Ti.API.info('not cleaning db - lastLoginBy '+lastLoginBy+' and current login by '+jsonData.data.user_id);
+			}
+			
+			//Clear the dog menu
+			var dogArray = [];
+			populateRightMenu(dogArray);
+			
+			//Pesists the user that logs in
+			saveUserLogin(jsonData.data.user_id);
+			
+			//update menu counts
+			updateLeftMenuCounts(0, 0, 0);
+			
 			//Save lookup data (breeds, dogfuel rules, place categories)
 			saveDogBreeds(jsonData.data.breeds);
 			saveDogfuelRules(jsonData.data.rules);
