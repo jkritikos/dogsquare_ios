@@ -7,7 +7,7 @@ var viewRunFinishMap = null;
 var runFinishSaveCommentButton = null;
 var viewRunSummary = null;
 var runFinishRunObject = null;
-
+var runFinishFBPosted = false;
 var ADD_COMMENT = 1;
 var COMMENT_ROW = 2;
 
@@ -329,8 +329,10 @@ function buildRunFinishView(obj){
 }
 
 function shareActivity(){
+	Ti.API.info('shareActivity() called and runFinishFBPosted='+runFinishFBPosted);
 	//Post activity on facebook if we must
-	if(shouldPostActivityFacebook()){
+	if(!runFinishFBPosted && shouldPostActivityFacebook()){
+		runFinishFBPosted = true;
 		//crap way of giving time to the map view to load..
 		setTimeout(function(){
 			//create map image
