@@ -385,6 +385,11 @@ function checkLoginCredentials(lObj){
 			window.setParallaxAmount(0.3);
 		} else {
 			
+			//logout from FB in case of error
+			if(fb.loggedIn){
+				fb.logout();	
+			}
+			
 			//Show the error message we got back from the server
 			progressView.change({
 		        error:true,

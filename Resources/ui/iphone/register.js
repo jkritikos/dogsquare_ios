@@ -662,6 +662,7 @@ function handleRegisterDatePickerChange(e){
 	
 	registerFieldBirthDateHintTextLabel.text = date;
 	signupUserObject.birth_date = pickerDate;
+	signupUserObject.birth_dateString = date;
 }
 
 function handleRegisterPickerChange(e){
@@ -956,6 +957,10 @@ function doSignup(uObj){
 			
 		} else {
 			
+			if(fb.loggedIn){
+				fb.logout();	
+			}
+			
 			//Show the error message we got back from the server
 			progressView.change({
 		        error:true,
@@ -977,7 +982,7 @@ function doSignup(uObj){
 		name:uObj.name,
 		email:uObj.email,
 		password:uObj.password,
-		birth_date:uObj.birth_date,
+		birth_date:uObj.birth_dateString,
 		facebook_id:uObj.facebook_id,
 		gender:uObj.gender,
 		address:uObj.address,

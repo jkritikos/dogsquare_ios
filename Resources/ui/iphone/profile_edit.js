@@ -231,12 +231,11 @@ function buildEditProfileView(window){
 	editProfileFieldBirthDateHintTextLabel.addEventListener('click', editProfileHandlePicker);
 	
 	var date = new Date(userObject.birth_date);
-	
-	editProfileObject.birth_date = date;
-	
 	var birth_date = formatDate(date);
 	
 	editProfileFieldBirthDateHintTextLabel.text = birth_date;
+	editProfileObject.birth_date = date;
+	editProfileObject.birth_dateString = birth_date;
 	
 	//Address textfield
 	editProfileFieldAddress = Ti.UI.createTextField({
@@ -564,6 +563,7 @@ function handleEditProfileDatePickerChange(e){
 	
 	editProfileFieldBirthDateHintTextLabel.text = date;
 	editProfileObject.birth_date = pickerDate;
+	editProfileObject.birth_dateString = date;
 }
 
 function handleEditProfilePickerChange(e){
@@ -839,7 +839,7 @@ function editUserProfile(uObj){
 		name:uObj.name,
 		email:uObj.email,
 		password:uObj.password,
-		birth_date:uObj.birth_date,
+		birth_date:uObj.birth_dateString,
 		facebook_id:uObj.facebook_id,
 		gender:uObj.gender,
 		address:uObj.address,

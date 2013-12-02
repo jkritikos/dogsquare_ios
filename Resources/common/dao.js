@@ -181,9 +181,18 @@ fb.addEventListener('login', function(e) {
     		} else if (e.error) {
         		//TODO handle error
         		alert(e.error);
+        		
+        		if(fb.loggedIn){
+					fb.logout();	
+				}
+        		
     		} else {
     			//TODO handle unknown response
         		alert('Unknown response');
+        		
+        		if(fb.loggedIn){
+					fb.logout();	
+				}
     		}
 		});
 		
@@ -297,7 +306,7 @@ function facebookPostImage(blob, msg, otherUserId){
 //Checks if activities should be posted to facebook
 function shouldPostActivityFacebook(){
 	var response = true;
-	var sharingFlag = true;
+	var sharingFlag = false;
 	if(Ti.App.Properties.getBool(SHARING_ACTIVITY_FACEBOOK) != null){
 		sharingFlag = Ti.App.Properties.getBool(SHARING_ACTIVITY_FACEBOOK);
 	}
@@ -315,7 +324,7 @@ function shouldPostActivityFacebook(){
 //Checks if checkins should be posted to facebook
 function shouldPostCheckinFacebook(){
 	var response = true;
-	var sharingFlag = true;
+	var sharingFlag = false;
 	if(Ti.App.Properties.getBool(SHARING_CHECKIN_FACEBOOK) != null){
 		sharingFlag = Ti.App.Properties.getBool(SHARING_CHECKIN_FACEBOOK);
 	}
