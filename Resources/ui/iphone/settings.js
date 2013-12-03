@@ -64,7 +64,8 @@ function handleSettingsMenuTableRows(e){
 			alert(getLocalMessage(MSG_NOT_AVAILABLE_WITH_FACEBOOK));
 		}
 	} else if(selectedItem == MENU_TAKE_TOUR){
-		
+		Ti.include('ui/iphone/tour.js');
+		openTourView();
 	} else if(selectedItem == MENU_REPORT_PROBLEM){
 		showProblemReportEmailDialog();
 	} else if(selectedItem == MENU_LOGOUT){

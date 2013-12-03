@@ -385,15 +385,18 @@ function checkLoginCredentials(lObj){
 			window.setParallaxAmount(0.3);
 		} else {
 			
+			var errorMessage = getErrorMessage(jsonData.data.response);
+			
 			//logout from FB in case of error
 			if(fb.loggedIn){
+				errorMessage = 'Pack Leader please register first!';
 				fb.logout();	
 			}
 			
 			//Show the error message we got back from the server
 			progressView.change({
 		        error:true,
-		        text:getErrorMessage(jsonData.data.response)
+		        text:errorMessage
 		    });
 			//and hide it after a while		    
 		    setTimeout(function() {

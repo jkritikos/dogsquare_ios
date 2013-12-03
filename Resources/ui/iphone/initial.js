@@ -91,7 +91,8 @@ var takeTourButton = Ti.UI.createButton({
 initialButtonsBackground.add(takeTourButton);
 
 takeTourButton.addEventListener('click', function(){
-	
+	Ti.include('ui/iphone/tour.js');
+	openTourView();
 });
 
 function handleTimebarChange(e){

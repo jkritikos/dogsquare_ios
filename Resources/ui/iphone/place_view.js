@@ -1158,7 +1158,7 @@ function checkinPlaceOnline(placeId){
 			
 			//Post to facebook if we must
 			if(shouldPostCheckinFacebook()){
-				var fbPost = 'I just checked in with my dog at '+checkinPlaceTitleLabel.text;
+				var fbPost = 'Is with his Dog Pack at '+checkinPlaceTitleLabel.text;
 				facebookPost(fbPost, null);	
 			}
 			
