@@ -1,8 +1,8 @@
 eclipse.preferences.version=1
 iosLaunchConfigurationAttributes/ATTR_MINIFY=true
 iosLaunchConfigurationAttributes/ATTR_PROJECT_NAME=dogsquare
-iosLaunchConfigurationAttributes/appid=com.dogsquare.app
-iosLaunchConfigurationAttributes/certificate=dogsquare Labs (A4KNRZ9Q2R)
+iosLaunchConfigurationAttributes/appid=com.dogsquareapp.client
+iosLaunchConfigurationAttributes/certificate=MILTIADIS SKOUNTRIANOS (XUSGKWEGN3)
 iosLaunchConfigurationAttributes/keychain=
 iosLaunchConfigurationAttributes/sdk_version=7.0
-iosLaunchConfigurationAttributes/uuid=8B00629D-10E4-4C2C-9A0A-22D1AE845726
+iosLaunchConfigurationAttributes/uuid=302022D6-4FAD-4908-8829-71E8133359C2
