@@ -9,6 +9,8 @@ var loginWindowPopupMode = null;
 var loginObject = {};
 
 function buildLoginWindow(isPopup){
+    Ti.API.info('buildLoginWindow() called with iOS7='+iOS7);
+    
 	loginWindowPopupMode = isPopup;
 	Titanium.UI.iPhone.showStatusBar();
 	
@@ -21,7 +23,7 @@ function buildLoginWindow(isPopup){
 	
 	var loginNavBar = Ti.UI.createImageView({
 		image:iOS7 ? IMAGE_PATH+'common/bar7.png' : IMAGE_PATH+'common/bar.png',
-		top:0
+		top:iOS7 ? 0 : -2
 	});
 	
 	//Back button only when not in popup mode
@@ -31,7 +33,7 @@ function buildLoginWindow(isPopup){
 		    width:48,
 		    height:33,
 		    left:6,
-		    top:23
+		    top:iOS7 ? 23 : 8
 		});
 		
 		loginNavBar.add(loginBackButton);
@@ -46,7 +48,7 @@ function buildLoginWindow(isPopup){
 		text:'Login',
 		color:'white',
 		font:UI_FONT_SEMIBOLD_NAVBAR,
-		top:20
+		top:iOS7 ? 20 : 5
 	});
 	
 	loginNavBar.add(loginNavBarLabel);
@@ -187,11 +189,11 @@ function handleForgotPasswordLabelLink(){
 	Ti.include('ui/iphone/password_reset.js');
 	buildPasswordResetView();
 	
-	if(iOS7){
+	//if(iOS7){
 		passwordResetNavWin.open();
-	}else{
-		passwordResetWindow.open();
-	}
+	//}else{
+	//	passwordResetWindow.open();
+	//}
 }
 
 //handle textfield when not focused

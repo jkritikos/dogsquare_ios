@@ -52,7 +52,7 @@ function populateInboxTableView(mObj) {
 		});
 		
 		var rowMessageProfileImage = Titanium.UI.createImageView({
-			image:API+'photo?user_id='+mObj[i].user_id,
+			image:API+'photo?user_id='+mObj[i].user_id+'&now='+new Date().getTime(),
 			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:2,
 			borderRadius:30,

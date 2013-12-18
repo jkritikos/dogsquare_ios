@@ -404,9 +404,11 @@ function populateViewActivityDogsTableView(dogObj){
 		var rowDogNameLabel = Titanium.UI.createLabel({ 
 			text:dogObj[i].Dog.name,
 			color:'#474747',
-			height:65,
-			textAlign:'center',
-			left:91,
+			height:35,
+			top:15,
+			width:125,
+			textAlign:'left',
+			left:85,
 			font:{fontSize:18, fontWeight:'regular', fontFamily:'Open Sans'},
 			dogId:dogObj[i].Dog.id
 		});
@@ -516,7 +518,7 @@ function populateViewActivityCommentsTableView(comObj){
 		});
 		
 		var commentRowUserImage = Titanium.UI.createImageView({
-			image:API+'photo?user_id='+comObj[i].comm.user_id,
+			image:API+'photo?user_id='+comObj[i].comm.user_id+'&now='+new Date().getTime(),
 			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			top:6,
 			left:10,
@@ -935,7 +937,7 @@ function appendCommentActivityTableView(date, message){
 		});
 		
 		var commentRowUserImage = Titanium.UI.createImageView({
-			image:API+'photo?user_id='+userObject.userId,
+			image:API+'photo?user_id='+userObject.userId+'&now='+new Date().getTime(),
 			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			top:6,
 			left:10,

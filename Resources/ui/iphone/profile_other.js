@@ -57,6 +57,24 @@ function buildProfileOtherView(uId, name) {
 			}
 		});
 		
+		//Photo dialog with options for viewing the profile image
+        var profilePhotoDialog = Titanium.UI.createOptionDialog({
+            options:['View','Cancel'],
+            cancel:1
+        });
+        
+        //Event listener for profile photo dialog options   
+        profilePhotoDialog.addEventListener('click',function(e){
+            if(e.index == 0){
+                profileOtherPhotoView();
+            } 
+        });
+        
+        //Event listener for profile image - brings up a dialog for viewing the profile image
+        profileOtherPhotoImage.addEventListener('click', function(){
+            profilePhotoDialog.show();
+        });
+		
 		//opacity bar
 		var profileOtherOpacityBar = Titanium.UI.createView({ 
 			backgroundColor:'white',
@@ -356,6 +374,15 @@ function buildProfileOtherView(uId, name) {
 	getOnlineOtherUser(uId);
 	
 	return profileOtherView;
+}
+
+//Opens a modal window to show the user's profile photo
+function profileOtherPhotoView(){
+    var image = profileOtherPhotoImage.image;
+        
+    Ti.include('ui/iphone/photo_view.js');
+    buildPhotoView(image);
+    photoNavWin.open();
 }
 
 //Updates the control flag for mutual followership - essentially blocking/unblocking certain actions on the UI, e.g. messaging

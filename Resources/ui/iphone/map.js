@@ -56,9 +56,9 @@ function updateLocationOnMap(){
 		mapRegion = {
 			latitude: e.coords.latitude,
 			longitude: e.coords.longitude,
-			animate:true,
-			latitudeDelta:0.003,
-			longitudeDelta:0.003
+			animate:true
+			//latitudeDelta:0.003,
+			//longitudeDelta:0.003
 		};
 		mapview.setLocation(mapRegion); 
 		
@@ -927,6 +927,19 @@ function updateMapWithAnnotations(places, checkins, activities){
 			
 			//Only proceed if we havent already added a checkin for the same place
 			if(placesAdded.indexOf(places[i].id) == -1){
+				
+				var thumbImage, thumbDefaultImage, showUser = null;
+				if(CLICKED_FILTER == FILTER_MATING || CLICKED_FILTER == FILTER_SAME_BREED){
+				    thumbImage = REMOTE_DOG_IMAGES + places[i].thumb;
+				    thumbDefaultImage = IMAGE_PATH+'common/default_dog_photo.png';
+				    showUser = true;
+				} else {
+				    thumbImage = places[i].dog_id ? REMOTE_DOG_IMAGES + places[i].thumb : REMOTE_PLACE_IMAGES + places[i].thumb;
+				    thumbDefaultImage = IMAGE_PATH+'common/default_place_photo.png';
+				    showUser = false;
+				}
+				
+				//pin is red for lost dog only
 				var customPin2 = Ti.UI.createView({
 					backgroundImage:places[i].dog_id ? IMAGE_PATH+'map/pin_user_red_small.png' : IMAGE_PATH+'map/pin_user_small.png',
 					width:38,
@@ -935,8 +948,8 @@ function updateMapWithAnnotations(places, checkins, activities){
 				
 				//Add the place thumb, if available
 				var placeImage = Ti.UI.createImageView({
-					image:places[i].dog_id ? REMOTE_DOG_IMAGES + places[i].thumb : REMOTE_PLACE_IMAGES + places[i].thumb,
-					defaultImage:IMAGE_PATH+'common/default_place_photo.png',
+					image:thumbImage,
+					defaultImage:thumbDefaultImage,
 					width:25,
 					height:25,
 					borderRadius:12,
@@ -956,10 +969,11 @@ function updateMapWithAnnotations(places, checkins, activities){
 					animate:false,
 					customView:customPin2,
 					rightButton:IMAGE_PATH+'map/arrow_icon.png',
-					place_id:places[i].id,
+					place_id:showUser ? false : places[i].id,  //showUser links to the user, place links to the place
 					category_id:places[i].category_id,
 					user_id:places[i].user_id,
-					user_name:places[i].user_name
+					user_name:places[i].user_name,
+					show_user:showUser
 				});
 				annotationArray.push(mapAnnotations);
 			} else {

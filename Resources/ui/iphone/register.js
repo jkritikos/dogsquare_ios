@@ -75,7 +75,7 @@ function buildRegisterWindow(){
 	
 	registerNavBar = Ti.UI.createImageView({
 		image:iOS7 ? IMAGE_PATH+'common/bar7.png' : IMAGE_PATH+'common/bar.png',
-		top:0
+		top:iOS7 ? 0 : -2
 	});
 	
 	//back button
@@ -84,7 +84,7 @@ function buildRegisterWindow(){
 	    width:48,
 	    height:33,
 	    left:6,
-	    top:23
+	    top:iOS7 ? 23 : 8
 	});
 	registerNavBar.add(registerBackButton);
 	
@@ -97,7 +97,7 @@ function buildRegisterWindow(){
 		text:'Welcome',
 		color:'white',
 		font:UI_FONT_SEMIBOLD_NAVBAR,
-		top:20
+		top:iOS7 ? 20 : 5
 	});
 	
 	registerNavBar.add(registerNavBarLabel);
@@ -643,11 +643,11 @@ function handleTermsLabelLink(){
 	Ti.include('ui/iphone/terms.js');
 	buildTermsView(VIEW_TERMS);
 	
-	if(iOS7){
+	//if(iOS7){
 		termsNavWin.open();
-	}else{
-		termsWindow.open();
-	}
+	//}else{
+	//	termsWindow.open();
+	//}
 }
 
 function handleRegisterDatePickerChange(e){

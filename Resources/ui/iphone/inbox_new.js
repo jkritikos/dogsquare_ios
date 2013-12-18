@@ -438,7 +438,7 @@ function populateInboxNewChatTableView(mObj, userId){
 		if(mObj[i].my_message == 0) {
 			if(!inboxNewOtherThumbCreated) {
 				rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
-				rowMessageProfileImage.image = API+'photo?user_id=' + userId;
+				rowMessageProfileImage.image = API+'photo?user_id=' + userId+'&now='+new Date().getTime();
 				rowMessageProfileImage.left = 10;
 				
 				inboxNewOtherThumbCreated = true;
@@ -456,7 +456,7 @@ function populateInboxNewChatTableView(mObj, userId){
 			
 			if(!inboxNewUserThumbCreated) {
 				rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
-				rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId;
+				rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId+'&now='+new Date().getTime();
 				rowMessageProfileImage.right = 10;
 				
 				inboxNewOtherThumbCreated = false;
@@ -537,7 +537,7 @@ function appendRowInboxNewTableView(date, message){
 	
 	if(!inboxNewUserThumbCreated) {
 		rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png',
-		rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId;
+		rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId+'&now='+new Date().getTime();
 		
 		inboxNewOtherThumbCreated = false;
 		inboxNewUserThumbCreated = true;

@@ -15,12 +15,12 @@ function buildPasswordResetView(){
 	});
 	
 	//check if version is ios 7 and higher and create new navigationWindow (3.1.3.GA)
-	if(iOS7){
+	//if(iOS7){
 		passwordResetNavWin = Ti.UI.iOS.createNavigationWindow({
 		    modal: true,
 		    window: passwordResetWindow
 		});
-	}
+	//}
 	
 	var passwordResetDoneButton = Titanium.UI.createButton({
 		backgroundImage:IMAGE_PATH+'common/Done_button.png',
@@ -30,11 +30,11 @@ function buildPasswordResetView(){
 	passwordResetWindow.setRightNavButton(passwordResetDoneButton);
 	
 	passwordResetDoneButton.addEventListener('click', function(e){
-		if(iOS7){
+		//if(iOS7){
 			passwordResetNavWin.close();
-		}else{
-			passwordResetWindow.close();
-		}
+		//}else{
+		//	passwordResetWindow.close();
+		//}
 	});
 	
 	var passwordResetDogsquareLogo = Ti.UI.createImageView({

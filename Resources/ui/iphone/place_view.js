@@ -663,7 +663,7 @@ function populateCheckinPlaceCommentsTableView(comObj){
 		});
 		
 		var commentRowUserImage = Titanium.UI.createImageView({
-			image:API+'photo?user_id='+comObj[i].comm.user_id,
+			image:API+'photo?user_id='+comObj[i].comm.user_id+'&now='+new Date().getTime(),
 			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			top:6,
 			left:10,
@@ -1039,7 +1039,7 @@ function appendCommentPlaceTableView(date, message){
 	});
 	
 	var commentRowUserImage = Titanium.UI.createImageView({
-		image:API+'photo?user_id='+userObject.userId,
+		image:API+'photo?user_id='+userObject.userId+'&now='+new Date().getTime(),
 		defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 		top:6,
 		left:10,
@@ -1158,7 +1158,7 @@ function checkinPlaceOnline(placeId){
 			
 			//Post to facebook if we must
 			if(shouldPostCheckinFacebook()){
-				var fbPost = 'Is with his Dog Pack at '+checkinPlaceTitleLabel.text;
+				var fbPost = 'I am with my Dog Pack at '+checkinPlaceTitleLabel.text;
 				facebookPost(fbPost, null);	
 			}
 			

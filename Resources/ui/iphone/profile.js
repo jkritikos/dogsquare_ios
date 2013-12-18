@@ -566,11 +566,11 @@ function profilePhotoView(){
 	Ti.include('ui/iphone/photo_view.js');
 	buildPhotoView(image);
 
-	if(iOS7){
+	//if(iOS7){
 		photoNavWin.open();
-	}else{
-		photoViewWindow.open();
-	}
+	//}else{
+	//	photoViewWindow.open();
+	//}
 }
 
 //Takes a new photo and uploads it as the new profile image

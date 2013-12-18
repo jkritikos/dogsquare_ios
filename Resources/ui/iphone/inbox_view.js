@@ -95,6 +95,7 @@ function populateInboxViewTableView(mObj, userId){
 	inboxViewToName = mObj[0].name;
 	
 	for(i=0;i<mObj.length;i++){
+		Ti.API.info('Inbox_view processing object '+JSON.stringify(mObj));
 		
 		//message row
 		var messageRow = Ti.UI.createTableViewRow({
@@ -167,7 +168,7 @@ function populateInboxViewTableView(mObj, userId){
 		if(mObj[i].my_message == 0) {
 			if(!otherThumbCreated) {
 				rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
-				rowMessageProfileImage.image = API+'photo?user_id=' + userId;
+				rowMessageProfileImage.image = API+'photo?user_id=' + userId+'&now='+new Date().getTime();
 				rowMessageProfileImage.left = 10;
 				
 				otherThumbCreated = true;
@@ -185,7 +186,7 @@ function populateInboxViewTableView(mObj, userId){
 			
 			if(!userThumbCreated) {
 				rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
-				rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId;
+				rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId+'&now='+new Date().getTime();
 				rowMessageProfileImage.right = 10;
 				
 				otherThumbCreated = false;
@@ -316,7 +317,7 @@ function appendRowInboxViewTableView(date, message){
 	
 	if(!userThumbCreated) {
 		rowMessageProfileImage.defaultImage = IMAGE_PATH+'follow_invite/default_User_photo.png';
-		rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId;
+		rowMessageProfileImage.image = API+'photo?user_id=' + userObject.userId+'&now='+new Date().getTime();
 		
 		otherThumbCreated = false;
 		userThumbCreated = true;

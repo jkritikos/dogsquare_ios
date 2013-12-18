@@ -83,11 +83,11 @@ function openSettingsTermsPrivacyView(type){
 	Ti.include('ui/iphone/terms.js');
 	buildTermsView(type);
 	
-	if(iOS7){
+	//if(iOS7){
 		termsNavWin.open();
-	}else{
-		termsWindow.open();
-	}
+	//}else{
+	//	termsWindow.open();
+	//}
 }
 
 //Opens the share settings view

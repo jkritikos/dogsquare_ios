@@ -223,15 +223,26 @@ function handleFeedsTableViewRows(e){
 		navController.open(feedsRowWindow);
 	} else if(feedType == FEED_FRIEND_NEW_FOLLOWER){
 		
-		Ti.include('ui/iphone/profile_other.js');
+	    if (id == userObject.userId){
+		  Ti.include('ui/iphone/profile.js');
+		  feedsRowWindow.add(viewProfile);
+		  feedsRowWindow.setTitle(userObject.name);
+		  
+		  openWindows.push(feedsRowWindow);
+          navController.open(feedsRowWindow);  
+		    
+		} else {
+		    Ti.include('ui/iphone/profile_other.js');
+        
+            var profileOtherView = buildProfileOtherView(id);
+            
+            feedsRowWindow.add(profileOtherView);
+            feedsRowWindow.setTitle(name);
+            
+            openWindows.push(feedsRowWindow);
+            navController.open(feedsRowWindow);
+		}
 		
-		var profileOtherView = buildProfileOtherView(id);
-		
-		feedsRowWindow.add(profileOtherView);
-		feedsRowWindow.setTitle(name);
-		
-		openWindows.push(feedsRowWindow);
-		navController.open(feedsRowWindow);
 	} else if(feedType == FEED_CHECKIN){
 		var placeId = e.row.placeId;
 		var placeTitle = e.row.placeName;

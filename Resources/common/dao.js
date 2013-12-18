@@ -1,6 +1,6 @@
 var SERVER = '';
 
-var PRODUCTION_MODE = true;
+var PRODUCTION_MODE = false;
 
 if(!PRODUCTION_MODE){
 	//UrbanAirship.key='QcPHp0gxT3-3yj5Y9aLDpA';
@@ -8,8 +8,8 @@ if(!PRODUCTION_MODE){
 	//UrbanAirship.master_secret='qK_-SzSeQP6NA_UQ8g-ENw';
 	//UrbanAirship.baseurl = 'https://go.urbanairship.com';
 	//API = 'http://dev.mindthebuzz.com/api/';
-	SERVER = 'http://dogsquare/';
-	
+	//SERVER = 'http://dogsquare/';
+	SERVER = 'http://dogsquare.veladia.com/';
 } else {
 	//UrbanAirship.key='W1NHMmPjR56aHc3u6nu6iA';
 	//UrbanAirship.secret ='KBiUUr_mQwKYNmTXX5oVpQ';
@@ -243,7 +243,7 @@ function facebookPostImage2(blob, otherUserId){
 	var data = {
 	    link : "http://www.dogsquareapp.com",
 	    name : "Dogsquare",
-	    message : "Hey Pack Leader!! You are invited to experience Dogsquare: the first Dog-social app that will drastically improve your loyal friend’s life. Your dog will be grateful every time you touch phone.",
+	    message : "Hey Pack Leader!! You are invited to experience Dogsquare: the first Dog-social app that will improve your loyal friend’s life. Your dog will be grateful every time you touch phone.",
 	    //caption : "The ",
 	    //picture : blob,
 	    picture : SERVER+'fb_icon6.png',
@@ -1562,7 +1562,7 @@ function getInboxMessages(){
 	
 	var messagesRows = [];
 	
-	var rows = db.execute('select i.remote_user_id, i.remote_user_name, i.date, i.message , i.my_message, i.read from inbox i where i.date = (select max(i2.date) from inbox i2 where i.remote_user_id = i2.remote_user_id)');
+	var rows = db.execute('select i.remote_user_id, i.remote_user_name, i.date, i.message , i.my_message, i.read from inbox i where i.date = (select max(i2.date) from inbox i2 where i.remote_user_id = i2.remote_user_id) order by i.date desc');
 	var i=0;
 	while (rows.isValidRow())
 	{
@@ -1573,6 +1573,8 @@ function getInboxMessages(){
 	  var message = rows.field(3);
 	  var my_message = rows.field(4);
 	  var read = rows.field(5);
+	  
+	  Ti.API.info('getInboxMessages() message object with date '+date);
 	  
 	  var obj = {
 			user_id:user_id,

@@ -7,16 +7,16 @@ function openTourView(){
 		modal:true,
 		translucent:false,
 		barImage:iOS7 ? IMAGE_PATH+'common/bar7.png' : IMAGE_PATH+'common/bar.png',
-		barColor:UI_COLOR,
+		//barColor:UI_COLOR,
 		title:'Tour'
 	});
 		
-	if(iOS7){
+	//if(iOS7){
 		tourNavWin  = Ti.UI.iOS.createNavigationWindow({
 		    modal: true,
 		    window: tourWindow
 		});
-	} 
+	//} 
 	
 	var tourDoneButton = Titanium.UI.createButton({
 		backgroundImage:IMAGE_PATH+'common/Done_button.png',
@@ -27,11 +27,11 @@ function openTourView(){
 	tourWindow.setRightNavButton(tourDoneButton);
 	
 	tourDoneButton.addEventListener('click', function(e){
-		if(iOS7){
+		//if(iOS7){
 			tourNavWin.close();
-		}else{
-			tourWindow.close();
-		}
+		//}else{
+		//	tourWindow.close();
+		//}
 	});
 	
 	//tour content
@@ -51,9 +51,9 @@ function openTourView(){
 	tourWindow.add(scrollableView);	
 	
 	//open win
-	if(iOS7){
+	//if(iOS7){
 		tourNavWin.open();
-	}else{
-		tourWindow.open();
-	}
+	//}else{
+	//	tourWindow.open();
+	//}
 }

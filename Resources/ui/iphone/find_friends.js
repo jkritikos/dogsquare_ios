@@ -474,7 +474,7 @@ function populateFindFriendsDogsquareTableView(uObj){
 		
 		//friend's profile name
 		var rowFriendImage = Titanium.UI.createImageView({
-			image:API+'photo?user_id='+uObj[i].User.id,
+			image:API+'photo?user_id='+uObj[i].User.id+'&now='+new Date().getTime(),
 			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:3,
 			borderRadius:30,

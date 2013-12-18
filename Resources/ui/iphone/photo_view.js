@@ -15,12 +15,12 @@ function buildPhotoView(img){
 	});
 	
 	//check if version is ios 7 and higher and create new navigationWindow (3.1.3.GA)
-	if(iOS7){
+	//if(iOS7){
 		photoNavWin = Ti.UI.iOS.createNavigationWindow({
 		    modal: true,
 		    window: photoViewWindow
 		});
-	}
+	//}
 	
 	photoViewImage = Ti.UI.createImageView({
 		image:IMAGE_PATH+'common/black_default',
@@ -42,10 +42,10 @@ function buildPhotoView(img){
 
 function handlePhotoViewDoneButton(){
 	
-	if(iOS7){
+	//if(iOS7){
 		photoNavWin.close();
-	}else{
-		photoViewWindow.close();
-	}
+	//}else{
+	//	photoViewWindow.close();
+	//}
 	
 }
