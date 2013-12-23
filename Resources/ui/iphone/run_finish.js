@@ -68,12 +68,13 @@ function buildRunFinishView(obj){
 	    regionFit:true,
 	    userLocation:false,
 	    visible:true,
+	    region:runSummaryRegion,
 	    annotations:[runFinishAnnotationStart,runFinishAnnotationEnd]
 	});
 	viewRunSummary.add(viewRunFinishMap);
 	
 	//set location
-	viewRunFinishMap.setLocation(runSummaryRegion);
+	//viewRunFinishMap.setLocation(runSummaryRegion);
 	
 	//opacity bar
 	var runFinishOpacityBar = Titanium.UI.createView({ 
@@ -372,7 +373,7 @@ function shareActivity(){
 			var blob = viewRunFinishMap.toImage();
 			var msg = 'I just finished an activity with my dog: we walked for '+runFinishRunObject.walk +' Km and played for '+runFinishRunObject.play+' minutes!';
 			facebookPostImage(blob, msg, null);	
-		}, 2500);
+		}, 3250);
 	}
 }
 

@@ -8,6 +8,7 @@ var findFriendsFacebookView = null;
 var findFriendsTableView = null;
 var findFriendsPhoneDialog = null;
 var findFriendsSearchContainer = null;
+var findFriendsFacebookFriendsCounterLabel = null;
 
 //UI components
 var FACEBOOK_TAB = 1;
@@ -268,6 +269,26 @@ function buildFindFriendsView(){
 		findFriendsFacebookView.add(findFriendsFacebookConnectButton);
 		findFriendsFacebookView.hide();
 		
+		var FBFriendsWithApp = getFacebookFriends();
+		var FBFriendsWithAppValue = 0;
+		if(FBFriendsWithApp != null){
+		    FBFriendsWithApp = FBFriendsWithApp.trim();
+		    Ti.API.info('Slicing string '+FBFriendsWithApp);
+		    var tmp = FBFriendsWithApp.split(",");
+		    FBFriendsWithAppValue = tmp.length;
+		}
+		
+		findFriendsFacebookFriendsCounterLabel = Ti.UI.createLabel({
+            text:'You have '+FBFriendsWithAppValue+' Facebook friends using Dogsquare.',
+            textAlign:'center',
+            color:'#756868',
+            top:57,
+            visible:false,
+            font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+        });
+        
+        viewFindFriends.add(findFriendsFacebookFriendsCounterLabel);
+		
 		//table view for all
 		findFriendsTableView = Titanium.UI.createTableView({
 			minRowHeight:60,
@@ -300,7 +321,11 @@ function sortByFullName(a, b) {
 function populateFindFriendsFacebookTableView(data){
 	var tableRows = [];
 	
+	var fbFriendsWithApp = getFacebookFriends();
+	
 	for(var i=0; i < data.length; i++){
+	    var hasApp = fbFriendsWithApp != null && fbFriendsWithApp.indexOf(data[i].id) > -1;
+	    
 		var row = Ti.UI.createTableViewRow({
 			className:'contactsRow',
 			height:73,
@@ -339,14 +364,26 @@ function populateFindFriendsFacebookTableView(data){
 		});
 		row.add(rowFullNameLabel);
 		
-		//invite button
-		var rowInviteButton = Titanium.UI.createButton({
-			backgroundImage:IMAGE_PATH+'follow_invite/Invite_btn.png',
-			right:9,
-			width:86,
-			height:29,
-			type:TYPE_INVITE_FB_BUTTON
-		});
+		if(hasApp){
+		    //follow button
+            var rowInviteButton = Titanium.UI.createButton({
+                backgroundImage:IMAGE_PATH+'follow_invite/Follow_btn.png',
+                right:9,
+                width:86,
+                height:29,
+                type:TYPE_FOLLOW_BUTTON
+            });
+		} else {
+		    //invite button
+            var rowInviteButton = Titanium.UI.createButton({
+                backgroundImage:IMAGE_PATH+'follow_invite/Invite_btn.png',
+                right:9,
+                width:86,
+                height:29,
+                type:TYPE_INVITE_FB_BUTTON
+            });
+		}
+		
 		row.add(rowInviteButton);
 		
 		tableRows.push(row);
@@ -563,10 +600,11 @@ function handleFindFriendsTabs(e){
 		
 		findFriendsTableView.hide();
 		
-		//Fetch facebook friends who have the app, if connected
+		//Fetch facebook friends, if connected
 		if(fb.loggedIn){
 			Ti.API.info('FindFriends: FB connected TRUE');
 			facebookGetAllFriends();
+			findFriendsFacebookFriendsCounterLabel.show();
 		} else {
 			Ti.API.info('FindFriends: FB connected FALSE');
 			findFriendsFacebookView.show();
@@ -578,7 +616,7 @@ function handleFindFriendsTabs(e){
 		findFriendsTabFacebookSelection.hide();
 		findFriendsTabContactsSelection.show();
 		findFriendsTabDogsquareSelection.hide();
-		
+		findFriendsFacebookFriendsCounterLabel.hide();
 		findFriendsTableView.show();
 		findFriendsFacebookView.hide();
 		
@@ -588,6 +626,7 @@ function handleFindFriendsTabs(e){
 		findFriendsTabFacebookSelection.hide();
 		findFriendsTabContactsSelection.hide();
 		findFriendsTabDogsquareSelection.show();
+		findFriendsFacebookFriendsCounterLabel.hide();
 		
 		var emptyArray = [];
 		
@@ -681,7 +720,7 @@ function doSearchUserByEmail(cEmail){
 	var emailList = escape(JSON.stringify(cEmail));
 	
 	xhr.onerror = function(e){
-		Ti.API.error('Error in doSearchUserByEmail() '+e);
+		Ti.API.error('Error in doSearchUserByEmail() '+JSON.stringify(e));
 		progressView.hide();
 		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
@@ -697,8 +736,10 @@ function doSearchUserByEmail(cEmail){
 		        success:true
 		    });
 			
-			populateFindFriendsContactsTableView(jsonData.data);
-			localDataForContacts = jsonData.data;
+			if(jsonData.data.results){
+			    populateFindFriendsContactsTableView(jsonData.data);
+                localDataForContacts = jsonData.data;
+			}
 			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;

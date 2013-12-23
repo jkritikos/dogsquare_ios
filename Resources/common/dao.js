@@ -144,6 +144,8 @@ fb.addEventListener('login', function(e) {
     			
     			Ti.API.info('FB callback: name '+fbName+' gender '+gender+' age '+age+' fbId '+fbId+' email '+email);
     			
+    			facebookGetFriendsWithApp();
+    			
     			if(CURRENT_VIEW == VIEW_SIGNUP){
     				Ti.API.info('FB Login from registration view');
 					
@@ -200,6 +202,55 @@ fb.addEventListener('login', function(e) {
 		Ti.API.info('USER **NOT** LOGGED IN TO FACEBOOK!');
 	}	
 });
+
+/*Persists the array of facebook friends*/
+function saveFacebookFriends(data){
+    Ti.App.Properties.setString('FACEBOOK_FRIENDS', data);
+}
+
+/*Returns the persisted array of facebook friends*/
+function getFacebookFriends(){
+    Ti.API.warn('DAO.getFacebookFriends() returns '+Ti.App.Properties.getString('FACEBOOK_FRIENDS'));
+    return Ti.App.Properties.getString('FACEBOOK_FRIENDS');
+}
+
+/*Gets the friends that have installed the app*/
+function facebookGetFriendsWithApp(){
+    if (Titanium.Network.online == true){
+        Ti.API.warn('GETTING FB FRIENDS');
+        
+        var data = {};
+        if(fb.loggedIn){
+            fb.request('friends.getAppUsers', data,function(e) {
+            if (e.success) {
+                Ti.API.warn('FACEBOOK - Success in getting FB friends with Dogsquare :'+e.result);
+                var friends = JSON.parse(e.result);
+                
+                var friendString = '';
+                for(var i=0; i < friends.length; i++){
+                    friendString += friends[i];
+                    
+                    if(i < (friends.length -1)){
+                        friendString += ',';
+                    }
+                }
+                
+                saveFacebookFriends(friendString);
+                
+                Ti.API.warn('FACEBOOK - Saved the FB friends list as '+friendString);
+            } else {
+                if (e.error) {
+                   Ti.API.warn('FACEBOOK - ERROR in getting FB friends');
+                } else {
+                    Ti.API.warn('FACEBOOK - UNKNOWN response in getting FB friends');
+                }
+            }
+        });
+        } else {
+            Ti.API.warn('FACEBOOK - NOT logged in');
+        }
+    }
+}
 
 /*Posts to the current (or another) user's facebook wall*/
 function facebookPost(msg, otherUserId){
@@ -872,6 +923,7 @@ function followUser(uId, button, win){
 	};
 	
 	xhr.onload = function(e) {
+	    Ti.API.info('followUser() got back from server '+this.responseText);
 		var jsonData = JSON.parse(this.responseText);
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
