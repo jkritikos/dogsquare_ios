@@ -1319,7 +1319,7 @@ function getActivityDetails(id){
 	
 	var info = [];
 	
-	var sql = 'select ad.dog_id, d.name, d.photo, d.breed_id, dr.walk_distance, dr.playtime, ad.dogfuel, ad.walk_distance, ad.playtime from activity_dogs ad inner join dogs d on (ad.dog_id=d.dog_id) left join DOGFUEL_RULES dr on (d.breed_id=dr.breed_id) where ad.activity_id=?';
+	var sql = 'select ad.dog_id, d.name, d.photo, d.breed_id, dr.walk_distance, dr.playtime, ad.dogfuel, ad.walk_distance, ad.playtime, d.age from activity_dogs ad inner join dogs d on (ad.dog_id=d.dog_id) left join DOGFUEL_RULES dr on (d.breed_id=dr.breed_id) where ad.activity_id=?';
 	var rows = db.execute(sql, id);
 	while (rows.isValidRow()){
 		
@@ -1334,7 +1334,8 @@ function getActivityDetails(id){
 			rule_playtime:rows.field(5),//dogfuel rule
 			dogfuel:rows.field(6),
 			walk_distance:rows.field(7),//dog performance
-			playtime:rows.field(8)//dog performance
+			playtime:rows.field(8),//dog performance
+			age:rows.field(9)
 		};
 		
 		info.push(obj);
@@ -1400,8 +1401,8 @@ function doSaveActivityCommentOnline(comObj, view){
 }
 
 //Calculates the dogfuel earned by the specified activity
-function calculateDogfuel(activityId, totalPlaytimeSeconds){
-	Ti.API.info('calculateDogfuel() called for activity '+activityId+' with totalPlaytimeSeconds='+totalPlaytimeSeconds);
+function calculateDogfuel(activityId, totalPlaytimeSeconds, temperature){
+	Ti.API.info('calculateDogfuel() called for activity '+activityId+' with totalPlaytimeSeconds='+totalPlaytimeSeconds+' and temperature '+temperature);
 	
 	//10 meters
 	var PLAYTIME_THRESHOLD = 0.002;
@@ -1435,12 +1436,8 @@ function calculateDogfuel(activityId, totalPlaytimeSeconds){
 		Ti.API.info(' *** Checkpoint: lat: '+coordinateData[i].lat+' lon '+coordinateData[i].lon+ ' total distance '+coordinateData[i].distance+' - Did '+currentDistanceFormated+' in '+coordinateData[i].dt+' ms');
 	}
 	
-	//Convert to minutes
-	//totalPlaytime = (totalPlaytime / 1000) / 60;
-	
 	//NEW playtime implementation
 	totalPlaytime = totalPlaytimeSeconds / 60;
-	
 	
 	Ti.API.info(' *** totalWalkDistance '+totalWalkDistance+' Km, totalPlaytime '+totalPlaytime+' minutes');
 	
@@ -1461,12 +1458,32 @@ function calculateDogfuel(activityId, totalPlaytimeSeconds){
 			earnedFromPlay = 0;
 		}
 		
+		Ti.API.info(' ::::: dog id  '+activityDogs[i].dog_id+' with breed '+activityDogs[i].breed_id+' and age '+activityDogs[i].age+' needs '+activityDogs[i].rule_playtime+' playtime OR '+activityDogs[i].rule_walk_distance+' km. Earned '+totalDogfuel+' dogfuel');
+		
+		//get dogfuel discounts for this dog
+		var boostFromAge, boostFromWeather = 0;
+		var dogfuelDiscount = getDogfuelDiscount(activityDogs[i].age);
+		if(dogfuelDiscount != null){
+			var extra_dogfuel = dogfuelDiscount.extra_dogfuel;
+			var weather_temp = dogfuelDiscount.weather_temp;
+			var weather_value = dogfuelDiscount.weather_temp;
+			
+			boostFromAge = (totalDogfuel * extra_dogfuel) / 100;
+			
+			if(temperature != null && temperature >= weather_temp){
+				boostFromWeather = (totalDogfuel * weather_value) / 100;
+			} else {
+				Ti.API.info('NOT using weather boost for '+weather_temp+ ' degrees because current temp is '+temperature);
+			}
+			
+			totalDogfuel += boostFromAge;
+			totalDogfuel += boostFromWeather;
+			Ti.API.info('Dogfuel discounts used boostFromAge='+boostFromAge+' and boostFromWeather='+boostFromWeather);
+		}
+		
+		//Round and save dogfuel value
 		totalDogfuel = Math.round(earnedFromPlay + earnedFromWalk);
 		totalDogfuel = totalDogfuel > 100 ? 100 : totalDogfuel;
-		
-		Ti.API.info(' ::::: dog id  '+activityDogs[i].dog_id+' with breed '+activityDogs[i].breed_id+' needs '+activityDogs[i].rule_playtime+' playtime OR '+activityDogs[i].rule_walk_distance+' km. Earned '+totalDogfuel+' dogfuel');
-		
-		//Save dogfuel value
 		saveDogfuelCalculation(activityId, activityDogs[i].dog_id, totalDogfuel, totalWalkDistance, totalPlaytime);
 		
 		//update right menu dogs
@@ -1801,6 +1818,54 @@ function savePlaceCategories(obj){
 	db.close();
 }
 
+//Updates the local db with the list of dogfuel discounts
+function saveDogfuelDiscounts(obj){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	
+	if(obj !=  null && obj.length > 0){
+		db.execute('BEGIN');
+		db.execute('delete from DOGFUEL_DISCOUNTS');
+		
+		for(i=0; i < obj.length; i++){
+			//Ti.API.info('savePlaceCategories() saved category '+obj[i].PlaceCategory.id);
+			db.execute('insert into DOGFUEL_DISCOUNTS (id, age_from, age_to, extra_dogfuel, weather_temp, weather_value) values (?,?,?,?,?,?)', obj[i].DogfuelDiscount.id, obj[i].DogfuelDiscount.age_from, obj[i].DogfuelDiscount.age_to,obj[i].DogfuelDiscount.extra_dogfuel, obj[i].DogfuelDiscount.weather_temp, obj[i].DogfuelDiscount.weather_value);
+		}
+	
+		db.execute('COMMIT');
+		Ti.API.info('saveDogfuelDiscounts() saved '+obj.length+' rows');
+	} else {
+		Ti.API.info('saveDogfuelDiscounts() NO data to save');
+	}
+	
+	db.close();
+}
+
+//Returns the dogfuel discount object for the specified dog age
+function getDogfuelDiscount(dogAge){
+	var db = Ti.Database.install('dog.sqlite', 'db');
+	var rows = db.execute('select age_from, age_to, extra_dogfuel, weather_temp, weather_value from DOGFUEL_DISCOUNTS where age_from >= ? and age_from <= ?', dogAge, dogAge);
+	var obj = null;
+	
+	while(rows.isValidRow()) {
+	  	obj = {
+	  		age_from:rows.field(0),
+			age_to:rows.field(1),
+			extra_dogfuel:rows.field(2),
+			weather_temp:rows.field(3),
+			weather_value:rows.field(4)
+		};
+		
+		//Ti.API.info('DOG BREED '+rows.field(0) + ' IS '+rows.field(1));	
+	  	rows.next();
+	}
+	
+	rows.close();
+	db.close();
+	
+	Ti.API.info('getDogfuelDiscount() returns '+JSON.stringify(obj) +' for dog with age '+dogAge);
+	return obj;
+}
+
 //Updates the local db with the latest list of countries
 function saveCountries(obj){
 	var db = Ti.Database.install('dog.sqlite', 'db');
@@ -1943,6 +2008,9 @@ function createDB(){
 	db.execute('create table if not exists PLACE_CATEGORIES (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"active\" integer)');
 	//db.execute('create table if not exists COUNTRIES (\"id\" INTEGER PRIMARY KEY, \"name\" varchar(256), \"active\" integer)');
 	db.execute('create table if not exists NOTIFICATIONS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"user_from_id\" integer, \"user_from_name\" varchar(256), \"type_id\" integer, \"read\" integer, \"activity_id\" integer, \"badge_id\" integer, \"date\" real, \"user_from_thumb\" varchar(128))');
+	
+	db.execute('create table if not exists DOGFUEL_DISCOUNTS (\"id\" INTEGER PRIMARY KEY AUTOINCREMENT, \"age_from\" integer, \"age_to\" integer, \"extra_dogfuel\" integer, \"weather_temp\" integer, \"weather_value\" integer)');
+	
 	db.execute('COMMIT');
 	db.close();
 	Ti.API.info('createDB() ends');

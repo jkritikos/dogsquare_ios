@@ -315,6 +315,7 @@ function handleCheckinPlacesTableViewRow(e){
 		
 		checkinPlaceBackButton.addEventListener("click", function() {
 		    navController.close(checkinPlaceWindow);
+		    openWindows.pop();
 		});
 		
 		checkinPlaceWindow.setTitle(placeTitle);

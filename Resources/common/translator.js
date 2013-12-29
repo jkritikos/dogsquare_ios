@@ -71,6 +71,7 @@ var FEED_FRIEND_COMMENT_ACTIVITY = 6;
 var FEED_CHECKIN = 7;
 var FEED_DOG_LOST = 8;
 var FEED_DOG_FOUND = 9;
+var FEED_NEW_PLACE = 10;
 
 //Remove error messages after a while
 var ERROR_MSG_REMOVE_TIMEOUT = 1500;
@@ -178,6 +179,8 @@ function getFeedMessage(obj){
 		msg = obj.Feed.user_from_name + ' commented on '+targetUser+' activity';
 	} else if(obj.Feed.type_id == FEED_CHECKIN){
 		msg = obj.Feed.user_from_name + ' at ' + obj.Feed.target_place_name;
+	} else if(obj.Feed.type_id == FEED_NEW_PLACE){
+		msg = obj.Feed.user_from_name + ' added ' + obj.Feed.target_place_name;
 	}
 	
 	return msg;

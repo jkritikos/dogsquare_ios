@@ -199,7 +199,7 @@ function showEditProfileView(){
 
 //Opens an email dialog for reporting app problems
 function showProblemReportEmailDialog(){
-	var recipients = ['report@dogsquare.com'];
+	var recipients = ['report@dogsquareapp.com'];
 	
 	var emailDialog = Ti.UI.createEmailDialog();
 	emailDialog.setBarColor('black');

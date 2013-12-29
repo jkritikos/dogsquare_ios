@@ -742,7 +742,7 @@ function validateDogForm(){
 	}else if(addDogFieldDogBreedHintTextLabel.id == null){
 		alert(getLocalMessage(MSG_ADD_DOG_NO_BREED));
 		return false;
-	}else if(isStringNullOrEmpty(addDogFieldAge.value) || isNaN(addDogFieldAge.value)){
+	}else if(isStringNullOrEmpty(addDogFieldAge.value) || isNaN(addDogFieldAge.value) || !isWithinRange(addDogFieldAge.value, 1, 20)){
 		alert(getLocalMessage(MSG_ADD_DOG_NO_AGE));
 		return false;
 	}else if(addDogFieldSizeHintTextLabel.id == null){

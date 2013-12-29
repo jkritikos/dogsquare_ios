@@ -256,6 +256,7 @@ function buildMapView(windowMode){
 		
 		checkinBackButton.addEventListener("click", function() {
 		    navController.close(checkinWindow);
+		    openWindows.pop();
 		    
 		    if(viewMapTargetMode == TARGET_MODE_REUSE){
 		    	Ti.API.info('Back from checkin.js - target mode is REUSE');

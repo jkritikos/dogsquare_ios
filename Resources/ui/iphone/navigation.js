@@ -42,7 +42,7 @@ var rightBtn = Ti.UI.createButton({
 });
 
 rightBtn.addEventListener("click", function(){
-	if(CURRENT_VIEW == VIEW_RUN && runningMode){
+	if((CURRENT_VIEW == VIEW_RUN && runningMode) || runningMode){
 		alert(getLocalMessage(MSG_RUN_NOT_ENDED));
 	} else {
 		window.toggleRightView();
@@ -206,6 +206,8 @@ function updateDogfuelValues(){
 			//save lookup data
 			saveDogBreeds(jsonData.data.breeds);
 			saveDogfuelRules(jsonData.data.rules);
+			saveDogfuelDiscounts(jsonData.data.discounts);
+			
 			//save place categories
 			savePlaceCategories(jsonData.data.categories);
 			

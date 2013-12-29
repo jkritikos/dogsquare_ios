@@ -63,21 +63,6 @@ function buildRunView(){
 		font:{fontSize:41, fontWeight:'bold', fontFamily:'Open Sans'}
 	});
 	
-	/*
-	var t3 = Ti.UI.create2DMatrix();
-	t3 = t3.scale(1, -1);
-	
-	var runDistanceUnitReflectionLabel = Ti.UI.createLabel({
-		text:'km',
-		transform:t3,
-		opacity:0.3,
-		top:91,
-		right:40,
-		color:UI_COLOR_RUN,
-		font:{fontSize:41, fontWeight:'bold', fontFamily:'Open Sans'}
-	}); 
-	*/
-	
 	runAvgPaceMinuteLabel = Ti.UI.createLabel({
 		text:'0.0',
 		top:IPHONE5? 216+iphone5Offset : 216,
@@ -225,6 +210,7 @@ function handleMapButton(){
 	runMapBackButton.addEventListener("click", function() {
 		//TODO isws edw thelei openWindows[openWindows.length-1]
 	    navController.close(runMapWindow);
+	    openWindows.pop();
 	});
 	
 	Ti.include('ui/iphone/map.js');
@@ -362,7 +348,7 @@ function handleEndRunButton(){
 		}
 		
 		//Calculate the total distance, playtime
-		var activityTotals = calculateDogfuel(runObject.activity_id, runObject.playtime);
+		var activityTotals = calculateDogfuel(runObject.activity_id, runObject.playtime, runObject.temperature);
 		runObject.walk = activityTotals.walk;
 		runObject.play = activityTotals.play;
 		
@@ -411,6 +397,23 @@ function handleEndRunButton(){
 		
 		//remove RUN window from the navigation stack
 		runFinishWindow.addEventListener('focus', function(){
+			Ti.API.warn('RunFinish view got focus: Removing RUN window from the navigation stack. openWindows.length='+openWindows.length);
+			
+			//hack for fixing the navigation bug that appears if we open another window from run.js
+			/*
+			if(openWindows.length > 2){
+				var theLength = openWindows.length;
+				for(var i=theLength; i >= theLength; i--){
+					Ti.API.warn('Navigation hack: removing window index '+i);
+					navController.close(openWindows[i-2], {animated:false});
+				}
+			} else {
+				Ti.API.warn('Navigation hack NOT needed: openWindows.length='+openWindows.length);
+				var runWindowIndex = openWindows.length-2;
+				navController.close(openWindows[runWindowIndex], {animated:false});
+			}
+			*/
+			
 			var runWindowIndex = openWindows.length-2;
 			navController.close(openWindows[runWindowIndex], {animated:false});
 		});
