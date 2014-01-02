@@ -347,7 +347,7 @@ function handleMapAnnotationClick(e){
 			});
 			
 			checkinPlaceWindow.setTitle(placeTitle);
-			var checkinPlaceView = buildCheckinPlaceView(placeId, false);
+			var checkinPlaceView = buildCheckinPlaceView(placeId, false, TARGET_MODE_NEW_WINDOW);
 			
 			checkinPlaceWindow.add(checkinPlaceView);
 			openWindows.push(checkinPlaceWindow);
@@ -642,7 +642,7 @@ function handleMapSearchCategoriesRows(e){
 		});
 		
 		checkinPlaceWindow.setTitle(placeTitle);
-		var checkinPlaceView = buildCheckinPlaceView(placeId, false);
+		var checkinPlaceView = buildCheckinPlaceView(placeId, false, TARGET_MODE_NEW_WINDOW);
 		
 		checkinPlaceWindow.add(checkinPlaceView);
 		openWindows.push(checkinPlaceWindow);

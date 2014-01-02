@@ -96,14 +96,14 @@ function populateFeedsTableView(data) {
 		var placeId = null;
 		var type = data[i].Feed.type_id;
 	
-		if(data[i].Feed.activity_id != null){
+		if(type == FEED_NEW_WALK || type == FEED_FRIEND_COMMENT_ACTIVITY || type == FEED_FRIEND_LIKE_ACTIVITY){
 			
 			var id = data[i].Feed.activity_id;
-		}else if(data[i].Feed.target_user_id != null){
+		} else if(type == FEED_FRIEND_NEW_FOLLOWER){
 			
 			var id = data[i].Feed.target_user_id;
 			var name = data[i].Feed.target_user_name;
-		}else if(data[i].Feed.target_dog_id != null){
+		} else if(type == FEED_NEW_DOG || type == FEED_FRIEND_LIKE_DOG || type == FEED_DOG_LOST || type == FEED_DOG_FOUND){
 			
 			var id = data[i].Feed.target_dog_id;
 			var name = data[i].Feed.target_dog_name;
@@ -177,6 +177,7 @@ function handleFeedsTableViewRows(e){
 	var feedType = e.row.feedType;
 	var id = e.row.id;
 	var name = e.row.name;
+	Ti.API.info('handleFeedsTableViewRows() handling row with object id '+id);
 	
 	var feedsRowWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
@@ -253,12 +254,11 @@ function handleFeedsTableViewRows(e){
 		var checkinPlaceWindow = Ti.UI.createWindow({
 			backgroundColor:UI_BACKGROUND_COLOR,
 			translucent:false,
-			//barImage:IMAGE_PATH+'common/bar.png',
 			barColor:UI_COLOR
 		});
 		
 		feedsRowWindow.setTitle(placeTitle);
-		var checkinPlaceView = buildCheckinPlaceView(placeId, false);
+		var checkinPlaceView = buildCheckinPlaceView(placeId, false, TARGET_MODE_NEW_WINDOW);
 		feedsRowWindow.add(checkinPlaceView);
 		
 		openWindows.push(feedsRowWindow);

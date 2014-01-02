@@ -319,7 +319,7 @@ function handleCheckinPlacesTableViewRow(e){
 		});
 		
 		checkinPlaceWindow.setTitle(placeTitle);
-		var checkinPlaceView = buildCheckinPlaceView(placeId, true);
+		var checkinPlaceView = buildCheckinPlaceView(placeId, true, TARGET_MODE_NEW_WINDOW);
 		
 		checkinPlaceWindow.add(checkinPlaceView);
 		openWindows.push(checkinPlaceWindow);

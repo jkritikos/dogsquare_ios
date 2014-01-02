@@ -27,10 +27,12 @@ var placeViewLongitude = null;
 var ADD_COMMENT = 1;
 var COMMENT_ROW = 2;
 var viewPlaceWithCheckin = false;
+var checkinPlaceTargetMode = null;
 
-function buildCheckinPlaceView(placeId, allowCheckin){
+function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 	checkinPlaceId = placeId;
 	viewPlaceWithCheckin = allowCheckin;
+	checkinPlaceTargetMode = windowMode;
 	
 	if(checkinPlaceView == null){
 		Titanium.Geolocation.getCurrentPosition(function(e){
@@ -652,6 +654,7 @@ function populateCheckinPlaceCommentsTableView(comObj){
 	
 	
 	for(i=0;i<comObj.length;i++){
+		//Ti.API.info('Adding data to the comments row: '+comObj[i].user_id+' and '+comObj[i].name);
 		//comment row
 		var commentRow = Ti.UI.createTableViewRow({
 			className:'commentRow',
@@ -659,6 +662,8 @@ function populateCheckinPlaceCommentsTableView(comObj){
 			width:'100%',
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',
+			user_id:comObj[i].comm.user_id,
+			user_name:comObj[i].comm.name,
 			rowId:COMMENT_ROW
 		});
 		
@@ -729,8 +734,16 @@ function handlePlaceCommentButton(e){
 	var toggle = e.source.toggle;
 	var button = e.source.button;
 	
+	//get the window instance
+	var targetWindow = null;
+	if(checkinPlaceTargetMode == TARGET_MODE_NEW_WINDOW){
+		targetWindow = openWindows[openWindows.length - 1];
+	} else if(checkinPlaceTargetMode == TARGET_MODE_REUSE){
+		targetWindow = navController.getWindow();
+	}
+	
 	if(toggle){
-		openWindows[openWindows.length - 1].setRightNavButton(null);
+		targetWindow.setRightNavButton(null);
 		checkinPlaceCommentsBackgroundView.animate({top:332, duration:500});
 		checkinPlaceCommentsTextArea.blur();
 		checkinPlaceCommentsTextArea.hide();
@@ -738,7 +751,7 @@ function handlePlaceCommentButton(e){
 		e.source.toggle = false;
 
 	}else if(!toggle){
-		openWindows[openWindows.length - 1].setRightNavButton(null);
+		targetWindow.setRightNavButton(null);
 		checkinPlaceCommentsBackgroundView.animate({top:-11, duration:500});
 		checkinPlaceCommentsTextArea.blur();
 		checkinPlaceCommentsTextArea.hide();
@@ -747,17 +760,69 @@ function handlePlaceCommentButton(e){
 	}
 }
 
+//Event handler for click events on the comments table
 function handlePlaceViewCommentTableRows(e){
 	var row = e.row.rowId;
+	Ti.API.info('clicked on row '+JSON.stringify(e.row));
+	
+	//get the window instance
+	var targetWindow = null;
+	if(checkinPlaceTargetMode == TARGET_MODE_NEW_WINDOW){
+		targetWindow = openWindows[openWindows.length - 1];
+	} else if(checkinPlaceTargetMode == TARGET_MODE_REUSE){
+		targetWindow = navController.getWindow();
+	}
 	
 	if(row == ADD_COMMENT){
 		checkinPlaceCommentsBackgroundView.animate({top:-11, duration:200});
 		checkinPlaceCommentsButton.toggle = true;
-		openWindows[openWindows.length - 1].setRightNavButton(checkinPlaceSaveCommentButton);
+		targetWindow.setRightNavButton(checkinPlaceSaveCommentButton);
 		
 		checkinPlaceCommentsTextArea.focus();
 		checkinPlaceCommentsTableView.hide();
 		checkinPlaceCommentsTextArea.show();
+	} else {
+		var userId = e.row.user_id;
+		var userName = e.row.user_name;
+		
+		//profile window
+		var profileWindow = Ti.UI.createWindow({
+			backgroundColor:'white',
+			translucent:false,
+			barColor:UI_COLOR
+		});
+		
+		//back button & event listener
+		var profileBackButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'common/back_button.png',
+		    width:48,
+		    height:33
+		});
+		
+		profileWindow.setLeftNavButton(profileBackButton);
+		profileBackButton.addEventListener("click", function() {
+		    navController.close(profileWindow);
+		});
+		
+		//Build the appropriate view and attach it to our window
+		if (userId == userObject.userId){
+		    Ti.include('ui/iphone/profile.js');
+			profileWindow.add(viewProfile);
+			profileWindow.setTitle(userObject.name);
+			  
+			openWindows.push(profileWindow);
+	        navController.open(profileWindow); 
+		} else {
+			Ti.include('ui/iphone/profile_other.js');
+        
+            var profileOtherView = buildProfileOtherView(userId,userName);
+            
+            profileWindow.add(profileOtherView);
+            profileWindow.setTitle(userName);
+            
+            openWindows.push(profileWindow);
+            navController.open(profileWindow);
+		}
 	}
 	
 }
@@ -966,6 +1031,14 @@ function updateCheckinPlace(placeObj, checkins, likes){
 }
 
 function handlePlaceCommentSaveButton(e){
+	//get the window instance
+	var targetWindow = null;
+	if(checkinPlaceTargetMode == TARGET_MODE_NEW_WINDOW){
+		targetWindow = openWindows[openWindows.length - 1];
+	} else if(checkinPlaceTargetMode == TARGET_MODE_REUSE){
+		targetWindow = navController.getWindow();
+	}
+	
 	if(checkinPlaceCommentsTextArea.value != ''){
 		addPlaceComObject.comment = checkinPlaceCommentsTextArea.value;
 		addPlaceComObject.place_id = e.source.placeId;
@@ -975,7 +1048,7 @@ function handlePlaceCommentSaveButton(e){
 		checkinPlaceCommentsTextArea.blur();
 		checkinPlaceCommentsTextArea.hide();
 		checkinPlaceCommentsTableView.show();
-		openWindows[openWindows.length - 1].setRightNavButton(null);
+		targetWindow.setRightNavButton(null);
 	}
 }
 
