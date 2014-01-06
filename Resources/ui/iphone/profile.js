@@ -232,6 +232,7 @@ viewProfile.add(profileTableViewBackground);
 //profile tableView
 var profileTableView = Titanium.UI.createTableView({
 	minRowHeight:71,
+	maxRowHeight:91,
 	width:320,
 	backgroundColor:'d2d2d2',
 	top:13,
@@ -338,17 +339,7 @@ function populateProfileTableView(activities){
 	var tableRows = [];
 	
 	if(activities.length > 0){
-		
 		for(var i=0; i < activities.length; i++){
-			
-			var activityRow = Ti.UI.createTableViewRow({
-				className:'activityRow',
-				height:71,
-				width:'100%',
-				backgroundColor:'white',
-				selectedBackgroundColor:'transparent',
-				activityId:activities[i].Activity.id
-			});
 			
 			var rowActivityImage = Titanium.UI.createImageView({
 				image:REMOTE_DOG_IMAGES + activities[i].Activity.thumb,
@@ -361,7 +352,9 @@ function populateProfileTableView(activities){
 			
 			//Wrapper view with vertical layout for the text in each row
 			var activityWrapperView = Ti.UI.createView({
-				layout:'vertical'
+				layout:'vertical',
+				top:0,
+				bottom:0
 			});
 			
 			//activity label
@@ -385,6 +378,16 @@ function populateProfileTableView(activities){
 				left:88,
 				color:'#938787',
 				font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
+			});
+			
+			var rowHeight = Math.round((activityLabel.text.length / 20) * 25);
+			var activityRow = Ti.UI.createTableViewRow({
+				className:'activityRow',
+				height:rowHeight,
+				width:'100%',
+				backgroundColor:'white',
+				selectedBackgroundColor:'transparent',
+				activityId:activities[i].Activity.id
 			});
 			
 			activityWrapperView.add(activityLabel);

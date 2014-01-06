@@ -102,7 +102,7 @@ checkinView.add(checkinPlacesTableViewBackground);
 
 //checkin places tableView
 var checkinPlacesTableView = Titanium.UI.createTableView({
-	minRowHeight:51,
+	minRowHeight:71,
 	width:320,
 	backgroundColor:UI_BACKGROUND_COLOR,
 	top:18,
@@ -128,26 +128,12 @@ function populatecheckinPlacesTableView(places){
 	
 		for(i=0;i<places.length;i++){
 			
-			//places row
-			var placeRow = Ti.UI.createTableViewRow({
-				className:'placeRow',
-				height:71,
-				width:'100%',
-				backgroundColor:places[i].color ? places[i].color : 'white',
-				selectedBackgroundColor:'transparent',
-				placeId:places[i].id,
-				dogId:places[i].dog_id,
-				userId:places[i].user_id,
-				categoryId:places[i].category_id,
-				userName:places[i].user_name
-			});
-			
 			//place image
 			var rowPlaceImage = Titanium.UI.createImageView({
 				image:places[i].dog_id ? API+'photo_dog?dog_id='+places[i].dog_id : REMOTE_PLACE_IMAGES + places[i].thumb,
 				defaultImage:IMAGE_PATH+'common/default_place_photo.png',
 				left:10,
-				top:5,
+				//top:5,
 				borderRadius:30,
 				borderWidth:2,
 				borderColor:'f5a92c'
@@ -157,7 +143,7 @@ function populatecheckinPlacesTableView(places){
 			var rowPlaceTitleLabel = Titanium.UI.createLabel({ 
 				text:places[i].name,
 				color:'black',
-				top:10,
+				top:4,
 				width:'auto',
 				textAlign:'left',
 				opacity:0.8,
@@ -169,7 +155,7 @@ function populatecheckinPlacesTableView(places){
 			var rowPlaceDescriptionLabel = Titanium.UI.createLabel({ 
 				text:places[i].category,
 				color:'black',
-				top:28,
+				//top:28,
 				width:'auto',
 				textAlign:'left',
 				opacity:0.7,
@@ -181,8 +167,8 @@ function populatecheckinPlacesTableView(places){
 			var rowPlaceDistanceLabel = Titanium.UI.createLabel({ 
 				text:places[i].distance,
 				color:'black',
-				height:14,
-				top:47,
+				//height:14,
+				//top:47,
 				width:'auto',
 				textAlign:'left',
 				opacity:0.5,
@@ -190,10 +176,37 @@ function populatecheckinPlacesTableView(places){
 				font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
 			});
 			
-			placeRow.add(rowPlaceTitleLabel);
-			placeRow.add(rowPlaceDescriptionLabel);
-			placeRow.add(rowPlaceDistanceLabel);
+			//places row
+			var rowHeight = Math.round((rowPlaceTitleLabel.text.length / 28) * 70);
+			var placeRow = Ti.UI.createTableViewRow({
+				className:'placeRow',
+				height:rowHeight,
+				width:'100%',
+				backgroundColor:places[i].color ? places[i].color : 'white',
+				selectedBackgroundColor:'transparent',
+				placeId:places[i].id,
+				dogId:places[i].dog_id,
+				userId:places[i].user_id,
+				categoryId:places[i].category_id,
+				userName:places[i].user_name,
+				placeName:places[i].name
+			});
+			
+			//Wrapper view with vertical layout for the text in each row
+			var rowWrapperView = Ti.UI.createView({
+				layout:'vertical',
+				top:0,
+				bottom:0
+			});
+			
+			
+			
+			rowWrapperView.add(rowPlaceTitleLabel);
+			rowWrapperView.add(rowPlaceDescriptionLabel);
+			rowWrapperView.add(rowPlaceDistanceLabel);
 			placeRow.add(rowPlaceImage);
+			
+			placeRow.add(rowWrapperView);
 			
 			tableRows.push(placeRow);
 		}
@@ -228,7 +241,7 @@ function populatecheckinPlacesTableView(places){
 
 function handleCheckinPlacesTableViewRow(e){
 	var placeId = e.row.placeId;
-	var placeTitle = e.row.children[0].text;
+	var placeTitle = e.row.placeName;
 	var categoryId = e.row.categoryId;
 	
 	if(categoryId == FILTER_LOST_DOG){
