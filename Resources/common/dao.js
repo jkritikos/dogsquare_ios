@@ -111,8 +111,8 @@ var SHARING_CHECKIN_FACEBOOK = 'share_checkin_fb';
 var FB_DOG_PWD = 1234;
 var FB_APP_ID = '509577672446427';
 var FB_API_KEY = '667843a07b0ab0bd71aaa4c91c5ec2af';
-var FB_READ_PERMISSIONS = ['read_stream', 'publish_actions','publish_stream'];
-var FB_WRITE_PERMISSIONS = ['publish_actions','publish_stream'];
+var FB_READ_PERMISSIONS = ['read_stream'];
+var FB_WRITE_PERMISSIONS = ['publish_actions'];
 
 var fb = require('facebook');
 fb.appid = FB_APP_ID;
@@ -127,10 +127,10 @@ fb.addEventListener('logout', function(e) {
 /*Facebook login event handler*/
 fb.addEventListener('login', function(e) {
 	
-	Ti.API.info('Facebook LOGIN event');
+	Ti.API.info('Facebook LOGIN event - CURRENT_VIEW='+CURRENT_VIEW);
 	
 	if(fb.loggedIn){
-		
+		Ti.API.info('Facebook LOGIN will expire on '+fb.getExpirationDate());
 		fb.requestWithGraphPath('me', {}, 'GET', function(e) {
     		if (e.success) {
     			Ti.API.info(e.result);
@@ -144,42 +144,75 @@ fb.addEventListener('login', function(e) {
     			
     			Ti.API.info('FB callback: name '+fbName+' gender '+gender+' age '+age+' fbId '+fbId+' email '+email);
     			
-    			facebookGetFriendsWithApp();
-    			
-    			if(CURRENT_VIEW == VIEW_SIGNUP){
-    				Ti.API.info('FB Login from registration view');
-					
-    				//Prepare a signup object from the FB data
-    				var signupObject = {
-    					name:fbName,
-    					followers:0,
-    					following:0,
-    					password:FB_DOG_PWD,
-    					facebook_id:fbId,
-    					age:age,
-    					gender:gender,
-    					email:email
-    				};
-    				
-    				doSignup(signupObject);	
-    			} else if(CURRENT_VIEW == VIEW_LOGIN){
-    				Ti.API.info('FB Login from login view');
-    				
-    				var loginObject = {
-    					email:'',
-    					password:'',
-    					facebook_id:fbId,
-    					f:FB_DOG_PWD
-    				};
-    				
-    				checkLoginCredentials(loginObject);
-    			} else if(CURRENT_VIEW == VIEW_FIND_FRIENDS){
-    				Ti.API.info('FB Login from find friends view');
-    				facebookGetAllFriends();
-    			} else {
-    				Ti.API.info('Other view: '+CURRENT_VIEW+' not doing something..');
-    			}
-    			
+    			//facebookGetFriendsWithApp();
+    			Ti.API.warn('GETTING FB FRIENDS that use the app');
+        
+        		var data = {};
+        
+           		fb.request('friends.getAppUsers', data,function(e) {
+		            if (e.success) {
+		                Ti.API.warn('FACEBOOK - Success in getting FB friends with Dogsquare :'+e.result);
+		                var friends = JSON.parse(e.result);
+		                
+		                var friendString = '';
+		                for(var i=0; i < friends.length; i++){
+		                    friendString += friends[i];
+		                    
+		                    if(i < (friends.length -1)){
+		                        friendString += ',';
+		                    }
+		                }
+		                
+		                saveFacebookFriends(friendString);
+		                
+		                if(CURRENT_VIEW == VIEW_SIGNUP){
+		    				Ti.API.info('FB Login from registration view');
+							
+		    				//Prepare a signup object from the FB data
+		    				var signupObject = {
+		    					name:fbName,
+		    					followers:0,
+		    					following:0,
+		    					password:FB_DOG_PWD,
+		    					facebook_id:fbId,
+		    					age:age,
+		    					gender:gender,
+		    					email:email
+		    				};
+		    				
+		    				doSignup(signupObject);	
+		    			} else if(CURRENT_VIEW == VIEW_LOGIN){
+		    				Ti.API.info('FB Login from login view');
+		    				
+		    				var loginObject = {
+		    					email:'',
+		    					password:'',
+		    					facebook_id:fbId,
+		    					f:FB_DOG_PWD
+		    				};
+		    				
+		    				checkLoginCredentials(loginObject);
+		    			} else if(CURRENT_VIEW == VIEW_FIND_FRIENDS){
+		    				Ti.API.info('FB Login from find friends view');
+		    				
+		    				Ti.API.info('UPDATING find friends view with number of friends that use the app');
+		                	findFriendsFacebookFriendsCounterLabel.text = 'You have '+friends.length+' Facebook friends using Dogsquare.';
+		    				
+		    				facebookGetAllFriends();
+		    			} else {
+		    				Ti.API.info('Other view: '+CURRENT_VIEW+' not doing something..');
+		    			}
+		                
+		                Ti.API.warn('FACEBOOK - Saved the FB friends with app list as '+friendString);
+		            } else {
+		                if (e.error) {
+		                   Ti.API.warn('FACEBOOK - ERROR in getting FB friends');
+		                } else {
+		                    Ti.API.warn('FACEBOOK - UNKNOWN response in getting FB friends');
+		                }
+		            }
+        		});
+        
     		} else if (e.error) {
         		//TODO handle error
         		alert(e.error);
@@ -216,8 +249,9 @@ function getFacebookFriends(){
 
 /*Gets the friends that have installed the app*/
 function facebookGetFriendsWithApp(){
+	Ti.API.error('AM I GETTING HERE?');
     if (Titanium.Network.online == true){
-        Ti.API.warn('GETTING FB FRIENDS');
+        Ti.API.warn('GETTING FB FRIENDS that use the app');
         
         var data = {};
         if(fb.loggedIn){
@@ -235,9 +269,17 @@ function facebookGetFriendsWithApp(){
                     }
                 }
                 
+                //update the label in find friends if we're there
+                if(CURRENT_VIEW == VIEW_FIND_FRIENDS){
+                	Ti.API.info('UPDATING find friends view with number of friends that use the app');
+                	findFriendsFacebookFriendsCounterLabel.text = 'You have '+friends.length+' Facebook friends using Dogsquare.';
+                } else {
+                	Ti.API.info('NOT UPDATING find friends view - CURRENT_VIEW='+CURRENT_VIEW);
+                }
+                
                 saveFacebookFriends(friendString);
                 
-                Ti.API.warn('FACEBOOK - Saved the FB friends list as '+friendString);
+                Ti.API.warn('FACEBOOK - Saved the FB friends with app list as '+friendString);
             } else {
                 if (e.error) {
                    Ti.API.warn('FACEBOOK - ERROR in getting FB friends');
@@ -256,7 +298,7 @@ function facebookGetFriendsWithApp(){
 function facebookPost(msg, otherUserId){
 	
 	var url = otherUserId != null ? otherUserId+'/feed' : 'me/feed';
-	
+	var writePermissionsTarget = otherUserId != null ? 'friends' : 'me';
 	var data = {
 	    //link : "http://www.dogsquareapp.com",
 	    //name : "Dogsquare",
@@ -268,19 +310,21 @@ function facebookPost(msg, otherUserId){
 	
 	if (Titanium.Network.online == true){
 		if(fb.loggedIn){
-		
-			fb.requestWithGraphPath(url, data, "POST", function(e) {
-		    	if (e.success) {
-		        	Ti.API.info('FACEBOOK - Success in posting message');
-		        	
-		    	} else {
-		        	if (e.error) {
-		         	   Ti.API.info('FACEBOOK - ERROR in posting message');
-		        	} else {
-		            	Ti.API.info('FACEBOOK - UNKNOWN response in posting message');
-		        	}
-		    	}
+			fb.reauthorize(FB_WRITE_PERMISSIONS, writePermissionsTarget, function(){
+				fb.requestWithGraphPath(url, data, "POST", function(e) {
+			    	if (e.success) {
+			        	Ti.API.info('FACEBOOK - Success in posting message');
+			        	
+			    	} else {
+			        	if (e.error) {
+			         	   Ti.API.info('FACEBOOK - ERROR in posting message');
+			        	} else {
+			            	Ti.API.info('FACEBOOK - UNKNOWN response in posting message');
+			        	}
+			    	}
+				});
 			});
+			
 		} else {
 			Ti.API.info('FACEBOOK - NOT logged in');
 		}
@@ -303,19 +347,21 @@ function facebookPostImage2(blob, otherUserId){
 	
 	if (Titanium.Network.online == true){
 		if(fb.loggedIn){
-			
-			fb.requestWithGraphPath(url, data, "POST", function(e) {
-		    	if (e.success) {
-		        	Ti.API.info('FACEBOOK - Success in posting message');
-		        	
-		    	} else {
-		        	if (e.error) {
-		         	   Ti.API.info('FACEBOOK - ERROR in posting message');
-		        	} else {
-		            	Ti.API.info('FACEBOOK - UNKNOWN response in posting message');
-		        	}
-		    	}
+			fb.reauthorize(FB_WRITE_PERMISSIONS, 'friends', function(){
+				fb.requestWithGraphPath(url, data, "POST", function(e) {
+			    	if (e.success) {
+			        	Ti.API.info('FACEBOOK - Success in posting invite');
+			        	
+			    	} else {
+			        	if (e.error) {
+			         	   Ti.API.info('FACEBOOK - ERROR in posting invite');
+			        	} else {
+			            	Ti.API.info('FACEBOOK - UNKNOWN response in posting invite');
+			        	}
+			    	}
+				});
 			});
+			
 		} else {
 			Ti.API.info('FACEBOOK - NOT logged in');
 		}
@@ -334,18 +380,19 @@ function facebookPostImage(blob, msg, otherUserId){
 	
 	if (Titanium.Network.online == true){
 		if(fb.loggedIn){
-			
-			fb.requestWithGraphPath(url, data, "POST", function(e) {
-		    	if (e.success) {
-		        	Ti.API.info('FACEBOOK - Success in posting image');
-		        	
-		    	} else {
-		        	if (e.error) {
-		         	   Ti.API.info('FACEBOOK - ERROR in posting image');
-		        	} else {
-		            	Ti.API.info('FACEBOOK - UNKNOWN response in posting image');
-		        	}
-		    	}
+			fb.reauthorize(FB_WRITE_PERMISSIONS, 'everyone', function(){
+				fb.requestWithGraphPath(url, data, "POST", function(e) {
+			    	if (e.success) {
+			        	Ti.API.info('FACEBOOK - Success in posting image');
+			        	
+			    	} else {
+			        	if (e.error) {
+			         	   Ti.API.info('FACEBOOK - ERROR in posting image');
+			        	} else {
+			            	Ti.API.info('FACEBOOK - UNKNOWN response in posting image');
+			        	}
+			    	}
+				});
 			});
 			
 		} else {
@@ -911,7 +958,7 @@ function deleteNote(note_id){
 }
 
 //save user whom you follow, in web database
-function followUser(uId, button, win){
+function followUser(uId, facebookId, button, win){
 	Ti.API.info('followUser() called');
 	
 	var xhr = Ti.Network.createHTTPClient();
@@ -926,22 +973,28 @@ function followUser(uId, button, win){
 	    Ti.API.info('followUser() got back from server '+this.responseText);
 		var jsonData = JSON.parse(this.responseText);
 		
-		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+		//Change the button even if we were already following
+		if (jsonData.data.response == NETWORK_RESPONSE_OK || jsonData.data.response == ERROR_USER_ALREADY_FOLLOWING ){
 			if(win == 1){
 				button.backgroundImage = IMAGE_PATH+'follow_invite/Unfollow_btn.png';
-			}else if(win == 2){
+			} else if(win == 2){
 				//Profile_other.js
 				button.backgroundImage = IMAGE_PATH+'profile_other/Unfollow_button.png';
 				
 				//Update the mutual followership flag
-				handleMutualFollowerCallback(jsonData.data.mutual_followers);
+				if(jsonData.data.response == NETWORK_RESPONSE_OK){
+					handleMutualFollowerCallback(jsonData.data.mutual_followers);
+				}
 			}
 			
-			var followers = jsonData.data.count_followers;
-			var inbox = jsonData.data.count_inbox;
-			var notifications = jsonData.data.count_notifications;
+			if(jsonData.data.response == NETWORK_RESPONSE_OK){
+				var followers = jsonData.data.count_followers;
+				var inbox = jsonData.data.count_inbox;
+				var notifications = jsonData.data.count_notifications;
+				
+				updateLeftMenuCounts(followers, inbox, notifications);
+			}
 			
-			updateLeftMenuCounts(followers, inbox, notifications);
 		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
 			Ti.API.error('Unauthorised request - need to login again');
 			showLoginPopup();
@@ -954,6 +1007,7 @@ function followUser(uId, button, win){
 	xhr.send({
 		user_id:userObject.userId,
 		follow_user:uId,
+		follow_user_fb:facebookId,
 		token:userObject.token
 	});
 }
@@ -1013,7 +1067,7 @@ function sendMessageToUser(id, name, message, view){
 }
 
 //unfollow user
-function unfollowUser(uId, button, win){
+function unfollowUser(uId, facebookId, button, win){
 	Ti.API.info('unfollowUser() called');
 	
 	var xhr = Ti.Network.createHTTPClient();
@@ -1027,21 +1081,27 @@ function unfollowUser(uId, button, win){
 	xhr.onload = function(e) {
 		var jsonData = JSON.parse(this.responseText);
 		
-		if (jsonData.data.response == NETWORK_RESPONSE_OK){
+		//Change the button even if we are not following
+		if (jsonData.data.response == NETWORK_RESPONSE_OK || jsonData.data.response == ERROR_USER_NOT_FOLLOWING){
 			if(win == 1){
 				button.backgroundImage = IMAGE_PATH+'follow_invite/Follow_btn.png';
 			}else if(win == 2){
 				button.backgroundImage = IMAGE_PATH+'profile_other/Follow_button.png';
 				
 				//Update the mutual followership flag
-				handleMutualFollowerCallback(jsonData.data.mutual_followers);
+				if(jsonData.data.response == NETWORK_RESPONSE_OK){
+					handleMutualFollowerCallback(jsonData.data.mutual_followers);
+				}
 			}
 			
-			var followers = jsonData.data.count_followers;
-			var inbox = jsonData.data.count_inbox;
-			var notifications = jsonData.data.count_notifications;
+			if(jsonData.data.response == NETWORK_RESPONSE_OK){
+				var followers = jsonData.data.count_followers;
+				var inbox = jsonData.data.count_inbox;
+				var notifications = jsonData.data.count_notifications;
+				
+				updateLeftMenuCounts(followers, inbox, notifications);
+			}
 			
-			updateLeftMenuCounts(followers, inbox, notifications);
 		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
 			Ti.API.error('Unauthorised request - need to login again');
 			showLoginPopup();
@@ -1054,6 +1114,7 @@ function unfollowUser(uId, button, win){
 	xhr.send({
 		user_id:userObject.userId,
 		follow_user:uId,
+		follow_user_fb:facebookId,
 		token:userObject.token
 	});
 }

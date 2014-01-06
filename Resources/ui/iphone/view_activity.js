@@ -163,7 +163,7 @@ function buildViewActivityView(aId){
 		viewActivityWeatherNumberLabel = Titanium.UI.createLabel({
 			height:21,
 			textAlign:'right',
-			right:116,
+			right:117,
 			top:10,
 			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
@@ -171,10 +171,10 @@ function buildViewActivityView(aId){
 		
 		//unit of the weather label
 		var viewActivityWeatherUnitLabel = Titanium.UI.createLabel({ 
-			text:'°C',
+			text:'min',
 			height:17,
-			textAlign:'center',
-			left:206,
+			textAlign:'left',
+			left:208,
 			top:14,
 			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
@@ -182,7 +182,7 @@ function buildViewActivityView(aId){
 		
 		//weather label
 		var viewActivityWeatherLabel = Titanium.UI.createLabel({ 
-			text:'weather',
+			text:'playtime',
 			height:19,
 			textAlign:'center',
 			left:177,
@@ -828,7 +828,7 @@ function updateActivityView(activityObj){
 	
 	viewActivityDistanceNumberLabel.text = activityObj.distance;
 	viewActivityAvgPaceNumberLabel.text = activityObj.pace;
-	viewActivityWeatherNumberLabel.text = activityObj.temperature;
+	viewActivityWeatherNumberLabel.text = activityObj.playtime;
 	viewActivityLikesNumberLabel.text = activityObj.likes;
 	
     

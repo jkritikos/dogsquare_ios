@@ -153,8 +153,8 @@ function handleListUsersTableViewRows(e){
 		}else {
 			Ti.include('ui/iphone/profile_other.js');
 			
-			var profileOtherView = buildProfileOtherView(userId);
 			var nameUser = e.row.children[1].text;
+			var profileOtherView = buildProfileOtherView(userId,nameUser);
 			
 			profileWindow.add(profileOtherView);
 			profileWindow.setTitle(nameUser);

@@ -545,11 +545,11 @@ function handleProfileOtherFollowButton(e){
 		var win = PROFILE_OTHER_WIN;
 		
 		if(e.source.toggle){
-			unfollowUser(userId, e.source, win);
+			unfollowUser(userId, null, e.source, win);
 			profileOtherFollowersNumberLabel.text --;
 			e.source.toggle = false;
 		}else{
-			followUser(userId, e.source, win);
+			followUser(userId, null, e.source, win);
 			e.source.toggle = true;
 			profileOtherFollowersNumberLabel.text ++;
 		}

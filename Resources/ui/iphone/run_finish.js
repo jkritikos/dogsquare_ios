@@ -175,10 +175,10 @@ function buildRunFinishView(obj){
 
 	//number of the weather label
 	var runFinishWeatherNumberLabel = Titanium.UI.createLabel({
-		text:obj.temperature,
+		text:obj.play,
 		height:21,
-		textAlign:'center',
-		left:252,
+		textAlign:'right',
+		left:244,
 		top:10,
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -186,10 +186,10 @@ function buildRunFinishView(obj){
 	
 	//unit of the weather label
 	var runFinishWeatherUnitLabel = Titanium.UI.createLabel({ 
-		text:'°C',
+		text:'min',
 		height:17,
-		textAlign:'center',
-		left:271,
+		textAlign:'left',
+		left:277,
 		top:14,
 		font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -197,7 +197,7 @@ function buildRunFinishView(obj){
 	
 	//weather label
 	var runFinishWeatherLabel = Titanium.UI.createLabel({ 
-		text:'weather',
+		text:'playtime',
 		height:19,
 		textAlign:'center',
 		left:246,

@@ -409,7 +409,6 @@ function populateFindFriendsContactsTableView(uData){
 			button:'invite'
 		});
 		
-		
 		var rowFriendImage = Titanium.UI.createImageView({
 			image:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:3,
@@ -511,7 +510,8 @@ function populateFindFriendsDogsquareTableView(uObj){
 		
 		//friend's profile name
 		var rowFriendImage = Titanium.UI.createImageView({
-			image:API+'photo?user_id='+uObj[i].User.id+'&now='+new Date().getTime(),
+			//image:API+'photo?user_id='+uObj[i].User.id+'&now='+new Date().getTime(),
+			image:getUserPhoto(uObj[i].User.thumb),
 			defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
 			left:3,
 			borderRadius:30,
@@ -610,7 +610,6 @@ function handleFindFriendsTabs(e){
 			findFriendsFacebookView.show();
 		}
 		
-		
 	} else if(tab == CONTACTS_TAB){
 		findFriendsSearchContainer.show();
 		findFriendsTabFacebookSelection.hide();
@@ -619,6 +618,9 @@ function handleFindFriendsTabs(e){
 		findFriendsFacebookFriendsCounterLabel.hide();
 		findFriendsTableView.show();
 		findFriendsFacebookView.hide();
+		
+		var emptyArray = [];
+		populateFindFriendsDogsquareTableView(emptyArray);
 		
 		getAddressBookContacts();
 	} else if(tab == DOGSQUARE_TAB){
@@ -629,7 +631,6 @@ function handleFindFriendsTabs(e){
 		findFriendsFacebookFriendsCounterLabel.hide();
 		
 		var emptyArray = [];
-		
 		populateFindFriendsDogsquareTableView(emptyArray);
 		
 		findFriendsTableView.show();
@@ -784,7 +785,6 @@ function handlefriendsTableViewRows(e){
 		
 		var profileOtherWindow = Ti.UI.createWindow({
 			backgroundColor:'white',
-			//barImage:IMAGE_PATH+'common/bar.png',
 			translucent:false,
 			barColor:UI_COLOR,
 			title:nameUser
@@ -806,23 +806,23 @@ function handlefriendsTableViewRows(e){
 		
 		openWindows.push(profileOtherWindow);
 		navController.open(profileOtherWindow);
-	}else if(e.source.type == TYPE_FOLLOW_BUTTON){
+	} else if(e.source.type == TYPE_FOLLOW_BUTTON){
 		var userId = e.source.userId;
+		var facebookId = e.row.facebook_id;
 		var win = FIND_FRIENDS_WIN;
 		
 		if(e.source.toggle){
-			unfollowUser(userId, e.source, win);
+			unfollowUser(userId, facebookId, e.source, win);
 			e.source.toggle = false;
-		}else{
-			followUser(userId, e.source, win);
+		} else{
+			followUser(userId, facebookId, e.source, win);
 			e.source.toggle = true;
 		}
-	}else if(e.source.type == TYPE_INVITE_BUTTON){
+	} else if(e.source.type == TYPE_INVITE_BUTTON){
 		Ti.API.info('Inviting by SMS - contact index is '+e.index);
 		
 		showContactPhoneNumbersSelection(e.index);
-		
-		
+	
 	} else if(e.source.type == TYPE_INVITE_FB_BUTTON){
 		Ti.API.info('Inviting by FACEBOOK, row is '+e.index+' fb id is '+e.row.facebook_id);
 		
@@ -952,6 +952,7 @@ function facebookGetAllFriends(){
 		        	
 		        	findFriendsFacebookView.hide();
 		        	populateFindFriendsFacebookTableView(allFriendsObject);
+		        	findFriendsFacebookFriendsCounterLabel.show();
 		        	findFriendsTableView.show();
 		        	
 		    	} else {

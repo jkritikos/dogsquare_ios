@@ -133,7 +133,7 @@ function populatecheckinPlacesTableView(places){
 				className:'placeRow',
 				height:71,
 				width:'100%',
-				backgroundColor:'white',
+				backgroundColor:places[i].color ? places[i].color : 'white',
 				selectedBackgroundColor:'transparent',
 				placeId:places[i].id,
 				dogId:places[i].dog_id,
