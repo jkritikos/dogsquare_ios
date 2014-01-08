@@ -112,12 +112,32 @@ var FB_DOG_PWD = 1234;
 var FB_APP_ID = '509577672446427';
 var FB_API_KEY = '667843a07b0ab0bd71aaa4c91c5ec2af';
 var FB_READ_PERMISSIONS = ['read_stream'];
-var FB_WRITE_PERMISSIONS = ['publish_actions'];
+var FB_WRITE_PERMISSIONS = ['publish_stream'];
+var FB_ALL_PERMISSIONS = ['publish_stream','read_stream'];
+var FB_WRITE_PERMISSION_TO_CHECK_FOR = 'publish_stream';
 
 var fb = require('facebook');
 fb.appid = FB_APP_ID;
 fb.forceDialogAuth = false;
-fb.permissions = FB_READ_PERMISSIONS;
+fb.permissions = FB_ALL_PERMISSIONS;
+
+//Checks if we are connected to FB and have write permissions
+function hasFBWritePermissions(){
+	var result = false;
+	if(fb.loggedIn){
+		var permissions = fb.getPermissions();
+		Ti.API.info('FACEBOOK permissions '+permissions);
+		
+		if(permissions.indexOf(FB_WRITE_PERMISSION_TO_CHECK_FOR) > -1){
+			Ti.API.info('FACEBOOK HAS WRITE permissions');
+			result = true;
+		} else {
+			Ti.API.info('FACEBOOK DOESNT HAVE WRITE permissions');
+		}
+	}
+	
+	return result;
+}
 
 /*Facebook logout event handler*/
 fb.addEventListener('logout', function(e) {
@@ -130,6 +150,7 @@ fb.addEventListener('login', function(e) {
 	Ti.API.info('Facebook LOGIN event - CURRENT_VIEW='+CURRENT_VIEW);
 	
 	if(fb.loggedIn){
+		Ti.API.info('Facebook permissions are '+fb.getPermissions());
 		Ti.API.info('Facebook LOGIN will expire on '+fb.getExpirationDate());
 		fb.requestWithGraphPath('me', {}, 'GET', function(e) {
     		if (e.success) {
@@ -310,7 +331,7 @@ function facebookPost(msg, otherUserId){
 	
 	if (Titanium.Network.online == true){
 		if(fb.loggedIn){
-			fb.reauthorize(FB_WRITE_PERMISSIONS, writePermissionsTarget, function(){
+			//fb.reauthorize(FB_WRITE_PERMISSIONS, writePermissionsTarget, function(){
 				fb.requestWithGraphPath(url, data, "POST", function(e) {
 			    	if (e.success) {
 			        	Ti.API.info('FACEBOOK - Success in posting message');
@@ -323,7 +344,7 @@ function facebookPost(msg, otherUserId){
 			        	}
 			    	}
 				});
-			});
+			//});
 			
 		} else {
 			Ti.API.info('FACEBOOK - NOT logged in');
@@ -347,7 +368,7 @@ function facebookPostImage2(blob, otherUserId){
 	
 	if (Titanium.Network.online == true){
 		if(fb.loggedIn){
-			fb.reauthorize(FB_WRITE_PERMISSIONS, 'friends', function(){
+		//	fb.reauthorize(FB_WRITE_PERMISSIONS, 'friends', function(){
 				fb.requestWithGraphPath(url, data, "POST", function(e) {
 			    	if (e.success) {
 			        	Ti.API.info('FACEBOOK - Success in posting invite');
@@ -360,7 +381,7 @@ function facebookPostImage2(blob, otherUserId){
 			        	}
 			    	}
 				});
-			});
+		//	});
 			
 		} else {
 			Ti.API.info('FACEBOOK - NOT logged in');
@@ -380,7 +401,7 @@ function facebookPostImage(blob, msg, otherUserId){
 	
 	if (Titanium.Network.online == true){
 		if(fb.loggedIn){
-			fb.reauthorize(FB_WRITE_PERMISSIONS, 'everyone', function(){
+			//fb.reauthorize(FB_WRITE_PERMISSIONS, 'everyone', function(){
 				fb.requestWithGraphPath(url, data, "POST", function(e) {
 			    	if (e.success) {
 			        	Ti.API.info('FACEBOOK - Success in posting image');
@@ -393,7 +414,7 @@ function facebookPostImage(blob, msg, otherUserId){
 			        	}
 			    	}
 				});
-			});
+		//	});
 			
 		} else {
 			Ti.API.info('FACEBOOK - NOT logged in');

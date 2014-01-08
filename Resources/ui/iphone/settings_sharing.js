@@ -42,6 +42,19 @@ function handleFBCheckinSharingSelection(e){
 	if(e.value && !fb.loggedIn){
 		fb.authorize();
 	}
+	
+	/*
+	if(!fb.loggedIn){
+		alert('DEN EXEIS KANEI LOGIN STO FB');
+	} 
+	
+	//Request write permissions if needed
+	if(!hasFBWritePermissions()){
+		fb.reauthorize(FB_WRITE_PERMISSIONS, 'friends', function(){
+			Ti.API.info('FACEBOOK got write permissions from sharing settings');
+		});
+	}
+	*/
 }
 
 //Event handler for checkin switch clicks
@@ -53,6 +66,18 @@ function handleFBCActivitySharingSelection(e){
 	if(e.value && !fb.loggedIn){
 		fb.authorize();
 	}
+	
+	/*
+	if(!fb.loggedIn){
+		alert('DEN EXEIS KANEI LOGIN STO FB');
+	} 
+	
+	//Request write permissions if needed
+	if(!hasFBWritePermissions()){
+		fb.reauthorize(FB_WRITE_PERMISSIONS, 'friends', function(){
+			Ti.API.info('FACEBOOK got write permissions from sharing settings');
+		});
+	}*/
 }
 
 function createSharingMenuRow(menu){

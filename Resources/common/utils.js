@@ -255,7 +255,7 @@ function relativeTime(eventTime){
 		metric = variable == 1 ? 'month' : 'months';
 		t = variable+' '+metric+' ago';
 	} else {
-		t = new Date(eventTime);
+		t = formatDate(new Date(eventTime));
 	}
 	
 	return t;
