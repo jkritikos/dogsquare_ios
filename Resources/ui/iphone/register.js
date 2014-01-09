@@ -949,6 +949,15 @@ function doSignup(uObj){
 			window.open(); //init the app
 			window.setParallaxAmount(0.3);
 			
+			if(statusBarWindowHack == null){
+				statusBarWindowHack = Ti.UI.createWindow({
+				    backgroundColor: 'transparent',
+				    zIndex: 1000,
+				    touchEnabled: false
+				});
+				statusBarWindowHack.open();
+			}
+			
 			if(uObj.facebook_id){
 				Ti.include('ui/iphone/profile.js');
 				navController.getWindow().add(viewProfile);

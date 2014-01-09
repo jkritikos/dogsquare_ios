@@ -144,10 +144,11 @@ function hideTextfields(e){
 function createCenterNavWindow(){	
 	var win = Ti.UI.createWindow({
 		backgroundColor:'#eee',
-		title:"Napp Slide Menu",
+		title:"",
 		navTintColor:UI_COLOR,
 		translucent:false,
-		barColor:UI_COLOR
+		barColor:UI_COLOR,
+		statusBarStyle:Ti.UI.iPhone.StatusBar.LIGHT_CONTENT
 		//barImage:IMAGE_PATH+'common/bar.png'
 	});
 	
@@ -180,8 +181,7 @@ var window = NappSlideMenu.createSlideMenuWindow({
 	rightWindow:winRight,
 	leftLedge:65,
 	rightLedge:43,
-	translucent:false,
-	modal:true
+	translucent:false
 });
 
 //Event listener for main window being slided or animated (i.e revealing left/right menu)

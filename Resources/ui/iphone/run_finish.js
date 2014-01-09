@@ -362,7 +362,8 @@ function handleRunFinishTableRows(e){
 	navController.open(dogProfileWindow);
 }
 
-function shareActivity(){
+function shareActivity(e){
+	Ti.API.info('shareActivity() called with event: '+JSON.stringify(e));
 	Ti.API.info('shareActivity() called and runFinishFBPosted='+runFinishFBPosted);
 	//Post activity on facebook if we must
 	if(!runFinishFBPosted && shouldPostActivityFacebook()){

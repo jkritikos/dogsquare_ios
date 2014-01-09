@@ -385,6 +385,15 @@ function checkLoginCredentials(lObj){
 			//Init the app
 			window.open(); //init the app
 			window.setParallaxAmount(0.3);
+			
+			if(statusBarWindowHack == null){
+				statusBarWindowHack = Ti.UI.createWindow({
+				    backgroundColor: 'transparent',
+				    zIndex: 1000,
+				    touchEnabled: false
+				});
+				statusBarWindowHack.open();
+			}
 		} else {
 			
 			var errorMessage = getErrorMessage(jsonData.data.response);

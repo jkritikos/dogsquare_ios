@@ -10,6 +10,9 @@ var openWindows = [];
 //holds global timers for various async tasks
 var timers = [];
 
+//Dirty hack for enforcing a light content status bar (white)
+var statusBarWindowHack = null;
+
 //Local notifications BEFORE dao
 Ti.include('common/dao.js');
 
@@ -35,6 +38,15 @@ if(!userObject.userId){
 } else {
 	window.open(); //init the app
 	window.setParallaxAmount(0.3);
+	
+	if(statusBarWindowHack == null){
+		statusBarWindowHack = Ti.UI.createWindow({
+		    backgroundColor: 'transparent',
+		    zIndex: 1000,
+		    touchEnabled: false
+		});
+		statusBarWindowHack.open();
+	}
 }
 
 //App launch
