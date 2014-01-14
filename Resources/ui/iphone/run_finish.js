@@ -108,16 +108,18 @@ function buildRunFinishView(obj){
 
 	//number of the distance label
 	var runFinishDistanceNumberLabel = Titanium.UI.createLabel({
-		text:obj.distance,
+		text:obj.distance + ' Km',
 		height:21,
-		textAlign:'right',
-		left:21,
+		width:104,
+		textAlign:'center',
+		left:1,
 		top:10,
-		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+		font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	runFinishOpacityBar.add(runFinishDistanceNumberLabel);
 	
 	//unit of the distance label
+	/*
 	var runFinishDistanceUnitLabel = Titanium.UI.createLabel({ 
 		text:'km',
 		height:17,
@@ -127,13 +129,15 @@ function buildRunFinishView(obj){
 		font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	runFinishOpacityBar.add(runFinishDistanceUnitLabel);
+	*/
 	
 	//distance label
 	var runFinishDistanceLabel = Titanium.UI.createLabel({ 
 		text:'distance',
 		height:19,
+		width:104,
 		textAlign:'center',
-		left:30,
+		left:1,
 		bottom:4,
 		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -141,17 +145,18 @@ function buildRunFinishView(obj){
 
 	//number of the average pace label
 	var runFinishAvgPaceNumberLabel = Titanium.UI.createLabel({
-		text:obj.pace,
+		text:obj.pace + ' Km/h',
 		height:21,
-		textAlign:'right',
-		left:114,
-		width:40,
+		textAlign:'center',
+		left:108,
+		width:104,
 		top:10,
-		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+		font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	runFinishOpacityBar.add(runFinishAvgPaceNumberLabel);
 	
 	//unit of the average pace label
+	/*
 	var runFinishAvgPaceUnitLabel = Titanium.UI.createLabel({ 
 		text:'km/h',
 		height:17,
@@ -161,13 +166,15 @@ function buildRunFinishView(obj){
 		font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	runFinishOpacityBar.add(runFinishAvgPaceUnitLabel);
+	*/
 	
 	//average pace label
 	var runFinishAvgPaceLabel = Titanium.UI.createLabel({ 
 		text:'avg pace',
 		height:19,
+		width:104,
 		textAlign:'center',
-		left:137,
+		left:108,
 		bottom:4,
 		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -175,16 +182,18 @@ function buildRunFinishView(obj){
 
 	//number of the weather label
 	var runFinishWeatherNumberLabel = Titanium.UI.createLabel({
-		text:obj.play,
+		text:obj.play + ' min',
 		height:21,
-		textAlign:'right',
-		left:244,
+		textAlign:'center',
+		right:2,
+		width:102,
 		top:10,
-		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+		font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	runFinishOpacityBar.add(runFinishWeatherNumberLabel);
 	
 	//unit of the weather label
+	/*
 	var runFinishWeatherUnitLabel = Titanium.UI.createLabel({ 
 		text:'min',
 		height:17,
@@ -194,13 +203,15 @@ function buildRunFinishView(obj){
 		font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	runFinishOpacityBar.add(runFinishWeatherUnitLabel);
+	*/
 	
 	//weather label
 	var runFinishWeatherLabel = Titanium.UI.createLabel({ 
 		text:'playtime',
 		height:19,
 		textAlign:'center',
-		left:246,
+		right:2,
+		width:102,
 		bottom:4,
 		font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
@@ -251,7 +262,7 @@ function buildRunFinishView(obj){
  
 	// add the route
 	viewRunFinishMap.addRoute(route);
-	viewRunFinishMap.addEventListener('complete', shareActivity);
+	//viewRunFinishMap.addEventListener('complete', shareActivity);
 	
 	//background for comments
 	runFinishCommentsBackgroundView = Ti.UI.createView({
@@ -362,19 +373,24 @@ function handleRunFinishTableRows(e){
 	navController.open(dogProfileWindow);
 }
 
-function shareActivity(e){
-	Ti.API.info('shareActivity() called with event: '+JSON.stringify(e));
-	Ti.API.info('shareActivity() called and runFinishFBPosted='+runFinishFBPosted);
+function shareActivity(){
+	Ti.API.info('shareActivity() called from DONE and runFinishFBPosted='+runFinishFBPosted);
 	//Post activity on facebook if we must
 	if(!runFinishFBPosted && shouldPostActivityFacebook()){
 		runFinishFBPosted = true;
+		
+		var blob = viewRunFinishMap.toImage();
+		var msg = 'I just finished an activity with my dog: we walked for '+runFinishRunObject.walk +' Km and played for '+runFinishRunObject.play+' minutes!';
+		facebookPostImage(blob, msg, null);	
 		//crap way of giving time to the map view to load..
+		/*
 		setTimeout(function(){
 			//create map image
 			var blob = viewRunFinishMap.toImage();
 			var msg = 'I just finished an activity with my dog: we walked for '+runFinishRunObject.walk +' Km and played for '+runFinishRunObject.play+' minutes!';
 			facebookPostImage(blob, msg, null);	
 		}, 3250);
+		*/
 	}
 }
 

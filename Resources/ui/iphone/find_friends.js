@@ -439,7 +439,7 @@ function populateFindFriendsContactsTableView(uData){
 			userEmail = people[i].email.work[0];
 		}
 		
-		if(uData != null){
+		if(uData != null && uData.results != null && uData.results.users != null){
 			//show follow button if user exists in web database and insert userId on follow button
 			for(k=0;k<uData.results.users.length;k++){
 				
@@ -619,8 +619,8 @@ function handleFindFriendsTabs(e){
 		findFriendsTableView.show();
 		findFriendsFacebookView.hide();
 		
-		var emptyArray = [];
-		populateFindFriendsDogsquareTableView(emptyArray);
+		//var emptyArray = [];
+		//populateFindFriendsDogsquareTableView(emptyArray);
 		
 		getAddressBookContacts();
 	} else if(tab == DOGSQUARE_TAB){
@@ -737,10 +737,10 @@ function doSearchUserByEmail(cEmail){
 		        success:true
 		    });
 			
-			if(jsonData.data.results){
+			//if(jsonData.data.results){
 			    populateFindFriendsContactsTableView(jsonData.data);
                 localDataForContacts = jsonData.data;
-			}
+			//}
 			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;
@@ -981,7 +981,7 @@ function facebookInvitePost(otherUserId, rowIndex){
 	var data = {
 	    link : "http://www.dogsquareapp.com",
 	    name : "Dogsquare",
-	    message : "Hey Pack Leader!! You are invited to experience Dogsquare: the first Dog-social app that will drastically improve your loyal friend’s life. Your dog will be grateful every time you touch phone.",
+	    message : "Hey Pack Leader!! You are invited to experience Dogsquare: the first Dog-social app that will improve your loyal friend’s life. Your dog will be grateful every time you touch phone.",
 	    //caption : "The ",
 	    picture : SERVER+'fb_icon6.png',
 	    description : "Woof your Dog!"

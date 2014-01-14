@@ -98,14 +98,16 @@ function buildViewActivityView(aId){
 		//number of the distance label
 		viewActivityDistanceNumberLabel = Titanium.UI.createLabel({
 			height:21,
-			textAlign:'right',
-			right:278,
+			textAlign:'center',
+			left:1,
+			width:78,
 			top:10,
-			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		viewActivityOpacityBar.add(viewActivityDistanceNumberLabel);
 		
 		//unit of the distance label
+		/*
 		var viewActivityDistanceUnitLabel = Titanium.UI.createLabel({ 
 			text:'km',
 			height:17,
@@ -115,13 +117,15 @@ function buildViewActivityView(aId){
 			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		viewActivityOpacityBar.add(viewActivityDistanceUnitLabel);
+		*/
 		
 		//distance label
 		var viewActivityDistanceLabel = Titanium.UI.createLabel({ 
 			text:'distance',
 			height:19,
+			width:78,
 			textAlign:'center',
-			left:16,
+			left:1,
 			bottom:4,
 			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
@@ -130,14 +134,16 @@ function buildViewActivityView(aId){
 		//number of the average pace label
 		viewActivityAvgPaceNumberLabel = Titanium.UI.createLabel({
 			height:21,
-			textAlign:'right',
-			right:207,
+			width:78,
+			textAlign:'center',
+			right:161,
 			top:10,
-			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		viewActivityOpacityBar.add(viewActivityAvgPaceNumberLabel);
 		
 		//unit of the average pace label
+		/*
 		var viewActivityAvgPaceUnitLabel = Titanium.UI.createLabel({ 
 			text:'km/h',
 			height:17,
@@ -147,13 +153,15 @@ function buildViewActivityView(aId){
 			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		viewActivityOpacityBar.add(viewActivityAvgPaceUnitLabel);
+		*/
 		
 		//average pace label
 		var viewActivityAvgPaceLabel = Titanium.UI.createLabel({ 
 			text:'avg pace',
 			height:19,
 			textAlign:'center',
-			left:92,
+			right:161,
+			width:78,
 			bottom:4,
 			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
@@ -162,14 +170,16 @@ function buildViewActivityView(aId){
 		//number of the weather label
 		viewActivityWeatherNumberLabel = Titanium.UI.createLabel({
 			height:21,
-			textAlign:'right',
-			right:117,
+			textAlign:'center',
+			width:78,
+			right:82,
 			top:10,
-			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		viewActivityOpacityBar.add(viewActivityWeatherNumberLabel);
 		
 		//unit of the weather label
+		/*
 		var viewActivityWeatherUnitLabel = Titanium.UI.createLabel({ 
 			text:'min',
 			height:17,
@@ -179,13 +189,15 @@ function buildViewActivityView(aId){
 			font:{fontSize:9, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		viewActivityOpacityBar.add(viewActivityWeatherUnitLabel);
+		*/
 		
 		//weather label
 		var viewActivityWeatherLabel = Titanium.UI.createLabel({ 
 			text:'playtime',
 			height:19,
+			width:78,
 			textAlign:'center',
-			left:177,
+			right:82,
 			bottom:4,
 			font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
@@ -205,7 +217,7 @@ function buildViewActivityView(aId){
 			textAlign:'center',
 			right:40,
 			top:10,
-			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'},
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'},
 			actId:aId
 		});
 		viewActivityLikesTransparentView.add(viewActivityLikesNumberLabel);
@@ -219,7 +231,7 @@ function buildViewActivityView(aId){
 		viewActivityLikesTransparentView.add(viewActivityLikesIcon);
 		
 		var viewActivityLikesLabel = Titanium.UI.createLabel({ 
-			text:'Likes',
+			text:'likes',
 			height:19,
 			textAlign:'center',
 			bottom:4,
@@ -514,7 +526,9 @@ function populateViewActivityCommentsTableView(comObj){
 			width:'100%',
 			backgroundColor:'white',
 			selectedBackgroundColor:'transparent',
-			rowId:COMMENT_ROW
+			rowId:COMMENT_ROW,
+			user_id:comObj[i].comm.user_id,
+			user_name:comObj[i].comm.name
 		});
 		
 		var commentRowUserImage = Titanium.UI.createImageView({
@@ -611,8 +625,47 @@ function handleViewActivityCommentTableRows(e){
 		viewActivityCommentsTextArea.focus();
 		viewActivityCommentsTableView.hide();
 		viewActivityCommentsTextArea.show();
-	}
+	} else {
+		var user_id = e.row.user_id;
+		var name = e.row.user_name;
+		Ti.API.info('handleViewActivityCommentTableRows() clicked on comment by user '+user_id);
+		
+		var userProfileWindow = Ti.UI.createWindow({
+			backgroundColor:'white',
+			translucent:false,
+			barColor:UI_COLOR
+		});
 	
+		//back button & event listener
+		var userProfileBackButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'common/back_button.png',
+		    width:48,
+		    height:33
+		});
+	
+		userProfileWindow.setLeftNavButton(userProfileBackButton);
+		userProfileBackButton.addEventListener("click", function() {
+		    navController.close(userProfileWindow);
+		});
+		
+		if (user_id == userObject.userId){
+			Ti.include('ui/iphone/profile.js');
+		  	userProfileWindow.add(viewProfile);
+		  	userProfileWindow.setTitle(userObject.name);
+		} else {
+		    Ti.include('ui/iphone/profile_other.js');
+        
+            var profileOtherView = buildProfileOtherView(user_id);
+            
+            userProfileWindow.add(profileOtherView);
+            userProfileWindow.setTitle(name);
+		}
+		
+		//open window
+		openWindows.push(userProfileWindow);
+        navController.open(userProfileWindow); 
+		
+	}
 }
 
 function handleActivityLikeButton(e){
@@ -629,7 +682,6 @@ function handleActivityLikeButton(e){
 		e.source.toggle = true;
 	}
 }
-
 
 function likeActivity(aId){
 	Ti.API.info('likeActivity() with id: ' + aId);
@@ -826,9 +878,9 @@ function getActivityLikedUsersOnline(aId){
 //Updates the UI with the data returned from the server
 function updateActivityView(activityObj){
 	
-	viewActivityDistanceNumberLabel.text = activityObj.distance;
-	viewActivityAvgPaceNumberLabel.text = activityObj.pace;
-	viewActivityWeatherNumberLabel.text = activityObj.playtime;
+	viewActivityDistanceNumberLabel.text = activityObj.distance + ' Km';
+	viewActivityAvgPaceNumberLabel.text = activityObj.pace + ' Km/h';
+	viewActivityWeatherNumberLabel.text = parseFloat(activityObj.playtime).toFixed(2) + ' min';
 	viewActivityLikesNumberLabel.text = activityObj.likes;
 	
     

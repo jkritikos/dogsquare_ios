@@ -507,6 +507,11 @@ function buildRegisterWindow(){
 	value.setMonth(12);
 	value.setDate(1);
 	
+	//Set the default date in case the user doesnt change it from the picker
+	var defaultDateForUserObject = formatDate(value);
+	signupUserObject.birth_date = value;
+	signupUserObject.birth_dateString = defaultDateForUserObject;
+	
 	registerDatePickerBackground = Titanium.UI.createView({
 	    height:260,
 	    bottom:-260,

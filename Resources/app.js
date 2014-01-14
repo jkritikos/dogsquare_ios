@@ -17,6 +17,7 @@ var statusBarWindowHack = null;
 Ti.include('common/dao.js');
 
 var userObject = getUserObject();
+var runningMode = false;
 
 //Create the database
 createDB();

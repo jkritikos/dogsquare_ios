@@ -82,7 +82,7 @@ var RESET_PASSWORD_SUCCESS = 'reset successfull';
 //SMS invite text message
 var INVITE_SMS_MSG = 'Hey there Pack leader, join me on Dogsquare the first Dog social application, now available in iTunes!';
 //Facebook invite message
-var INVITE_FB_MSG = 'Pack Leader, you are invited to experience Dogsquare - the first Dog-social app that will drastically improve your loyal friend’s life. Your dog will be grateful every time you touch your phone. So Woof your Dog! Find us at the Appstore @ http://www.appstore.com/dogsquare OR visit us @ www.dogsquareapp.com';
+var INVITE_FB_MSG = 'Pack Leader, you are invited to experience Dogsquare - the first Dog-social app that will improve your loyal friend’s life. Your dog will be grateful every time you touch your phone. So Woof your Dog! Find us at the Appstore @ http://www.appstore.com/dogsquare OR visit us @ www.dogsquareapp.com';
 
 function TT(s){
 	var currentLanguage = LANGUAGE_ENGLISH;

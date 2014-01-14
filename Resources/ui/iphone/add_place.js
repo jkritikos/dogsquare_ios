@@ -401,18 +401,28 @@ function doSavePlaceOnline(pObj){
 		text:"Saving..."
 	});
 	
+	//Hide save button
+	addPlaceWindow.setRightNavButton(null);
+	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
 		Ti.API.error('Error in doSavePlaceOnline() '+e);
 		progressView.hide();
+		
+		//Show the save button
+		addPlaceWindow.setRightNavButton(addPlaceSaveButton);
+		
 		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
 	xhr.onload = function(e){
 		Ti.API.info('doSavePlaceOnline() got back from server '+this.responseText); 	
 		var jsonData = JSON.parse(this.responseText);
+		
+		//Show the save button
+		addPlaceWindow.setRightNavButton(addPlaceSaveButton);
 		
 		if(jsonData.data.response == NETWORK_RESPONSE_OK){
 			Ti.API.info('doSavePlaceOnline() got back place id from server '+jsonData.data.place_id);

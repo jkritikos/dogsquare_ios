@@ -1,4 +1,3 @@
-var runningMode = false;
 var currentActivityMode = null;
 var runningPathCoordinates = [];
 var runningDistanceKm = 0;
@@ -376,6 +375,7 @@ function handleEndRunButton(){
 		
 		runFinishWindow.setLeftNavButton(runFinishBackButton);
 		runFinishBackButton.addEventListener("click", function() {
+			shareActivity();
 		    navController.close(runFinishWindow);
 		    getOnlineUser();
 		});
@@ -389,6 +389,7 @@ function handleEndRunButton(){
 		
 		runFinishWindow.setRightNavButton(runFinishDoneButton);
 		runFinishDoneButton.addEventListener("click", function() {
+			shareActivity();
 		    navController.close(runFinishWindow);
 		    getOnlineUser();
 		});
