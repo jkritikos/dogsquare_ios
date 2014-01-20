@@ -6,15 +6,36 @@ var addPlaceWindow = Ti.UI.createWindow({
 	title:'Add Place / Incident'
 });
 
-//image view for previewing the place image
-var addPlaceImagePreview = Ti.UI.createImageView({
-	width:320,
-	height:320,
-	top:160,
-	zIndex:1
+//photo button
+var addPlacePhotoButton = Ti.UI.createButton({
+	backgroundImage:IMAGE_PATH+'add_dog/place_photo.png',
+	width:104,
+	height:101,
+	top:19
 });
 
-addPlaceWindow.add(addPlaceImagePreview);
+//photo label
+var addPlacePhotoLabel = Ti.UI.createLabel({
+	text:'Add a photo',
+	bottom:14,
+	textAlign:'center',
+	width:55,
+	height:30,
+	color:'black',
+	opacity:0.6,
+	font:{fontSize:9, fontWeight:'bold', fontFamily:'Open Sans'}
+});
+
+addPlacePhotoButton.add(addPlacePhotoLabel);
+addPlaceWindow.add(addPlacePhotoButton);
+
+//image view for previewing the place image
+var addPlaceImagePreview = Ti.UI.createImageView({
+	zIndex:1,
+	processed:false
+});
+
+addPlacePhotoButton.add(addPlaceImagePreview);
 
 var addPlaceObject = {};
 
@@ -41,16 +62,28 @@ addPlaceBackButton.addEventListener("click", function() {
     navController.close(addPlaceWindow);
 });
 
+//annotation
+var addPlaceMapAnnotation = Ti.Map.createAnnotation({
+    animate: false,
+    image:IMAGE_PATH+'checkin_place/pin_map.png',
+    latitude:userObject.lat,
+    longitude:userObject.lon
+});
+
+var addPlaceAnnotations = [];
+addPlaceAnnotations.push(addPlaceMapAnnotation);
+
 //the map
 var addPlaceMap = Titanium.Map.createView({ 
 	width:'100%',
-	top:0,
-	height:IPHONE5 ? 248 : 161,
+	top:140,
+	height:IPHONE5 ? 240 : 100,
     mapType:Titanium.Map.STANDARD_TYPE,
     animate:true,
     regionFit:true,
     userLocation:true,
-    visible:true
+    visible:true,
+    annotations:addPlaceAnnotations
 });
 addPlaceWindow.add(addPlaceMap);
 
@@ -59,42 +92,14 @@ var addPlaceMapRegion = {
 	latitude: userObject.lat,
 	longitude: userObject.lon,
 	animate:true,
-	latitudeDelta:0.003,
-	longitudeDelta:0.003
+	latitudeDelta:0.03,
+	longitudeDelta:0.03
 };
 	
 addPlaceMap.setLocation(checkinMapRegion);
 
-//photo area button
-var addPlacePhotoAreaButton = Ti.UI.createButton({ 
-	backgroundImage:IMAGE_PATH+'add_place/photo_area.png',
-	top:IPHONE5 ? 246 : 158,
-	height:138,
-	width:320,
-	zIndex:0
-});
-addPlaceWindow.add(addPlacePhotoAreaButton);
-addPlacePhotoAreaButton.addEventListener('click', addPlaceShowPhotoOptions);
+addPlacePhotoButton.addEventListener('click', addPlaceShowPhotoOptions);
 addPlaceImagePreview.addEventListener('click', addPlaceShowPhotoOptions);
-//photo icon
-var addPlacePhotoIcon = Ti.UI.createImageView({ 
-	image:IMAGE_PATH+'add_place/photo_icon.png',
-	top:40
-});
-addPlacePhotoAreaButton.add(addPlacePhotoIcon);
-
-//photo label
-var addPlacePhotoLabel = Titanium.UI.createLabel({ 
-	text:'Add a photo',
-	color:'black',
-	top:79,
-	height:18,
-	width:74,
-	opacity:0.6,
-	textAlign:'center',
-	font:{fontSize:11, fontWeight:'semibold', fontFamily:'Open Sans'}
-});
-addPlacePhotoAreaButton.add(addPlacePhotoLabel);
 
 //photo dialog
 var addPlacePhotoDialog = Titanium.UI.createOptionDialog({
@@ -320,7 +325,7 @@ function handlePlaceCameraSelection(){
 			var compressedImage = jpgcompressor.compress(image);
 			
 			//Preview thumbnail
-			var imageThumbnailPreview = image.imageAsResized(320,320);
+			var imageThumbnailPreview = image.imageAsThumbnail(94,0,47);
 			addPlaceImagePreview.image = imageThumbnailPreview;
 			
 			//Create thumbnail
@@ -358,7 +363,7 @@ function handlePlacePhotoSelection(){
 			var compressedImage = jpgcompressor.compress(image);
 			
 			//Preview thumbnail
-			var imageThumbnailPreview = image.imageAsResized(320,320);
+			var imageThumbnailPreview = image.imageAsThumbnail(94,0,47);
 			addPlaceImagePreview.image = imageThumbnailPreview;
 			
 			//Create thumbnail

@@ -53,7 +53,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 		checkinPlaceMapAnnotation = Ti.Map.createAnnotation({
 	        animate: true,
 	        image:IMAGE_PATH+'checkin_place/pin_map.png'
-	   });
+	    });
 	   
 	   //Scrollable view for place photos
 	   checkinScrollablePhotoView = Titanium.UI.createScrollableView({
@@ -91,6 +91,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 			backgroundColor:UI_COLOR,
 			zIndex:2
 		});
+		
 		checkinPlaceView.add(checkinPlaceButtonBarView);
 		
 		//Container for checkin/like buttons

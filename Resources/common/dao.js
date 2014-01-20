@@ -484,8 +484,8 @@ function getBadgeDetails(id){
 	} else if(id == 3){
 		badge = {
 			title:'Olympian',
-			description:'Achieved when a dog from the user\'s pack fills the Dog fuel bar at least 3 times a week for 4 weeks\' time.',
-			award:'12 ­in a row­ dog bar fillings per month! Olympians never rest­ - keep going!'
+			description:'Achieved when a dog from the user\'s pack fills the Dog fuel bar at least 2 times a week for 4 weeks\' time.',
+			award:'8 ­in a row­ dog bar fillings per month! Olympians never rest­ - keep going!'
 		};
 	} else if(id == 4){
 		badge = {
@@ -496,14 +496,14 @@ function getBadgeDetails(id){
 	} else if(id == 5){
 		badge = {
 			title:'Athletic',
-			description:'Achieved when a dog from the user\'s pack fills the bar 10 times in a month.',
-			award:'10 dog bar filling in a month! Twice the dog bar fillings, double the Glory!'
+			description:'Achieved when a dog from the user\'s pack fills the bar 6 times in a month.',
+			award:'6 dog bar filling in a month! Twice the dog bar fillings, double the Glory!'
 		};
 	} else if(id == 6){
 		badge = {
 			title:'Crossfit',
-			description:'Achieved when a dog fills the fuel bar for 6 times in 2 weeks time.',
-			award:'6 bar fillings in 2 weeks!?! This badge is earned not given.'
+			description:'Achieved when a dog fills the fuel bar for 5 times in 2 weeks time.',
+			award:'5 bar fillings in 2 weeks!?! This badge is earned not given.'
 		};
 	} else if(id == 7){
 		badge = {

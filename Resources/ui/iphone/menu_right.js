@@ -130,6 +130,18 @@ function populateRightMenu(dogObject){
 			color:'8a8b8c',
 			height:18,
 			textAlign:'left',
+			left:160,
+			top:50,
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'},
+			type:TYPE_SELECT_ROW
+		});
+		
+		//dog mood label inside the dog row - right menu row
+		var rowDogMoodLabel24 = Titanium.UI.createLabel({ 
+			text:'24h',
+			color:'red',
+			height:18,
+			textAlign:'left',
 			left:132,
 			top:50,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'},
@@ -142,9 +154,10 @@ function populateRightMenu(dogObject){
 			color:'ab7b04',
 			height:18,
 			width:35,
-			textAlign:'left',
-			left:185,
-			top:50,
+			textAlign:'center',
+			//left:185,
+			right:23,
+			bottom:4,
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'},
 			type:TYPE_SELECT_ROW
 		});
@@ -224,6 +237,7 @@ function populateRightMenu(dogObject){
 			rightMenuRow.add(rowColorBoneImage);
 		}
 		
+		rightMenuRow.add(rowDogMoodLabel24);
 		rightMenuData.push(rightMenuRow);
 	}
 	rightTableView.setData(rightMenuData);

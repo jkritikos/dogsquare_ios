@@ -243,7 +243,7 @@ function getLocalMessage(code){
 	} else if(code == MSG_PWD_CHANGE_NO_NEW_PASSWORD){
 		msg = 'Hey Pack leader,the new password is missing here!';
 	} else if(code == MSG_RUN_NO_DOGS){
-		msg = 'Wouldn’t it be great if you selected at least one dog to go out with you !!';
+		msg = 'Wouldn’t it be great if you selected at least one dog to go out with you !! Simply go to the right menu and pick from the pack!';
 	} else if(code == MSG_RUN_END){
 		msg = 'Hey Pack leader, it is important that you Start your activity first!';
 	} else if(code == MSG_REGISTER_NO_NAME){

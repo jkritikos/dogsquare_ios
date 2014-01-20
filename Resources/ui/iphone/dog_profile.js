@@ -16,6 +16,7 @@ var dogProfileBoneImageColor = null;
 var dogProfileLostDogButton = null;
 var dogProgileProgressView = null;
 var dogProfileEditButton = null;
+var dogProfileOwnerImage = null;
 
 var BUTTON_LOST_DOG = 1;
 var BUTTON_FOUND_DOG = 2;
@@ -254,7 +255,6 @@ function buildDogProfileView(dogId){
 		dogProfileOpacityDescriptionBar.add(dogProfileBreedTypeLabel);
 		
 		dogProfileView.add(dogProfileOpacityDescriptionBar);
-		
 		dogProfileView.add(dogProfilePhotoImage);
 		
 		var dogProfileMoodLabel = Titanium.UI.createLabel({ 
@@ -325,6 +325,32 @@ function buildDogProfileView(dogId){
 			dogProfileBoneImage.bottom = IPHONE5 ? 127 : 50;
 			dogProfileBoneImageColor.bottom = IPHONE5 ? 127 : 50;
 			dogProfileLikeMeLabel.bottom = IPHONE5 ? 95 : 17;
+			
+			//Add the owner
+			var dogProfileOwnerLabel = Titanium.UI.createLabel({ 
+				text:'Owner',
+				color:'black',
+				height:'auto',
+				textAlign:'left',
+				left:36,
+				bottom:IPHONE5 ? 45 : 60,
+				opacity:0.6,
+				font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+			});
+			
+			dogProfileOwnerImage = Titanium.UI.createImageView({
+				defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
+				bottom:IPHONE5 ? 35 : 50,
+				left:198,
+				width:42,
+				borderRadius:21,
+				borderWidth:1,
+				borderColor:'f5a92c'
+			});
+			
+			dogProfileOwnerImage.addEventListener('click', handleDogOwnerClick);
+			dogProfileView.add(dogProfileOwnerLabel);
+			dogProfileView.add(dogProfileOwnerImage);
 		}
 		
 		dogProfileView.add(dogProfileMatingBackground);
@@ -350,6 +376,43 @@ function buildDogProfileView(dogId){
 	getOnlineDog(dogId);
 	
 	return dogProfileView;
+}
+
+//Event handler for clicking on the dog owner thumbnail
+function handleDogOwnerClick(e){
+	Ti.API.info('Click on dog owner '+e.source.owner_id);
+	
+	var ownerName = e.source.owner;
+	if(e.source.owner_id != null){
+		Ti.include('ui/iphone/profile_other.js');
+        
+        var ownerWindow = Ti.UI.createWindow({
+			backgroundColor:'white',
+			//barImage:IMAGE_PATH+'common/bar.png',
+			translucent:false,
+			barColor:UI_COLOR
+		});
+	
+		//back button & event listener
+		var ownerBackButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'common/back_button.png',
+		    width:48,
+		    height:33
+		});
+	
+		ownerWindow.setLeftNavButton(ownerBackButton);
+		ownerBackButton.addEventListener("click", function() {
+		    navController.close(ownerWindow);
+		});
+        
+        var profileOtherView = buildProfileOtherView(e.source.owner_id);
+        
+        ownerWindow.add(profileOtherView);
+        ownerWindow.setTitle(ownerName);
+        
+        openWindows.push(ownerWindow);
+        navController.open(ownerWindow);
+	}
 }
 
 //Event handler for the lost/found dog button
@@ -1084,6 +1147,10 @@ function updateDogProfile(dogObj){
 			dogProfileLostDogButton.backgroundImage = IMAGE_PATH+'dog_profile/lost_btn.png';
 			dogProfileLostDogButton.button = BUTTON_LOST_DOG;
 		}
+	} else {
+		dogProfileOwnerImage.owner_id = dogObj.owner_id;
+		dogProfileOwnerImage.owner = dogObj.owner_name;
+		dogProfileOwnerImage.image = getUserPhoto(dogObj.owner_thumb);
 	}
 	
 }
