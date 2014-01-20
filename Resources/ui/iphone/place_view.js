@@ -4,7 +4,6 @@ var checkinPlaceCommentsTextArea = null;
 var checkinPlaceCommentsTableView = null;
 var checkinPlaceCommentsButton = null;
 var checkinPlaceHeartImage = null;
-var checkinPlacePhotoImage = null;
 var checkinPlaceTitleLabel = null;
 var checkinPlaceDescriptionLabel = null;
 var checkinPlaceMap = null;
@@ -14,15 +13,17 @@ var checkinPlaceSaveCommentButton = null;
 var checkinPlaceId = null;
 var checkinNumberLabel = null;
 var checkinNumberOfHeartsLabel = null;
-var checkinPlaceLikesHeartImage = null;
+//var checkinPlaceLikesHeartImage = null;
 var checkinPlaceButton = null;
 var checkinLabel = null;
-
+var checkinStatusLabel = null;
 var annotations = [];
 var addPlaceComObject = {};
-
+var checkinScrollablePhotoView = null;
 var placeViewLatitude = null;
 var placeViewLongitude = null;
+var checkinPlaceNumPhotosLabel = null;
+var checkinPlaceUrlLabel = null;
 
 var ADD_COMMENT = 1;
 var COMMENT_ROW = 2;
@@ -45,184 +46,257 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 			placeViewLongitude = e.coords.longitude; 
 		});
 		
-		checkinPlaceView = Ti.UI.createView({
+		checkinPlaceView = Ti.UI.createScrollView({
 			backgroundColor:'white'
 		});
 		
 		checkinPlaceMapAnnotation = Ti.Map.createAnnotation({
 	        animate: true,
-	        image:IMAGE_PATH+'run_finish/pin.png'
+	        image:IMAGE_PATH+'checkin_place/pin_map.png'
 	   });
+	   
+	   //Scrollable view for place photos
+	   checkinScrollablePhotoView = Titanium.UI.createScrollableView({
+		    top:0,
+		    width:320,
+		    height:320,
+			showPagingControl: true,
+			pagingControlColor:'gray',
+			pagingControlAlpha:0.5,
+			zIndex:4
+	   });
+	   
+	   checkinPlaceView.add(checkinScrollablePhotoView);
+	   
+	   //number of pics indicator
+	   checkinPlaceNumPhotosLabel = Ti.UI.createLabel({
+			top:300,
+			text:'',
+			textAlign:'right',
+			width:'auto',
+			height:'auto',
+			right:14,
+			color:'black',
+			zIndex:4,
+			font:{fontSize:12, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+	   
+	   checkinPlaceView.add(checkinPlaceNumPhotosLabel);
+	   
+	   //background bar for checkinPlace button
+		var checkinPlaceButtonBarView = Ti.UI.createView({
+			top:320,
+			height:110,
+			width:'100%',
+			backgroundColor:UI_COLOR,
+			zIndex:2
+		});
+		checkinPlaceView.add(checkinPlaceButtonBarView);
+		
+		//Container for checkin/like buttons
+		var checkinPlaceButtonContainer = Ti.UI.createView({
+			top:430,
+			height:110,
+			width:'100%',
+			backgroundColor:'white',
+			zIndex:2
+		});
+		checkinPlaceView.add(checkinPlaceButtonContainer);
+		
+		//vertical line separator
+		var checkinLineSeparator = Ti.UI.createView({
+			backgroundColor:'red',
+			width:0.5,
+			height:90,
+			right:141
+		});
+		
+		checkinPlaceButtonContainer.add(checkinLineSeparator);
 		
 		//the map
 		checkinPlaceMap = Titanium.Map.createView({ 
-			width:'100%',
+			width:'44%',
 			top:0,
-			height:120,
+			right:0,
+			height:110,
 		    mapType:Titanium.Map.STANDARD_TYPE,
 		    animate:true,
 		    regionFit:true,
 		    userLocation:true,
 		    visible:true
 		});
-		checkinPlaceView.add(checkinPlaceMap);
 		
-		//photo image
-		checkinPlacePhotoImage = Ti.UI.createImageView({
-			defaultImage:IMAGE_PATH+'common/white_top_default.png',
-			width:320,
-			height:320,
-			top:120,
-			zIndex:1
-		});
-		checkinPlaceView.add(checkinPlacePhotoImage);
+		checkinPlaceMap.addEventListener('click', handleCheckinMapClick);
+		
+		checkinPlaceButtonBarView.add(checkinPlaceMap);
 		
 		//Place photo event handler opens the gallery for this place
-		checkinPlacePhotoImage.addEventListener('click', handlePlaceGallery);
-		
-		//view to add photo
-		var checkinPlacePhotoView = Ti.UI.createView({
-			height:120,
-			top:checkinPlacePhotoImage.top,
-			width:54,
-			right:0,
-			backgroundColor:'black',
-			opacity:0.5,
-			zIndex:2
-		});
-		checkinPlaceView.add(checkinPlacePhotoView);
+		checkinScrollablePhotoView.addEventListener('click', handlePlaceGallery);
 		
 		//add photo icon
 		var checkinPlaceAddPhotoIcon = Ti.UI.createImageView({
-			image:IMAGE_PATH+'gallery/add_photo_icon.png',
+			image:IMAGE_PATH+'checkin_place/add_photo_icon.png',
 			right:10,
-			top:168,
-			zIndex:2
+			top:260,
+			zIndex:4
 		});
 		
 		checkinPlaceView.add(checkinPlaceAddPhotoIcon);
 		
 		//Event handler for adding photos
-		checkinPlacePhotoView.addEventListener('click', handlePlaceShowPhotoOptions);
 		checkinPlaceAddPhotoIcon.addEventListener('click', handlePlaceShowPhotoOptions);
-		
-		//background bar for checkinPlace button
-		var checkinPlaceButtonBarView = Ti.UI.createView({
-			top:240,
-			height:92,
-			width:'100%',
-			backgroundColor:'white',
-			zIndex:2
-		});
-		checkinPlaceView.add(checkinPlaceButtonBarView);
 		
 		//place title label
 		checkinPlaceTitleLabel = Ti.UI.createLabel({
-			top:0,
+			top:27,
 			textAlign:'left',
-			width:280,
-			left:17,
-			color:'black',
-			opacity:0.6,
+			minimumFontSize:16,
+			width:160,
+			height:20,
+			left:15,
+			color:'white',
 			zIndex:2,
-			font:{fontSize:14, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:16, fontWeight:'bold', fontFamily:'Open Sans'}
 		});
 		checkinPlaceButtonBarView.add(checkinPlaceTitleLabel);
 		
 		//place description label
 		checkinPlaceDescriptionLabel = Ti.UI.createLabel({
-			top:17,
+			top:50,
 			textAlign:'left',
-			width:180,
-			left:17,
-			color:'black',
-			opacity:0.8,
+			width:160,
+			height:20,
+			left:15,
+			color:'white',
 			zIndex:2,
-			font:{fontSize:12, fontWeight:'regular', fontFamily:'Open Sans'}
+			font:{fontSize:13, fontWeight:'bold', fontFamily:'Open Sans'}
 		});
 		
 		checkinPlaceButtonBarView.add(checkinPlaceDescriptionLabel);
 		
+		//place url label
+		checkinPlaceUrlLabel = Ti.UI.createLabel({
+			text:'Go to Website',
+			top:70,
+			textAlign:'left',
+			width:160,
+			height:20,
+			left:15,
+			color:'black',
+			zIndex:2,
+			visible:false,
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		
+		checkinPlaceUrlLabel.addEventListener('click', handlePlaceUrlClick);
+		
+		checkinPlaceButtonBarView.add(checkinPlaceUrlLabel);
+		
 		//checkin number label
 		checkinNumberLabel = Ti.UI.createLabel({
-			textAlign:'left',
-			width:'auto',
-			top:47,
-			right:223,
+			textAlign:'right',
+			width:35,
+			top:18,
+			right:95,
 			color:'#f99e30',
 			font:{fontSize:17, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
-		checkinPlaceButtonBarView.add(checkinNumberLabel);
-		checkinNumberLabel.hide();
+		checkinPlaceButtonContainer.add(checkinNumberLabel);
 		
-		//checkin number label
+		//checkin label
 		checkinLabel = Ti.UI.createLabel({
 			text:'Check-ins',
 			textAlign:'left',
-			width:'auto',
-			top:48,
-			right:150,
-			color:'#f99e30',
-			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
+			width:73,
+			top:22,
+			right:15,
+			color:UI_FONT_COLOR_LIGHT_BLACK,
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
-		checkinPlaceButtonBarView.add(checkinLabel); 
+		checkinPlaceButtonContainer.add(checkinLabel); 
 		checkinLabel.addEventListener('click', handlePlaceCheckinsLabel);
-		checkinLabel.hide();
 		
 		//checkin number of hearts label 
 		checkinNumberOfHeartsLabel = Ti.UI.createLabel({
 			textAlign:'right',
-			width:'auto',
-			right:100,
-			top:47,
-			color:'#f99e30',
+			width:35,
+			right:95,
+			top:75,
+			color:'red',
 			font:{fontSize:17, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
-		checkinPlaceButtonBarView.add(checkinNumberOfHeartsLabel);
-		checkinNumberOfHeartsLabel.hide();
+		checkinPlaceButtonContainer.add(checkinNumberOfHeartsLabel);
+		
+		var checkinLikesLabel = Ti.UI.createLabel({
+			text:'Like',
+			textAlign:'left',
+			width:73,
+			top:79,
+			right:15,
+			color:UI_FONT_COLOR_LIGHT_BLACK,
+			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		
+		checkinPlaceButtonContainer.add(checkinLikesLabel);
+		checkinLikesLabel.addEventListener('click', handlePlaceLikesButton);
+		
+		//checkin status label
+		checkinStatusLabel = Ti.UI.createLabel({
+			text:'You are here now',
+			textAlign:'center',
+			width:155,
+			top:17,
+			left:8,
+			visible:false,
+			color:'black',
+			font:{fontSize:16, fontWeight:'semibold', fontFamily:'Open Sans'}
+		});
+		
+		checkinPlaceButtonContainer.add(checkinStatusLabel);
 		
 		//checkinPlace button
 		checkinPlaceButton = Ti.UI.createButton({
-			backgroundImage:IMAGE_PATH+'checkin_place/check_in_btn.png',
-			width:179,
-			height:51,
-			left:14,
-			top:36,
+			backgroundImage:IMAGE_PATH+'checkin_place/check_in_here.png',
+			width:163,
+			height:39,
+			left:10,
+			top:13,
 			place_id:placeId
 		});
-		checkinPlaceButtonBarView.add(checkinPlaceButton);
+		checkinPlaceButtonContainer.add(checkinPlaceButton);
 		checkinPlaceButton.hide();
 		checkinPlaceButton.addEventListener('click', handleCheckinPlaceButton);
 		
-		//heart image
+		//like button
 		checkinPlaceHeartImage = Ti.UI.createImageView({
-			image:IMAGE_PATH+'common/best_icon_default.png',
-			right:46,
-			top:38,
+			image:IMAGE_PATH+'checkin_place/like_button.png',
+			left:11,
+			bottom:9,
 			placeId:placeId,
 			toggle:false
 		});
-		checkinPlaceButtonBarView.add(checkinPlaceHeartImage);
+		checkinPlaceButtonContainer.add(checkinPlaceHeartImage);
 		checkinPlaceHeartImage.addEventListener('click', handlePlaceLikeButton);
-		checkinPlaceHeartImage.hide();
 		
-		//small heart image
-		checkinPlaceLikesHeartImage = Ti.UI.createImageView({
-			image:IMAGE_PATH+'dog_profile/best_icon_selected.png',
-			right:73,
-			top:48
+		//dummy heart icon next to the like button
+		checkinPlaceHeartImageDummy = Ti.UI.createImageView({
+			image:IMAGE_PATH+'common/best_icon_selected_red.png',
+			left:133,
+			width:32,
+			bottom:14,
+			placeId:placeId,
+			toggle:false
 		});
-		checkinPlaceButtonBarView.add(checkinPlaceLikesHeartImage);
-		checkinPlaceLikesHeartImage.addEventListener('click', handlePlaceLikesButton);
-		checkinPlaceLikesHeartImage.hide();
+		
+		checkinPlaceButtonContainer.add(checkinPlaceHeartImageDummy);
 		
 		//background for comments
 		checkinPlaceCommentsBackgroundView = Ti.UI.createView({
-			top:332,
-			height:IPHONE5 ? 515 : 429,
+			top:550,
+			height:IPHONE5 ? 545 : 459,
 			width:'100%',
 			backgroundColor:UI_BACKGROUND_COLOR,
-			zIndex:2
+			zIndex:6
 		});
 		checkinPlaceView.add(checkinPlaceCommentsBackgroundView);
 		
@@ -292,6 +366,12 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 	getOnlinePlace(placeId);
 	
 	return checkinPlaceView;
+}
+
+//Event handler for clicking on the url label
+function handlePlaceUrlClick(e){
+	Ti.API.info('open url '+e.source.place_url);
+	Ti.Platform.openURL(e.place_url);
 }
 
 //photo dialog
@@ -729,8 +809,42 @@ function populateCheckinPlaceCommentsTableView(comObj){
 	checkinPlaceCommentsTableView.setData(tableRows);
 }
 
+//Event handler for map click
+function handleCheckinMapClick(e){
+	Ti.API.info('Map clicked on checkin place lat '+e.annotation.latitude);
+	
+	Ti.include('ui/iphone/map_place.js');
+	var mapView = buildMapPlaceView(e.annotation.latitude, e.annotation.longitude);
+	
+	//map window
+	var checkinMapWindow = Ti.UI.createWindow({
+		backgroundColor:'white',
+		translucent:false,
+		title:'Map',
+		barColor:UI_COLOR
+	});
+	
+	checkinMapWindow.add(mapView);
+	
+	//back button & event listener
+	var mapBackButton = Ti.UI.createButton({
+	    backgroundImage: IMAGE_PATH+'common/back_button.png',
+	    width:48,
+	    height:33
+	});
+	
+	checkinMapWindow.setLeftNavButton(mapBackButton);
+	mapBackButton.addEventListener("click", function() {
+	    navController.close(checkinMapWindow);
+	});
+	
+	openWindows.push(checkinMapWindow);
+	navController.open(checkinMapWindow);
+}
+
 //handle comments button
 function handlePlaceCommentButton(e){
+	
 	var toggle = e.source.toggle;
 	var button = e.source.button;
 	
@@ -744,7 +858,7 @@ function handlePlaceCommentButton(e){
 	
 	if(toggle){
 		targetWindow.setRightNavButton(null);
-		checkinPlaceCommentsBackgroundView.animate({top:332, duration:500});
+		checkinPlaceCommentsBackgroundView.animate({top:550, duration:500});
 		checkinPlaceCommentsTextArea.blur();
 		checkinPlaceCommentsTextArea.hide();
 		checkinPlaceCommentsTableView.show();
@@ -774,6 +888,10 @@ function handlePlaceViewCommentTableRows(e){
 	}
 	
 	if(row == ADD_COMMENT){
+		
+		Ti.API.info('ADD comment button pressed');
+		checkinPlaceView.scrollTo(0,0);
+		
 		checkinPlaceCommentsBackgroundView.animate({top:-11, duration:200});
 		checkinPlaceCommentsButton.toggle = true;
 		targetWindow.setRightNavButton(checkinPlaceSaveCommentButton);
@@ -857,7 +975,7 @@ function likePlace(pId){
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
 			
-			checkinPlaceHeartImage.image = IMAGE_PATH+'common/best_icon_selected_red.png';
+			checkinPlaceHeartImage.image = IMAGE_PATH+'checkin_place/unlike_button.png';
 			checkinNumberOfHeartsLabel.text++;
 			
 			var followers = jsonData.data.count_followers;
@@ -898,7 +1016,7 @@ function unlikePlace(pId){
 		
 		if (jsonData.data.response == NETWORK_RESPONSE_OK){
 			
-			checkinPlaceHeartImage.image = IMAGE_PATH+'common/best_icon_default.png';
+			checkinPlaceHeartImage.image = IMAGE_PATH+'checkin_place/like_button.png';
 			checkinNumberOfHeartsLabel.text--;
 			
 			var followers = jsonData.data.count_followers;
@@ -949,7 +1067,14 @@ function getOnlinePlace(pId){
 			//Hide progress view
 			progressView.hide();
 			
-			updateCheckinPlace(jsonData.data.place, jsonData.data.checkins, jsonData.data.likes);
+			//Last checkin
+			if(jsonData.data.last_checkin != null){
+				checkinStatusLabel.text = 'You were here ' + relativeTime(jsonData.data.last_checkin);
+			} else {
+				checkinStatusLabel.text = 'You have never been here!!';
+			}
+			
+			updateCheckinPlace(jsonData.data.place, jsonData.data.checkins, jsonData.data.likes, jsonData.data.photos);
 			populateCheckinPlaceCommentsTableView(jsonData.data.comments);
 			
 			var followers = jsonData.data.count_followers;
@@ -983,7 +1108,7 @@ function getOnlinePlace(pId){
 }
 
 //update checkin place UI
-function updateCheckinPlace(placeObj, checkins, likes){
+function updateCheckinPlace(placeObj, checkins, likes, photos){
 	Ti.API.info('place_view.js shows '+placeObj.name+' at latitude '+placeObj.latitude+' and longitude '+placeObj.longitude);
 	
 	var distance = null;
@@ -992,17 +1117,48 @@ function updateCheckinPlace(placeObj, checkins, likes){
 	
 	//if(distance < CHECKIN_ALLOWED_DISTANCE){
 	if(viewPlaceWithCheckin){
+		checkinStatusLabel.hide();
 		checkinPlaceButton.show();
 		checkinPlaceHeartImage.show();
 		checkinNumberLabel.text = checkins;
 		checkinNumberOfHeartsLabel.text = likes;
-	}else{
+	} else{
+		checkinStatusLabel.show();
 		checkinNumberLabel.text = checkins;
 		checkinNumberOfHeartsLabel.text = likes;
-		checkinPlaceLikesHeartImage.show();
 		checkinNumberLabel.show();
 		checkinLabel.show();
 		checkinNumberOfHeartsLabel.show();
+	}
+	
+	//Url
+	if(placeObj.url != null && placeObj.url != ''){
+		checkinPlaceUrlLabel.place_url = placeObj.url;
+		checkinPlaceUrlLabel.show();
+	}
+	
+	//set photos onto the scrollable view
+	if(photos != null){
+		var tmpString = ' photos';
+		if(photos.length == 1){
+			tmpString = ' photo';
+		} 
+		checkinPlaceNumPhotosLabel.text = photos.length + tmpString;
+		var photoViews = [];
+		
+		for(var z=0; z < photos.length; z++){
+			var tmpImageView = Ti.UI.createImageView({
+				defaultImage:IMAGE_PATH+'common/white_top_default.png',
+				image:REMOTE_PLACE_IMAGES + photos[z].path,
+				width:320,
+				height:320,
+				top:0
+			});
+			
+			photoViews.push(tmpImageView);
+		}
+		
+		checkinScrollablePhotoView.views = photoViews;
 	}
 	
 	//update map and put annotation
@@ -1012,20 +1168,18 @@ function updateCheckinPlace(placeObj, checkins, likes){
 	annotations.push(checkinPlaceMapAnnotation);
 	checkinPlaceMap.annotations = annotations;
 	checkinPlaceMap.region = {latitude:placeObj.latitude, longitude:placeObj.longitude,
-            				  latitudeDelta:0.01, longitudeDelta:0.01};
+            				  latitudeDelta:0.03, longitudeDelta:0.03};
     //update other info
 	checkinPlaceMap.longitude = placeObj.longitude;
-	checkinPlacePhotoImage.defaultImage = IMAGE_PATH+'common/white_top_default.png';
-    checkinPlacePhotoImage.image = REMOTE_PLACE_IMAGES + placeObj.photo;
     checkinPlaceTitleLabel.text = placeObj.name;
     checkinPlaceDescriptionLabel.text = placeObj.category;
     
     //update likes
     if(placeObj.liked == null){
-		checkinPlaceHeartImage.image = IMAGE_PATH+'common/best_icon_default.png';
+		checkinPlaceHeartImage.image = IMAGE_PATH+'checkin_place/like_button.png';
 		checkinPlaceHeartImage.toggle = false;
 	}else{
-		checkinPlaceHeartImage.image = IMAGE_PATH+'common/best_icon_selected_red.png';
+		checkinPlaceHeartImage.image = IMAGE_PATH+'checkin_place/unlike_button.png';
 		checkinPlaceHeartImage.toggle = true;
 	}
 }
@@ -1212,15 +1366,19 @@ function checkinPlaceOnline(placeId){
 		        success:true
 		    });
 		    
-			checkinNumberLabel.show();
-			checkinNumberOfHeartsLabel.show();
-			checkinPlaceLikesHeartImage.show();
-			checkinLabel.show();
+		    //Show checkin status message
+		    checkinStatusLabel.text = 'You are here now';
+		    checkinStatusLabel.show();
+		    
+			//checkinNumberLabel.show();
+			//checkinNumberOfHeartsLabel.show();
+			//checkinPlaceLikesHeartImage.show();
+			//checkinLabel.show();
 			checkinPlaceButton.hide();
-			checkinPlaceHeartImage.hide();
+			//checkinPlaceHeartImage.hide();
 			checkinNumberLabel.text++;
 			
-			//Hide message and close register window
+			//Hide message
 			progressView.hide();
 			
 			var followers = jsonData.data.count_followers;

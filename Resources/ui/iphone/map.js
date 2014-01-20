@@ -839,7 +839,7 @@ function updateMapWithAnnotations(places, checkins, activities){
 	 		placesAdded.push(checkins[i].place_id);
 	 		
 	 		var customPin2 = Ti.UI.createView({
-				backgroundImage:IMAGE_PATH+'map/pin_user_small.png',
+				backgroundImage:IMAGE_PATH+'map/pin_check_in_user_orange.png',
 				width:38,
 				height:43
 			});
@@ -883,7 +883,8 @@ function updateMapWithAnnotations(places, checkins, activities){
 		for(i=0;i<activities.length;i++){
 	 		
 	 		var customPin2 = Ti.UI.createView({
-				backgroundImage:IMAGE_PATH+'map/pin_user_small.png',
+				//backgroundImage:IMAGE_PATH+'map/pin_user_small.png',
+				backgroundImage:IMAGE_PATH+'map/pin_check_in_user_green.png',
 				width:38,
 				height:43
 			});

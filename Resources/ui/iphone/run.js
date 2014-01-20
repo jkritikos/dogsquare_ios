@@ -94,31 +94,21 @@ function buildRunView(){
 		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 	});
 	
-	var runMapButton = Ti.UI.createButton({
-		backgroundImage:IMAGE_PATH+'menu_left/Map_icon.png',
-		right:52,
-		width:26,
-		height:23,
-		top:IPHONE5? 228+iphone5Offset : 228
+	var runMapButton = Ti.UI.createImageView({
+		image:IMAGE_PATH+'profile/woofin_button_orange.png',
+		width:97,
+		//height:49,
+		right:8,
+		top:IPHONE5? 224+iphone5Offset : 224
 	});
 	runMapButton.addEventListener('click', handleMapButton);
 	
-	var runMapLabel = Ti.UI.createLabel({
-		text:'View map',
-		top:IPHONE5? 251+iphone5Offset : 251,
-		right:25,
-		color:UI_COLOR_RUN,
-		font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
-	});
-	
-	//viewRun.add(runDistanceUnitReflectionLabel);
 	viewRun.add(runDurationLabel);
 	viewRun.add(runDurationValueLabel);
 	viewRun.add(runAvgPaceLabel);
 	viewRun.add(runAvgPaceMinuteLabel);
 	viewRun.add(runDistanceValueLabel);
 	viewRun.add(runDistanceUnitLabel);
-	viewRun.add(runMapLabel);
 	viewRun.add(runMapButton);
 	viewRun.add(runDogsquareLogo);
 	

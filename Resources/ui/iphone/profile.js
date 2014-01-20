@@ -171,7 +171,7 @@ var profileOpacityBarBottom = Titanium.UI.createView({
 
 //Map button
 var profileMapButton = Ti.UI.createButton({
-	backgroundImage:IMAGE_PATH+'profile/map_button.png',
+	backgroundImage:IMAGE_PATH+'profile/woofin_button_orange.png',
 	width:108,
 	height:49,
 	top:245,
@@ -183,7 +183,7 @@ viewProfile.add(profileMapButton);
 
 //Start button
 var profileStartButton = Ti.UI.createButton({
-	backgroundImage:IMAGE_PATH+'profile/start_button.png',
+	backgroundImage:IMAGE_PATH+'profile/start_activity_green.png',
 	top:243,
 	width:178,
 	height:52,
