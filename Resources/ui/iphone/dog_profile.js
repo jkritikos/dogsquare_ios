@@ -319,12 +319,12 @@ function buildDogProfileView(dogId){
 		
 		//if not my dog change the position os some images and labels
 		if(!dogProfileMyDog){
-			dogProfileMatingBackground.bottom = IPHONE5 ? 86 : 8;
-			dogProfileMoodLabel.bottom = IPHONE5 ? 144 : 66;
-			dogProfileMoodPercentLabel.bottom = IPHONE5 ? 130 : 50;
-			dogProfileBoneImage.bottom = IPHONE5 ? 127 : 50;
-			dogProfileBoneImageColor.bottom = IPHONE5 ? 127 : 50;
-			dogProfileLikeMeLabel.bottom = IPHONE5 ? 95 : 17;
+			//dogProfileMatingBackground.bottom = IPHONE5 ? 86 : 8;
+			//dogProfileMoodLabel.bottom = IPHONE5 ? 144 : 66;
+			//dogProfileMoodPercentLabel.bottom = IPHONE5 ? 130 : 50;
+			//dogProfileBoneImage.bottom = IPHONE5 ? 127 : 50;
+			//dogProfileBoneImageColor.bottom = IPHONE5 ? 127 : 50;
+			//dogProfileLikeMeLabel.bottom = IPHONE5 ? 95 : 17;
 			
 			//Add the owner
 			var dogProfileOwnerLabel = Titanium.UI.createLabel({ 
@@ -333,14 +333,15 @@ function buildDogProfileView(dogId){
 				height:'auto',
 				textAlign:'left',
 				left:36,
-				bottom:IPHONE5 ? 45 : 60,
+				bottom:IPHONE5 ? 45 : 55,
+				top:IPHONE5 ? 436 : 440,
 				opacity:0.6,
 				font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 			});
 			
 			dogProfileOwnerImage = Titanium.UI.createImageView({
 				defaultImage:IMAGE_PATH+'follow_invite/default_User_photo.png',
-				bottom:IPHONE5 ? 35 : 50,
+				bottom:IPHONE5 ? 35 : 45,
 				left:198,
 				width:42,
 				borderRadius:21,

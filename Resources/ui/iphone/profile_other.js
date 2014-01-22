@@ -477,7 +477,7 @@ function populateProfileOtherActivityTableView(activities){
 			
 			//activity label
 			var activityLabel = Ti.UI.createLabel({
-				text:'Gone for a walk with '+activities[i].Activity.dogs,
+				text:'Went for a walk with '+activities[i].Activity.dogs,
 				top:10,
 				textAlign:'left',
 				width:'auto',

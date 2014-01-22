@@ -701,6 +701,8 @@ function doSaveDogOnline(dObj){
 			var dogProfileView = buildDogProfileView(dObj.dog_id);
 		
 			navController.getWindow().add(dogProfileView);
+			navController.getWindow().setTitle(dObj.name);
+			
 			closeOpenWindows();
 		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
 			Ti.API.error('Unauthorised request - need to login again');
@@ -794,6 +796,7 @@ function updateAddDogView(id){
 	editDogId = id;
 	
 	var dogObj = getDogById(id);
+	Ti.API.info('getDogById() returns '+JSON.stringify(dogObj));
 	
 	imageThumbnailPreviewImageView.image = dogProfilePhotoImage.image;
 	

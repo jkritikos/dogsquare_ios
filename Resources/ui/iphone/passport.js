@@ -64,15 +64,18 @@ function populateTableViewSection(nData) {
 	var numberOfNotes = null;
 	
 	var previousMonth = null;
+	var previousYear = null;
 	
 	if(nData.length > 0) {
 		for(i=0;i<nData.length;i++){
 			var date = new Date(nData[i].date*1000);
 			var month = date.getMonth();
+			var year = date.getYear();
 			//rows are ordered by date - if previous month
-			if(previousMonth != month){
+			if(previousMonth != month || previousYear != year){
 				numberOfNotes = 1;
 				previousMonth = month;
+				previousYear = year;
 				
 				var rowDate = formatDate(date);
 				var rowMinutes = date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes();
@@ -186,6 +189,7 @@ function populateTableViewSection(nData) {
 				rowCategoryNumberLabel1.text = numberOfNotes;
 				
 				previousMonth = month;
+				previousYear = year;
 				var passportRow = Ti.UI.createTableViewRow({
 					className:'passportRow',
 					height:'auto',

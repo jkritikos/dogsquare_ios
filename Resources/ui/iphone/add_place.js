@@ -77,7 +77,7 @@ addPlaceAnnotations.push(addPlaceMapAnnotation);
 var addPlaceMap = Titanium.Map.createView({ 
 	width:'100%',
 	top:140,
-	height:IPHONE5 ? 240 : 100,
+	height:IPHONE5 ? 240 : 190,
     mapType:Titanium.Map.STANDARD_TYPE,
     animate:true,
     regionFit:true,

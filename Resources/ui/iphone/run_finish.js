@@ -22,6 +22,19 @@ Ti.App.addEventListener('activity', function(data) {
 });
 
 function buildRunFinishView(obj){
+	//Data cleansing
+	if(!obj.distance || obj.distance == null){
+		obj.distance = 0;
+	}
+	
+	if(!obj.pace || obj.pace == null){
+		obj.pace = 0;
+	}
+	
+	if(!obj.play || obj.play == null){
+		obj.play = 0;
+	}
+	
 	runFinishRunObject = obj;
 	
 	//run finish View

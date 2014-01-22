@@ -878,6 +878,14 @@ function getActivityLikedUsersOnline(aId){
 //Updates the UI with the data returned from the server
 function updateActivityView(activityObj){
 	
+	if(!activityObj.distance || activityObj.distance == null){
+		activityObj.distance = 0;
+	}
+	
+	if(!activityObj.pace || activityObj.pace == null){
+		activityObj.pace = 0;
+	}
+	
 	viewActivityDistanceNumberLabel.text = activityObj.distance + ' Km';
 	viewActivityAvgPaceNumberLabel.text = activityObj.pace + ' Km/h';
 	viewActivityWeatherNumberLabel.text = parseFloat(activityObj.playtime).toFixed(2) + ' min';

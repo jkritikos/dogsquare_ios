@@ -318,41 +318,72 @@ function handleMapAnnotationClick(e){
 	var source = e.clicksource;
 	var category_id = annotation.category_id;
 	var showUser = annotation.show_user;
+	var showDog = annotation.show_dog;
 	
 	if(source == 'rightButton'){
 		if(annotation.place_id && category_id != FILTER_LOST_DOG){
 			var placeId = annotation.place_id;
 			var placeTitle = annotation.place_title ? annotation.place_title : annotation.title;
 			
-			Ti.include('ui/iphone/place_view.js');
+			if(showDog){
+				Ti.include('ui/iphone/dog_profile.js');
+				
+				var dogProfileWindow = Ti.UI.createWindow({
+					backgroundColor:UI_BACKGROUND_COLOR,
+					translucent:false,
+					barColor:UI_COLOR
+				});
+				
+				//back button
+				var dogProfileBackButton = Ti.UI.createButton({
+				    backgroundImage: IMAGE_PATH+'common/back_button.png',
+				    width:48,
+				    height:33
+				});
+				
+				dogProfileWindow.setLeftNavButton(dogProfileBackButton);
+				
+				dogProfileBackButton.addEventListener("click", function() {
+				    navController.close(dogProfileWindow);
+				});
 			
-			var checkinPlaceWindow = Ti.UI.createWindow({
-				backgroundColor:UI_BACKGROUND_COLOR,
-				translucent:false,
-				//barImage:IMAGE_PATH+'common/bar.png',
-				barColor:UI_COLOR
-			});
+				dogProfileWindow.setTitle(placeTitle);
+				var dogProfileView = buildDogProfileView(placeId);
+				
+				dogProfileWindow.add(dogProfileView);
+				openWindows.push(dogProfileWindow);
+				navController.open(dogProfileWindow);
+				
+			} else {
+				Ti.include('ui/iphone/place_view.js');
 			
-			//back button
-			var checkinPlaceBackButton = Ti.UI.createButton({
-			    backgroundImage: IMAGE_PATH+'common/back_button.png',
-			    width:48,
-			    height:33
-			});
+				var checkinPlaceWindow = Ti.UI.createWindow({
+					backgroundColor:UI_BACKGROUND_COLOR,
+					translucent:false,
+					barColor:UI_COLOR
+				});
+				
+				//back button
+				var checkinPlaceBackButton = Ti.UI.createButton({
+				    backgroundImage: IMAGE_PATH+'common/back_button.png',
+				    width:48,
+				    height:33
+				});
+				
+				checkinPlaceWindow.setLeftNavButton(checkinPlaceBackButton);
+				
+				checkinPlaceBackButton.addEventListener("click", function() {
+				    navController.close(checkinPlaceWindow);
+				});
 			
-			checkinPlaceWindow.setLeftNavButton(checkinPlaceBackButton);
+				checkinPlaceWindow.setTitle(placeTitle);
+				var checkinPlaceView = buildCheckinPlaceView(placeId, false, TARGET_MODE_NEW_WINDOW);
+				
+				checkinPlaceWindow.add(checkinPlaceView);
+				openWindows.push(checkinPlaceWindow);
+				navController.open(checkinPlaceWindow);
+			}
 			
-			checkinPlaceBackButton.addEventListener("click", function() {
-			    navController.close(checkinPlaceWindow);
-			});
-			
-			checkinPlaceWindow.setTitle(placeTitle);
-			var checkinPlaceView = buildCheckinPlaceView(placeId, false, TARGET_MODE_NEW_WINDOW);
-			
-			checkinPlaceWindow.add(checkinPlaceView);
-			openWindows.push(checkinPlaceWindow);
-			//openWindows[1] = checkinPlaceWindow;
-			navController.open(checkinPlaceWindow);
 		} else if(annotation.activity_id && !showUser){
 			var activityId = annotation.activity_id;
 			Ti.include('ui/iphone/view_activity.js');
@@ -909,14 +940,14 @@ function updateMapWithAnnotations(places, checkins, activities){
 				latitude:activities[i].lat,
 				longitude:activities[i].lon,
 				title:activities[i].user_name,
-				subtitle:'Went on a walk',
+				subtitle:'Went for a walk',
 				animate:false,
 				customView:customPin2,
 				rightButton:IMAGE_PATH+'map/arrow_icon.png',
 				user_id:activities[i].id,
 				user_name:activities[i].user_name,
 				activity_id:activities[i].activity_id,
-				show_user:true
+				show_user:false
 			});
 			
 			annotationArray.push(mapAnnotations);
@@ -930,15 +961,17 @@ function updateMapWithAnnotations(places, checkins, activities){
 			//Only proceed if we havent already added a checkin for the same place
 			if(placesAdded.indexOf(places[i].id) == -1){
 				
-				var thumbImage, thumbDefaultImage, showUser = null;
+				var thumbImage, thumbDefaultImage, showUser, showDog = null;
 				if(CLICKED_FILTER == FILTER_MATING || CLICKED_FILTER == FILTER_SAME_BREED){
 				    thumbImage = REMOTE_DOG_IMAGES + places[i].thumb;
 				    thumbDefaultImage = IMAGE_PATH+'common/default_dog_photo.png';
-				    showUser = true;
+				    showUser = false;
+				    showDog = true;
 				} else {
 				    thumbImage = places[i].dog_id ? REMOTE_DOG_IMAGES + places[i].thumb : REMOTE_PLACE_IMAGES + places[i].thumb;
 				    thumbDefaultImage = IMAGE_PATH+'common/default_place_photo.png';
 				    showUser = false;
+				    showDog = false;
 				}
 				
 				//pin is red for lost dog only
@@ -975,7 +1008,8 @@ function updateMapWithAnnotations(places, checkins, activities){
 					category_id:places[i].category_id,
 					user_id:places[i].user_id,
 					user_name:places[i].user_name,
-					show_user:showUser
+					show_user:showUser,
+					show_dog:showDog
 				});
 				annotationArray.push(mapAnnotations);
 			} else {

@@ -1,4 +1,4 @@
-function buildMapPlaceView(lat, lon){
+function buildMapPlaceView(lat, lon, title){
 	var mapview = Titanium.Map.createView({
 		width:'100%',
 		height:'100%',
@@ -27,6 +27,7 @@ function buildMapPlaceView(lat, lon){
         animate: false,
         latitude:lat,
         longitude:lon,
+        title:title,
         image:IMAGE_PATH+'checkin_place/pin_map.png'
    });
 	

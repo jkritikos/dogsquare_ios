@@ -133,10 +133,10 @@ function buildRunView(){
 	});
 
 	runEndButton = Ti.UI.createButton({
-		backgroundImage:IMAGE_PATH+'run/endActivity_orange.png',
+		backgroundImage:IMAGE_PATH+'run/endActivity_red.png',
 		bottom:5,
 		width:320,
-		height:62,
+		height:54,
 		zIndex:2
 	});
 

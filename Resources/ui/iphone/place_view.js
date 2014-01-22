@@ -106,7 +106,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 		
 		//vertical line separator
 		var checkinLineSeparator = Ti.UI.createView({
-			backgroundColor:'red',
+			backgroundColor:'white',
 			width:0.5,
 			height:90,
 			right:141
@@ -211,7 +211,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 			width:73,
 			top:22,
 			right:15,
-			color:UI_FONT_COLOR_LIGHT_BLACK,
+			color:'#f99e30',
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		checkinPlaceButtonContainer.add(checkinLabel); 
@@ -229,12 +229,12 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 		checkinPlaceButtonContainer.add(checkinNumberOfHeartsLabel);
 		
 		var checkinLikesLabel = Ti.UI.createLabel({
-			text:'Like',
+			text:'Likes',
 			textAlign:'left',
 			width:73,
 			top:79,
 			right:15,
-			color:UI_FONT_COLOR_LIGHT_BLACK,
+			color:'red',
 			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
@@ -815,7 +815,7 @@ function handleCheckinMapClick(e){
 	Ti.API.info('Map clicked on checkin place lat '+e.annotation.latitude);
 	
 	Ti.include('ui/iphone/map_place.js');
-	var mapView = buildMapPlaceView(e.annotation.latitude, e.annotation.longitude);
+	var mapView = buildMapPlaceView(e.annotation.latitude, e.annotation.longitude, e.annotation.title);
 	
 	//map window
 	var checkinMapWindow = Ti.UI.createWindow({
@@ -1070,7 +1070,7 @@ function getOnlinePlace(pId){
 			
 			//Last checkin
 			if(jsonData.data.last_checkin != null){
-				checkinStatusLabel.text = 'You were here ' + relativeTime(jsonData.data.last_checkin);
+				checkinStatusLabel.text = 'You were here ' + relativeTime(jsonData.data.last_checkin).toLowerCase();
 			} else {
 				checkinStatusLabel.text = 'You have never been here!!';
 			}
