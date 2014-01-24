@@ -166,7 +166,7 @@ fb.addEventListener('login', function(e) {
     			Ti.API.info('FB callback: name '+fbName+' gender '+gender+' age '+age+' fbId '+fbId+' email '+email);
     			
     			//facebookGetFriendsWithApp();
-    			Ti.API.warn('GETTING FB FRIENDS that use the app');
+    			Ti.API.warn('INLINE GETTING FB FRIENDS that use the app');
         
         		var data = {};
         
@@ -269,10 +269,11 @@ function getFacebookFriends(){
 }
 
 /*Gets the friends that have installed the app*/
+/*
 function facebookGetFriendsWithApp(){
-	Ti.API.error('AM I GETTING HERE?');
+	Ti.API.info('AM I GETTING HERE?');
     if (Titanium.Network.online == true){
-        Ti.API.warn('GETTING FB FRIENDS that use the app');
+        Ti.API.warn('DAO GETTING FB FRIENDS that use the app');
         
         var data = {};
         if(fb.loggedIn){
@@ -314,6 +315,7 @@ function facebookGetFriendsWithApp(){
         }
     }
 }
+*/
 
 /*Posts to the current (or another) user's facebook wall*/
 function facebookPost(msg, otherUserId){

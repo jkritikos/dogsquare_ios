@@ -318,13 +318,16 @@ function sortByFullName(a, b) {
 };
 
 //populate FB friends
-function populateFindFriendsFacebookTableView(data){
+function populateFindFriendsFacebookTableView(data, facebook_ids){
 	var tableRows = [];
 	
 	var fbFriendsWithApp = getFacebookFriends();
+	Ti.API.info('fbFriendsWithApp='+fbFriendsWithApp);
+	Ti.API.info('facebook_ids='+facebook_ids);
 	
 	for(var i=0; i < data.length; i++){
 	    var hasApp = fbFriendsWithApp != null && fbFriendsWithApp.indexOf(data[i].id) > -1;
+	    var isFollowing = facebook_ids != null && facebook_ids.indexOf(data[i].id) > -1;
 	    
 		var row = Ti.UI.createTableViewRow({
 			className:'contactsRow',
@@ -367,11 +370,12 @@ function populateFindFriendsFacebookTableView(data){
 		if(hasApp){
 		    //follow button
             var rowInviteButton = Titanium.UI.createButton({
-                backgroundImage:IMAGE_PATH+'follow_invite/Follow_btn.png',
+                backgroundImage:isFollowing ? IMAGE_PATH+'follow_invite/Unfollow_btn.png' : IMAGE_PATH+'follow_invite/Follow_btn.png',
                 right:9,
                 width:86,
                 height:29,
-                type:TYPE_FOLLOW_BUTTON
+                type:TYPE_FOLLOW_BUTTON,
+                toggle:isFollowing ? true : false
             });
 		} else {
 		    //invite button
@@ -892,7 +896,9 @@ function showContactPhoneNumbersSelection(sortedContactIndex){
 	}
 }
 
+
 /*Gets the friends that have installed the app*/
+/*
 function facebookGetFriendsWithApp(){
 	if (Titanium.Network.online == true){
 		
@@ -926,13 +932,14 @@ function facebookGetFriendsWithApp(){
 		} 
 	}
 }
+*/
 
 //Gets all the friends of the currently connected FB account
 function facebookGetAllFriends(){
 	var data = {};
 	
 	if (Titanium.Network.online == true){
-		Ti.API.warn('GETTING ALL FB FRIENDS');
+		Ti.API.warn('find.friends.js GETTING ALL FB FRIENDS');
 		if(fb.loggedIn){
 			
 			//progress view
@@ -946,14 +953,33 @@ function facebookGetAllFriends(){
 		        	
 		        	var allFriends = JSON.parse(e.result);
 		        	var allFriendsObject = allFriends.data;
-		        	
 		        	allFriendsObject.sort(sortFBFriends);
 		        	Ti.API.info('FACEBOOK - Success in getting ALL friends '+allFriendsObject.length);
 		        	
-		        	findFriendsFacebookView.hide();
-		        	populateFindFriendsFacebookTableView(allFriendsObject);
-		        	findFriendsFacebookFriendsCounterLabel.show();
-		        	findFriendsTableView.show();
+		        	//Retrieve the facebook ids of all the user's followers
+		        	var xhr = Ti.Network.createHTTPClient();
+					xhr.setTimeout(NETWORK_TIMEOUT);
+		        	
+		        	xhr.onerror = function(e){
+						Ti.API.error('Error in facebookGetAllFriends() '+e);
+						alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
+					};
+					
+					xhr.onload = function(e) {
+						Ti.API.info('facebookGetAllFriends() got back FB followers from server '+this.responseText);
+						var jsonData = JSON.parse(this.responseText);
+		
+						//Update the UI
+						findFriendsFacebookView.hide();
+			        	populateFindFriendsFacebookTableView(allFriendsObject, jsonData.data.facebook_ids);
+			        	findFriendsFacebookFriendsCounterLabel.show();
+			        	findFriendsTableView.show();
+					};
+					
+					xhr.open('POST',API+'getFacebookFriendsFollowing');
+					xhr.send({
+						user_id:userObject.userId
+					});
 		        	
 		    	} else {
 		        	if (e.error) {
