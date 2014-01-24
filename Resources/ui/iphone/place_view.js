@@ -30,7 +30,7 @@ var COMMENT_ROW = 2;
 var viewPlaceWithCheckin = false;
 var checkinPlaceTargetMode = null;
 
-function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
+function buildCheckinPlaceView(placeId, allowCheckin, windowMode){		
 	checkinPlaceId = placeId;
 	viewPlaceWithCheckin = allowCheckin;
 	checkinPlaceTargetMode = windowMode;
@@ -92,6 +92,9 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 			zIndex:2
 		});
 		
+		//Event listener for map events
+		checkinPlaceButtonBarView.addEventListener('click', handleCheckinMapClick);
+		
 		checkinPlaceView.add(checkinPlaceButtonBarView);
 		
 		//Container for checkin/like buttons
@@ -124,10 +127,9 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 		    animate:true,
 		    regionFit:true,
 		    userLocation:true,
-		    visible:true
+		    visible:true,
+		    touchEnabled:false
 		});
-		
-		checkinPlaceMap.addEventListener('click', handleCheckinMapClick);
 		
 		checkinPlaceButtonBarView.add(checkinPlaceMap);
 		
@@ -197,7 +199,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 		checkinNumberLabel = Ti.UI.createLabel({
 			textAlign:'right',
 			width:35,
-			top:18,
+			top:21,
 			right:95,
 			color:'#f99e30',
 			font:{fontSize:17, fontWeight:'semibold', fontFamily:'Open Sans'}
@@ -212,7 +214,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 			top:22,
 			right:15,
 			color:'#f99e30',
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		checkinPlaceButtonContainer.add(checkinLabel); 
 		checkinLabel.addEventListener('click', handlePlaceCheckinsLabel);
@@ -222,7 +224,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 			textAlign:'right',
 			width:35,
 			right:95,
-			top:75,
+			top:78,
 			color:'red',
 			font:{fontSize:17, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
@@ -235,7 +237,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 			top:79,
 			right:15,
 			color:'red',
-			font:{fontSize:13, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		checkinPlaceButtonContainer.add(checkinLikesLabel);
@@ -414,6 +416,7 @@ function handlePlaceGallery(){
 	galleryWindow.setLeftNavButton(galleryBackButton);
 	galleryBackButton.addEventListener("click", function() {
 	    navController.close(galleryWindow);
+	    openWindows.pop();
 	});
 	
 	galleryWindow.add(viewGallery);
@@ -447,6 +450,7 @@ function handlePlaceLikesButton(e){
 	listUsersWindow.setLeftNavButton(listUsersBackButton);
 	listUsersBackButton.addEventListener("click", function() {
 	    navController.close(listUsersWindow);
+	    openWindows.pop();
 	});
 	
 	listUsersWindow.add(listUsersView);
@@ -480,6 +484,7 @@ function handlePlaceCheckinsLabel(e){
 	listUsersWindow.setLeftNavButton(listUsersBackButton);
 	listUsersBackButton.addEventListener("click", function() {
 	    navController.close(listUsersWindow);
+	    openWindows.pop();
 	});
 	
 	listUsersWindow.add(listUsersView);
@@ -518,6 +523,20 @@ function uploadPlacePhoto(photoObject){
 			progressView.change({
 		        success:true
 		    });
+		    
+		    //Update photos scrollable view
+		    var currentPhotoViews = checkinScrollablePhotoView.getViews();
+		    var tmpImageView = Ti.UI.createImageView({
+				defaultImage:IMAGE_PATH+'common/white_top_default.png',
+				image:REMOTE_PLACE_IMAGES + jsonData.data.filename,
+				width:320,
+				height:320,
+				top:0
+			});
+			currentPhotoViews.push(tmpImageView);
+			checkinScrollablePhotoView.setViews(currentPhotoViews);
+			
+			checkinPlaceNumPhotosLabel.text = currentPhotoViews.length + ' photos';
 		    
 		    //Hide message and close register window
 			progressView.hide();
@@ -812,40 +831,45 @@ function populateCheckinPlaceCommentsTableView(comObj){
 
 //Event handler for map click
 function handleCheckinMapClick(e){
-	Ti.API.info('Map clicked on checkin place lat '+e.annotation.latitude);
+	var x = e.x;
 	
-	Ti.include('ui/iphone/map_place.js');
-	var mapView = buildMapPlaceView(e.annotation.latitude, e.annotation.longitude, e.annotation.title);
+	Ti.API.info('Map clicked on checkin place title '+checkinPlaceMap.title);
 	
-	//map window
-	var checkinMapWindow = Ti.UI.createWindow({
-		backgroundColor:'white',
-		translucent:false,
-		title:'Map',
-		barColor:UI_COLOR
-	});
-	
-	checkinMapWindow.add(mapView);
-	
-	//back button & event listener
-	var mapBackButton = Ti.UI.createButton({
-	    backgroundImage: IMAGE_PATH+'common/back_button.png',
-	    width:48,
-	    height:33
-	});
-	
-	checkinMapWindow.setLeftNavButton(mapBackButton);
-	mapBackButton.addEventListener("click", function() {
-	    navController.close(checkinMapWindow);
-	});
-	
-	openWindows.push(checkinMapWindow);
-	navController.open(checkinMapWindow);
+	if(x >= 180){
+		Ti.include('ui/iphone/map_place.js');
+		var mapView = buildMapPlaceView(checkinPlaceMap.lat, checkinPlaceMap.lon, checkinPlaceMap.title);
+		
+		//map window
+		var checkinMapWindow = Ti.UI.createWindow({
+			backgroundColor:'white',
+			translucent:false,
+			title:'Map',
+			barColor:UI_COLOR
+		});
+		
+		checkinMapWindow.add(mapView);
+		
+		//back button & event listener
+		var mapBackButton = Ti.UI.createButton({
+		    backgroundImage: IMAGE_PATH+'common/back_button.png',
+		    width:48,
+		    height:33
+		});
+		
+		checkinMapWindow.setLeftNavButton(mapBackButton);
+		mapBackButton.addEventListener("click", function() {
+		    navController.close(checkinMapWindow);
+		    openWindows.pop();
+		});
+		
+		openWindows.push(checkinMapWindow);
+		navController.open(checkinMapWindow);	
+	}
 }
 
-//handle comments button
+//handle comments button bar
 function handlePlaceCommentButton(e){
-	
+	Ti.API.info('Clicked on the comments bar');
 	var toggle = e.source.toggle;
 	var button = e.source.button;
 	
@@ -878,6 +902,7 @@ function handlePlaceCommentButton(e){
 //Event handler for click events on the comments table
 function handlePlaceViewCommentTableRows(e){
 	var row = e.row.rowId;
+	Ti.API.info('clicked on comment row: checkinPlaceTargetMode = '+checkinPlaceTargetMode);
 	Ti.API.info('clicked on row '+JSON.stringify(e.row));
 	
 	//get the window instance
@@ -921,6 +946,7 @@ function handlePlaceViewCommentTableRows(e){
 		profileWindow.setLeftNavButton(profileBackButton);
 		profileBackButton.addEventListener("click", function() {
 		    navController.close(profileWindow);
+		    openWindows.pop();
 		});
 		
 		//Build the appropriate view and attach it to our window
@@ -1144,6 +1170,7 @@ function updateCheckinPlace(placeObj, checkins, likes, photos){
 		if(photos.length == 1){
 			tmpString = ' photo';
 		} 
+		
 		checkinPlaceNumPhotosLabel.text = photos.length + tmpString;
 		var photoViews = [];
 		
@@ -1161,6 +1188,11 @@ function updateCheckinPlace(placeObj, checkins, likes, photos){
 		
 		checkinScrollablePhotoView.views = photoViews;
 	}
+	
+	//map data for linking to detailed map view
+	checkinPlaceMap.lat = placeObj.latitude;
+	checkinPlaceMap.lon = placeObj.longitude;
+	checkinPlaceMap.title = placeObj.name;
 	
 	//update map and put annotation
 	checkinPlaceMapAnnotation.latitude = placeObj.latitude;

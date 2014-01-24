@@ -244,7 +244,7 @@ function handleFeedsTableViewRows(e){
             navController.open(feedsRowWindow);
 		}
 		
-	} else if(feedType == FEED_CHECKIN){
+	} else if(feedType == FEED_CHECKIN || feedType == FEED_NEW_PLACE){
 		var placeId = e.row.placeId;
 		var placeTitle = e.row.placeName;
 		Ti.API.info('show place id '+placeId);

@@ -326,6 +326,13 @@ function handleEndRunButton(){
 			runObject.coordinates = runningPathCoordinates;
 		} else {
 			
+			if(runFirstSetOfCoordinates == null){
+				runFirstSetOfCoordinates = {
+					latitude:0,
+					longitude:0
+				};
+			}
+			
 			//User did not move, or the coordinates were not accurate enough, so we save what we have
 			//Save coordinates
 			saveActivityCoordinates(runObject.activity_id, runFirstSetOfCoordinates.latitude, runFirstSetOfCoordinates.longitude, new Date().getTime(), 0, 0, currentActivityMode);

@@ -745,7 +745,7 @@ function updateDogfuelLocal(dog_id, value){
 
 //Saves a dog object in the local db
 function saveDog(dogObject){
-	Ti.API.info('saveDog() called');
+	Ti.API.info('saveDog() called with object '+JSON.stringify(dogObject));
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
 	if(!dogObject.dogfuel){
@@ -759,7 +759,7 @@ function saveDog(dogObject){
 
 //edit dog in local db
 function editDogLocal(dogObject){
-	Ti.API.info('editDogLocal() called');
+	Ti.API.info('editDogLocal() called with object '+JSON.stringify(dogObject));
 	
 	var db = Ti.Database.install('dog.sqlite', 'db');
 	
@@ -802,6 +802,8 @@ function getDogs(){
 			breed_id:rows.field(4),
 			dogfuel:rows.field(5)
 		};
+		
+		Ti.API.info('getDogs() returns dog '+obj.name+' with breed '+obj.breed_id);
 		
 	  	dogRows.push(obj);	
 	  	rows.next();
