@@ -275,7 +275,7 @@ function handleTableViewRows(e){
 			var dogId = e.row.dogId;
 			
 			Ti.include('ui/iphone/dog_profile.js');
-			var dogProfileView = buildDogProfileView(dogId);
+			var dogProfileView = buildDogProfileView(dogId, true);
 			
 			navController.getWindow().add(dogProfileView);
 			

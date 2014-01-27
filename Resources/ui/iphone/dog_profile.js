@@ -21,7 +21,7 @@ var dogProfileOwnerImage = null;
 var BUTTON_LOST_DOG = 1;
 var BUTTON_FOUND_DOG = 2;
 	
-function buildDogProfileView(dogId){
+function buildDogProfileView(dogId, allowEdit){
 	dogProfileDogId = dogId;
 	
 	if(dogProfileView == null){
@@ -44,7 +44,10 @@ function buildDogProfileView(dogId){
 		
 		//Always prepare the photo options depending on whether this is our dog or not
 		if(dogProfileMyDog){
-			navController.getWindow().rightNavButton = dogProfileEditButton;
+			if(allowEdit){
+				navController.getWindow().rightNavButton = dogProfileEditButton;
+			}
+			
 			
 			//Photo dialog with options for viewing/changing the profile image
 			var dogProfilePhotoDialog = Titanium.UI.createOptionDialog({

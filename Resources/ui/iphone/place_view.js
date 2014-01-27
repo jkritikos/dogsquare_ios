@@ -916,7 +916,7 @@ function handlePlaceViewCommentTableRows(e){
 	if(row == ADD_COMMENT){
 		
 		Ti.API.info('ADD comment button pressed');
-		checkinPlaceView.scrollTo(0,0);
+		//checkinPlaceView.scrollTo(0,0);
 		
 		checkinPlaceCommentsBackgroundView.animate({top:-11, duration:200});
 		checkinPlaceCommentsButton.toggle = true;

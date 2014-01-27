@@ -215,7 +215,7 @@ function handleFeedsTableViewRows(e){
 		
 		Ti.include('ui/iphone/dog_profile.js');
 		
-		var dogProfileView = buildDogProfileView(id);
+		var dogProfileView = buildDogProfileView(id, false);
 		
 		feedsRowWindow.add(dogProfileView);
 		feedsRowWindow.setTitle(name);

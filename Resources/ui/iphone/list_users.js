@@ -165,7 +165,7 @@ function handleListUsersTableViewRows(e){
 	}else if (type == ROW_TYPE_DOG){
 		Ti.include('ui/iphone/dog_profile.js');
 		
-		var dogProfileView = buildDogProfileView(userId);
+		var dogProfileView = buildDogProfileView(userId, false);
 		
 		var dogProfileWindow = Ti.UI.createWindow({
 			backgroundColor:UI_BACKGROUND_COLOR,

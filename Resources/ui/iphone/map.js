@@ -348,7 +348,7 @@ function handleMapAnnotationClick(e){
 				});
 			
 				dogProfileWindow.setTitle(placeTitle);
-				var dogProfileView = buildDogProfileView(placeId);
+				var dogProfileView = buildDogProfileView(placeId, false);
 				
 				dogProfileWindow.add(dogProfileView);
 				openWindows.push(dogProfileWindow);
@@ -976,7 +976,7 @@ function updateMapWithAnnotations(places, checkins, activities){
 				
 				//pin is red for lost dog only
 				var customPin2 = Ti.UI.createView({
-					backgroundImage:places[i].dog_id ? IMAGE_PATH+'map/pin_user_red_small.png' : IMAGE_PATH+'map/pin_user_small.png',
+					backgroundImage:places[i].dog_id ? IMAGE_PATH+'map/pin_user_red_small.png' : IMAGE_PATH+'map/pin_user_yellow_small.png',
 					width:38,
 					height:43
 				});

@@ -298,7 +298,7 @@ function buildProfileOtherView(uId, name) {
 		
 		//dogs button
 		var profileOtherDogsButton = Ti.UI.createButton({
-		    backgroundImage: IMAGE_PATH+'profile_other/Chat_icon.png',
+		    backgroundImage: IMAGE_PATH+'profile_other/Dog_icon.png',
 		    width:45,
 		    height:43,
 		    right:30,

@@ -360,7 +360,7 @@ function handleViewActivityTableRows(e){
 	
 	Ti.include('ui/iphone/dog_profile.js');
 		
-	var dogProfileView = buildDogProfileView(dogId);
+	var dogProfileView = buildDogProfileView(dogId, false);
 	
 	var dogProfileWindow = Ti.UI.createWindow({
 		backgroundColor:UI_BACKGROUND_COLOR,

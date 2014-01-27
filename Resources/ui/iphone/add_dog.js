@@ -698,7 +698,7 @@ function doSaveDogOnline(dObj){
 			navController.getWindow().setRightNavButton(rightBtn);
 			
 			Ti.include('ui/iphone/dog_profile.js');
-			var dogProfileView = buildDogProfileView(dObj.dog_id);
+			var dogProfileView = buildDogProfileView(dObj.dog_id, false);
 		
 			navController.getWindow().add(dogProfileView);
 			navController.getWindow().setTitle(dObj.name);
@@ -903,7 +903,7 @@ function doEditDogOnline(dObj){
 			navController.getWindow().setRightNavButton(rightBtn);
 			
 			Ti.include('ui/iphone/dog_profile.js');
-			var dogProfileView = buildDogProfileView(dObj.dog_id);
+			var dogProfileView = buildDogProfileView(dObj.dog_id, false);
 		
 			navController.getWindow().add(dogProfileView);
 			closeOpenWindows();
