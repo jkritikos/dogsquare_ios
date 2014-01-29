@@ -3,6 +3,7 @@ var checkinPlaceCommentsBackgroundView = null;
 var checkinPlaceCommentsTextArea = null;
 var checkinPlaceCommentsTableView = null;
 var checkinPlaceCommentsButton = null;
+var checkinPlaceCommentsObject = null;
 var checkinPlaceHeartImage = null;
 var checkinPlaceTitleLabel = null;
 var checkinPlaceDescriptionLabel = null;
@@ -18,7 +19,7 @@ var checkinPlaceButton = null;
 var checkinLabel = null;
 var checkinStatusLabel = null;
 var annotations = [];
-var addPlaceComObject = {};
+
 var checkinScrollablePhotoView = null;
 var placeViewLatitude = null;
 var placeViewLongitude = null;
@@ -294,30 +295,34 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 		checkinPlaceButtonContainer.add(checkinPlaceHeartImageDummy);
 		
 		//background for comments
+		/*
 		checkinPlaceCommentsBackgroundView = Ti.UI.createView({
 			top:550,
 			height:IPHONE5 ? 545 : 459,
 			width:'100%',
-			backgroundColor:UI_BACKGROUND_COLOR,
+			backgroundColor:'white',
 			zIndex:6
 		});
 		checkinPlaceView.add(checkinPlaceCommentsBackgroundView);
+		*/
 		
 		//button to show all comments
 		checkinPlaceCommentsButton = Ti.UI.createButton({ 
 			backgroundImage:IMAGE_PATH+'common/comment_field_grey.png',
-			top:0,
+			top:550,
 			width:320,
 			height:44,
 			toggle:false,
 			zIndex:3,
 			button:'bar'
 		});
-		checkinPlaceCommentsBackgroundView.add(checkinPlaceCommentsButton);
-		//event listener for button
-		checkinPlaceCommentsButton.addEventListener('click', handlePlaceCommentButton);
+		checkinPlaceView.add(checkinPlaceCommentsButton);
+		
+		//event listener for bar button
+		//checkinPlaceCommentsButton.addEventListener('click', handlePlaceCommentButton);
 		
 		// save button
+		/*
 		checkinPlaceSaveCommentButton = Ti.UI.createButton({
 			backgroundImage:IMAGE_PATH+'common/save_button.png',
 		    width:54,
@@ -325,6 +330,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 		    placeId:placeId
 		});
 		checkinPlaceSaveCommentButton.addEventListener('click', handlePlaceCommentSaveButton);
+		*/
 		
 		//comments title label
 		var checkinPlaceCommentsTitleLabel = Titanium.UI.createLabel({ 
@@ -339,6 +345,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 		checkinPlaceCommentsButton.add(checkinPlaceCommentsTitleLabel);
 		
 		//create a comment text area
+		/*
 		checkinPlaceCommentsTextArea = Ti.UI.createTextArea({
 			backgroundColor:'white',
 			width:276,
@@ -348,16 +355,18 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 		});
 		checkinPlaceCommentsBackgroundView.add(checkinPlaceCommentsTextArea); 
 		checkinPlaceCommentsTextArea.hide();
+		*/
 		
 		//comments tableView
 		checkinPlaceCommentsTableView = Titanium.UI.createTableView({
 			minRowHeight:47,
 			width:320,
 			backgroundColor:'e7e7e7',
-			top:41,
-			bottom:0
+			top:590,
+			height:'auto'
+			//bottom:0
 		});
-		checkinPlaceCommentsBackgroundView.add(checkinPlaceCommentsTableView);
+		checkinPlaceView.add(checkinPlaceCommentsTableView);
 		checkinPlaceCommentsTableView.addEventListener('click', handlePlaceViewCommentTableRows);
 		
 		//remove empty rows
@@ -916,6 +925,11 @@ function handlePlaceViewCommentTableRows(e){
 	if(row == ADD_COMMENT){
 		
 		Ti.API.info('ADD comment button pressed');
+		Ti.include('ui/iphone/comment_add.js');
+		openAddCommentWindow(TARGET_MODE_NEW_WINDOW, checkinPlaceCommentsObject, checkinPlaceId);
+		
+		
+		/*
 		//checkinPlaceView.scrollTo(0,0);
 		
 		checkinPlaceCommentsBackgroundView.animate({top:-11, duration:200});
@@ -925,6 +939,7 @@ function handlePlaceViewCommentTableRows(e){
 		checkinPlaceCommentsTextArea.focus();
 		checkinPlaceCommentsTableView.hide();
 		checkinPlaceCommentsTextArea.show();
+		*/
 	} else {
 		var userId = e.row.user_id;
 		var userName = e.row.user_name;
@@ -1103,6 +1118,7 @@ function getOnlinePlace(pId){
 			
 			updateCheckinPlace(jsonData.data.place, jsonData.data.checkins, jsonData.data.likes, jsonData.data.photos);
 			populateCheckinPlaceCommentsTableView(jsonData.data.comments);
+			checkinPlaceCommentsObject = jsonData.data.comments;
 			
 			var followers = jsonData.data.count_followers;
 			var inbox = jsonData.data.count_inbox;
@@ -1217,6 +1233,7 @@ function updateCheckinPlace(placeObj, checkins, likes, photos){
 	}
 }
 
+/*
 function handlePlaceCommentSaveButton(e){
 	//get the window instance
 	var targetWindow = null;
@@ -1238,8 +1255,10 @@ function handlePlaceCommentSaveButton(e){
 		targetWindow.setRightNavButton(null);
 	}
 }
+*/
 
 //Server call for saving place comments
+/*
 function doSavePlaceCommentOnline(comObj){
 	Ti.API.info('doSavePlaceCommentOnline() called with commentObject='+comObj); 	
 	
@@ -1363,6 +1382,7 @@ function appendCommentPlaceTableView(date, message){
 	checkinPlaceCommentsTableView.scrollToIndex(1);
 	checkinPlaceCommentsTextArea.value = '';
 }
+*/
 
 function handleCheckinPlaceButton(e){
 	var placeId = e.source.place_id;
