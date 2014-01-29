@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:app xmlns:ti="http://ti.appcelerator.org">
     <id>com.dogsquareapp.client</id>
-    <name>dogsquare</name>
+    <name>Dogsquare</name>
     <version>1.0</version>
     <publisher>Dogsquare Labs</publisher>
     <url>http://</url>

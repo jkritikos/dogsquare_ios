@@ -289,7 +289,7 @@ function buildRunFinishView(obj){
 	
 	//button to show all comments
 	runFinishCommentsButton = Ti.UI.createButton({ 
-		backgroundImage:IMAGE_PATH+'common/comment_field.png',
+		backgroundImage:IMAGE_PATH+'common/comment_field_grey.png',
 		top:0,
 		width:320,
 		height:44,

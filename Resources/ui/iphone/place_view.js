@@ -305,7 +305,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 		
 		//button to show all comments
 		checkinPlaceCommentsButton = Ti.UI.createButton({ 
-			backgroundImage:IMAGE_PATH+'common/comment_field.png',
+			backgroundImage:IMAGE_PATH+'common/comment_field_grey.png',
 			top:0,
 			width:320,
 			height:44,

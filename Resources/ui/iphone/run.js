@@ -464,7 +464,7 @@ function trackLocation(){
 		}
 		
 		//only use accurate coordinates
-		if(e.coords.accuracy <= 10){
+		if(e.coords.accuracy <= 15){
 			Ti.API.info('trackLocation() got coordinates - processing');
 			tick++;
 			
@@ -480,7 +480,7 @@ function trackLocation(){
 			
 			//Get weather once we get the 1st accurate set of coordinates
 			if(tick == 1){
-				weather.getWeather(e.coords.latitude, e.coords.longitude);	
+				//weather.getWeather(e.coords.latitude, e.coords.longitude);	
 			}
 			
 			var tmpDistance = calculateDistance(coordinates);
