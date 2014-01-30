@@ -1279,8 +1279,10 @@ function saveActivityOnline(id){
 	var pace = activityObject.pace;
 	var distance = activityObject.distance;
 	
+	Ti.API.info('saveActivityOnline() coordinates string is '+coordinates);
+	
 	xhr.onerror = function(e){
-		Ti.API.error('ERROR in saveActivityOnline()');
+		Ti.API.error('ERROR in saveActivityOnline(): ' + JSON.stringify(e));
 		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	

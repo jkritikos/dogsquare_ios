@@ -46,6 +46,8 @@ function openAddCommentWindow(windowMode, commentsObj, objectId){
 	//open win
 	openWindows.push(commentsWindow);
 	navController.open(commentsWindow); 
+	
+	commentsTextArea.focus();
 }
 
 function buildAddCommentView(commentsObj){

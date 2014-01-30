@@ -327,6 +327,7 @@ function handleEndRunButton(){
 		} else {
 			
 			if(runFirstSetOfCoordinates == null){
+				Ti.API.warn('runFirstSetOfCoordinates is NULL - using zero values');
 				runFirstSetOfCoordinates = {
 					latitude:0,
 					longitude:0

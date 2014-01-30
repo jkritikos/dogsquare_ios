@@ -158,7 +158,7 @@ leftTableView.addEventListener("click", function(e){
 			Ti.include('ui/iphone/feeds.js');
 			buildFeedsView();
 			navController.getWindow().add(viewFeeds);
-			navController.getWindow().setTitle('Dog Feed');
+			navController.getWindow().setTitle('Feed');
 			break;
 		case MENU_PROFILE:
 			CURRENT_VIEW = VIEW_PROFILE;
@@ -349,7 +349,7 @@ function createLeftMenuRow(menuItem){
 	var icon, label;
 	if(menuItem == MENU_FEED){
 		icon = IMAGE_PATH+'menu_left/newsFeed_menu.png';
-		label = 'Dog Feed';
+		label = 'Feed';
 	} else if(menuItem == MENU_PROFILE){
 		icon = IMAGE_PATH+'menu_left/Home_icon.png';
 		label = 'Profile';

@@ -882,8 +882,9 @@ function updateMapWithAnnotations(places, checkins, activities){
 				width:25,
 				height:25,
 				borderRadius:12,
-				borderWidth:2,
-				borderColor:'#f9bf30',
+				borderWidth:1,
+				//borderColor:'#f9bf30',
+				borderColor:'#f8a139',
 				zIndex:2,
 				top:5,
 				left:6
@@ -927,8 +928,9 @@ function updateMapWithAnnotations(places, checkins, activities){
 				width:25,
 				height:25,
 				borderRadius:12,
-				borderWidth:2,
-				borderColor:'#f9bf30',
+				borderWidth:1,
+				//borderColor:'#f9bf30',
+				borderColor:'#649631',
 				zIndex:2,
 				top:5,
 				left:6
@@ -988,8 +990,9 @@ function updateMapWithAnnotations(places, checkins, activities){
 					width:25,
 					height:25,
 					borderRadius:12,
-					borderWidth:2,
-					borderColor:places[i].dog_id ? '#ec1818' : '#f9bf30',
+					borderWidth:1,
+					//borderColor:places[i].dog_id ? '#ec1818' : '#f9bf30',
+					borderColor:places[i].dog_id ? '#eb1717' : '#ffea00',
 					zIndex:2,
 					top:5
 				});

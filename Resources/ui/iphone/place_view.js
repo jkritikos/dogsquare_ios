@@ -253,7 +253,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 			left:8,
 			visible:false,
 			color:'black',
-			font:{fontSize:16, fontWeight:'semibold', fontFamily:'Open Sans'}
+			font:{fontSize:15, fontWeight:'semibold', fontFamily:'Open Sans'}
 		});
 		
 		checkinPlaceButtonContainer.add(checkinStatusLabel);
@@ -275,7 +275,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 		checkinPlaceHeartImage = Ti.UI.createImageView({
 			image:IMAGE_PATH+'checkin_place/like_button.png',
 			left:11,
-			bottom:9,
+			bottom:2,
 			placeId:placeId,
 			toggle:false
 		});
@@ -287,7 +287,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 			image:IMAGE_PATH+'common/best_icon_selected_red.png',
 			left:133,
 			width:32,
-			bottom:14,
+			bottom:7,
 			placeId:placeId,
 			toggle:false
 		});
@@ -1192,7 +1192,8 @@ function updateCheckinPlace(placeObj, checkins, likes, photos){
 		
 		for(var z=0; z < photos.length; z++){
 			var tmpImageView = Ti.UI.createImageView({
-				defaultImage:IMAGE_PATH+'common/white_top_default.png',
+				//defaultImage:IMAGE_PATH+'common/white_top_default.png',
+				defaultImage:IMAGE_PATH+'common/white_default.png',
 				image:REMOTE_PLACE_IMAGES + photos[z].path,
 				width:320,
 				height:320,
