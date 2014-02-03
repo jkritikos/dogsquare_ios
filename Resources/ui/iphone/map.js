@@ -10,6 +10,8 @@ var FILTER_PUBLIC_PLACE = 7;
 var FILTER_BEACH = 8;
 var FILTER_WORKPLACE = 9;
 var FILTER_LOST_DOG = 10;
+var FILTER_AGILITY_CENTER = 11;
+var FILTER_DOG_TRAINER = 12;
 var FILTER_RECENTLY_OPEN = 100;
 var FILTER_MATING = 101;
 var FILTER_SAME_BREED = 102;
@@ -207,6 +209,8 @@ function buildMapView(windowMode){
 	mapSearchFilterData.push(createMapFilterRow(FILTER_PUBLIC_PLACE));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_BEACH));
 	mapSearchFilterData.push(createMapFilterRow(FILTER_WORKPLACE));
+	mapSearchFilterData.push(createMapFilterRow(FILTER_AGILITY_CENTER));
+	mapSearchFilterData.push(createMapFilterRow(FILTER_DOG_TRAINER));	
 
 	mapSearchCategoriesTableView.setData(mapSearchFilterData);
 
@@ -566,6 +570,12 @@ function getMapFilter(filter){
 	} else if(filter == FILTER_LOST_DOG){
 		icon = IMAGE_PATH+'map_filters/lost_icon.png';
 		label = 'Lost dog';
+	} else if(filter == FILTER_AGILITY_CENTER){
+		icon = IMAGE_PATH+'map_filters/Agility-centers_icon.png';
+		label = 'Agility centers';
+	} else if(filter == FILTER_DOG_TRAINER){
+		icon = IMAGE_PATH+'map_filters/dog_trainers.png';
+		label = 'Dog trainers';
 	}
 	
 	var obj = {
