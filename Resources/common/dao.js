@@ -1534,6 +1534,8 @@ function calculateDogfuel(activityId, totalPlaytimeSeconds, temperature){
 	
 	Ti.API.info('calculateDogfuel() found '+activityDogs.length+' dogs to calculate dogfuel for');
 	for(var i=0; i < activityDogs.length; i++){
+		totalDogfuel = 0;
+		
 		if(totalWalkDistance > 0){
 			earnedFromWalk = (100 * totalWalkDistance) / activityDogs[i].rule_walk_distance;
 		} else {
@@ -1546,6 +1548,7 @@ function calculateDogfuel(activityId, totalPlaytimeSeconds, temperature){
 			earnedFromPlay = 0;
 		}
 		
+		totalDogfuel = Math.round(earnedFromPlay + earnedFromWalk);
 		Ti.API.info(' ::::: dog id  '+activityDogs[i].dog_id+' with breed '+activityDogs[i].breed_id+' and age '+activityDogs[i].age+' needs '+activityDogs[i].rule_playtime+' playtime OR '+activityDogs[i].rule_walk_distance+' km. Earned '+totalDogfuel+' dogfuel');
 		
 		//get dogfuel discounts for this dog
@@ -1556,10 +1559,12 @@ function calculateDogfuel(activityId, totalPlaytimeSeconds, temperature){
 			var weather_temp = dogfuelDiscount.weather_temp;
 			var weather_value = dogfuelDiscount.weather_temp;
 			
+			Ti.API.info('About to use boost rules: extra_dogfuel:'+extra_dogfuel+' weather_temp:'+weather_temp+' weather_value:'+weather_value);
+			
 			boostFromAge = (totalDogfuel * extra_dogfuel) / 100;
 			
 			if(temperature != null && temperature >= weather_temp){
-				boostFromWeather = (totalDogfuel * weather_value) / 100;
+				boostFromWeather = Math.round((totalDogfuel * weather_value) / 100);
 			} else {
 				Ti.API.info('NOT using weather boost for '+weather_temp+ ' degrees because current temp is '+temperature);
 			}
@@ -1570,7 +1575,7 @@ function calculateDogfuel(activityId, totalPlaytimeSeconds, temperature){
 		}
 		
 		//Round and save dogfuel value
-		totalDogfuel = Math.round(earnedFromPlay + earnedFromWalk);
+		totalDogfuel = Math.round(totalDogfuel);
 		totalDogfuel = totalDogfuel > 100 ? 100 : totalDogfuel;
 		saveDogfuelCalculation(activityId, activityDogs[i].dog_id, totalDogfuel, totalWalkDistance, totalPlaytime);
 		

@@ -5,8 +5,11 @@ var saveCommentButton = null;
 
 //Data components
 var addCommentObject = {};
+var commentAddObjectId = null;
 
 function openAddCommentWindow(windowMode, commentsObj, objectId){
+	commentAddObjectId = objectId;
+	
 	//window
 	var commentsWindow = Ti.UI.createWindow({
 		backgroundColor:'white',
@@ -278,6 +281,7 @@ function doSavePlaceCommentOnline(comObj){
 			updateLeftMenuCounts(followers, inbox, notifications);
 			
 			appendCommentPlaceTableView(date, message);
+			
 		} else if(jsonData.data.response == ERROR_REQUEST_UNAUTHORISED){
 			Ti.API.error('Unauthorised request - need to login again');
 			showLoginPopup();
@@ -368,6 +372,8 @@ function appendCommentPlaceTableView(date, message){
 	}else{
 		commentsTableView.appendRow(commentRow);
 	}
+	
+	getOnlinePlace(commentAddObjectId);
 	
 	commentsTableView.scrollToIndex(1);
 	commentsTextArea.value = '';

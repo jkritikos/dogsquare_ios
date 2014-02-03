@@ -901,7 +901,7 @@ function doEditDogOnline(dObj){
 			populateRightMenu(getDogs());
 			
 			navController.getWindow().setRightNavButton(rightBtn);
-			
+			navController.getWindow().setTitle(dObj.name);
 			Ti.include('ui/iphone/dog_profile.js');
 			var dogProfileView = buildDogProfileView(dObj.dog_id, false);
 		

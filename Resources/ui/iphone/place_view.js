@@ -370,10 +370,11 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 		checkinPlaceCommentsTableView.addEventListener('click', handlePlaceViewCommentTableRows);
 		
 		//remove empty rows
+		/*
 		checkinPlaceCommentsTableView.footerView = Ti.UI.createView({
 		    height: 1,
 		    backgroundColor: 'transparent'
-		});
+		});*/
 	}
 	getOnlinePlace(placeId);
 	
@@ -383,7 +384,7 @@ function buildCheckinPlaceView(placeId, allowCheckin, windowMode){
 //Event handler for clicking on the url label
 function handlePlaceUrlClick(e){
 	Ti.API.info('open url '+e.source.place_url);
-	Ti.Platform.openURL(e.place_url);
+	Ti.Platform.openURL(e.source.place_url);
 }
 
 //photo dialog
@@ -536,7 +537,7 @@ function uploadPlacePhoto(photoObject){
 		    //Update photos scrollable view
 		    var currentPhotoViews = checkinScrollablePhotoView.getViews();
 		    var tmpImageView = Ti.UI.createImageView({
-				defaultImage:IMAGE_PATH+'common/white_top_default.png',
+				defaultImage:IMAGE_PATH+'common/white_default.png',
 				image:REMOTE_PLACE_IMAGES + jsonData.data.filename,
 				width:320,
 				height:320,

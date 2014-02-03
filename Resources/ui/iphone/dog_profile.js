@@ -447,7 +447,7 @@ function editDogProfile(){
 		//barImage:IMAGE_PATH+'common/bar.png',
 		translucent:false,
 		barColor:UI_COLOR,
-		title:'Add new dog'
+		title:'Edit dog'
 	});
 	
 	//back button
