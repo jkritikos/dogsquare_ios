@@ -58,9 +58,9 @@ function updateLocationOnMap(){
 		mapRegion = {
 			latitude: e.coords.latitude,
 			longitude: e.coords.longitude,
-			animate:true
-			//latitudeDelta:0.003,
-			//longitudeDelta:0.003
+			animate:true,
+			latitudeDelta:0.003,
+			longitudeDelta:0.003
 		};
 		mapview.setLocation(mapRegion); 
 		

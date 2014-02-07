@@ -469,6 +469,7 @@ function doSavePlaceOnline(pObj){
 			
 			placeCheckinWindow.setLeftNavButton(placeCheckinBackButton);
 			placeCheckinBackButton.addEventListener("click", function() {
+				getNearbyPlaces();
 			    navController.close(placeCheckinWindow);
 			});
 			

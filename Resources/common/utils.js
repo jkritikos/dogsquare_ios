@@ -107,7 +107,7 @@ function getUserPhoto(path){
 	
 	if(path != null){
 		if(path.substring(0,4) == 'http'){
-			photo = path;
+			photo = path+'&now='+new Date().getTime();
 		} else {
 			photo = REMOTE_USER_IMAGES+path;
 		}

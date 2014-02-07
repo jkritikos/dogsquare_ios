@@ -1176,7 +1176,7 @@ function updateCheckinPlace(placeObj, checkins, likes, photos){
 	}
 	
 	//Url
-	if(placeObj.url != null && placeObj.url != ''){
+	if(placeObj.url != null && placeObj.url != 'http' && placeObj.url != ''){
 		checkinPlaceUrlLabel.place_url = placeObj.url;
 		checkinPlaceUrlLabel.show();
 	}

@@ -226,11 +226,11 @@ function builAddDogView(windowMode){
 		
 		//Age textfield label
 		addDogFieldAgeHintTextLabel = Ti.UI.createLabel({
-			text:'Age*',
+			text:'Age (years only)*',
 			color:'999999',
 			textAlign:'left',
 			left:4,
-			width:80,
+			width:150,
 			height:30,
 			font:{fontSize:17, fontWeight:'regular', fontFamily:'Open Sans'}
 		});

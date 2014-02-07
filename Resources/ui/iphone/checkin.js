@@ -240,6 +240,8 @@ function populatecheckinPlacesTableView(places){
 }
 
 function handleCheckinPlacesTableViewRow(e){
+	Ti.API.info('nearme table clicked!');
+	
 	var placeId = e.row.placeId;
 	var placeTitle = e.row.placeName;
 	var categoryId = e.row.categoryId;

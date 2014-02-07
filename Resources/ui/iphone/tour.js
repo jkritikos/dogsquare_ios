@@ -36,12 +36,12 @@ function openTourView(){
 	});
 	
 	//tour content
-	var view1 = Ti.UI.createImageView({backgroundColor:'white',image:IPHONE5? IMAGE_PATH+'tour/1-568h@2x.jpg' : IMAGE_PATH+'tour/1.jpg' });
-	var view2 = Ti.UI.createImageView({backgroundColor:'white',image:IPHONE5? IMAGE_PATH+'tour/2-568h@2x.jpg' : IMAGE_PATH+'tour/2.jpg' });
-	var view3 = Ti.UI.createImageView({backgroundColor:'white',image:IPHONE5? IMAGE_PATH+'tour/3-568h@2x.jpg' : IMAGE_PATH+'tour/3.jpg' });
-	var view4 = Ti.UI.createImageView({backgroundColor:'white',image:IPHONE5? IMAGE_PATH+'tour/4-568h@2x.jpg' : IMAGE_PATH+'tour/4.jpg' });
-	var view5 = Ti.UI.createImageView({backgroundColor:'white',image:IPHONE5? IMAGE_PATH+'tour/5-568h@2x.jpg' : IMAGE_PATH+'tour/5.jpg' });
-	var view6 = Ti.UI.createImageView({backgroundColor:'white',image:IPHONE5? IMAGE_PATH+'tour/6-568h@2x.jpg' : IMAGE_PATH+'tour/6.jpg' });
+	var view1 = Ti.UI.createImageView({backgroundColor:'#cbcad8',image:IPHONE5? IMAGE_PATH+'tour/1-568h@2x.jpg' : IMAGE_PATH+'tour/1.jpg' });
+	var view2 = Ti.UI.createImageView({backgroundColor:'#cbcad8',image:IPHONE5? IMAGE_PATH+'tour/2-568h@2x.jpg' : IMAGE_PATH+'tour/2.jpg' });
+	var view3 = Ti.UI.createImageView({backgroundColor:'#cbcad8',image:IPHONE5? IMAGE_PATH+'tour/3-568h@2x.jpg' : IMAGE_PATH+'tour/3.jpg' });
+	var view4 = Ti.UI.createImageView({backgroundColor:'#cbcad8',image:IPHONE5? IMAGE_PATH+'tour/4-568h@2x.jpg' : IMAGE_PATH+'tour/4.jpg' });
+	var view5 = Ti.UI.createImageView({backgroundColor:'#cbcad8',image:IPHONE5? IMAGE_PATH+'tour/5-568h@2x.jpg' : IMAGE_PATH+'tour/5.jpg' });
+	var view6 = Ti.UI.createImageView({backgroundColor:'#cbcad8',image:IPHONE5? IMAGE_PATH+'tour/6-568h@2x.jpg' : IMAGE_PATH+'tour/6.jpg' });
 	
 	var scrollableView = Ti.UI.createScrollableView({
 	  views:[view1,view2,view3,view4,view5,view6],

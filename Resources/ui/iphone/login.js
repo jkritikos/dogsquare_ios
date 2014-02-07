@@ -326,7 +326,7 @@ function checkLoginCredentials(lObj){
 				dogObj.name = jsonData.data.dogs[i].Dog.name;
 				dogObj.dog_id = jsonData.data.dogs[i].Dog.id;
 				dogObj.photo_filename = jsonData.data.dogs[i].Dog.photo;
-				dogObj.breed_id = 1;
+				dogObj.breed_id = jsonData.data.dogs[i].Dog.breed_id;
 				dogObj.breed = jsonData.data.dogs[i].Dog.dog_breed;
 				dogObj.age = jsonData.data.dogs[i].Dog.age;
 				dogObj.gender = jsonData.data.dogs[i].Dog.gender;
