@@ -607,7 +607,7 @@ function handleFindFriendsTabs(e){
 		//Fetch facebook friends, if connected
 		if(fb.loggedIn){
 			Ti.API.info('FindFriends: FB connected TRUE');
-			facebookGetAllFriends();
+			facebookGetAllFriends(userObject.facebook_id);
 			findFriendsFacebookFriendsCounterLabel.show();
 		} else {
 			Ti.API.info('FindFriends: FB connected FALSE');
@@ -935,11 +935,11 @@ function facebookGetFriendsWithApp(){
 */
 
 //Gets all the friends of the currently connected FB account
-function facebookGetAllFriends(){
+function facebookGetAllFriends(facebookId){
 	var data = {};
 	
 	if (Titanium.Network.online == true){
-		Ti.API.warn('find.friends.js GETTING ALL FB FRIENDS');
+		Ti.API.warn('find.friends.js GETTING ALL FB FRIENDS for facebook id '+facebookId);
 		if(fb.loggedIn){
 			
 			//progress view
@@ -978,7 +978,8 @@ function facebookGetAllFriends(){
 					
 					xhr.open('POST',API+'getFacebookFriendsFollowing');
 					xhr.send({
-						user_id:userObject.userId
+						user_id:userObject.userId,
+						facebook_id:facebookId
 					});
 		        	
 		    	} else {

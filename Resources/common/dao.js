@@ -219,9 +219,10 @@ fb.addEventListener('login', function(e) {
 		    				Ti.API.info('UPDATING find friends view with number of friends that use the app');
 		                	findFriendsFacebookFriendsCounterLabel.text = 'You have '+friends.length+' Facebook friends using Dogsquare.';
 		    				
-		    				facebookGetAllFriends();
+		    				facebookGetAllFriends(fbId);
 		    			} else {
-		    				Ti.API.info('Other view: '+CURRENT_VIEW+' not doing something..');
+		    				Ti.API.info('Other view: '+CURRENT_VIEW+' - updating facebook id on the server..');
+		    				updateFacebookForUser(fbId);
 		    			}
 		                
 		                Ti.API.warn('FACEBOOK - Saved the FB friends with app list as '+friendString);
@@ -256,6 +257,42 @@ fb.addEventListener('login', function(e) {
 		Ti.API.info('USER **NOT** LOGGED IN TO FACEBOOK!');
 	}	
 });
+
+function updateFacebookForUser(facebookId){
+	if (Titanium.Network.online == true){
+		Ti.API.warn('updateFacebookForUser() called for facebookId='+facebookId);
+		if(fb.loggedIn){
+			var xhr = Ti.Network.createHTTPClient();
+			xhr.setTimeout(NETWORK_TIMEOUT);
+        	
+        	xhr.onerror = function(e){
+				Ti.API.error('Error in updateFacebookForUser() '+e);
+				alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
+			};
+			
+			xhr.onload = function(e) {
+				Ti.API.info('updateFacebookForUser() got back from server '+this.responseText);
+				var jsonData = JSON.parse(this.responseText);
+
+				//Update the user object
+				var obj = {
+					facebook_id:facebookId
+				};
+				
+				saveUserObject(obj);
+			};
+			
+			xhr.open('POST',API+'facebookConnect');
+			xhr.send({
+				user_id:userObject.userId,
+				facebook_id:facebookId,
+				token:userObject.token
+			});
+		} else {
+			Ti.API.info('DAO.updateFacebookForUser() not updating user because we are not connected to FB');		
+		}
+	}
+}
 
 /*Persists the array of facebook friends*/
 function saveFacebookFriends(data){
@@ -984,13 +1021,13 @@ function deleteNote(note_id){
 
 //save user whom you follow, in web database
 function followUser(uId, facebookId, button, win){
-	Ti.API.info('followUser() called');
+	Ti.API.info('followUser() called with uId='+uId+' facebookId='+facebookId+' win='+win);
 	
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(NETWORK_TIMEOUT);
 	
 	xhr.onerror = function(e){
-		Ti.API.error('Error in followUser() '+e);
+		Ti.API.error('Error in followUser() '+JSON.stringify(e));
 		alert(getLocalMessage(MSG_NO_INTERNET_CONNECTION));
 	};
 	
